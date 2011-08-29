@@ -465,6 +465,7 @@ allConstants = [
     Constant "PRIM_PHANTOM" llcPrimPhantom,
     Constant "PRIM_PHYSICS" llcPrimPhysics,
     Constant "PRIM_POINT_LIGHT" llcPrimPointLight,
+    Constant "PRIM_POS_LOCAL" (IVal 33),
     Constant "PRIM_POSITION" llcPrimPosition,
     Constant "PRIM_ROT_LOCAL" (IVal 29),
     Constant "PRIM_ROTATION" llcPrimRotation,
