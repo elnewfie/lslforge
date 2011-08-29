@@ -334,6 +334,7 @@ funcSigs = [
     ("llSetLinkTexture",LLVoid,[LLInteger,LLString,LLInteger]),
     ("llSetLinkTextureAnim",LLVoid,[LLInteger,LLInteger,LLInteger,LLInteger,LLInteger,LLFloat,LLFloat,LLFloat]),
     ("llSetLocalRot",LLVoid,[LLRot]),
+    ("llSetMemoryLimit",LLInteger,[LLInteger]),
     ("llSetObjectDesc",LLVoid,[LLString]),
     ("llSetObjectName",LLVoid,[LLString]),
     ("llSetParcelMusicURL",LLVoid,[LLString]),
@@ -780,7 +781,8 @@ funcDescriptions = [
     ("llSetLinkCamera", (["link","eye","at"], "Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.\n")),
     ("llClearLinkMedia", (["link","face"], "Clears (deletes) the media and all params from the given face on the linked prim(s).\n")),
     ("llGetLinkMedia", (["link","face","params"], "Get the media params for a particular face on a link'ed prim, given the desired list of named params.\n")),
-    ("llSetLinkMedia", (["link","face","params"], "Set the media params for a particular face on the linked prim(s) without a delay.\n"))
-    ("llGetMemoryLimit", ([], "Get the maximum memory a script can use.\n"))
+    ("llSetLinkMedia", (["link","face","params"], "Set the media params for a particular face on the linked prim(s) without a delay.\n")),
+    ("llGetMemoryLimit", ([], "Get the maximum memory a script can use.\n")),
+    ("llSetMemoryLimit", (["limit"], "Request limit bytes to be reserved for this script. Returns the integer TRUE or FALSE indicating if the memory limit was set.\n"))
     ]
 
