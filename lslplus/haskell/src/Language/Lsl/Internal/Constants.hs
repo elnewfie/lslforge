@@ -332,6 +332,7 @@ allConstants = [
     Constant "OBJECT_SCRIPT_MEMORY" (IVal 11),
     Constant "OBJECT_TOTAL_SCRIPT_COUNT" (IVal 10),
     Constant "OBJECT_RUNNING_SCRIPT_COUNT" (IVal 9),
+    Constant "OBJECT_SCRIPT_TIME" (IVal 12),
     Constant "OBJECT_VELOCITY" (IVal 5),
     Constant "OBJECT_GROUP" (IVal 7),
     Constant "OBJECT_UNKNOWN_DETAIL" (IVal (-1)),
