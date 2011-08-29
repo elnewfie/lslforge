@@ -52,6 +52,7 @@ funcSigs = [
     ("llCSV2List",LLList,[LLString]),
     ("llCeil",LLInteger,[LLFloat]),
     ("llClearCameraParams",LLVoid,[]),
+    ("llClearLinkMedia",LLInteger,[LLInteger,LLInteger]),
     ("llClearPrimMedia",LLInteger,[LLInteger]),
     ("llCloseRemoteDataChannel",LLVoid,[LLKey]),
     ("llCloud",LLFloat,[LLVector]),
@@ -773,7 +774,8 @@ funcDescriptions = [
     ("llLinkSitTarget", (["link","offset","rot"], "Set the sit location for the linked prim(s). The sit location is relative to the prim's position and rotation.\n")),
     ("llAvatarOnLinkSitTarget", (["link"], "Returns a key that is the UUID of the user seated on the prim.\n")),
     ("llSetContentType", (["request_id","content_type"], "Set the Internet media type of an LSL HTTP server response. content_type: CONTENT_TYPE_TEXT, CONTENT_TYPE_HTML\n")),
-    ("llSetLinkCamera", (["link","eye","at"], "Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.\n"))
+    ("llSetLinkCamera", (["link","eye","at"], "Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.\n")),
+    ("llClearLinkMedia", (["link","face"], "Clears (deletes) the media and all params from the given face on the linked prim(s).\n"))
     
     ]
 
