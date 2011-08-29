@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="LslPlus Table of Contents">
+	<topic label="Introduction" href="html/intro.html"></topic>
+	<topic label="What Do You Mean 'Plus?"  href="html/plus.html">
+    <topic href="html/optimization.html" label="Optimization">
+    </topic> 
+	</topic>
+	<topic label="Installation" href="html/installation.html"/>
+	<topic label="Basic Usage" href="html/basic.html">
+		<topic label="Unit Tests" href="html/unit-test.html"></topic>
+  <topic href="html/project-references.html" label="Project References">
+  </topic>
+		<topic label="Sim Projects" href="html/sim-project.html">
+     <topic href="html/avEventHandler.html" label="Avatar Event Handler">
+     </topic>
+     <topic href="html/avEventGen.html" label="Avatar Event Generator Utility">
+     </topic></topic></topic>
+	<topic label="Launching LSL Code" href="html/launching.html"></topic>
+	<topic label="Debugging" href="html/debug.html"></topic>
+	<topic label="Sim Watcher View" href="html/sim-watcher.html"></topic>
+	<topic label="Examples" href="html/examples.html"></topic>
+</toc>

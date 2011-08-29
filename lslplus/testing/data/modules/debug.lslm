@@ -1,0 +1,12 @@
+// debug.lslm
+$module (integer DEBUG)
+
+debug(string message)
+{
+    if (DEBUG)
+    {
+        llOwnerSay("DEBUG: " + message);
+    }
+}
+
+

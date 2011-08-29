@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Unit Test</title>
+    <link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>Unit Test File</h1>
+<p>The LSL Plus plugin can execute individual functions and handlers of your scripts an modules in
+<em>unit tests</em>.  Unit tests are &quot;written&quot; by building a tree of tests within a test file.
+First, you must create a test file, which you do in a manner similar to creating a script file -- launching
+the appropriate wizard under the <em>New</em> popup menu.  Tests automatically get the extension 
+<em>lslt</em> - you don't have to specify it.</p>
+
+<p>This what the initial test file looks like (a test suite with no tests in it):</p>
+<img src="images/blank-suite.jpg"/>
+
+<p>The test editor is much different than the code editor. In essence it is a graphical XML editor, although
+you never see the XML.  A test file defines a <em>suite</em> of tests.   Each test tests a single 
+LSL entry point (function or handler) by specifying the full path to the entry point (path to the module or
+script, plus path to the entry point within the source file.  For a function, the path to the entry point
+within the source element is just the function name.  For a handler it is the state name '.' the handler name, 
+e.g. default.link_message), the arguments (if any) to the entry point, the expected return value (if applicable)
+or &quot;don't care&quot; if you you do not want the test to fail no matter what is returned.  You can
+specify initial values of global variables (if you don't the default initialization will occur) and
+the expected final values of global variables, for those you care about.<p>
+
+<p>Adding a test - first right click and select Add Test:</p>
+<img src="images/add-test.jpg"/>
+
+<p>Then specify the entry point (using the combo boxes, which will allow you to pick any entry point in
+your code base):</p>
+<img src="images/entrypoint.jpg"/>
+
+<p>This creates an initial test that looks something like:</p>
+
+<img src="images/initial-test.jpg"/>
+
+<p>This test will call the <em>hello</em> function in the <em>hello.lslm</em> module, and
+doesn't care what it returns (the value is blank -- which is good, because 'hello' has no return value).  This test should
+always pass.  Save it (Ctrl-S), and then run it:</p>
+<img src="images/launch-test.jpg"/>
+
+<p>We see that it passes, but if we drill down into the test results, we can see more of what happened:</p>
+
+<img src="images/first-test.jpg"/>
+
+<p>
+The log shows that the function <em>llOwnerSay</em> was called with the argument &quot;hello&quot;.
+</p>
+
+
+<p> You can specify what LL functions
+you expect to be called, with what arguments, and what these functions should return.  Note, you only specify
+calls to <em>non-stateless</em> LL functions.  Stateless functions are those functions which always return
+the same result for a given set of arguments (examples of these are the mathematical function, list manipulation
+functions, string functions, etc.).  These <em>stateless</em> functions don't interact with the SL environment
+in any way, and therefore behave as expected when called within your unit tests.  But stateful function (there
+are lots of these -- prim/object manipulation functions, parcel functions, physics functions, etc.) behavior
+depends on the state of the environment; therefore, for the unit tests, you can specify exactly how they should
+behave within your tests by specifying what sequence of calls you expect, with what arguments, and can specify
+the return value (if applicable) for each particular expected call.  There are several modes you can specify for
+these <em>mock</em> calls:
+
+<ul>
+    <li><em>nice</em> mode.  No matter what call is made return a result.  If the user hasn't specified
+    a result for a particular function and set of arguments, return a default value (0 for scalars,
+    the empty string for strings, the null key for keys, the zero vector for vectors, the zero rotation
+    for rotations, and the empty list for lists).
+    <li><em>normal</em> mode.  If the user hasn't specified that a particular call, with a particular
+    set of arguments will be made, the test fails.
+    <li><em>exhaust</em> mode.  Like normal mode, but if all the calls that the user has specified will
+    be made are not actually made during the execution of the test, the test fails.
+    <li><em>strict</em> mode.  Like exhaust mode, but with the additional restriction that all the calls
+    must be made in the exact order that they were specified.  Otherwise the test fails.
+</ul>
+
+<p>If we change the <em>calls mode</em> for the test we defined above to <em>normal</em> we no longer get
+a successful outcome:</p>
+
+<img src="images/second-test.jpg"/>
+
+<p>The test fails because, since we aren't being 'nice', the call to <em>llOwnerSay</em> is unexpected, and
+causes the test to fail.  We can then change our test to indicate we expect a call to llOwnerSay with
+the appropriate argument.  First, use the context menu to add a call:</p>
+
+<img src="images/add-call.jpg"/>
+
+<p>Then select the function you expect:</p>
+
+<img src="images/enter-expected-func.jpg"/>
+
+<p>This adds the call to the call list, with expected arguments defaulted to &quot;don't care&quot; (the 
+value field is blank).
+You can then edit the argument to tell it you expect it to be &quot;hello&quot;.</p>
+
+<img src="images/edit-argument.jpg"/>
+
+<p>Rerunning the test with this change will cause it to once again pass.</p>
+
+<p>Regardless of the mode, when you specify a call (<em>mock up</em> a call) you can either pass in an actual 
+parameter that you expect, or specify &quot;don't care&quot (by clearing all text from the field); which will successfully match any argument.</p>
+
+<p>When the test is run, the global variables are initialized and the code in the entry point is executed, with
+calls to external (non-stateless) LL functions handled as you specify in the test.  The test may abort (fail) early
+(if an unexpected LL call is made), otherwise it runs to completion, at which point the strict/exhaust tests are 
+made to see if all the correct function calls were made, the return value is tested to see if it matches expectations,
+and the final values of globals are tested against any expectations were set.  The results are presented in a
+JUnit like format, with a progress bar advancing as the tests are run (turning to red when failures are encountered),
+and the test results presented in a tree.  Part of the test results is a complete log of all LL functions that were
+called (both stateless, aka internal, functions, and non-stateless/external functions).</p>
+
+<p>The editing is done via either right clicking
+to add new elements to the tree, or delete elements (such as new tests, or new calls in the list of expected calls),
+or by
+selecting the second column of a row and editing directly the value therein.  You can also edit the name of the
+test suite and the name of each test.  You can't edit the entry point for a test (e.g. hello.lslm/hello) or
+an expected call (e.g. 'llOwnerSay').  To change these you need to delete the test or call and then create a new
+test or call to replace it.</p>
+
+<p>When specifying arguments and return values, and values of global variables (either initial or expected final), you
+can enter LSL expressions, e.g.:</p>
+<img src="images/computed-argument.jpg"/>
+
+<p> These expressions can contain literal values and LL predefined constants (e.g. <em>TRUE</em>)
+combined with the usual operators.  You can't call functions or refer to variables.  This facility allows you to
+do things such as pass in mask values by oring together the appropriate LSL constants, rather than having to 
+figure out what the actual value of those constants are, oring them together yourself, and typing the resulting
+value into your test.</p>
+
+<p>The test editor now has full undo/redo support, just like the <a href="sim-project.html">Sim Project Editor</a>.</p>

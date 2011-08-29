@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Sim Watcher View</title>
+	<link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>Sim Watcher View</h1>
+
+<p>The Sim Watcher view allows you to monitor the progress of your LSL simulation (not an LSL Unit Test, which
+uses the JUnit-like test view).  The Sim Watcher view appears when you launch a script directly, or (more
+usefully) you define and then launch a <a href="sim-project.html">sim project</a>.  The view will look 
+something like:</p>
+
+<img src="images/sim-watcher.jpg"/>
+
+<p>The view has the following features:</p>
+
+<ul>
+<li>The <strong>log</strong> which shows various things that have happened in the simulation, in 
+reverse chronological order (most recent events at the top).</li>
+<li>The simulation time display, which shows the amount of 'simulated' time that has passed since the
+start of the simulation.  Note that simulated time passes at a different rate than 'real' time (often much
+faster).</li>
+<li>A dropdown list and associated 'go' button to allow you to select and send an arbitrary LSL event to
+an arbitrary script, prim, or object.  A popup will appear to allow you to enter parameters appropriate
+to the event.  Note that proper event semantics aren't guaranteed.  E.g. you could send a timer event to
+any script, even if that script had never registered a timer.</li>
+<li>The chat button, which allows you to 'chat' as any of the avatars that are present in the simulation.
+A popup will appear prompting you for the avatar to chat as, the actual text you want to chat, and the
+channel to chat on.</li>
+<li>The touch button, which allows you to touch (as one of the avatars in the sim) any prim in the simulation.
+A popup will appear prompting you for the prim to touch, the avatar who should do the touching, and the 
+duration of the touch.</li>
+</ul>
+</body>
+

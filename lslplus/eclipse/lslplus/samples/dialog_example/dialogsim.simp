@@ -1,0 +1,126 @@
+<worldNode>
+  <nodeName>world</nodeName>
+  <value class="string"></value>
+  <childrenArray>
+    <anyNaturalNode>
+      <displayName>max_time</displayName>
+      <nodeName>max_time</nodeName>
+      <value class="int">10000000</value>
+      <childrenArray/>
+    </anyNaturalNode>
+    <eventHandlerNode>
+      <nodeName>event-handler</nodeName>
+      <childrenArray/>
+    </eventHandlerNode>
+    <defaultAvatarNode>
+      <nodeName>Default Avatar</nodeName>
+      <childrenArray>
+        <avatarPropertiesNode>
+          <nodeName>avatar-properties</nodeName>
+          <childrenArray>
+            <gridPositionNode>
+              <nodeName>pos</nodeName>
+              <childrenArray>
+                <gridCoordinateNode>
+                  <nodeName>x</nodeName>
+                  <value class="float">128.0</value>
+                  <childrenArray/>
+                </gridCoordinateNode>
+                <gridCoordinateNode>
+                  <nodeName>y</nodeName>
+                  <value class="float">128.0</value>
+                  <childrenArray/>
+                </gridCoordinateNode>
+                <gridCoordinateNode>
+                  <nodeName>z</nodeName>
+                  <value class="float">0.0</value>
+                  <childrenArray/>
+                </gridCoordinateNode>
+              </childrenArray>
+            </gridPositionNode>
+          </childrenArray>
+        </avatarPropertiesNode>
+	    <eventHandlerNode>
+	      <nodeName>event-handler</nodeName>
+	      <value class="string">@PREFIX@eventhandler.lslm</value>
+	      <childrenArray/>
+	    </eventHandlerNode>
+      </childrenArray>
+    </defaultAvatarNode>
+    <objectNode>
+      <nodeName>Object</nodeName>
+      <childrenArray>
+        <objectPropertiesNode>
+          <nodeName>object-properties</nodeName>
+          <childrenArray>
+            <gridPositionNode>
+              <nodeName>pos</nodeName>
+              <childrenArray>
+                <gridCoordinateNode>
+                  <nodeName>x</nodeName>
+                  <value class="float">128.0</value>
+                  <childrenArray/>
+                </gridCoordinateNode>
+                <gridCoordinateNode>
+                  <nodeName>y</nodeName>
+                  <value class="float">128.0</value>
+                  <childrenArray/>
+                </gridCoordinateNode>
+                <gridCoordinateNode>
+                  <nodeName>z</nodeName>
+                  <value class="float">0.0</value>
+                  <childrenArray/>
+                </gridCoordinateNode>
+              </childrenArray>
+            </gridPositionNode>
+          </childrenArray>
+        </objectPropertiesNode>
+        <primNode>
+          <nodeName>Object</nodeName>
+          <childrenArray>
+            <primPropertiesNode>
+              <nodeName>prim-properties</nodeName>
+              <childrenArray>
+                <gridPositionNode>
+                  <nodeName>pos</nodeName>
+                  <childrenArray>
+                    <gridCoordinateNode>
+                      <nodeName>x</nodeName>
+                      <value class="float">0.0</value>
+                      <childrenArray/>
+                    </gridCoordinateNode>
+                    <gridCoordinateNode>
+                      <nodeName>y</nodeName>
+                      <value class="float">0.0</value>
+                      <childrenArray/>
+                    </gridCoordinateNode>
+                    <gridCoordinateNode>
+                      <nodeName>z</nodeName>
+                      <value class="float">0.0</value>
+                      <childrenArray/>
+                    </gridCoordinateNode>
+                  </childrenArray>
+                </gridPositionNode>
+                <avatarReferenceNode>
+                  <nodeName>owner</nodeName>
+                  <value class="string">Default Avatar</value>
+                  <childrenArray/>
+                </avatarReferenceNode>
+                <stringNode>
+                  <nodeName>description</nodeName>
+                  <value class="string"></value>
+                  <childrenArray/>
+                </stringNode>
+              </childrenArray>
+            </primPropertiesNode>
+            <scriptNode>
+              <nodeName>dialog-script</nodeName>
+              <value class="string">@PREFIX@dialog_script.lslp</value>
+              <childrenArray/>
+            </scriptNode>
+          </childrenArray>
+        </primNode>
+      </childrenArray>
+    </objectNode>
+  </childrenArray>
+</worldNode>

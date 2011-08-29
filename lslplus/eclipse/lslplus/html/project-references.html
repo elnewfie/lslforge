@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Project References</title>
+	<link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>Project References</h1>
+
+<p>As of LSL Plus 0.13.0, you can use the 'project references' feature of Eclipse to 
+better organize your code, especially if your are using the LSL Plus modules feature.
+</p>
+
+<p>If you want to split your LSL development into multiple projects, yet share a library
+of modules among all those projects, you can setup a project containing just the 
+library of modules (organized into folders however you choose), and then create a 
+reference from each project that uses those modules to the project containing the 
+library.  To create a project reference, you use the project properties, which you
+access via the project context menu:</p>
+
+<img src="images/project-context-menu.png"/>
+
+<p>There is a references section which you can access from the properties dialog:</p>
+
+<img src="images/project-properties-refs.png"/>
+
+<p>
+In the example, the project 'abd' has a reference to a library project, 'lib'.  When
+scripts are compiled in 'abd' it will look for modules (only modules!) in both the
+'lib' and 'abd' projects.  If the same module appears in both projects (e.g.
+both have a module 'foo.lslm' in the folder 'bar', which means both modules
+have a fully qualified name of 'bar.foo.lslm') then the one in the local project
+('abd') will take preference over the one in the reference.</p>
+
+<p>Note that references (as far as LSL Plus is concerned) are not transitive: 
+if project 'A' refers to project 'B', and project 'B' refers to project 'C', 
+LSL Plus will not look for modules in 'C' when compiling scripts in 'A'.  LSL
+Plus will only look in 'C' for modules when compiling scripts in 'A' if 'A' 
+directly depends on 'C'.</p>
+</body>
+

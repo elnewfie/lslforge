@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Launching LSL Code</title>
+    <link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>Launching LSL Code</h1>
+<p>
+Once you have created some LSL scripts or modules, you will want to test and debug those scripts.  To do
+this you must run, or launch, the code.  There are three things in LSL Plus that can be launched:
+</p>
+
+<ul>
+<li>Standalone scripts</li>
+<li>Unit tests</li>
+<li>Sim projects</li>
+</ul>
+
+<p>Launching a standalone script offers a minimal set of functionality: the script runs in a simulated
+world in which it is the sole script contained within the sole prim of the sole object in a region.
+There will be one avatar in the region, named "Default Avatar".  The script will run as expected:
+it will enter the <em>default</em> state, and it's state_entry event handler will run.  Then it will
+sit and wait for something to happen.  There is a UI which will allow you to send events to the script
+(like touch events, for example).  It won't have any inventory to work with, or other script to interact
+with.  To launch a script, you use the 'Run' or 'Debug' menu item in the context menu in the Navigator
+view:</p>
+<img src="images/launch-script.jpg"/>
+
+<p>Launching a <a href="unit-test.html">unit test</a> allows you to perform narrowly target tests of individual functions or
+handlers in your modules and scripts.  The entire LSL environment is 'mocked-up' -- you specify the
+results of any 'LL' function calls in the test (aside from purely 'internal' functions, such as the
+mathematical functions, list and string functions, etc.) so that you can completely control the progress
+of the test.  The launching works the same way -- select a test file, and right click to get the 
+context menu, then select the Run/Debug submenu and launch the test.<p>
+
+<p>Launching a <a href="sim-project.html">simulator project</a> allows you to test multiple scripts in an
+environment that you specify, with multiple objects, prims, avatars, inventory items, available.  The 
+lauching works the same way: pick a sim project file (.simp file) and use the context menu to launch it.
+</p>
+</body>
+</html>
