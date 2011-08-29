@@ -40,6 +40,7 @@ funcSigs = [
     ("llAsin",LLFloat,[LLFloat]),
     ("llAtan2",LLFloat,[LLFloat,LLFloat]),
     ("llAttachToAvatar",LLVoid,[LLInteger]),
+    ("llAvatarOnLinkSitTarget",LLKey,[LLInteger]),
     ("llAvatarOnSitTarget",LLKey,[]),
     ("llAxes2Rot",LLRot,[LLVector,LLVector,LLVector]),
     ("llAxisAngle2Rot",LLRot,[LLVector,LLFloat]),
@@ -768,6 +769,7 @@ funcDescriptions = [
     ("llSetVelocity", (["force", "local"], "Applies velocity to object\ninteger local – boolean, if TRUE, force is treated as a local directional vector instead of region directional vector\n"))
     ("llSetAngularVelocity", (["force", "local"], "Applies rotational velocity to object.\ninteger local – boolean, if TRUE uses local axis, if FALSE uses region axis\n"))
     ("llLinkSitTarget", (["link","offset","rot"], "Set the sit location for the linked prim(s). The sit location is relative to the prim's position and rotation.\n"))
+    ("llAvatarOnLinkSitTarget", (["link"], "Returns a key that is the UUID of the user seated on the prim.\n"))
     
     ]
 
