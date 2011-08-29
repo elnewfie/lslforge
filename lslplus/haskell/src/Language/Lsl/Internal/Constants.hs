@@ -429,6 +429,7 @@ allConstants = [
     Constant "PRIM_HOLE_DEFAULT" (IVal cPrimHoleDefault),
     Constant "PRIM_HOLE_SQUARE" (IVal cPrimHoleSquare),
     Constant "PRIM_HOLE_TRIANGLE" (IVal cPrimHoleTriangle),
+    Constant "PRIM_LINK_TARGET" (IVal 34),
     Constant "PRIM_MATERIAL" llcPrimMaterial,
     Constant "PRIM_MATERIAL_FLESH" (IVal 4),
     Constant "PRIM_MATERIAL_GLASS" (IVal 2),
