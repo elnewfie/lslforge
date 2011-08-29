@@ -250,6 +250,8 @@ allConstants = [
     Constant "CLICK_ACTION_OPEN" llcClickActionOpen,
     Constant "CLICK_ACTION_PLAY" llcClickActionPlay,
     Constant "CLICK_ACTION_OPEN_MEDIA" llcClickActionOpenMedia,
+    Constant "CONTENT_TYPE_TEXT" (IVal 0x0),
+    Constant "CONTENT_TYPE_HTML" (IVal 0x1),
     Constant "CONTROL_BACK" (IVal 0x2),
     Constant "CONTROL_DOWN" (IVal 0x20),
     Constant "CONTROL_FWD" (IVal 0x1),
