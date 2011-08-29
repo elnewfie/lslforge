@@ -352,6 +352,7 @@ funcSigs = [
     ("llSetVehicleRotationParam",LLVoid,[LLInteger,LLRot]),
     ("llSetVehicleType",LLVoid,[LLInteger]),
     ("llSetVehicleVectorParam",LLVoid,[LLInteger,LLVector]),
+    ("llSetVelocity",LLVoid,[LLVector,LLInteger]),
     ("llShout",LLVoid,[LLInteger,LLString]),
     ("llSin",LLFloat,[LLFloat]),
     ("llSitTarget",LLVoid,[LLVector,LLRot]),
@@ -762,5 +763,6 @@ funcDescriptions = [
     ("llGetSPMaxMemory",([],"Returns the integer of the most bytes used while LlScriptProfiler was last active.\n")),
     ("llGetUsedMemory",([],"Returns the integer of the number of bytes of memory currently in use by the script.\n")),
     ("llRegionSayTo", ([], "Says the text supplied in string msg on channel supplied in integer channel to the object or avatar specified by target\n"))
+    ("llSetVelocity", (["force", "local"], "Applies velocity to object\ninteger local – boolean, if TRUE, force is treated as a local directional vector instead of region directional vector\n"))
     ]
 
