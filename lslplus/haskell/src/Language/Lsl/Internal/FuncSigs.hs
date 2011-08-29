@@ -324,6 +324,7 @@ funcSigs = [
     ("llSetForceAndTorque",LLVoid,[LLVector,LLVector,LLInteger]),
     ("llSetHoverHeight",LLVoid,[LLFloat,LLInteger,LLFloat]),
     ("llSetLinkAlpha",LLVoid,[LLInteger,LLFloat,LLInteger]),
+    ("llSetLinkCamera",LLVoid,[LLInteger,LLVector,LLVector]),
     ("llSetLinkColor",LLVoid,[LLInteger,LLVector,LLInteger]),
     ("llSetLinkPrimitiveParams",LLVoid,[LLInteger,LLList]),
     ("llSetLinkPrimitiveParamsFast",LLVoid,[LLInteger,LLList]),
@@ -771,6 +772,8 @@ funcDescriptions = [
     ("llSetAngularVelocity", (["force", "local"], "Applies rotational velocity to object.\ninteger local – boolean, if TRUE uses local axis, if FALSE uses region axis\n")),
     ("llLinkSitTarget", (["link","offset","rot"], "Set the sit location for the linked prim(s). The sit location is relative to the prim's position and rotation.\n")),
     ("llAvatarOnLinkSitTarget", (["link"], "Returns a key that is the UUID of the user seated on the prim.\n")),
-    ("llSetContentType", (["request_id","content_type"], "Set the Internet media type of an LSL HTTP server response. content_type: CONTENT_TYPE_TEXT, CONTENT_TYPE_HTML\n"))
+    ("llSetContentType", (["request_id","content_type"], "Set the Internet media type of an LSL HTTP server response. content_type: CONTENT_TYPE_TEXT, CONTENT_TYPE_HTML\n")),
+    ("llSetLinkCamera", (["link","eye","at"], "Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.\n"))
+    
     ]
 
