@@ -135,6 +135,7 @@ funcSigs = [
     ("llGetListLength",LLInteger,[LLList]),
     ("llGetLocalPos",LLVector,[]),
     ("llGetLocalRot",LLRot,[]),
+    ("llGetMemoryLimit",LLInteger,[]),
     ("llGetMass",LLFloat,[]),
     ("llGetNextEmail",LLVoid,[LLString,LLString]),
     ("llGetNotecardLine",LLKey,[LLString,LLInteger]),
@@ -780,6 +781,6 @@ funcDescriptions = [
     ("llClearLinkMedia", (["link","face"], "Clears (deletes) the media and all params from the given face on the linked prim(s).\n")),
     ("llGetLinkMedia", (["link","face","params"], "Get the media params for a particular face on a link'ed prim, given the desired list of named params.\n")),
     ("llSetLinkMedia", (["link","face","params"], "Set the media params for a particular face on the linked prim(s) without a delay.\n"))
-    
+    ("llGetMemoryLimit", ([], "Get the maximum memory a script can use.\n"))
     ]
 
