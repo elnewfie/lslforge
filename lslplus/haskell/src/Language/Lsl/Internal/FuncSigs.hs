@@ -126,6 +126,7 @@ funcSigs = [
     ("llGetKey",LLKey,[]),
     ("llGetLandOwnerAt",LLKey,[LLVector]),
     ("llGetLinkKey",LLKey,[LLInteger]),
+    ("llGetLinkMedia",LLList,[LLInteger,LLInteger,LLList]), 
     ("llGetLinkName",LLString,[LLInteger]),
     ("llGetLinkNumber",LLInteger,[]),
     ("llGetLinkNumberOfSides",LLInteger,[LLInteger]),
@@ -775,7 +776,8 @@ funcDescriptions = [
     ("llAvatarOnLinkSitTarget", (["link"], "Returns a key that is the UUID of the user seated on the prim.\n")),
     ("llSetContentType", (["request_id","content_type"], "Set the Internet media type of an LSL HTTP server response. content_type: CONTENT_TYPE_TEXT, CONTENT_TYPE_HTML\n")),
     ("llSetLinkCamera", (["link","eye","at"], "Sets the camera eye offset, and the offset that camera is looking at, for avatars that sit on the linked prim.\n")),
-    ("llClearLinkMedia", (["link","face"], "Clears (deletes) the media and all params from the given face on the linked prim(s).\n"))
+    ("llClearLinkMedia", (["link","face"], "Clears (deletes) the media and all params from the given face on the linked prim(s).\n")),
+    ("llGetLinkMedia", (["link","face","params"], "Get the media params for a particular face on a link'ed prim, given the desired list of named params.\n"))
     
     ]
 
