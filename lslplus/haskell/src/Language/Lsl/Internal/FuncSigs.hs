@@ -205,6 +205,7 @@ funcSigs = [
     ("llIntegerToBase64",LLString,[LLInteger]),
     ("llKey2Name",LLString,[LLKey]),
     ("llLinkParticleSystem",LLVoid,[LLInteger,LLList]),
+    ("llLinkSitTarget",LLVoid,[LLInteger,LLVector,LLRot]),
     ("llList2CSV",LLString,[LLList]),
     ("llList2Float",LLFloat,[LLList,LLInteger]),
     ("llList2Integer",LLInteger,[LLList,LLInteger]),
@@ -766,5 +767,7 @@ funcDescriptions = [
     ("llRegionSayTo", ([], "Says the text supplied in string msg on channel supplied in integer channel to the object or avatar specified by target\n"))
     ("llSetVelocity", (["force", "local"], "Applies velocity to object\ninteger local – boolean, if TRUE, force is treated as a local directional vector instead of region directional vector\n"))
     ("llSetAngularVelocity", (["force", "local"], "Applies rotational velocity to object.\ninteger local – boolean, if TRUE uses local axis, if FALSE uses region axis\n"))
+    ("llLinkSitTarget", (["link","offset","rot"], "Set the sit location for the linked prim(s). The sit location is relative to the prim's position and rotation.\n"))
+    
     ]
 
