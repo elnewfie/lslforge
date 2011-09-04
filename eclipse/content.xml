@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8"?><?metadataRepository version='1.1.0'?>
+<repository name="LSL Plus Update Site - LSLForge" type="org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository" version="1.0.0">
+  <properties size="2">
+    <property name="p2.timestamp" value="1315104124794"/>
+    <property name="p2.compressed" value="true"/>
+  </properties>
+  <units size="8">
+    <unit id="LSLPlus_0.14.0" version="1.0.0.07s">
+      <properties size="2">
+        <property name="org.eclipse.equinox.p2.name" value="LSLPlus 0.14.0"/>
+        <property name="org.eclipse.equinox.p2.type.category" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="LSLPlus_0.14.0" version="1.0.0.07s"/>
+      </provides>
+      <requires size="2">
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslplus.feature.group" range="[0.14.0,0.14.0]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslplus_part_linux_x86.feature.group" range="[0.14.0,0.14.0]">
+          <filter>
+            (osgi.os=linux)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+    </unit>
+    <unit id="lslplus_win32_x86" version="0.14.0" singleton="false">
+      <update id="lslplus_win32_x86" range="[0.0.0,0.14.0)" severity="0"/>
+      <properties size="1">
+        <property name="org.eclipse.equinox.p2.name" value="Lslplus_win32_x86 Fragment"/>
+      </properties>
+      <provides size="4">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslplus_win32_x86" version="0.14.0"/>
+        <provided namespace="osgi.bundle" name="lslplus_win32_x86" version="0.14.0"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+        <provided namespace="osgi.fragment" name="lslplus" version="0.14.0"/>
+      </provides>
+      <requires size="1">
+        <required namespace="osgi.bundle" name="lslplus" range="0.12.0"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslplus_win32_x86" version="0.14.0"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-Name: Lslplus_win32_x86 Fragment
+Bundle-Version: 0.14.0
+Bundle-SymbolicName: lslplus_win32_x86
+Manifest-Version: 1.0
+Fragment-Host: lslplus;bundle-version="0.12.0"
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id="lslplus" version="0.14.0">
+      <update id="lslplus" range="[0.0.0,0.14.0)" severity="0"/>
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="LSLPlus"/>
+        <property name="org.eclipse.equinox.p2.provider" value="LSLPLus"/>
+        <property name="org.eclipse.equinox.p2.bundle.localization" value="plugin"/>
+      </properties>
+      <provides size="36">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslplus" version="0.14.0"/>
+        <provided namespace="osgi.bundle" name="lslplus" version="0.14.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.alias" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.annotations" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.basic" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.collections" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.enums" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.extended" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.javabean" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.reflection" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.core" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.core.util" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.binary" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.copy" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.json" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.path" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.xml" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.xml.xppdom" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.mapper" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.persistence" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.decorators" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.editor" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.editor.imported" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.editor.lsl" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.generated" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.language_metadata" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.launching" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.lsltest" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.testview" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.util" version="0.0.0"/>
+        <provided namespace="java.package" name="lslplus.wizards" version="0.0.0"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+      </provides>
+      <requires size="11">
+        <required namespace="osgi.bundle" name="org.eclipse.core.runtime" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.jface.text" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui.workbench.texteditor" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui.editors" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.debug.ui" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui.ide" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.help" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.update.core" range="0.0.0"/>
+        <required namespace="java.package" name="com.ibm.icu.text" range="3.6.1"/>
+        <required namespace="java.package" name="org.eclipse.ui.views.contentoutline" range="0.0.0"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslplus" version="0.14.0"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-Name: LSLPlus
+Bundle-ClassPath: xstream-1.2.2.jar,lslplus.jar
+Bundle-Version: 0.14.0
+Import-Package: com.ibm.icu.text;version="3.6.1",org.eclipse.ui.views.contentoutline
+Bundle-Activator: lslplus.LslPlusPlugin
+Bundle-Vendor: LSLPLus
+Require-Bundle: org.eclipse.core.runtime,org.eclipse.ui,org.eclipse.jface.text,org.eclipse.ui.workbench.texteditor,org.eclipse.ui.editors,org.eclipse.debug.ui,org.eclipse.ui.ide,org.eclipse.help,org.eclipse.update.core
+Export-Package: com.thoughtworks.xstream; uses:="com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.io,  com.thoughtworks.xstream.converters.reflection,  com.thoughtworks.xstream.mapper,  com.thoughtworks.xstream.core,  com.thoughtworks.xstream.core.util,  com.thoughtworks.xstream.alias",com.thoughtworks.xstream.alias;uses:="com.thoughtworks.xstream.mapper,com.thoughtworks.xstream.core",com.thoughtworks.xstream.annotations; uses:="com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.converters.reflection,  com.thoughtworks.xstream.mapper,  com.thoughtworks.xstream",com.thoughtworks.xstream.converters;uses:="com.thoughtworks.xstream.io,com.thoughtworks.xstream.core",com.thoughtworks.xstream.converters.basic;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream.io,com.thoughtworks.xstream.core.util",com.thoughtworks.xstream.converters.collections;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream.io,com.thoughtworks.xstream.mapper",com.thoughtworks.xstream.converters.enums; uses:="com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.io,  com.thoughtworks.xstream.mapper,  com.thoughtworks.xstream.converters.collections",com.thoughtworks.xstream.converters.extended; uses:="com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.io,  com.thoughtworks.xstream.converters.reflection,  com.thoughtworks.xstream.mapper,  com.thoughtworks.xstream.converters.basic,  com.thoughtworks.xstream.converters.collections",com.thoughtworks.xstream.converters.javabean; uses:="com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.io,  com.thoughtworks.xstream.mapper,  com.thoughtworks.xstream.alias",com.thoughtworks.xstream.converters.reflection; uses:="com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.io,  new com.thoughtworks.xstream.converters.reflection,  com.thoughtworks.xstream.mapper,  com.thoughtworks.xstream.converters.basic,  com.thoughtworks.xstream.core,  com.thoughtworks.xstream.core.util",com.thoughtworks.xstream.core; uses:="com.thoughtworks.xstream.io,  com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.converters.reflection,  com.thoughtworks.xstream.io.path,  com.thoughtworks.xstream.mapper,  com.thoughtworks.xstream,  com.thoughtworks.xstream.alias",com.thoughtworks.xstream.core.util;uses:="com.thoughtworks.xstream.converters",com.thoughtworks.xstream.io;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream.core",com.thoughtworks.xstream.io.binary;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream.io",com.thoughtworks.xstream.io.copy;uses:="com.thoughtworks.xstream.io",com.thoughtworks.xstream.io.json;uses:="com.thoughtworks.xstream.io,com.thoughtworks.xstream.core.util",com.thoughtworks.xstream.io.path;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream.io",com.thoughtworks.xstream.io.xml; uses:="org.dom4j,  com.thoughtworks.xstream.io.xml.xppdom,  nu.xom,  org.xmlpull.v1,  com.thoughtworks.xstream,  com.thoughtworks.xstream.core.util,  org.w3c.dom,  javax.xml.namespace,  org.xml.sax,  javax.xml.stream,  com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.io,  org.dom4j.io,  org.jdom,  javax.xml.transform.sax",com.thoughtworks.xstream.io.xml.xppdom,com.thoughtworks.xstream.mapper;uses:="com.thoughtworks.xstream.converters,com.thoughtworks.xstream.alias",com.thoughtworks.xstream.persistence;uses:="com.thoughtworks.xstream",lslplus; uses:="lslplus.cserver,  lslplus.language_metadata,  org.eclipse.core.runtime,  lslplus.lsltest,  org.eclipse.jface.resource,  lslplus.decorators,  org.eclipse.ui,  lslplus.util,  lslplus.editor.lsl,  org.eclipse.ui.plugin,  lslplus.generated,  lslplus.sim,  lslplus.debug,  org.eclipse.osgi.util,  org.eclipse.core.expressions,  org.eclipse.core.resources,  org.eclipse.swt.graphics,  org.osgi.framework,  org.eclipse.swt.widgets,  SimStatuses,  lslplus.editor",lslplus.decorators;uses:="org.eclipse.jface.viewers",lslplus.editor; uses:="org.eclipse.jface.text,  org.eclipse.jface.text.reconciler,  org.eclipse.core.runtime,  org.eclipse.jface.text.source,  org.eclipse.core.filebuffers,  lslplus,  org.eclipse.ui,  lslplus.editor.lsl,  org.eclipse.jface.text.rules,  org.eclipse.ui.part,  org.eclipse.jface.text.contentassist,  org.eclipse.jface.action,  org.eclipse.jface.text.presentation,  org.eclipse.jface.viewers,  org.eclipse.swt.graphics,  org.eclipse.swt.widgets,  lslplus.gentree,  org.eclipse.ui.editors.text",lslplus.editor.imported;uses:="org.eclipse.jface.text,org.eclipse.swt.graphics,org.eclipse.swt.widgets",lslplus.editor.lsl; uses:="org.eclipse.jface.text,  org.eclipse.jface.preference,  lslplus.util,  org.eclipse.jface.util,  org.eclipse.jface.text.rules,  org.eclipse.jface.text.contentassist",lslplus.generated;uses:="com.thoughtworks.xstream",lslplus.language_metadata,lslplus.launching; uses:="org.eclipse.debug.core,  org.eclipse.debug.ui,  org.eclipse.core.runtime,  lslplus.lsltest,  org.eclipse.ui,  org.eclipse.jface.viewers,  org.eclipse.debug.core.model",lslplus.lsltest; uses:="org.eclipse.debug.core,  org.eclipse.core.runtime,  lslplus,  org.eclipse.core.resources,  com.thoughtworks.xstream,  lslplus.generated,  lslplus.gentree,  lslplus.debug",lslplus.testview; uses:="lslplus.lsltest,  org.eclipse.swt.events,  org.eclipse.jface.viewers,  org.eclipse.swt.graphics,  org.eclipse.ui.part,  org.eclipse.swt.widgets",lslplus.util; uses:="org.eclipse.jface.resource,  org.eclipse.jface.text.rules,  org.eclipse.jface.preference,  com.thoughtworks.xstream.io,  com.thoughtworks.xstream.converters,  com.thoughtworks.xstream.mapper,  org.eclipse.core.resources,  org.eclipse.swt.graphics,  org.eclipse.jface.util",lslplus.wizards; uses:="org.eclipse.jface.wizard,  org.eclipse.core.runtime,  org.eclipse.jface.resource,  org.eclipse.swt.events,  org.eclipse.ui,  org.eclipse.swt.layout,  org.eclipse.core.resources,  org.eclipse.jface.viewers,  org.osgi.framework,  org.eclipse.swt.widgets"
+Bundle-SymbolicName: lslplus; singleton:=true
+Manifest-Version: 1.0
+Bundle-ActivationPolicy: lazy
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id="lslplus.feature.group" version="0.14.0" singleton="false">
+      <update id="lslplus.feature.group" range="[0.0.0,0.14.0)" severity="0"/>
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="Lslplus"/>
+        <property name="org.eclipse.equinox.p2.description" value="The LSL Plus Plugin."/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslplus.feature.group" version="0.14.0"/>
+      </provides>
+      <requires size="13">
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.core.runtime" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.jface.text" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.workbench.texteditor" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.editors" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.debug.ui" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.ide" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.help" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.update.core" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="com.ibm.icu" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.views" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslplus" range="[0.14.0,0.14.0]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslplus.feature.jar" range="[0.14.0,0.14.0]">
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+      <licenses size="1">
+        <license>
+          Redistribution and use in source and binary forms, with or without
+modification, are permitted 
+provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+notice, this list of 
+conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of 
+conditions and the following disclaimer in the documentation
+and/or other materials provided 
+with the distribution.
+3. The name of the author may not be used to endorse or promote
+products derived from this 
+software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+OR IMPLIED WARRANTIES, INCLUDING,
+BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, 
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF 
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER 
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING 
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+        </license>
+      </licenses>
+      <copyright>
+        Except where otherwise indicated the LSLPlus Plug-in was written
+by and is copyright to:
+Copyright 2007-2008, Robert Greayer. All rights reserved.
+This software is licensed under the terms of a "BSD3" style license,
+the text of which can
+be found in a file called 'LICENSE'.
+The copyright for some portions of this software are held by
+others.  Where the copyright holder
+is different from the above, the copyright holder is clearly
+indicated within the source file with
+the differing copyright, or in an associated license file in
+cases in which source is not provided.
+The copyright notice specifies under what terms the contribution
+is provided.
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the
+HaXml library, which has the following copyright:
+--------------------------------------------------------------------
+The HaXml library and tools were written by and are copyright to
+    (c) copyright 1998-2006    Malcolm Wallace and Colin Runciman
+
+The library incorporates the module Text.ParserCombinators.HuttonMeijerWallace
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+
+The HaXml library is licensed under the terms of the GNU Lesser
+General Public Licence (LGPL), which can be found in the file called
+LICENCE-LGPL, with the following special exception:
+
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this
+library give permission to use, copy, link, modify, and distribute,
+binary-only object-code versions of an executable linked with the
+original unmodified Library, without requiring the supply of any
+mechanism to modify or replace the Library and relink (clauses 6a,
+6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are
+complied with.
+----
+
+The HaXml tools Xtract, Validate, DtdToHaskell, and MkOneOf, are
+licensed under the terms of the GNU General Public Licence (GPL),
+which can be found in the file called LICENCE-GPL.
+
+This library and toolset is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Licences for more details.
+
+If these licensing terms are not acceptable to you, please contact me for
+negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the
+polyparse library, which has the following copyright:
+--------------------------------------------------------------------
+The module Text.ParserCombinators.HuttonMeijer is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+The module Text.ParserCombinators.HuttonMeijerWallace is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+  with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+The modules Text.ParserCombinators.Poly* and Text.Parse
+are
+    (c) copyright 2006-2007    Malcolm Wallace
+
+These modules are licensed under the terms of the GNU Lesser
+General Public Licence (LGPL), which can be found in the file called
+LICENCE-LGPL, with the following special exception:
+
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this
+library give permission to use, copy, link, modify, and distribute,
+binary-only object-code versions of an executable linked with the
+original unmodified Library, without requiring the supply of any
+mechanism to modify or replace the Library and relink (clauses 6a,
+6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are
+complied with.
+----
+
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Licence for more details.
+
+If these licensing terms are not acceptable to you, please contact me for
+negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+      </copyright>
+    </unit>
+    <unit id="lslplus_part_linux_x86.feature.jar" version="0.14.0">
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="lslplus_part_linux_x86"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+      </properties>
+      <provides size="3">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslplus_part_linux_x86.feature.jar" version="0.14.0"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="feature" version="1.0.0"/>
+        <provided namespace="org.eclipse.update.feature" name="lslplus_part_linux_x86" version="0.14.0"/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size="1">
+        <artifact classifier="org.eclipse.update.feature" id="lslplus_part_linux_x86" version="0.14.0"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="1">
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslplus_part_linux_x86.feature.group" version="0.14.0" singleton="false">
+      <update id="lslplus_part_linux_x86.feature.group" range="[0.0.0,0.14.0)" severity="0"/>
+      <properties size="4">
+        <property name="org.eclipse.equinox.p2.name" value="lslplus_part_linux_x86"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslplus_part_linux_x86.feature.group" version="0.14.0"/>
+      </provides>
+      <requires size="2">
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslplus_linux_x86" range="[0.14.0,0.14.0]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslplus_part_linux_x86.feature.jar" range="[0.14.0,0.14.0]">
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <filter>
+        (osgi.os=linux)
+      </filter>
+      <touchpoint id="null" version="0.0.0"/>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslplus.feature.jar" version="0.14.0">
+      <properties size="2">
+        <property name="org.eclipse.equinox.p2.name" value="Lslplus"/>
+        <property name="org.eclipse.equinox.p2.description" value="The LSL Plus Plugin."/>
+      </properties>
+      <provides size="3">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslplus.feature.jar" version="0.14.0"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="feature" version="1.0.0"/>
+        <provided namespace="org.eclipse.update.feature" name="lslplus" version="0.14.0"/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size="1">
+        <artifact classifier="org.eclipse.update.feature" id="lslplus" version="0.14.0"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="1">
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size="1">
+        <license>
+          Redistribution and use in source and binary forms, with or without
+modification, are permitted 
+provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright
+notice, this list of 
+conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+notice, this list of 
+conditions and the following disclaimer in the documentation
+and/or other materials provided 
+with the distribution.
+3. The name of the author may not be used to endorse or promote
+products derived from this 
+software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
+OR IMPLIED WARRANTIES, INCLUDING,
+BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, 
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF 
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+OR BUSINESS INTERRUPTION) HOWEVER 
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING 
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+        </license>
+      </licenses>
+      <copyright>
+        Except where otherwise indicated the LSLPlus Plug-in was written
+by and is copyright to:
+Copyright 2007-2008, Robert Greayer. All rights reserved.
+This software is licensed under the terms of a "BSD3" style license,
+the text of which can
+be found in a file called 'LICENSE'.
+The copyright for some portions of this software are held by
+others.  Where the copyright holder
+is different from the above, the copyright holder is clearly
+indicated within the source file with
+the differing copyright, or in an associated license file in
+cases in which source is not provided.
+The copyright notice specifies under what terms the contribution
+is provided.
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the
+HaXml library, which has the following copyright:
+--------------------------------------------------------------------
+The HaXml library and tools were written by and are copyright to
+    (c) copyright 1998-2006    Malcolm Wallace and Colin Runciman
+
+The library incorporates the module Text.ParserCombinators.HuttonMeijerWallace
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+
+The HaXml library is licensed under the terms of the GNU Lesser
+General Public Licence (LGPL), which can be found in the file called
+LICENCE-LGPL, with the following special exception:
+
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this
+library give permission to use, copy, link, modify, and distribute,
+binary-only object-code versions of an executable linked with the
+original unmodified Library, without requiring the supply of any
+mechanism to modify or replace the Library and relink (clauses 6a,
+6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are
+complied with.
+----
+
+The HaXml tools Xtract, Validate, DtdToHaskell, and MkOneOf, are
+licensed under the terms of the GNU General Public Licence (GPL),
+which can be found in the file called LICENCE-GPL.
+
+This library and toolset is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Licences for more details.
+
+If these licensing terms are not acceptable to you, please contact me for
+negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the
+polyparse library, which has the following copyright:
+--------------------------------------------------------------------
+The module Text.ParserCombinators.HuttonMeijer is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+The module Text.ParserCombinators.HuttonMeijerWallace is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+  with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+The modules Text.ParserCombinators.Poly* and Text.Parse
+are
+    (c) copyright 2006-2007    Malcolm Wallace
+
+These modules are licensed under the terms of the GNU Lesser
+General Public Licence (LGPL), which can be found in the file called
+LICENCE-LGPL, with the following special exception:
+
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this
+library give permission to use, copy, link, modify, and distribute,
+binary-only object-code versions of an executable linked with the
+original unmodified Library, without requiring the supply of any
+mechanism to modify or replace the Library and relink (clauses 6a,
+6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are
+complied with.
+----
+
+This library is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Licence for more details.
+
+If these licensing terms are not acceptable to you, please contact me for
+negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+      </copyright>
+    </unit>
+    <unit id="lslplus_linux_x86" version="0.14.0" singleton="false">
+      <update id="lslplus_linux_x86" range="[0.0.0,0.14.0)" severity="0"/>
+      <properties size="1">
+        <property name="org.eclipse.equinox.p2.name" value="lslplus_linux_x86 Fragment"/>
+      </properties>
+      <provides size="4">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslplus_linux_x86" version="0.14.0"/>
+        <provided namespace="osgi.bundle" name="lslplus_linux_x86" version="0.14.0"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+        <provided namespace="osgi.fragment" name="lslplus" version="0.14.0"/>
+      </provides>
+      <requires size="1">
+        <required namespace="osgi.bundle" name="lslplus" range="0.14.0"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslplus_linux_x86" version="0.14.0"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-Name: lslplus_linux_x86 Fragment
+Bundle-Version: 0.14.0
+Bundle-SymbolicName: lslplus_linux_x86
+Manifest-Version: 1.0
+Fragment-Host: lslplus;bundle-version="0.14.0"
+Bundle-ManifestVersion: 2
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+  </units>
+</repository>
