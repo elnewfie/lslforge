@@ -1,15 +1,2 @@
-update-sites/na-east http://voxel.dl.sourceforge.net/sourceforge/lslplus @North America (East)
-update-sites/na-west http://internap.dl.sourceforge.net/sourceforge/lslplus @North America (West)
-update-sites/europe-ch http://puzzle.dl.sourceforge.net/sourceforge/lslplus @Europe (Switzerland)
-update-sites/europe-de http://mesh.dl.sourceforge.net/sourceforge/lslplus @Europe (Germany)
-update-sites/europe-fr http://ovh.dl.sourceforge.net/sourceforge/lslplus @Europe (France)
-update-sites/europe-ie http://heanet.dl.sourceforge.net/sourceforge/lslplus @Europe (Ireland)
-update-sites/europe-it http://garr.dl.sourceforge.net/sourceforge/lslplus @Europe (Italy)
-update-sites/europe-nl http://surfnet.dl.sourceforge.net/sourceforge/lslplus @Europe (Netherlands)
-update-sites/europe-uk http://kent.dl.sourceforge.net/sourceforge/lslplus @Europe (United Kingdom)
-update-sites/asia-jp http://jaist.dl.sourceforge.net/sourceforge/lslplus @Asia (Japan)
-update-sites/asia-tw http://nchc.dl.sourceforge.net/sourceforge/lslplus @Asia (Taiwan)
-update-sites/australia-east http://transact.dl.sourceforge.net/sourceforge/lslplus @Australia (East)
-update-sites/australia-west http://waix.dl.sourceforge.net/sourceforge/lslplus @Australia (West)
-update-sites/sa http://ufpr.dl.sourceforge.net/sourceforge/lslplus @South America
-test/local http://localhost:8080/bar @Local Test
+update-sites/lslforge http://lslforge.googlecode.com/git/eclipse @LSLForge
+update-sites/slchat http://slchat.org/lslplus @SLChat Test Site

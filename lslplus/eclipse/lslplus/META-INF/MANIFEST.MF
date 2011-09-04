@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LSLPlus
 Bundle-SymbolicName: lslplus; singleton:=true
-Bundle-Version: 0.13.0
+Bundle-Version: 0.14.0
 Bundle-ClassPath: xstream-1.2.2.jar,
  lslplus.jar
 Bundle-Activator: lslplus.LslPlusPlugin
@@ -112,6 +112,7 @@ Export-Package: com.thoughtworks.xstream;
    org.eclipse.core.runtime,
    org.eclipse.jface.text.source,
    org.eclipse.core.filebuffers,
+   lslplus,
    org.eclipse.ui,
    lslplus.editor.lsl,
    org.eclipse.jface.text.rules,
@@ -185,7 +186,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.workbench.texteditor,
  org.eclipse.ui.editors,
  org.eclipse.debug.ui,
- org.eclipse.core.expressions,
  org.eclipse.ui.ide,
  org.eclipse.help,
  org.eclipse.update.core

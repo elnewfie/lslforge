@@ -2,9 +2,8 @@
 <feature
       id="lslplus-part-win32-x86"
       label="Lslplus_part_win32_x86"
-      version="0.13.1"
-      os="win32"
-      arch="x86">
+      version="0.14.0"
+      os="win32">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]

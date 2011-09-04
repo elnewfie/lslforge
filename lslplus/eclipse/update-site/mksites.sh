@@ -5,6 +5,8 @@ if [ "$#" != "1" ]; then
     exit 1
 fi
 
+unzip artifacts.jar
+unzip content.jar
 
 for site in `awk '{print $1;}' siteurls.txt`
 do

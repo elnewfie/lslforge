@@ -20,29 +20,14 @@ Tested-With:	GHC ==6.10.4
 Extra-source-files: NOTICE
 
 Executable LslPlus
-  Build-Depends: HaXml == 1.19.7,
-     array == 0.2.0.0,
-     base == 4.1.0.0,
-     bytestring == 0.9.1.4,
-     containers == 0.2.0.1,
-     directory == 1.0.0.3,
-     filepath == 1.1.0.2,
-     haskell98 == 1.0.1.0,
---     mtl == 1.1.0.2,
---     network == 2.2.1.4,
-     network,
-     old-time == 1.0.0.2,
-     parsec == 2.1.0.1,
-     pureMD5 == 1.0.0.0,
-     random == 1.0.0.1,
-     syb == 0.1.0.1,
-     template-haskell == 2.3.0.1,
-     utf8-string == 0.3.5,
---     transformers >= 0.1 && < 0.2,
-     transformers == 0.2.2.0,
-     fclabels > 0.4 && < 0.5,
-     monads-fd == 0.1.0.0
-
+  Build-Depends:  base >= 4.0 && < 5, haskell98, 
+     filepath >= 1.1.0.0 && < 1.2, parsec >= 2.1.0.0 && < 3, 
+     HaXml >= 1.19 && < 1.20, directory > 1 && < 1.1, array >= 0.2 && < 0.3,
+     monads-fd > 0.0 && < 0.1, transformers >= 0.1 && < 0.2, 
+     network >= 2.1 && < 2.3, random >= 1.0, containers >= 0.1 && < 0.3,
+     old-time, utf8-string >= 0.3 && < 0.4, pureMD5 >= 0.2 && < 3, 
+     bytestring >= 0.9 && < 0.10, template-haskell >= 2.3.0.0 && < 2.4, 
+     syb >= 0.1.0.0 && < 0.2.0.0, fclabels > 0.4 && < 0.5
   Main-Is:        LslPlus.hs
   Hs-Source-Dirs: src
   Other-modules: 
