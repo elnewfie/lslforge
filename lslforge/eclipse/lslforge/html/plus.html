@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>What Do You Mean &quot;Plus&quot;?</title>
+	<link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>What Do You Mean &quot;Plus&quot;?</h1>
+<div class="content">
+<p>
+The 'compiler' for LSLForge accepts the basic LSL scripting language code, <em>plus</em> some
+additional extensions.  That may sound a bit strange, since unless the LSL compiler within SL does
+not accept those extensions, what use could they be?  What the LSLForge compiler does is take as
+input LSLForge code, and it produces 'straight' LSL code as a compiled output.  If you feed it
+plain LSL code, it will simply produce equivalent LSL code as its output (in addition to validating
+that it is syntactically correct, and allowing you to test it).  But LSLForge also allows you to 
+separate you code into <em>scripts</em> and <em>modules</em>.  If you have some useful functions that
+you use over and over again in different LSL scripts, you have to continually cut and paste them into
+each script that you write (and then, assuming you are editing offline, paste the whole thing into 
+the SL LSL editor).  With LSLForge, you can separate these reusable functions (and global variables)
+into modules, and <em>import</em> these modules into your scripts (and into other modules).  When
+the scripts are compiled, the resulting plain LSL script can then be uploaded (cut-n-pasted) into
+SL.
+</p>
+
+<p>At this point some clever and/or skeptical reader might be mumbling something like
+ &quot;Couldn't you just use the C preprocessor instead, and use the #include directive?&quot;  The answer
+is, yeah, probably, but a &quot;language aware&quot; import mechanism is potentially more powerful
+than source pre-processing.  Also, I didn't think of that until after I'd gotten it working.
+The import mechanism, though, is pretty useful; it allows the symbols you import to be qualified with
+a prefix, so that you can avoid namespace problems, for example.  It allows parameterization of the 
+import, right now just allowing the binding of <em>free variables</em> that the module declares to
+variables within the scope of the script.  I envision extending this to providing functions and types
+as import parameters as well, which will allow creation of generic modules, such as a generic sort 
+module.  But if you just want to use LSLForge to edit and test &quot;straight&quot; LSL code, the 
+<em>plus</em> features won't get in your way.</p>
+
+<p>
+Here is a basic example of module usage:</p>
+
+<p>Module: avogadro.lslm</p>
+<pre>
+$module ()
+
+float avogadro = 6.022142E+23;
+
+float to_moles(float molecules) {
+    return molecules / avogadro;
+}
+</pre>
+
+<p>Script: really_useful.lslp</p>
+
+<pre>
+$import avogadro.lslm () my_;
+
+default {
+    state_entry() {
+        llSay(0, "Avogadro's number is: " + (string)my_avogadro);
+        llSay(0, "5 billion molecules is: " + ((string)my_to_moles(5000000000.0)) + " moles");
+    }
+}
+</pre>
+
+<p>
+In the above example, the inclusion of the prefix &quot;my_&quot; is not necessary.  You could
+omit it on the first line, in the import statement, and remove it from references to the avogadro
+constant and the to_moles function.  But if you happen to have other avogadro's number definitions
+and mole conversion functions scattered around in your script already (and, let's face it, who
+doesn't?) then this feature will prevent name clashes.</p>
+
+<p>Since LSLForge 0.3.1, the module feature has been enhanced.  The basic module system generally works
+like an include mechanism, with some rewriting of terms.  The above 'avogadro' example will produce
+a final 'compiled' LSL script that looks like:
+</div>
+<pre>
+// LSL script generated: Wed May 21 20:22:17 Eastern Daylight Time 2008
+float my_avogadro = 6.0221424e23;
+float my_to_moles(float molecules){
+    return (molecules / my_avogadro);
+}
+default {
+    state_entry() {
+        llSay(0,("Avogadro's number is: " + ((string)my_avogadro)));
+        llSay(0,(("5 billion molecules is: " + ((string)my_to_moles(7.050327e8))) + " moles"));
+    }
+}
+</pre>
+
+<p>Each 'import' gets expanded 'inline', with rewriting, to produce the final output.  But in some 
+circumstances, this results in much-less than optimal code (code that uses up too much memory).  Consider
+the following system of modules:</p>
+
+<p>Module 'debug.lslm':</p>
+<pre>
+$module (integer DEBUG)
+
+debug(string msg) {
+    if (DEBUG) llOwnerSay(msg);
+}
+</pre>
+
+<p>Module 'sum.lslm':</p>
+<pre>
+$module (integer dbg)
+
+$import debug.lslm(DEBUG=dbg);
+
+float compute_sum(float x, float y) {
+    debug("computing sum of " + ((string) x) + " and " + ((string) y));
+    return x + y;
+}
+</pre>
+
+<p>Module 'product.lslm'</p>
+<pre>
+$module (integer DEBUG)
+
+$import debug.lslm(DEBUG=DEBUG);
+
+float compute_product(float x, float y) {
+    debug("computing product of " + ((string) x) + " and " + ((string) y));
+    return x * y;
+}
+</pre>
+
+<p>And a script that uses the modules</p>
+<pre>
+
+integer debug_flag = FALSE;
+
+$import sum.lslm(dbg=debug_flag);
+$import product.lslm(DEBUG=debug_flag);
+
+default {
+    state_entry() {
+        llOwnerSay((string)compute_sum(3.0,compute_product(5.0,PI)));
+    }
+}
+</pre>
+
+<p>
+If simple rewriting is used, this script won't compile, since both 'sum.lslm' and 'product.lslm'
+import, and therefore define, their own instances of 'debug.lslm'.  One or the other could be given
+a prefix (e.g. 'my_'), but that would result in a redundant definition of the debug function (e.g.
+'debug' and 'my_debug').  To avoid this issue, the compiler will detect that the same module is being
+imported with the same parameters (in this case, the same top-level 'debug_flag' is passed through
+the each intermediate module, to the 'debug.lslm' module), and recognize that only one 'shared' 
+instance of the module needs to be included in the compiled output, thus resolving the name conflict
+and eliminating redundant code.  The output looks like:</p>
+
+<pre>
+// LSL script generated: Wed May 21 21:23:56 Eastern Daylight Time 2008
+integer debug_flag = FALSE;
+float compute_product(float x,float y){
+    debug(((("computing product of " + ((string)x)) + " and ") + ((string)y)));
+    return (x * y);
+}
+float compute_sum(float x,float y){
+    debug(((("computing sum of " + ((string)x)) + " and ") + ((string)y)));
+    return (x + y);
+}
+debug(string msg){
+    if (debug_flag) llOwnerSay(msg);
+}
+default {
+    state_entry() {
+        llOwnerSay(((string)compute_sum(3.0,compute_product(5.0,PI))));
+    }
+}
+</pre> 
+
+<p>Rewriting versus sharing in a particular instance may be confusing.  If the same module
+is imported in two different places, but the arguments passed when importing
+the module don't resolve to exactly the same global variables, then the instances can't be shared,
+and the only way the script will be able to be compiled is if a prefix is used somewhere to 
+give the imported symbols different names.</p>
+
+<p>Because LSLForge takes 'source' files (.lslp scripts and .lslm modules) and transforms them
+into 'object' files (.lsl scripts) it has the opportunity to do some <a href="optimization.html">
+optimization</a>.</p>
+</body>
+</html>

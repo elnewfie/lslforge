@@ -1,0 +1,29 @@
+$module ()
+
+$import $avEventGen ();
+
+string k = NULL_KEY;
+string url = "";
+
+list onOwnerSay(string primKey, string message, list avInfo) {
+    // the message will contain the (base) URL
+    url = message + "/hello?id=1";
+    return [mkHTTPRequest(url, "GET", "", "127.0.0.1", "Mozilla/5.0 (compatible)")];
+}
+
+list onHTTPRequestKey(string responseKey, list avInfo) {
+    k = responseKey;
+    return [];
+}
+
+list onHTTPBadRequest(list avInfo) {
+    return [mkSay(0,"unexpected -- bad request to url: " + url)];
+}
+
+list onHTTPResponse(string responseKey, integer status, string body, list avInfo) {
+    if (responseKey == k) {
+        return [mkSay(0,"response - status: " + (string) status + ", body: " + body)];
+    } else {
+        return [mkSay(0,"unexpected response!")];
+    }
+}

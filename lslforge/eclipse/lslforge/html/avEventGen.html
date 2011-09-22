@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Avatar Event Generator Module</title>
+	<link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>Avatar Event Generator Module</h1>
+
+<p>The Avatar Event Generator Module is useful within an <a href="avEventHandler.html">
+Avatar Event Handler</a> (and only within an avatar event handler) for producing simulated
+events that an avatar might produce (e.g. touch events, control event, payment events).</p>
+
+<p>The module has the following interface:</p>
+<table>
+<tr>
+<th>Function</th><th>Description</th>
+</tr>
+<tr>
+<td>string <em>mkTouch</em>(string primKey, float duration)</td>
+<td>Create an event string representing the avatar touching a particular prim for a duration (in seconds).</td>
+</tr>
+<tr>
+<td>string <em>mkFaceTouch</em>(string primKey, float duration, integer face, float s, float t)</td>
+<td>Create an event string representing the avatar touch a particular face of a particular prim 
+at a particular face location for  a duration (in seconds).</td>
+</tr>
+<tr>
+<td>string <em>mkWhisper</em>(integer channel, string message)</td>
+<td>Create an even representing the avatar whispering on a particular channel.</td>
+</tr>
+<tr>
+<td>string <em>mkSay</em>(integer channel, string message)</td>
+<td>Create an even representing the avatar speaking on a particular channel.</td>
+</tr>
+<tr>
+<td>string <em>mkShout</em>(integer channel, string message)</td>
+<td>Create an even representing the avatar shouting on a particular channel.</td>
+</tr>
+<tr>
+<td>string <em>mkPay</em>(string primKey, integer amount)</td>
+<td>Create an even representing the avatar paying an amount to a particular prim.</td>
+</tr>
+<tr>
+<td>string <em>mkControl</em>(integer newControlBits)</td>
+<td>Create an even representing the avatar/agent's control bits changing.</td>
+</tr>
+<tr>
+<td>string <em>mkHTTPRequest</em>(string url, string method, string body, string ip, string userAgent)</td>
+<td>'Send' an HTTP request to a particular (script) URL, using an HTTP method ("GET"/"POST"/etc.), with 
+the specified body, from the specified IP address and user agent (e.g. "Mozilla/5.0 (compatible)").</td>
+</tr>
+<tr>
+<th>Constant</th><th>Description</th>
+</tr>
+<tr>
+<td>integer LSLFORGE_AVATAR_KEY</td><td>For the <a href="avEventHandler.html">event handlers</a>, the item identifier for the avatar key element or the avinfo parameter.</td>
+</tr>
+<tr>
+<td>integer LSLFORGE_AVATAR_POS</td><td>For the <a href="avEventHandler.html">event handlers</a>, the item identifier for the avatar position element or the avinfo parameter.</td>
+</tr>
+<tr>
+<td>integer LSLFORGE_AVATAR_ROT</td><td>For the <a href="avEventHandler.html">event handlers</a>, the item identifier for the avatar rotation element or the avinfo parameter.</td>
+</tr>
+<tr>
+<td>integer LSLFORGE_AVATAR_NAME</td><td>For the <a href="avEventHandler.html">event handlers</a>, the item identifier for the avatar name element or the avinfo parameter.</td>
+</tr>
+</table>
+</body>
+

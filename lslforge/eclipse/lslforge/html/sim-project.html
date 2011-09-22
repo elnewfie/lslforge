@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Sim Project File</title>
+	<link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>Sim Project File</h1>
+
+<p>A Sim Project file is a file that defines the configuration of a simulated environment for LSL scripts to
+run within.  The environment can contain avatars and objects, which can contain scripts and other inventory items.
+Scripts, embedded in prims, can communicate with one another using chat, email, or link messages, just as in
+the 'real' LSL environment.</p>
+
+<p>
+A Sim Project can be 'launched' (by right clicking on the file and selecting the correct 'run' option) in 
+both 'Run' and 'Debug' modes.  When launched, the various scripts configured in the Sim Project will run and begin
+handling events.  Much of the activity is captured in a log that is displayed to the user as the simulation proceeds.
+If in debug mode and a breakpoint is hit, the simulation suspends, giving the user the opportunity to step through
+code, inspect variables, etc.</p>
+
+<p>The Sim Project file is edited using a custom editor, which looks like this:</p>
+
+<img src="images/sim-project-editor.jpg"/>
+
+<p>The project has a tree structure, with the 'world' at the top level, and the in-world avatars and rezzed
+objects just under the root.  Inventory objects (such as running scripts, or notecards) are contained with in
+the individual prims of the top-level objects.  Of course, prims can contain their own inventory objects, which in
+turn can contain scripts and other objects etc.  Just as in SL, only scripts that are in the 'top level' (rezzed)
+objects will be running.</p>
+
+<p>
+In addition to placing scripts inside prims, a special kind of LSLForge module can be associated both with
+the simulator project as a whole and with each avatar in the simulator project.  These modules are event handler
+modules, which can respond to various simulator events and produce their own events in reply.  The 
+<a href="avEventHandler.html">avatar event handler</a> can respond to things like chat events or 'owner say' 
+events and produce events such as touches and payments.  The 'world' event handler is used primarily for
+responding to HTTP requests (from LSL scripts) and producing XML requests (a sample 'world' event handler can
+be created using the File -> New -> Sim Event Handler wizard.  A full HTTP/XML-RPC example can be created 
+using the File -> New -> HTTP/RPC Example wizard.).
+</p>
+
+<p>When a Sim Project is running, you can observe its behavior and interact with it via the 
+<a href="sim-watcher.html">Sim Watcher</a> view.</p>
+</body>
+</html>

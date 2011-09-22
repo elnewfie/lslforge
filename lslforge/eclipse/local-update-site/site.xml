@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/lslforge_0.10.1.jar" id="lslforge" version="0.10.1"/>
+   <feature url="features/lslforge-part-macosx-x86_0.10.1.jar" id="lslforge-part-macosx-x86" version="0.10.1"/>
+   <feature url="features/lslforge-part-win32-x86_0.10.1.jar" id="lslforge-part-win32-x86" version="0.10.1" os="win32" arch="x86"/>
+   <feature url="features/lslforge_part_linux_x86_0.10.1.jar" id="lslforge_part_linux_x86" version="0.10.1"/>
+</site>

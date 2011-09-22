@@ -1,0 +1,17 @@
+$module ()
+
+$import $avEventGen ();
+
+list onDialog(string message, list buttons, integer channel, string objectName, list av_info) {
+	integer length = llGetListLength(buttons);
+	integer i;
+	
+	for (i = 0; i < length; i++) {
+		string button = llList2String(buttons, i);
+		if (button == "Ok") {
+			return [mkSay(channel,button)];
+		}
+	}
+
+    return [];
+}

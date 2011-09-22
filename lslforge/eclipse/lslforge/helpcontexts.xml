@@ -1,0 +1,6 @@
+<contexts>
+	<context id="simProjectEditor" title="Panic Button Title">
+		<description>The Sim Project Editor supports the editing of a hierarchical configuration for a simulation of the LSL environment.</description>
+		<topic href="html/sim-project.html" label="Sim Project Reference"/>
+	</context>
+</contexts>

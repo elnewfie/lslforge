@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><?artifactRepository version='1.1.0'?>
+<repository name="LSLForge Update Site" type="org.eclipse.equinox.p2.artifact.repository.simpleRepository" version="1">
+  <properties size="2">
+    <property name="p2.timestamp" value="1315161740654"/>
+    <property name="p2.compressed" value="true"/>
+  </properties>
+  <mappings size="3"><rule filter="(&amp; (classifier=osgi.bundle))" output="http://slchat.org/lslforge/${id}_plugin_${version}.jar"/><rule filter="(&amp; (classifier=binary))" output="http://slchat.org/lslforge/${id}_${version}"/><rule filter="(&amp; (classifier=org.eclipse.update.feature))" output="http://slchat.org/lslforge/${id}_feature_${version}.jar"/></mappings>
+  <artifacts size="6">
+    <artifact classifier="osgi.bundle" id="lslforge_win32_x86" version="0.14.0">
+      <properties size="2">
+        <property name="artifact.size" value="0"/>
+        <property name="download.size" value="2247987"/>
+      </properties>
+    </artifact>
+    <artifact classifier="osgi.bundle" id="lslforge" version="0.14.0">
+      <properties size="2">
+        <property name="artifact.size" value="0"/>
+        <property name="download.size" value="3145804"/>
+      </properties>
+    </artifact>
+    <artifact classifier="org.eclipse.update.feature" id="lslforge" version="0.14.0">
+      <properties size="2">
+        <property name="download.contentType" value="application/zip"/>
+        <property name="download.size" value="4425"/>
+      </properties>
+    </artifact>
+    <artifact classifier="osgi.bundle" id="lslforge_linux_x86" version="0.14.0">
+      <properties size="2">
+        <property name="artifact.size" value="0"/>
+        <property name="download.size" value="2218235"/>
+      </properties>
+    </artifact>
+    <artifact classifier="org.eclipse.update.feature" id="lslforge_part_linux_x86" version="0.14.0">
+      <properties size="2">
+        <property name="download.contentType" value="application/zip"/>
+        <property name="download.size" value="396"/>
+      </properties>
+    </artifact>
+    <artifact classifier="org.eclipse.update.feature" id="lslforge_part_win32_x86" version="0.14.0">
+      <properties size="2">
+        <property name="download.contentType" value="application/zip"/>
+        <property name="download.size" value="441"/>
+      </properties>
+    </artifact>
+  </artifacts>
+</repository>

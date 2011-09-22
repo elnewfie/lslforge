@@ -1,0 +1,4 @@
+default {
+    state_entry() {
+    }
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<title>Optimization</title>
+	<link rel="stylesheet" type="text/css" href="book.css"/>
+</head>
+
+<body>
+<h1>Optimization</h1>
+<div class="content">
+<p>
+The LSLForge Plug-in can take LSLForge scripts and produced optimized LSL output scripts. This
+feature allows you to edit and maintain your scripts in a higher level, more expressive, 
+maintainable style, but upload more space/time efficient versions in-world.
+On the LSLForge preferences page, there is a setting called 'Enable optimizations', shown below.
+</p>
+
+<p><img src="images/prefs.png" alt="preferences"/></p>
+
+<p>
+The key optimizations supported are inlining of functions, folding of constants, and pruning of
+unused constants and functions.  When optimizations are enabled, constant folding and pruning
+occur automatically.  For a function to be inlined, the function must be marked with the 'inline'
+pragma.  Here is a sample module with a function marked with the inline pragma:
+</p>
+
+<pre>
+// compute the nth fibonacci number...
+// pragma inline
+integer fib(integer n) {
+    integer prev0 = 1;
+    integer prev1 = 1;
+    
+    integer i;
+    integer val = prev1;
+    for (i = 1; i < n; i++) {
+        val = prev0 + prev1;
+        prev0 = prev1;
+        prev1 = val;
+    }
+    
+    return val;
+}
+</pre>
+<p>As shown above, the inline pragma must occur in a single line comment (not a block comment)
+on a line by itself before the function to be inlined.  Note that recursive functions, or
+functions that are part of a recursive cycle, will not be inlined, even if marked.
+Inlining can be turned off with the
+'noinlining' pragma.  If a function has been marked as 'inline' (say in a module), but you would
+rather it not be inlined in another function or handler, you can mark that function or handler as 
+'noinlining', and no functions will be inlined within that function or handler. For example:
+</p>
+<pre>
+    default {
+        // pragma noinlining
+        state_entry() {
+           ...
+        }
+    }
+</pre>
+</div>
+
+<p>With optimizations turned on, and given the module defining the 'fib' function from above,
+the following LSLForge script:</p>
+<pre>
+$import fib.lslm ();
+
+default {
+    state_entry() {
+        llOwnerSay((string)fib(3));
+        llOwnerSay((string)fib(10));
+        llOwnerSay((string)fib(1000));
+    }
+}
+</pre>
+
+would be transformed and optimized into the following LSL script:
+
+<pre>
+// LSL script generated: Mon Feb  2 22:41:00 Eastern Standard Time 2009
+default {
+    state_entry() {
+        llOwnerSay("Hello Scripter");
+        llOwnerSay("3");
+        llOwnerSay("89");
+        integer prev0 = 1;
+        integer prev1 = 1;
+        integer i;
+        integer val = prev1;
+        for ((i = 1); (i < 1000); i++) {
+            (val = (prev0 + prev1));
+            (prev0 = prev1);
+            (prev1 = val);
+        }
+        llOwnerSay(((string)val));
+    }
+}
+</pre>
+<p>
+In the above example, the optimizer figures out that all three calls to 'fib'
+are with constants as parameters, and that <em>fib</em> is a pure function (always
+returns the same result given a given set of arguments), so they should be 
+replaceable by constants.  The optimizer executes the 'fib' function to determine
+the resulting constant, but in the third case gives up because the computation time
+exceeds a pre-set limit (it does this because the function could be in an infinite loop)
+and so simply inlines the code for the call to fib(1000).  For comparison, without optimization
+the LSL script would look like: 
+</p>
+<pre>
+// LSL script generated: Sun Feb  1 22:03:28 Eastern Standard Time 2009
+integer fib(integer n){
+    integer prev0 = 1;
+    integer prev1 = 1;
+    integer i;
+    integer val = prev1;
+    for ((i = 1); (i < n); i++) {
+        (val = (prev0 + prev1));
+        (prev0 = prev1);
+        (prev1 = val);
+    }
+    return val;
+}
+default {
+    state_entry() {
+        llOwnerSay("Hello Scripter");
+        llOwnerSay(((string)fib(3)));
+        llOwnerSay(((string)fib(10)));
+        llOwnerSay(((string)fib(1000)));
+    }
+}
+</pre>
+
+<p>The optimizer will figure out if a global variable is a constant (and can thus potentially
+be replaced with its value anywhere it is used).  It also understands which LL functions are
+'pure' and can thus be executed at compile time, if they have been give constant arguments.
+Here is an example that demonstrates all of this:
+</p>
+<p>Initial <em>lslp</em> script:</p>
+<pre>
+float const = 5280.0;
+
+float hypotenuse(float a, float b) {
+    return llSqrt(a * a + b * b);
+}
+
+default {
+    state_entry() {
+        llOwnerSay((string)(hypotenuse(6000.0,3000.0) / const));
+    }
+}
+</pre>
+
+<p>Optimized script:</p>
+<pre>
+// LSL script generated: Mon Feb  2 22:41:00 Eastern Standard Time 2009
+default {
+    state_entry() {
+        llOwnerSay("1.270493");
+    }
+}
+</pre>
+</body>
+</html>
