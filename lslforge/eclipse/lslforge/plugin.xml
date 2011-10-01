@@ -25,7 +25,7 @@
             extensions="simp"
             icon="icons/obj16/lslforge-sim.gif"
             id="lslforge.editor.SimEditor"
-            name="LSLForge Sim Editor">
+            name="LslForge Sim Editor">
       </editor>
    </extension>
    
@@ -49,7 +49,7 @@
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             class="lslforge.launching.LaunchLslTestShortcut"
-            description="Launches an LSLForge Test"
+            description="Launches a LSLForge Test"
             icon="icons/lslforgetestrun.gif"
             id="lslforge.LaunchLslTest"
             label="Launch Lsl Test"
@@ -197,11 +197,11 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="lslforge.lslforge"
+            id="lslforge.LslForge"
             name="LSLForge">
       </category>
       <wizard
-            category="lslforge.lslforge"
+            category="lslforge.LslForge"
             class="lslforge.wizards.LslForgeProjectWizard"
             finalPerspective="lslforge.LslForgePerspective"
             icon="icons/newlprj_wiz.gif"
@@ -210,14 +210,14 @@
             preferredPerspectives="lslforge.LslForgePerspective"
             project="true">
          <description>
-            Create a new LSL+ Project.  An LSL+ Project allows you to edit and test LSL code.
+            Create a new LSLForge Project.  A LSLForge Project allows you to edit and test LSL code.
          </description>
       </wizard>
       <primaryWizard
             id="lslforge.LslForgeProjectWizard">
       </primaryWizard>
       <wizard
-            category="lslforge.lslforge"
+            category="lslforge.LslForge"
             class="lslforge.wizards.NewTestWizard"
             icon="icons/obj16/lslforge-test.gif"
             id="lslforge.newTestWizard"
@@ -225,7 +225,7 @@
             preferredPerspectives="lslforge.LslForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.lslforge"
+            category="lslforge.LslForge"
             class="lslforge.wizards.NewModuleWizard"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.module_wizard"
@@ -233,7 +233,7 @@
             preferredPerspectives="lslforge.LslForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.lslforge"
+            category="lslforge.LslForge"
             class="lslforge.wizards.NewScriptWizard"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.script_wizard"
@@ -241,7 +241,7 @@
             preferredPerspectives="lslforge.LslForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.lslforge"
+            category="lslforge.LslForge"
             class="lslforge.wizards.NewSimProjectWizard"
             icon="icons/obj16/lslforge-sim.gif"
             id="lslforge.newSimProjectWizard"
@@ -249,7 +249,7 @@
             preferredPerspectives="lslforge.LslForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.lslforge"
+            category="lslforge.LslForge"
             class="lslforge.wizards.NewSimEventHandler"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.newSimEventHandlerWizard"
@@ -257,7 +257,7 @@
             preferredPerspectives="lslforge.LslForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.lslforge"
+            category="lslforge.LslForge"
             class="lslforge.wizards.NewAvEventHandler"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.newAvEventHandlerWizard"

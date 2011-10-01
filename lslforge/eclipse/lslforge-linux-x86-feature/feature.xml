@@ -2,7 +2,7 @@
 <feature
       id="lslforge_part_linux_x86"
       label="lslforge_part_linux_x86"
-      version="0.14.0">
+      version="0.1.0">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
