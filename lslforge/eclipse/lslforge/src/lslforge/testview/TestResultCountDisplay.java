@@ -3,7 +3,7 @@ package lslforge.testview;
 
 import java.text.MessageFormat;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -58,8 +58,8 @@ public class TestResultCountDisplay extends Composite implements DisposeListener
         }
     }
 
-    private final Image errorIcon = LslForgePlugin.createImage("icons/error.gif"); //$NON-NLS-1$
-    private final Image failureIcon = LslForgePlugin.createImage("icons/failed.gif"); //$NON-NLS-1$
+    private final Image errorIcon = LSLForgePlugin.createImage("icons/error.gif"); //$NON-NLS-1$
+    private final Image failureIcon = LSLForgePlugin.createImage("icons/failed.gif"); //$NON-NLS-1$
             
     public TestResultCountDisplay(Composite parent) {
         super(parent, SWT.WRAP);

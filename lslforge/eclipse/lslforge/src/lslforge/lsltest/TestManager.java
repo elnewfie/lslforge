@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.testview.TestRunnerViewPart;
 import lslforge.util.Util;
 
@@ -85,7 +85,7 @@ public class TestManager {
         this.numRun = 0;
         this.numFailures = 0;
         this.numErrors = 0;
-        LslForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+        LSLForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
             public void run() { showTestRunnerViewPartInActivePage(findTestRunnerViewPartInActivePage());}
         });
         for (Iterator<ITestListener> i = listeners.iterator(); i.hasNext();) {
@@ -102,7 +102,7 @@ public class TestManager {
         IWorkbenchPage page= null;
         try {
             try {
-                page= LslForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                page= LSLForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
             } catch (NullPointerException e) {
             }
 
@@ -126,7 +126,7 @@ public class TestManager {
     }
 
     private TestRunnerViewPart findTestRunnerViewPartInActivePage() {
-        IWorkbenchPage page= LslForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IWorkbenchPage page= LSLForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
         if (page == null)
             return null;
         return (TestRunnerViewPart) page.findView(TestRunnerViewPart.ID);

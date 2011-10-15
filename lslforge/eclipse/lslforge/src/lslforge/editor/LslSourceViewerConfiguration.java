@@ -15,14 +15,14 @@ package lslforge.editor;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.editor.imported.HTMLTextPresenter;
-import lslforge.editor.lsl.LslCodeScanner;
-import lslforge.editor.lsl.LslCompletionProcessor;
-import lslforge.editor.lsl.LslForgeAutoIndentStrategy;
-import lslforge.editor.lsl.LslForgeDoubleClickSelector;
+import lslforge.editor.lsl.LSLCodeScanner;
+import lslforge.editor.lsl.LSLCompletionProcessor;
+import lslforge.editor.lsl.LSLForgeAutoIndentStrategy;
+import lslforge.editor.lsl.LSLForgeDoubleClickSelector;
 import lslforge.editor.lsl.ScannerChangeListener;
-import lslforge.util.LslColorProvider;
+import lslforge.util.LSLColorProvider;
 
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.DefaultInformationControl;
@@ -49,14 +49,14 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Shell;
 
 /**
- * Configuration for an Lsl (+) source viewer.
+ * Configuration for an LSL (+) source viewer.
  */
-public class LslSourceViewerConfiguration extends SourceViewerConfiguration 
+public class LSLSourceViewerConfiguration extends SourceViewerConfiguration 
 implements ScannerChangeListener {
 
     private HashSet<SourceViewerConfigurationListener> listeners = new HashSet<SourceViewerConfigurationListener>();
-    private LslCodeScanner scanner;
-    private LslForgeEditor editor;
+    private LSLCodeScanner scanner;
+    private LSLForgeEditor editor;
     
     static class SingleTokenScanner extends BufferedRuleBasedScanner {
         public SingleTokenScanner(TextAttribute attribute) {
@@ -68,8 +68,8 @@ implements ScannerChangeListener {
      * Default constructor.
      * @param editor the editor
      */
-    public LslSourceViewerConfiguration(LslForgeEditor editor) {
-        this.scanner = LslForgePlugin.getDefault().getLslCodeScanner();
+    public LSLSourceViewerConfiguration(LSLForgeEditor editor) {
+        this.scanner = LSLForgePlugin.getDefault().getLSLCodeScanner();
         scanner.addListener(this);
         this.editor = editor;
     }
@@ -86,7 +86,7 @@ implements ScannerChangeListener {
      * (non-Javadoc) Method declared on SourceViewerConfiguration
      */
     public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
-        return new LslAnnotationHover();
+        return new LSLAnnotationHover();
     }
 
     /*
@@ -94,7 +94,7 @@ implements ScannerChangeListener {
      *      java.lang.String)
      */
     public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
-        IAutoEditStrategy strategy = (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType) ? new LslForgeAutoIndentStrategy()
+        IAutoEditStrategy strategy = (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType) ? new LSLForgeAutoIndentStrategy()
                 : new DefaultIndentLineAutoEditStrategy());
         return new IAutoEditStrategy[] { strategy };
     }
@@ -103,7 +103,7 @@ implements ScannerChangeListener {
      * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getConfiguredDocumentPartitioning(org.eclipse.jface.text.source.ISourceViewer)
      */
     public String getConfiguredDocumentPartitioning(ISourceViewer sourceViewer) {
-        return LslForgePlugin.LSL_PARTITIONING;
+        return LSLForgePlugin.LSL_PARTITIONING;
     }
 
     /*
@@ -111,7 +111,7 @@ implements ScannerChangeListener {
      */
     public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
         return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
-                LslPartitionScanner.LSL_MULTILINE_COMMENT };
+                LSLPartitionScanner.LSL_MULTILINE_COMMENT };
     }
 
     /*
@@ -121,17 +121,17 @@ implements ScannerChangeListener {
 
         ContentAssistant assistant = new ContentAssistant();
         assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
-        assistant.setContentAssistProcessor(new LslCompletionProcessor(),
+        assistant.setContentAssistProcessor(new LSLCompletionProcessor(),
                 IDocument.DEFAULT_CONTENT_TYPE);
 
         assistant.enableAutoActivation(true);
         assistant.setAutoActivationDelay(500);
         assistant.setProposalPopupOrientation(IContentAssistant.CONTEXT_INFO_BELOW);
-        assistant.setProposalSelectorBackground(LslForgePlugin.getDefault().getLslColorProvider()
+        assistant.setProposalSelectorBackground(LSLForgePlugin.getDefault().getLSLColorProvider()
                 .getColor(new RGB(224, 224, 224)));
         assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
-        assistant.setContextInformationPopupBackground(LslForgePlugin.getDefault()
-                .getLslColorProvider().getColor(new RGB(255, 255, 50)));
+        assistant.setContextInformationPopupBackground(LSLForgePlugin.getDefault()
+                .getLSLColorProvider().getColor(new RGB(255, 255, 50)));
         assistant.setInformationControlCreator(new IInformationControlCreator() {
             public IInformationControl createInformationControl(Shell parent) {
                 return new DefaultInformationControl(parent, new HTMLTextPresenter(true));
@@ -152,7 +152,7 @@ implements ScannerChangeListener {
      */
     public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer,
             String contentType) {
-        return new LslForgeDoubleClickSelector();
+        return new LSLForgeDoubleClickSelector();
     }
 
     /*
@@ -167,26 +167,26 @@ implements ScannerChangeListener {
      */
     public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 
-        LslColorProvider provider = LslForgePlugin.getDefault().getLslColorProvider();
+        LSLColorProvider provider = LSLForgePlugin.getDefault().getLSLColorProvider();
         PresentationReconciler reconciler = new PresentationReconciler();
         reconciler.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
 
-        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(LslForgePlugin.getDefault()
-                .getLslCodeScanner());
+        DefaultDamagerRepairer dr = new DefaultDamagerRepairer(LSLForgePlugin.getDefault()
+                .getLSLCodeScanner());
         reconciler.setDamager(dr, IDocument.DEFAULT_CONTENT_TYPE);
         reconciler.setRepairer(dr, IDocument.DEFAULT_CONTENT_TYPE);
 
         dr = new DefaultDamagerRepairer(new SingleTokenScanner(new TextAttribute(provider
-                .getColor(LslColorProvider.MULTI_LINE_COMMENT_COLOR))));
-        reconciler.setDamager(dr, LslPartitionScanner.LSL_MULTILINE_COMMENT);
-        reconciler.setRepairer(dr, LslPartitionScanner.LSL_MULTILINE_COMMENT);
+                .getColor(LSLColorProvider.MULTI_LINE_COMMENT_COLOR))));
+        reconciler.setDamager(dr, LSLPartitionScanner.LSL_MULTILINE_COMMENT);
+        reconciler.setRepairer(dr, LSLPartitionScanner.LSL_MULTILINE_COMMENT);
 
         return reconciler;
     }
 
     @Override
     public IReconciler getReconciler(ISourceViewer sourceViewer) {
-    	LslForgeReconcilingStrategy strat = new LslForgeReconcilingStrategy(this.editor);
+    	LSLForgeReconcilingStrategy strat = new LSLForgeReconcilingStrategy(this.editor);
     	MonoReconciler reconciler = new MonoReconciler(strat, false);
     	return reconciler;
     }
@@ -196,7 +196,7 @@ implements ScannerChangeListener {
     }
 
     public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
-        return new LslTextHover();
+        return new LSLTextHover();
     }
 
     public void dispose() {

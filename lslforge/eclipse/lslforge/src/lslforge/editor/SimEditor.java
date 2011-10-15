@@ -4,8 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.gentree.Node;
 import lslforge.gentree.NodeFactory;
 import lslforge.gentree.NodeListener;
@@ -355,9 +355,9 @@ public class SimEditor extends EditorPart implements NodeListener {
 			if (n.hasValueChoices()) {
 			    String[] choices;
 			    if ("scripts".equals(n.getChoicesId())) { //$NON-NLS-1$
-			        choices = nature.getLslScripts();
+			        choices = nature.getLSLScripts();
 			    } else if ("optional-module".equals(n.getChoicesId())) { //$NON-NLS-1$
-			        List<String> modules = nature.getLslModules();
+			        List<String> modules = nature.getLSLModules();
 			        modules.add(0, "(none)"); //$NON-NLS-1$ TODO
 			        choices = modules.toArray(new String[modules.size()]);
 			    } else if ("avatars".equals(n.getChoicesId())) { //$NON-NLS-1$
@@ -492,7 +492,7 @@ public class SimEditor extends EditorPart implements NodeListener {
 	private SimProject.WorldNode world = null;
 	@SuppressWarnings("unused")
 	private String simProjectName = null;
-	private LslProjectNature nature = null;
+	private LSLProjectNature nature = null;
 	private int changeCount = 0;
 	private IFile file;
 	private DeleteNodeAction fDeleteNodeAction;
@@ -528,7 +528,7 @@ public class SimEditor extends EditorPart implements NodeListener {
 	
     public void doSave(IProgressMonitor monitor) {
 		String val = SimProject.toXml(world);
-		if (LslForgePlugin.DEBUG) Util.log("world = " + val); //$NON-NLS-1$
+		if (LSLForgePlugin.DEBUG) Util.log("world = " + val); //$NON-NLS-1$
 		try {
 			file.setContents(new ByteArrayInputStream(val.getBytes()), IResource.FORCE | IResource.KEEP_HISTORY, monitor);
 			zeroChangeCount();
@@ -556,7 +556,7 @@ public class SimEditor extends EditorPart implements NodeListener {
 		this.setPartName(input.getName());
 		file = (IFile) input.getAdapter(IFile.class);
 		try {
-			nature = (LslProjectNature) file.getProject().getNature(LslProjectNature.ID);
+			nature = (LSLProjectNature) file.getProject().getNature(LSLProjectNature.ID);
 		} catch (CoreException e1) {
 			throw new PartInitException("Can't get project nature", e1); //$NON-NLS-1$
 		}
@@ -686,7 +686,7 @@ public class SimEditor extends EditorPart implements NodeListener {
      
 	private void createColumns(Tree tree) {
 		fColumn1 = new TreeColumn(tree, SWT.LEFT);
-		fColumn1.setText(Messages.getString("LslTestEditor.ITEM"));  //$NON-NLS-1$
+		fColumn1.setText(Messages.getString("LSLTestEditor.ITEM"));  //$NON-NLS-1$
 		fColumn1.setWidth(200);
 		fColumn1.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -694,7 +694,7 @@ public class SimEditor extends EditorPart implements NodeListener {
 		});
 
 		fColumn2 = new TreeColumn(tree, SWT.LEFT);
-		fColumn2.setText(Messages.getString("LslTestEditor.VALUE"));  //$NON-NLS-1$
+		fColumn2.setText(Messages.getString("LSLTestEditor.VALUE"));  //$NON-NLS-1$
 		fColumn2.setWidth(100);
 		fColumn2.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -724,7 +724,7 @@ public class SimEditor extends EditorPart implements NodeListener {
     }
     
     private void asyncExec(Runnable r) {
-        LslForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
+        LSLForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
     }
     
     protected void createUndoRedoActions() {

@@ -43,7 +43,8 @@ public class ListConverter implements Converter {
             Object value = null;
                 
             if ("value".equals(reader.getNodeName())) { //$NON-NLS-1$
-                if (value != null) throw new ConversionException("multiple values in single entry"); //$NON-NLS-1$
+//Dead code, removed
+//                if (value != null) throw new ConversionException("multiple values in single entry"); //$NON-NLS-1$
                 value = readItem(reader, context, l);
             } else {
                 throw new ConversionException("unrecognized list element"); //$NON-NLS-1$
@@ -56,14 +57,13 @@ public class ListConverter implements Converter {
         return l;
     }
 
-    @SuppressWarnings("unchecked")
-	public boolean canConvert(Class type) {
+	public boolean canConvert(@SuppressWarnings("rawtypes") Class type) {
         return List.class.isAssignableFrom(type);
     }
 
-    @SuppressWarnings("unchecked")
-	private Object createCollection(Class type) {
-        Class defaultType = mapper.defaultImplementationOf(type);
+	private Object createCollection(@SuppressWarnings("rawtypes") Class type) {
+        @SuppressWarnings("rawtypes")
+		Class defaultType = mapper.defaultImplementationOf(type);
         try {
             return defaultType.newInstance();
         } catch (InstantiationException e) {

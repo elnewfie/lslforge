@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.FileLocator;
@@ -175,7 +175,7 @@ public class Util {
 			IStatus.ERROR, 
 			message, 
 			e); 
-		LslForgePlugin.getDefault().getLog().log(status);
+		LSLForgePlugin.getDefault().getLog().log(status);
 	}
 
 	public static void log(String message) {
@@ -185,7 +185,7 @@ public class Util {
 			IStatus.INFO, 
 			message, 
 			null); 
-		LslForgePlugin.getDefault().getLog().log(status);
+		LSLForgePlugin.getDefault().getLog().log(status);
 	}
 
 	public static Object[] append(Object[] lst,Object[] lst1) {
@@ -244,7 +244,7 @@ public class Util {
 				IStatus.INFO, 
 				message, 
 				null); 
-			LslForgePlugin.getDefault().getLog().log(status);
+			LSLForgePlugin.getDefault().getLog().log(status);
 	}
 	
 	public static interface ArrayMapFunc<T> {
@@ -304,7 +304,7 @@ public class Util {
 	public static ImageDescriptor findDescriptor(String spath) {
 		IPath path = new Path(spath);
 		URL url = 
-			FileLocator.find(LslForgePlugin.getDefault().getBundle(), path, null);
+			FileLocator.find(LSLForgePlugin.getDefault().getBundle(), path, null);
 		if (url != null) {
 			return ImageDescriptor.createFromURL(url);
 		} else {

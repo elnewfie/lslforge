@@ -3,7 +3,7 @@ package lslforge.simview;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.SimListener;
 import lslforge.SimManager;
 import lslforge.sim.SimEvent;
@@ -44,7 +44,7 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
         public StopAction(Shell parentShell) {
             setText("Stop Sim"); //$NON-NLS-1$
             setToolTipText("Stop Sim"); //$NON-NLS-1$
-            ImageDescriptor descriptor = LslForgePlugin
+            ImageDescriptor descriptor = LSLForgePlugin
                     .imageDescriptorFromPlugin("icons/stop.gif"); //$NON-NLS-1$
             setHoverImageDescriptor(descriptor);
             setImageDescriptor(descriptor);
@@ -65,7 +65,7 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
             this.userEventName = userEventName;
             setText(text); 
             setToolTipText(toolTip);
-            ImageDescriptor descriptor = LslForgePlugin
+            ImageDescriptor descriptor = LSLForgePlugin
                     .imageDescriptorFromPlugin("icons/chat.gif"); //$NON-NLS-1$
             setHoverImageDescriptor(descriptor);
             setImageDescriptor(descriptor);
@@ -96,7 +96,7 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
             this.parentShell = parentShell;
             setText("Touch"); //$NON-NLS-1$
             setToolTipText("Touch!"); //$NON-NLS-1$
-            ImageDescriptor descriptor = LslForgePlugin
+            ImageDescriptor descriptor = LSLForgePlugin
                     .imageDescriptorFromPlugin("icons/touch.gif"); //$NON-NLS-1$
             setHoverImageDescriptor(descriptor);
             setImageDescriptor(descriptor);
@@ -146,7 +146,7 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
     private boolean refreshPending = false;
     
     public SimWatcherViewPart() {
-        simManager = LslForgePlugin.getDefault().getSimManager();
+        simManager = LSLForgePlugin.getDefault().getSimManager();
         simManager.addSimListener(this);
         simManager.addSimMetaDataListener(this);
     }
@@ -366,7 +366,7 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
     }
 
     private void asyncExec(Runnable r) {
-        LslForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
+        LSLForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
     }
     
     private void populateEventsCombo() {

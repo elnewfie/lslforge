@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import lslforge.LslProjectNature;
+import lslforge.LSLProjectNature;
 import lslforge.generated.LSLType;
 import lslforge.generated.Tuple2;
 import lslforge.util.Util;
@@ -15,7 +15,7 @@ import lslforge.util.Util;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-public class LslTest {
+public class LSLTest {
 
 	private static final String EMPTY_STRING = "\"\""; //$NON-NLS-1$
     private static final String BLANK = ""; //$NON-NLS-1$
@@ -24,28 +24,28 @@ public class LslTest {
 	public static int SCRIPT_FUNCTION_TEST = 2;
 	private String name = BLANK;
 	private EntryPoint entryPoint = null;
-	private LslValue[] arguments = null;
+	private LSLValue[] arguments = null;
 	private MaybeValue expectedReturn = null;
 	private CallExpectations expectations = new CallExpectations();
 	private ArrayList<GlobBinding> initialBindings = new ArrayList<GlobBinding>();
 	private ArrayList<GlobBinding> finalBindings = new ArrayList<GlobBinding>();
-    private LslTestSuite suite;
+    private LSLTestSuite suite;
 	
-	public static class LslValue {
+	public static class LSLValue {
 	}
 	
 	public static class MaybeValue {
-	    private LslValue val = null;
+	    private LSLValue val = null;
 	    private Class<?> type = null;
 	    
 	    public MaybeValue() {
 	        this.val = null;
 	    }
-	    public MaybeValue(LslValue val) {
+	    public MaybeValue(LSLValue val) {
 	        this.val = val;
         }
 
-        public LslValue getVal() { return val; }
+        public LSLValue getVal() { return val; }
 	    
 	    public Class<?> getType() { return type; }
 	    
@@ -53,19 +53,19 @@ public class LslTest {
 	        return val == null ? BLANK : val.toString();
 	    }
 
-        public void setVal(LslValue o) {
+        public void setVal(LSLValue o) {
             this.val = o;
         }
 	}
 	
-	public static class LslVoid extends LslValue {
+	public static class LSLVoid extends LSLValue {
 		public String toString() { return BLANK; }
 	}
 
-	public static class LslString extends LslValue {
+	public static class LSLString extends LSLValue {
 		public String val;
 
-		public LslString(String val) {
+		public LSLString(String val) {
 			this.val = val;
 		}
 		
@@ -75,10 +75,10 @@ public class LslTest {
 
 	}
 	
-	public static class LslInteger extends LslValue {
+	public static class LSLInteger extends LSLValue {
 		public String val;
 
-		public LslInteger(String val) {
+		public LSLInteger(String val) {
 			this.val = val;
 		}
 		
@@ -87,10 +87,10 @@ public class LslTest {
 		}
 	}
 	
-	public static class LslFloat extends LslValue {
+	public static class LSLFloat extends LSLValue {
 		public String val;
 		
-		public LslFloat(String val) {
+		public LSLFloat(String val) {
 			this.val = val;
 		}
 		
@@ -99,10 +99,10 @@ public class LslTest {
 		}
 	}
 	
-	public static class LslKey extends LslValue {
+	public static class LSLKey extends LSLValue {
 		public String val;
 
-		public LslKey(String val) {
+		public LSLKey(String val) {
 			this.val = val;
 		}
 		
@@ -111,15 +111,15 @@ public class LslTest {
 		}
 	}
 	
-	public static class LslList extends LslValue {
-		private List<LslValue> val;
+	public static class LSLList extends LSLValue {
+		private List<LSLValue> val;
 
-		public LslList() {
-		    val = new LinkedList<LslValue>();
+		public LSLList() {
+		    val = new LinkedList<LSLValue>();
 		}
 		
-		public LslList(List<LslValue> val) {
-			if (val == null) this.val = new LinkedList<LslValue>();
+		public LSLList(List<LSLValue> val) {
+			if (val == null) this.val = new LinkedList<LSLValue>();
 			else this.val = val;
 		}
 		
@@ -127,7 +127,7 @@ public class LslTest {
 			StringBuilder buf = new StringBuilder("["); //$NON-NLS-1$
 			String sep = BLANK;
 
-			for (Iterator<LslValue> it = getVal().iterator(); it.hasNext(); ) {
+			for (Iterator<LSLValue> it = getVal().iterator(); it.hasNext(); ) {
 				buf.append(sep).append(it.next().toString());
 				sep = ","; //$NON-NLS-1$
 			}
@@ -135,27 +135,27 @@ public class LslTest {
 			return buf.append(']').toString();
 		}
 
-        public void setVal(List<LslValue> val) {
-            if (val == null) val = new LinkedList<LslValue>();
+        public void setVal(List<LSLValue> val) {
+            if (val == null) val = new LinkedList<LSLValue>();
             this.val = val;
         }
 
-        public List<LslValue> getVal() {
-            if (val == null) val = new LinkedList<LslValue>();
+        public List<LSLValue> getVal() {
+            if (val == null) val = new LinkedList<LSLValue>();
             return val;
         }
 	}
 	
-	public static class LslList1 extends LslValue {
+	public static class LSLList1 extends LSLValue {
 	    String val;
-	    public LslList1(String val) { this.val  = val; }
+	    public LSLList1(String val) { this.val  = val; }
 	    public String getVal() { return val; }
 	    public String toString() { return val; }
 	}
 	
-	public static class LslVector extends LslValue {
+	public static class LSLVector extends LSLValue {
 		String val;
-		public LslVector(String val) {
+		public LSLVector(String val) {
 		    this.val = val;
 		}
 		
@@ -167,9 +167,9 @@ public class LslTest {
 		}
 	}
 	
-    public static class LslRotation extends LslValue {
+    public static class LSLRotation extends LSLValue {
         String val;
-        public LslRotation(String val) {
+        public LSLRotation(String val) {
             this.val = val;
         }
         
@@ -207,7 +207,7 @@ public class LslTest {
 	
 	public static class ExpectedCall {
 		private String name;
-		private LslValue returns;
+		private LSLValue returns;
 		private List<MaybeValue> args = new ArrayList<MaybeValue>();
 		
         public void setName(String funcName) {
@@ -216,10 +216,10 @@ public class LslTest {
         public String getName() {
             return name;
         }
-        public void setReturns(LslValue returns) {
+        public void setReturns(LSLValue returns) {
             this.returns = returns;
         }
-        public LslValue getReturns() {
+        public LSLValue getReturns() {
             return returns;
         }
         public void setArgs(List<MaybeValue> args) {
@@ -264,7 +264,7 @@ public class LslTest {
 	    }
 	    
 	    public void setMode(String mode) {
-	         if (!modeSet.contains(mode)) throw new RuntimeException(Messages.getString("LslTest.INVALID_MODE") + mode); //$NON-NLS-1$
+	         if (!modeSet.contains(mode)) throw new RuntimeException(Messages.getString("LSLTest.INVALID_MODE") + mode); //$NON-NLS-1$
 	         this.mode = mode;
 	    }
 	    
@@ -280,11 +280,11 @@ public class LslTest {
 	
 	public static class GlobBinding {
 	    private String name;
-	    private LslValue value;
+	    private LSLValue value;
 	    
 	    public String getName() { return name; }
-	    public LslValue getValue() { return value; }
-        public void setValue(LslValue o) {
+	    public LSLValue getValue() { return value; }
+        public void setValue(LSLValue o) {
             value = o;
         }
         public void setName(String name) {
@@ -293,7 +293,7 @@ public class LslTest {
 	}
 	
 	public void postInit() {
-	    if (this.arguments == null) this.arguments = new LslValue[0];
+	    if (this.arguments == null) this.arguments = new LSLValue[0];
 	    if (this.entryPoint == null) this.entryPoint = new EntryPoint();
 	    if (this.expectedReturn == null) this.expectedReturn = new MaybeValue();
 	    if (this.name == null) this.name = BLANK;
@@ -308,33 +308,33 @@ public class LslTest {
 	public static void main(String[] args) {
 		XStream xstream = new XStream(new DomDriver());
 		
-		LslTest tst = new LslTest();
+		LSLTest tst = new LSLTest();
 		tst.name = "Sample"; //$NON-NLS-1$
 	    EntryPoint mod = new EntryPoint();
 	    tst.entryPoint = mod;
 		mod.setPath("sort"); //$NON-NLS-1$
 		mod.setFileName("test.lslm"); //$NON-NLS-1$
 		tst.expectedReturn = new MaybeValue();
-		tst.expectedReturn.setVal(new LslInteger("2")); //$NON-NLS-1$
+		tst.expectedReturn.setVal(new LSLInteger("2")); //$NON-NLS-1$
 		System.out.println(xstream.toXML(tst));
 	}
 
-	public static LslValue defaultValueFor(Class<?> argType) {
-		if (LslString.class.equals(argType)) {
-			return new LslString(EMPTY_STRING);
-		} else if (LslKey.class.equals(argType)) {
-			return new LslKey(EMPTY_STRING);
-		} else if (LslInteger.class.equals(argType)) {
-			return new LslInteger("0"); //$NON-NLS-1$
-		} else if (LslFloat.class.equals(argType)) {
-			return new LslFloat("0.0"); //$NON-NLS-1$
-		} else if (LslList.class.equals(argType)) {
-			return new LslList(null);
-		} else if (LslVector.class.equals(argType)) {
-			return new LslVector("<0,0,0>"); //$NON-NLS-1$
-		} else if (LslRotation.class.equals(argType)) {
-			return new LslRotation("<0,0,0,1>"); //$NON-NLS-1$
-		} else return new LslVoid();
+	public static LSLValue defaultValueFor(Class<?> argType) {
+		if (LSLString.class.equals(argType)) {
+			return new LSLString(EMPTY_STRING);
+		} else if (LSLKey.class.equals(argType)) {
+			return new LSLKey(EMPTY_STRING);
+		} else if (LSLInteger.class.equals(argType)) {
+			return new LSLInteger("0"); //$NON-NLS-1$
+		} else if (LSLFloat.class.equals(argType)) {
+			return new LSLFloat("0.0"); //$NON-NLS-1$
+		} else if (LSLList.class.equals(argType)) {
+			return new LSLList(null);
+		} else if (LSLVector.class.equals(argType)) {
+			return new LSLVector("<0,0,0>"); //$NON-NLS-1$
+		} else if (LSLRotation.class.equals(argType)) {
+			return new LSLRotation("<0,0,0,1>"); //$NON-NLS-1$
+		} else return new LSLVoid();
 	}
 	
     public static String defaultValueFor(String argType) {
@@ -377,42 +377,42 @@ public class LslTest {
         this.initialBindings = bindings;
     }
     
-    public static Class<?> stringToLslType(String s) {
-    	if ("integer".equals(s)) return LslInteger.class; //$NON-NLS-1$
-    	else if ("float".equals(s)) return LslFloat.class; //$NON-NLS-1$
-    	else if ("string".equals(s)) return LslString.class; //$NON-NLS-1$
-    	else if ("key".equals(s)) return LslKey.class; //$NON-NLS-1$
-    	else if ("vector".equals(s)) return LslVector.class; //$NON-NLS-1$
-    	else if ("rotation".equals(s)) return LslRotation.class; //$NON-NLS-1$
-    	else if ("list".equals(s)) return LslList.class; //$NON-NLS-1$
-    	else if ("void".equals(s)) return LslVoid.class; //$NON-NLS-1$
-    	else if (BLANK.equals(s)) return LslVoid.class;
-    	return LslValue.class;
+    public static Class<?> stringToLSLType(String s) {
+    	if ("integer".equals(s)) return LSLInteger.class; //$NON-NLS-1$
+    	else if ("float".equals(s)) return LSLFloat.class; //$NON-NLS-1$
+    	else if ("string".equals(s)) return LSLString.class; //$NON-NLS-1$
+    	else if ("key".equals(s)) return LSLKey.class; //$NON-NLS-1$
+    	else if ("vector".equals(s)) return LSLVector.class; //$NON-NLS-1$
+    	else if ("rotation".equals(s)) return LSLRotation.class; //$NON-NLS-1$
+    	else if ("list".equals(s)) return LSLList.class; //$NON-NLS-1$
+    	else if ("void".equals(s)) return LSLVoid.class; //$NON-NLS-1$
+    	else if (BLANK.equals(s)) return LSLVoid.class;
+    	return LSLValue.class;
     }
 
     public static String lslTypeToString(Class<?> c) {
-        if (LslInteger.class.equals(c)) return "integer"; //$NON-NLS-1$
-        else if (LslFloat.class.equals(c)) return "float"; //$NON-NLS-1$
-        else if (LslString.class.equals(c)) return "string"; //$NON-NLS-1$
-        else if (LslKey.class.equals(c)) return "key"; //$NON-NLS-1$
-        else if (LslVector.class.equals(c)) return "vector"; //$NON-NLS-1$
-        else if (LslRotation.class.equals(c)) return "rotation"; //$NON-NLS-1$
-        else if (LslList.class.equals(c)) return "list"; //$NON-NLS-1$
-        else if (LslList1.class.equals(c)) return "list"; //$NON-NLS-1$
+        if (LSLInteger.class.equals(c)) return "integer"; //$NON-NLS-1$
+        else if (LSLFloat.class.equals(c)) return "float"; //$NON-NLS-1$
+        else if (LSLString.class.equals(c)) return "string"; //$NON-NLS-1$
+        else if (LSLKey.class.equals(c)) return "key"; //$NON-NLS-1$
+        else if (LSLVector.class.equals(c)) return "vector"; //$NON-NLS-1$
+        else if (LSLRotation.class.equals(c)) return "rotation"; //$NON-NLS-1$
+        else if (LSLList.class.equals(c)) return "list"; //$NON-NLS-1$
+        else if (LSLList1.class.equals(c)) return "list"; //$NON-NLS-1$
         else return "void"; //$NON-NLS-1$
     }
     
-    public static LslValue mkLslType(String s, String val) {
-        if ("integer".equals(s)) return new LslInteger(val); //$NON-NLS-1$
-        else if ("float".equals(s)) return new LslFloat(val); //$NON-NLS-1$
-        else if ("string".equals(s)) return new LslString(val); //$NON-NLS-1$
-        else if ("key".equals(s)) return new LslKey(val); //$NON-NLS-1$
-        else if ("vector".equals(s)) return new LslVector(val); //$NON-NLS-1$
-        else if ("rotation".equals(s)) return new LslRotation(val); //$NON-NLS-1$
-        else if ("list".equals(s)) return new LslList1(val); //$NON-NLS-1$
-        else if ("void".equals(s)) return new LslVoid(); //$NON-NLS-1$
-        else if (BLANK.equals(s)) return new LslVoid();
-        return new LslVoid();
+    public static LSLValue mkLSLType(String s, String val) {
+        if ("integer".equals(s)) return new LSLInteger(val); //$NON-NLS-1$
+        else if ("float".equals(s)) return new LSLFloat(val); //$NON-NLS-1$
+        else if ("string".equals(s)) return new LSLString(val); //$NON-NLS-1$
+        else if ("key".equals(s)) return new LSLKey(val); //$NON-NLS-1$
+        else if ("vector".equals(s)) return new LSLVector(val); //$NON-NLS-1$
+        else if ("rotation".equals(s)) return new LSLRotation(val); //$NON-NLS-1$
+        else if ("list".equals(s)) return new LSLList1(val); //$NON-NLS-1$
+        else if ("void".equals(s)) return new LSLVoid(); //$NON-NLS-1$
+        else if (BLANK.equals(s)) return new LSLVoid();
+        return new LSLVoid();
     }
     public void setFinalBindings(ArrayList<GlobBinding> finalBindings) {
         this.finalBindings = finalBindings;
@@ -433,10 +433,10 @@ public class LslTest {
         
         LinkedList<Tuple2<String,LSLType>> params = nature().getParams(entryPoint.getFileName(), entryPoint.getPath());
         
-        this.arguments = new LslValue[params.size()];
+        this.arguments = new LSLValue[params.size()];
         
         for (int i = 0; i < params.size(); i++) {
-            this.arguments[i] = defaultValueFor(stringToLslType(TestProject.lslTypeToString(params.get(i).el2)));
+            this.arguments[i] = defaultValueFor(stringToLSLType(TestProject.lslTypeToString(params.get(i).el2)));
         }
     }
 
@@ -444,11 +444,11 @@ public class LslTest {
         return entryPoint;
     }
 
-    public void setSuite(LslTestSuite lslTestSuite) {
-        this.suite = lslTestSuite;
+    public void setSuite(LSLTestSuite lSLTestSuite) {
+        this.suite = lSLTestSuite;
     }
     
-    private LslProjectNature nature() {
+    private LSLProjectNature nature() {
         return suite.nature();
     }
 
@@ -460,11 +460,11 @@ public class LslTest {
         return name;
     }
 
-    public void setArguments(LslValue[] arguments) {
+    public void setArguments(LSLValue[] arguments) {
         this.arguments = arguments;
     }
 
-    public LslValue[] getArguments() {
+    public LSLValue[] getArguments() {
         return arguments;
     }
 }

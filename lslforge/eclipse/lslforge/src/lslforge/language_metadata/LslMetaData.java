@@ -3,11 +3,11 @@
  */
 package lslforge.language_metadata;
 
-public class LslMetaData {
-	private LslHandler[] handlers = new LslHandler[0];
-	private LslFunction[] functions = new LslFunction[0];
-	private LslConstant[] constants = new LslConstant[0];
-	public LslHandler[] getHandlers() { return handlers; }
-	public LslFunction[] getFunctions() { return functions; }
-	public LslConstant[] getConstants() { return constants; }
+public class LSLMetaData {
+	private LSLHandler[] handlers = new LSLHandler[0];
+	private LSLFunction[] functions = new LSLFunction[0];
+	private LSLConstant[] constants = new LSLConstant[0];
+	public LSLHandler[] getHandlers() { return handlers; }
+	public LSLFunction[] getFunctions() { return functions; }
+	public LSLConstant[] getConstants() { return constants; }
 }

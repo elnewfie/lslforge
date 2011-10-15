@@ -3,7 +3,7 @@
  */
 package lslforge.language_metadata;
 
-public class LslParam {
+public class LSLParam {
 	private String name;
 	private String type;
 	

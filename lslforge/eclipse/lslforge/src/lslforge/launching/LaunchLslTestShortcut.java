@@ -1,6 +1,6 @@
 package lslforge.launching;
 
-import lslforge.lsltest.LslTestSuite;
+import lslforge.lsltest.LSLTestSuite;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IResource;
@@ -16,17 +16,17 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 
-public class LaunchLslTestShortcut implements ILaunchShortcut {
+public class LaunchLSLTestShortcut implements ILaunchShortcut {
 
 	public static final String LC_RESOURCE_NAME = "resource_name"; //$NON-NLS-1$
 
 	public void launch(ISelection selection, String mode) {
 		Object o = null;
-		LslTestSuite s = null;
+		LSLTestSuite s = null;
 		if (selection instanceof IStructuredSelection &&
 		    ((IStructuredSelection)selection).size() == 1 &&
 			(o = ((IStructuredSelection)selection).getFirstElement()) instanceof IAdaptable &&
-			(s = (LslTestSuite)((IAdaptable)o).getAdapter(LslTestSuite.class)) != null) {
+			(s = (LSLTestSuite)((IAdaptable)o).getAdapter(LSLTestSuite.class)) != null) {
 			
 			try {
 				ILaunchConfiguration config = findConfig(s);
@@ -37,7 +37,7 @@ public class LaunchLslTestShortcut implements ILaunchShortcut {
 		}
 	}
 
-	public ILaunchConfiguration findConfig(LslTestSuite suite) throws CoreException {
+	public ILaunchConfiguration findConfig(LSLTestSuite suite) throws CoreException {
 		ILaunchConfiguration[] configs = debugPlugin().getLaunchManager().getLaunchConfigurations(getConfigurationType());
 		IResource r = suite.getResource();
 		

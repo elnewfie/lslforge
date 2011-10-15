@@ -3,8 +3,8 @@ package lslforge.preferences;
 import java.io.IOException;
 import java.text.MessageFormat;
 
-import lslforge.LslForgePlugin;
-import lslforge.editor.lsl.LslCodeScanner;
+import lslforge.LSLForgePlugin;
+import lslforge.editor.lsl.LSLCodeScanner;
 
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
@@ -13,33 +13,33 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class LslForgeEditorPreferencePage extends FieldEditorPreferencePage implements
+public class LSLForgeEditorPreferencePage extends FieldEditorPreferencePage implements
         IWorkbenchPreferencePage {
 
-    public LslForgeEditorPreferencePage() throws IOException {
+    public LSLForgeEditorPreferencePage() throws IOException {
         super(FieldEditorPreferencePage.GRID);
-        setPreferenceStore(LslForgePlugin.getDefault().getPreferenceStore());
+        setPreferenceStore(LSLForgePlugin.getDefault().getPreferenceStore());
     }
 
     public void init(IWorkbench workbench) {
     }
 
     protected IPreferenceStore doGetPreferenceStore() {
-        return LslForgePlugin.getDefault().getPreferenceStore();
+        return LSLForgePlugin.getDefault().getPreferenceStore();
     }
 
     protected void createFieldEditors() {
-//        addField(new ColorFieldEditor(LslColorProvider.DEFAULT_COLOR, "Default color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.HANDLER_COLOR, "Handler color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.KEYWORD_COLOR, "Keyword color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.MULTI_LINE_COMMENT_COLOR, "Multi-line comment color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.PREDEF_CONST_COLOR, "Predefined constant color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.PREDEF_FUNC_COLOR, "Predefined (ll) function color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.SINGLE_LINE_COMMENT_COLOR, "Single line comment color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.STRING_COLOR, "String color", getFieldEditorParent()));
-//        addField(new ColorFieldEditor(LslColorProvider.TYPE_COLOR, "Type color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.DEFAULT_COLOR, "Default color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.HANDLER_COLOR, "Handler color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.KEYWORD_COLOR, "Keyword color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.MULTI_LINE_COMMENT_COLOR, "Multi-line comment color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.PREDEF_CONST_COLOR, "Predefined constant color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.PREDEF_FUNC_COLOR, "Predefined (ll) function color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.SINGLE_LINE_COMMENT_COLOR, "Single line comment color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.STRING_COLOR, "String color", getFieldEditorParent()));
+//        addField(new ColorFieldEditor(LSLColorProvider.TYPE_COLOR, "Type color", getFieldEditorParent()));
 
-        for (int i = 0; i < LslCodeScanner.STYLE_KINDS.length; i++) {
+        for (int i = 0; i < LSLCodeScanner.STYLE_KINDS.length; i++) {
             createFieldEditors(i);
         }
     }
@@ -48,8 +48,8 @@ public class LslForgeEditorPreferencePage extends FieldEditorPreferencePage impl
         return MessageFormat.format(pattern,new Object[] { arg });
     }
     private void createFieldEditors(int kind) {
-        String kname = LslCodeScanner.KIND_NAMES[kind];
-        String kindId = LslCodeScanner.STYLE_KINDS[kind];
+        String kname = LSLCodeScanner.KIND_NAMES[kind];
+        String kindId = LSLCodeScanner.STYLE_KINDS[kind];
         addField(new ColorFieldEditor(kindId + '.' + "color",  //$NON-NLS-1$
                 fmt("{0} color", kname),getFieldEditorParent())); //$NON-NLS-1$
         addField(new BooleanFieldEditor(kindId + '.' + "bold",//$NON-NLS-1$

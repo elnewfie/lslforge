@@ -9,8 +9,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.generated.GlobalSummary;
 import lslforge.generated.GlobalSummary_GlobalSummary;
 import lslforge.gentree.Node;
@@ -18,8 +18,8 @@ import lslforge.gentree.NodeFactory;
 import lslforge.gentree.NodeFactory2;
 import lslforge.gentree.NodeListener;
 import lslforge.gentree.NodeStatus;
-import lslforge.lsltest.LslTest;
-import lslforge.lsltest.LslTestSuite;
+import lslforge.lsltest.LSLTest;
+import lslforge.lsltest.LSLTestSuite;
 import lslforge.lsltest.TestProject;
 import lslforge.lsltest.TestProject.BindingListNode;
 import lslforge.lsltest.TestProject.SuiteNode;
@@ -112,19 +112,19 @@ public class TestEditor extends EditorPart implements NodeListener {
         }
         
         protected Control createDialogArea(Composite parent) {
-            getShell().setText(Messages.getString("LslTestEditor.ENTER_TEST_ENTRY_POINT")); //$NON-NLS-1$
+            getShell().setText(Messages.getString("LSLTestEditor.ENTER_TEST_ENTRY_POINT")); //$NON-NLS-1$
             Composite  composite = (Composite) super.createDialogArea(parent);
             GridLayout layout = (GridLayout) composite.getLayout();
             layout.numColumns = 2;
             Label fileNameLabel = new Label(composite, SWT.LEFT|SWT.HORIZONTAL);
-            fileNameLabel.setText(Messages.getString("LslTestEditor.FILE_NAME")); //$NON-NLS-1$
+            fileNameLabel.setText(Messages.getString("LSLTestEditor.FILE_NAME")); //$NON-NLS-1$
             Label pathLabel = new Label(composite, SWT.LEFT|SWT.HORIZONTAL);
-            pathLabel.setText(Messages.getString("LslTestEditor.ENTRY_POINT")); //$NON-NLS-1$
+            pathLabel.setText(Messages.getString("LSLTestEditor.ENTRY_POINT")); //$NON-NLS-1$
             
             combo = new Combo(composite, SWT.READ_ONLY|SWT.DROP_DOWN);
             combo2 = new Combo(composite, SWT.READ_ONLY|SWT.DROP_DOWN);
             
-            String[] files = nature.getLslFiles();
+            String[] files = nature.getLSLFiles();
             combo.setItems(files);
             combo.deselectAll();
             // a mild hack (there are preferred ways, but this is simplest) to widen the disabled combo
@@ -150,7 +150,7 @@ public class TestEditor extends EditorPart implements NodeListener {
                         combo2.setEnabled(false);
                         okButton().setEnabled(false);
                     }
-                    if (LslForgePlugin.DEBUG) Util.log("fileName = " + fileName + ", path = " + path); //$NON-NLS-1$ //$NON-NLS-2$
+                    if (LSLForgePlugin.DEBUG) Util.log("fileName = " + fileName + ", path = " + path); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             
@@ -167,7 +167,7 @@ public class TestEditor extends EditorPart implements NodeListener {
                     } else {
                         path = null;
                     }
-                    if (LslForgePlugin.DEBUG) Util.log("path = " + path); //$NON-NLS-1$
+                    if (LSLForgePlugin.DEBUG) Util.log("path = " + path); //$NON-NLS-1$
                 }
             });
             return composite;
@@ -306,7 +306,7 @@ public class TestEditor extends EditorPart implements NodeListener {
             
             combo = new Combo(composite, SWT.READ_ONLY|SWT.DROP_DOWN);
 
-            String[] items = LslForgePlugin.getStatefulFunctions();
+            String[] items = LSLForgePlugin.getStatefulFunctions();
             int index = Util.elementIndex(name, items);
             
             combo.setItems(items);
@@ -645,7 +645,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 			if (n.hasValueChoices()) {
 			    String[] choices;
 			    if ("expectations-mode".equals(n.getChoicesId())) { //$NON-NLS-1$
-			        choices = LslTest.CallExpectations.getModes().toArray(new String[0]);
+			        choices = LSLTest.CallExpectations.getModes().toArray(new String[0]);
 			    } else {
 			        choices = new String[0];
 			    }
@@ -768,7 +768,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 	private SuiteNode world = null;
 	@SuppressWarnings("unused")
 	private String simProjectName = null;
-	private LslProjectNature nature = null;
+	private LSLProjectNature nature = null;
 	private int changeCount = 0;
 	private IFile file;
 	private DeleteNodeAction fDeleteNodeAction;
@@ -803,8 +803,8 @@ public class TestEditor extends EditorPart implements NodeListener {
 	}
 	
     public void doSave(IProgressMonitor monitor) {
-		String val = TestProject.toLslTestSuite(world).toXml();
-		if (LslForgePlugin.DEBUG) Util.log("world = " + val); //$NON-NLS-1$
+		String val = TestProject.toLSLTestSuite(world).toXml();
+		if (LSLForgePlugin.DEBUG) Util.log("world = " + val); //$NON-NLS-1$
 		try {
 			file.setContents(new ByteArrayInputStream(val.getBytes()), IResource.FORCE | IResource.KEEP_HISTORY, monitor);
 			zeroChangeCount();
@@ -826,7 +826,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 		this.setPartName(input.getName());
 		file = (IFile) input.getAdapter(IFile.class);
 		try {
-			nature = (LslProjectNature) file.getProject().getNature(LslProjectNature.ID);
+			nature = (LSLProjectNature) file.getProject().getNature(LSLProjectNature.ID);
 		} catch (CoreException e1) {
 			throw new PartInitException("Can't get project nature", e1); //$NON-NLS-1$
 		}
@@ -835,7 +835,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 		if (file != null) {
 			try {
 			    boolean dirty[] = { false };
-				world = TestProject.fromLslTestSuite(LslTestSuite.fromXml(file.getContents(), file), dirty);
+				world = TestProject.fromLSLTestSuite(LSLTestSuite.fromXml(file.getContents(), file), dirty);
 				if (dirty[0]) incChangeCount();
 			} catch (CoreException e) {
 				Util.error(e, "Corrupted sim project file: " + e.getMessage()); //$NON-NLS-1$
@@ -957,7 +957,7 @@ public class TestEditor extends EditorPart implements NodeListener {
      
 	private void createColumns(Tree tree) {
 		fColumn1 = new TreeColumn(tree, SWT.LEFT);
-		fColumn1.setText(Messages.getString("LslTestEditor.ITEM"));  //$NON-NLS-1$
+		fColumn1.setText(Messages.getString("LSLTestEditor.ITEM"));  //$NON-NLS-1$
 		fColumn1.setWidth(200);
 		fColumn1.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -965,7 +965,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 		});
 
 		fColumn2 = new TreeColumn(tree, SWT.LEFT);
-		fColumn2.setText(Messages.getString("LslTestEditor.VALUE"));  //$NON-NLS-1$
+		fColumn2.setText(Messages.getString("LSLTestEditor.VALUE"));  //$NON-NLS-1$
 		fColumn2.setWidth(100);
 		fColumn2.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
@@ -995,7 +995,7 @@ public class TestEditor extends EditorPart implements NodeListener {
     }
     
     private void asyncExec(Runnable r) {
-        LslForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
+        LSLForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
     }
     
     protected void createUndoRedoActions() {

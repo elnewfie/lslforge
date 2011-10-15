@@ -3,15 +3,15 @@ package lslforge.editor;
 import java.util.Iterator;
 import java.util.List;
 
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
-import lslforge.debug.LslLineBreakpoint;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
+import lslforge.debug.LSLLineBreakpoint;
 import lslforge.generated.ErrInfo;
 import lslforge.generated.ErrInfo_ErrInfo;
 import lslforge.generated.Maybe_Just;
 import lslforge.generated.TextLocation;
 import lslforge.generated.TextLocation_TextLocation;
-import lslforge.outline.LslForgeOutlinePage;
+import lslforge.outline.LSLForgeOutlinePage;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
@@ -46,22 +46,22 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 /**
  * LSLForge text editor.
  */
-public class LslForgeEditor extends TextEditor implements SourceViewerConfigurationListener, LslProjectNature.RecompileListener {
-    public static final String ID = "lslforge.editor.LslForgeEditor"; //$NON-NLS-1$
+public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurationListener, LSLProjectNature.RecompileListener {
+    public static final String ID = "lslforge.editor.LSLForgeEditor"; //$NON-NLS-1$
 
     /** The projection support */
     private ProjectionSupport fProjectionSupport;
     
-    private LslForgeOutlinePage outlinePage;
+    private LSLForgeOutlinePage outlinePage;
     /**
      * Create an instance of the editor.
      */
-    public LslForgeEditor() {
+    public LSLForgeEditor() {
         super();
     }
 
     /**
-     * The <code>LslForgeEditor</code> implementation of this
+     * The <code>LSLForgeEditor</code> implementation of this
      * <code>AbstractTextEditor</code> method extend the actions to add those
      * specific to the receiver
      */
@@ -118,11 +118,10 @@ public class LslForgeEditor extends TextEditor implements SourceViewerConfigurat
      * @param required the required type
      * @return an adapter for the required type or <code>null</code>
      */
-    @SuppressWarnings("unchecked")
-	public Object getAdapter(Class required) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
         if (IContentOutlinePage.class.equals(required)) {
             if (outlinePage == null) {
-                outlinePage = new LslForgeOutlinePage(this);
+                outlinePage = new LSLForgeOutlinePage(this);
             }
             return outlinePage;
         }
@@ -140,17 +139,17 @@ public class LslForgeEditor extends TextEditor implements SourceViewerConfigurat
 	protected void initializeEditor() {
         super.initializeEditor();
         
-        LslSourceViewerConfiguration config = new LslSourceViewerConfiguration(this);
+        LSLSourceViewerConfiguration config = new LSLSourceViewerConfiguration(this);
         setSourceViewerConfiguration(config);
-        outlinePage = new LslForgeOutlinePage(this);
+        outlinePage = new LSLForgeOutlinePage(this);
         config.addListener(this);
     }
 
-    private LslProjectNature nature() {
+    private LSLProjectNature nature() {
         IResource resource = (IResource) getEditorInput().getAdapter(IResource.class);
         if (resource != null) {
         	try {
-				return (LslProjectNature) resource.getProject().getNature(LslProjectNature.ID);
+				return (LSLProjectNature) resource.getProject().getNature(LSLProjectNature.ID);
 			} catch (CoreException e) {
 				Util.error(e, "can't get project nature"); //$NON-NLS-1$
 			}
@@ -172,9 +171,9 @@ public class LslForgeEditor extends TextEditor implements SourceViewerConfigurat
     }
 
     public void dispose() {
-        LslProjectNature n = nature();
+        LSLProjectNature n = nature();
         if (n != null) n.removeRecompileListener(this);
-        ((LslSourceViewerConfiguration)this.getSourceViewerConfiguration()).dispose();
+        ((LSLSourceViewerConfiguration)this.getSourceViewerConfiguration()).dispose();
         super.dispose();
     }
     
@@ -190,7 +189,7 @@ public class LslForgeEditor extends TextEditor implements SourceViewerConfigurat
         viewer.doOperation(ProjectionViewer.TOGGLE);
 
 
-        LslProjectNature n = nature();
+        LSLProjectNature n = nature();
         if (n != null) n.addRecompileListener(this);
 
         this.getVerticalRuler().getControl().addMouseListener(new MouseListener() {
@@ -202,14 +201,14 @@ public class LslForgeEditor extends TextEditor implements SourceViewerConfigurat
                     Integer line = new Integer(getVerticalRuler().toDocumentLineNumber(e.y) + 1);
                     try {
                         IMarker m = null;
-                        IMarker[] markers = resource.findMarkers(LslLineBreakpoint.MARKER_ID, true, 0);
+                        IMarker[] markers = resource.findMarkers(LSLLineBreakpoint.MARKER_ID, true, 0);
                         for (int i = 0; i < markers.length; i++) {
                             if (line.equals(markers[i].getAttribute(IMarker.LINE_NUMBER))) {
                                 m = markers[i];
                             }
                         }
                         if (m == null) {
-                            new LslLineBreakpoint(resource,line.intValue());
+                            new LSLLineBreakpoint(resource,line.intValue());
                         } else {
                             IBreakpoint bp = breakpointManager().getBreakpoint(m);
                             breakpointManager().removeBreakpoint(bp, true);
@@ -219,7 +218,7 @@ public class LslForgeEditor extends TextEditor implements SourceViewerConfigurat
                     }
                         
                 } else {
-                    if (LslForgePlugin.DEBUG) Util.log("resource is null, can't create breakpoint"); //$NON-NLS-1$
+                    if (LSLForgePlugin.DEBUG) Util.log("resource is null, can't create breakpoint"); //$NON-NLS-1$
                 }
             }
 
@@ -322,7 +321,7 @@ public class LslForgeEditor extends TextEditor implements SourceViewerConfigurat
     }
     
     private void asyncExec(Runnable r) {
-        LslForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
+        LSLForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(r);
     }
 
 	public void recompile() {

@@ -4,14 +4,14 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = "lslforge.messages"; //$NON-NLS-1$
-	public static String LslForgePlugin_COULD_NOT_DESERIALIZE_META_DATA;
-    public static String LslForgePlugin_NO_META_DATA;
-    public static String LslForgeProjectWizard_CREATE_LSL_PLUS_PROJECT;
-	public static String LslForgeProjectWizardPage_CreateAnLSLForgeProject;
-    public static String LslForgeProjectWizardPage_ENTER_PROJECT_NAME;
-    public static String LslForgeProjectWizardPage_FOLDER_EXISTS_IN_WORKSPACE;
-    public static String LslForgeProjectWizardPage_PROJECT_ALREADY_EXISTS;
-	public static String LslForgeProjectWizardPage_ProjectName;
+	public static String LSLForgePlugin_COULD_NOT_DESERIALIZE_META_DATA;
+    public static String LSLForgePlugin_NO_META_DATA;
+    public static String LSLForgeProjectWizard_CREATE_LSL_PLUS_PROJECT;
+	public static String LSLForgeProjectWizardPage_CreateAnLSLForgeProject;
+    public static String LSLForgeProjectWizardPage_ENTER_PROJECT_NAME;
+    public static String LSLForgeProjectWizardPage_FOLDER_EXISTS_IN_WORKSPACE;
+    public static String LSLForgeProjectWizardPage_PROJECT_ALREADY_EXISTS;
+	public static String LSLForgeProjectWizardPage_ProjectName;
     public static String ProjectNature_MARK_DERIVED_COMPLETE;
     public static String ProjectNature_OK;
     public static String ProjectNature_REFRESH;

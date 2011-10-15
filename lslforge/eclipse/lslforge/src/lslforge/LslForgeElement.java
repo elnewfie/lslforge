@@ -10,9 +10,9 @@ import org.eclipse.core.runtime.PlatformObject;
  * @author rgreayer
  *
  */
-public class LslForgeElement extends PlatformObject {
+public class LSLForgeElement extends PlatformObject {
 	private IFile f;
-	public LslForgeElement(IFile f) {
+	public LSLForgeElement(IFile f) {
 		this.f = f;
 	}
 

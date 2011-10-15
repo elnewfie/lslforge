@@ -5,15 +5,15 @@ package lslforge.language_metadata;
 
 
 
-public class LslFunction {
+public class LSLFunction {
 	private String name;
-	private LslParam[] params;
+	private LSLParam[] params;
 	private String returns;
 	private boolean stateless;
 	private String description;
 	public String getName() { return name; }
 	public String getReturns() { return returns; }
-	public LslParam[] getParams() { return params; }
+	public LSLParam[] getParams() { return params; }
 	public String getDescription() { return description; }
 	public boolean isStateless() { return stateless; }
 	public String fullSignature() {

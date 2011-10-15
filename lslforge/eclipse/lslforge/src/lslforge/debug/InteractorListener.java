@@ -4,6 +4,6 @@
 package lslforge.debug;
 
 public interface InteractorListener {
-    public void suspended(LslScriptExecutionState state);
+    public void suspended(LSLScriptExecutionState state);
     public void completed();
 }

@@ -13,8 +13,8 @@ import org.eclipse.ui.IPerspectiveFactory;
  * @author rgreayer
  *
  */
-public class LslForgePerspectiveFactory implements IPerspectiveFactory {
-    public static final String PERSPECTIVE_ID = "lslforge.LslForgePerspective"; //$NON-NLS-1$
+public class LSLForgePerspectiveFactory implements IPerspectiveFactory {
+    public static final String PERSPECTIVE_ID = "lslforge.LSLForgePerspective"; //$NON-NLS-1$
 	public void createInitialLayout(IPageLayout layout) {
 		String editorArea = layout.getEditorArea();
 		
@@ -28,7 +28,7 @@ public class LslForgePerspectiveFactory implements IPerspectiveFactory {
 		right.addView(IPageLayout.ID_OUTLINE);
 		
 		layout.addActionSet("org.eclipse.debug.ui.launchActionSet"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("lslforge.LslForgeProjectWizard"); //$NON-NLS-1$
+		layout.addNewWizardShortcut("lslforge.LSLForgeProjectWizard"); //$NON-NLS-1$
 		layout.addNewWizardShortcut("lslforge.newTestWizard"); //$NON-NLS-1$
         layout.addNewWizardShortcut("lslforge.module_wizard"); //$NON-NLS-1$
         layout.addNewWizardShortcut("lslforge.script_wizard"); //$NON-NLS-1$

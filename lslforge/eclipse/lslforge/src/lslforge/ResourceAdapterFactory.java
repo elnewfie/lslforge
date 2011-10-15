@@ -1,6 +1,6 @@
 package lslforge;
 
-import lslforge.lsltest.LslTestSuite;
+import lslforge.lsltest.LSLTestSuite;
 import lslforge.sim.SimProject;
 import lslforge.util.Util;
 
@@ -10,28 +10,27 @@ import org.eclipse.core.runtime.IAdapterFactory;
 
 /**
  * And adapter factory that can transform IResource objects into various
- * different LSL elements types (LslElement objects, LslDerivedScript objects,
- * and LslTestSuite objects).
+ * different LSL elements types (LSLElement objects, LSLDerivedScript objects,
+ * and LSLTestSuite objects).
  * @author rgreayer
  *
  */
 public class ResourceAdapterFactory implements IAdapterFactory {
 
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
+	public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType) {
 		if (adaptableObject instanceof IFile) {
 			IFile f = (IFile) adaptableObject;
 			String ext = f.getFileExtension();
-			if (LslForgeElement.class.equals(adapterType) && ("lslp".equals(ext) //$NON-NLS-1$
+			if (LSLForgeElement.class.equals(adapterType) && ("lslp".equals(ext) //$NON-NLS-1$
 			                                         || "lslm".equals(ext))) { //$NON-NLS-1$
-				return new LslForgeElement(f);
-			} else if ("lslp".equals(ext) && LslForgeScript.class.equals(adapterType)) { //$NON-NLS-1$
-			    return new LslForgeScript(f);
-			} else if ("lsl".equals(ext) && LslDerivedScript.class.equals(adapterType)) { //$NON-NLS-1$
-				return new LslDerivedScript(f);
-			} else if ("lslt".equals(ext) && LslTestSuite.class.equals(adapterType)) { //$NON-NLS-1$
+				return new LSLForgeElement(f);
+			} else if ("lslp".equals(ext) && LSLForgeScript.class.equals(adapterType)) { //$NON-NLS-1$
+			    return new LSLForgeScript(f);
+			} else if ("lsl".equals(ext) && LSLDerivedScript.class.equals(adapterType)) { //$NON-NLS-1$
+				return new LSLDerivedScript(f);
+			} else if ("lslt".equals(ext) && LSLTestSuite.class.equals(adapterType)) { //$NON-NLS-1$
 				try {
-					LslTestSuite suite = LslTestSuite.fromXml(f.getContents(), f);
+					LSLTestSuite suite = LSLTestSuite.fromXml(f.getContents(), f);
 					suite.setIResource(f);
 					return suite;
 				} catch (CoreException e) {
@@ -52,14 +51,14 @@ public class ResourceAdapterFactory implements IAdapterFactory {
 	}
 
 	static private Class<?>[] adapterList = {
-		LslForgeElement.class,
-		LslDerivedScript.class,
-		LslTestSuite.class,
-		LslForgeScript.class,
+		LSLForgeElement.class,
+		LSLDerivedScript.class,
+		LSLTestSuite.class,
+		LSLForgeScript.class,
 		SimProject.WorldNode.class
 	};
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return adapterList;
 	}

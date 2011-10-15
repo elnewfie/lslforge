@@ -3,7 +3,7 @@ package lslforge.editor;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.gentree.Node;
 import lslforge.sim.SimProject;
 import lslforge.sim.SimProjectNodes;
@@ -37,7 +37,7 @@ public class SimProjectLabelProvider extends LabelProvider implements ITableLabe
     private Image bodypartImage = createImage("icons/bodypart.gif"); //$NON-NLS-1$
     private Image createImage(String path) {
         if (images == null) images = new LinkedList<Image>();
-        Image i = LslForgePlugin.createImage(path);
+        Image i = LSLForgePlugin.createImage(path);
         if (i != null) images.add(i);
         return i;
     }

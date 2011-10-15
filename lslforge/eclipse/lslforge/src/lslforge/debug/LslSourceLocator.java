@@ -1,6 +1,6 @@
 package lslforge.debug;
 
-import lslforge.editor.LslForgeEditor;
+import lslforge.editor.LSLForgeEditor;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
@@ -12,11 +12,11 @@ import org.eclipse.debug.ui.ISourcePresentation;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
-public class LslSourceLocator implements ISourceLocator, ISourcePresentation {
+public class LSLSourceLocator implements ISourceLocator, ISourcePresentation {
 
     public Object getSourceElement(IStackFrame stackFrame) {
-        if (stackFrame instanceof LslStackFrame) {
-            LslStackFrame frame = (LslStackFrame) stackFrame;
+        if (stackFrame instanceof LSLStackFrame) {
+            LSLStackFrame frame = (LSLStackFrame) stackFrame;
             
             if (frame.getFile() == null) return null;
             Path p = new Path(frame.getFile());
@@ -30,7 +30,7 @@ public class LslSourceLocator implements ISourceLocator, ISourcePresentation {
     }
 
     public String getEditorId(IEditorInput input, Object element) {
-        return LslForgeEditor.ID;
+        return LSLForgeEditor.ID;
     }
 
     public IEditorInput getEditorInput(Object element) {

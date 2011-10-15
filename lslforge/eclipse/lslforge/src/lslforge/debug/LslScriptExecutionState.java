@@ -8,7 +8,7 @@ import com.thoughtworks.xstream.converters.basic.FloatConverter;
 import com.thoughtworks.xstream.converters.basic.IntConverter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-public class LslScriptExecutionState {
+public class LSLScriptExecutionState {
 
     public static abstract class Value { 
         public abstract String typeString();
@@ -173,7 +173,7 @@ public class LslScriptExecutionState {
         configureXStream(xstream);
     }
     public static void configureXStream(XStream xstream) {
-        xstream.alias("script-state", LslScriptExecutionState.class); //$NON-NLS-1$
+        xstream.alias("script-state", LSLScriptExecutionState.class); //$NON-NLS-1$
         xstream.alias("frame", Frame.class); //$NON-NLS-1$
         xstream.alias("binding", Binding.class); //$NON-NLS-1$
         xstream.aliasType("integer-value",IntegerValue.class); //$NON-NLS-1$
@@ -186,8 +186,8 @@ public class LslScriptExecutionState {
         xstream.alias("value", Value.class); //$NON-NLS-1$
         xstream.registerConverter(new SingleValueConverter() {
             private FloatConverter conv = new FloatConverter();
-            @SuppressWarnings("unchecked")
-			public boolean canConvert(Class arg0) {
+
+			public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
                 return FloatValue.class.equals(arg0);
             }
             public Object fromString(String arg0) {
@@ -209,8 +209,7 @@ public class LslScriptExecutionState {
                 return conv.toString(arg0.toString());
             }
 
-            @SuppressWarnings("unchecked")
-			public boolean canConvert(Class arg0) {
+			public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
                 return IntegerValue.class.equals(arg0);
             }
             
@@ -225,8 +224,7 @@ public class LslScriptExecutionState {
                 return ((StringValue)arg0).val;
             }
 
-            @SuppressWarnings("unchecked")
-			public boolean canConvert(Class arg0) {
+			public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
                 return StringValue.class.equals(arg0);
             }
             
@@ -241,16 +239,15 @@ public class LslScriptExecutionState {
                 return ((KeyValue)arg0).val;
             }
 
-            @SuppressWarnings("unchecked")
-			public boolean canConvert(Class arg0) {
+			public boolean canConvert(@SuppressWarnings("rawtypes") Class arg0) {
                 return KeyValue.class.equals(arg0);
             }
             
         });
     }
     
-    public static LslScriptExecutionState fromXML(String xml) {
-        return (LslScriptExecutionState) xstream.fromXML(xml);
+    public static LSLScriptExecutionState fromXML(String xml) {
+        return (LSLScriptExecutionState) xstream.fromXML(xml);
     }
     
 }

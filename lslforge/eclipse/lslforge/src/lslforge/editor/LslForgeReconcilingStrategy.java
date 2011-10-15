@@ -5,11 +5,11 @@ import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.reconciler.DirtyRegion;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 
-public class LslForgeReconcilingStrategy implements IReconcilingStrategy {
+public class LSLForgeReconcilingStrategy implements IReconcilingStrategy {
 
-    private LslForgeEditor editor;
+    private LSLForgeEditor editor;
 
-    public LslForgeReconcilingStrategy(LslForgeEditor editor) {
+    public LSLForgeReconcilingStrategy(LSLForgeEditor editor) {
         this.editor = editor;
     }
     

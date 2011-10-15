@@ -11,9 +11,9 @@ import org.eclipse.jface.text.TextUtilities;
 /**
  * Indentation strategy that deals with open and closing brackets.
  */
-public class LslForgeAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
+public class LSLForgeAutoIndentStrategy extends DefaultIndentLineAutoEditStrategy {
 
-    public LslForgeAutoIndentStrategy() {
+    public LSLForgeAutoIndentStrategy() {
     }
 
     public void customizeDocumentCommand(IDocument document, DocumentCommand command) {

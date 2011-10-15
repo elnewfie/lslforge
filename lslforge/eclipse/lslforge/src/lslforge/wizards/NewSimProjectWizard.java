@@ -3,7 +3,7 @@ package lslforge.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.sim.SimProject;
 import lslforge.util.Util;
 
@@ -17,10 +17,10 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class NewSimProjectWizard extends Wizard implements INewWizard {
-	private LslSimProjectWizardPage mainPage;
+	private LSLSimProjectWizardPage mainPage;
 	private IStructuredSelection selection;
-	private class LslSimProjectWizardPage extends LslFileCreationWizardPage {
-		public LslSimProjectWizardPage(IStructuredSelection selection) {
+	private class LSLSimProjectWizardPage extends LSLFileCreationWizardPage {
+		public LSLSimProjectWizardPage(IStructuredSelection selection) {
 			super("Create Simulation Project", selection); //$NON-NLS-1$
 			setTitle("Create Simulation Project"); //$NON-NLS-1$
 			setPageComplete(false);
@@ -49,13 +49,13 @@ public class NewSimProjectWizard extends Wizard implements INewWizard {
 
 	public boolean performFinish() {
         IFile f = mainPage.createNewFile();
-        LslForgePlugin.openResource(getShell(), f);
+        LSLForgePlugin.openResource(getShell(), f);
 		return true;
 	}
 
 	public void addPages() {
 		super.addPages();
-		mainPage = new LslSimProjectWizardPage(selection);
+		mainPage = new LSLSimProjectWizardPage(selection);
 		addPage(mainPage);
 	}
 

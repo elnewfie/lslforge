@@ -3,26 +3,26 @@
  */
 package lslforge.debug;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.SimManager;
 
 import org.eclipse.debug.core.ILaunch;
 
-public class LslSimProcess extends LslProcess {
+public class LSLSimProcess extends LSLProcess {
     private static final String SYSTEM_TESTER = "SystemTester"; //$NON-NLS-1$
     private String simDescription;
-	public LslSimProcess(String descriptor, ILaunch launch) {
+	public LSLSimProcess(String descriptor, ILaunch launch) {
 	    super(launch);
 	    this.simDescription = descriptor;
 	}
 
     protected Interactor createInteractor(Process p) {
-        return new LslSimInteractor(launch.getLaunchMode(),simDescription, 
+        return new LSLSimInteractor(launch.getLaunchMode(),simDescription, 
                 p.getInputStream(), p.getOutputStream());
     }
 
     protected Process launchExecutable() {
-        return LslForgePlugin.launchCoreCommand(SYSTEM_TESTER, false);
+        return LSLForgePlugin.launchCoreCommand(SYSTEM_TESTER, false);
     }
 	
 	public String getLabel() {
@@ -35,6 +35,6 @@ public class LslSimProcess extends LslProcess {
 	}
 	
     private SimManager simManager() {
-        return LslForgePlugin.getDefault().getSimManager();
+        return LSLForgePlugin.getDefault().getSimManager();
     }
 }

@@ -1,7 +1,7 @@
 package lslforge.debug;
 
-import lslforge.debug.LslScriptExecutionState.Binding;
-import lslforge.debug.LslScriptExecutionState.Frame;
+import lslforge.debug.LSLScriptExecutionState.Binding;
+import lslforge.debug.LSLScriptExecutionState.Frame;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -12,23 +12,23 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 
-public class LslThread implements IThread, InteractorListener {
+public class LSLThread implements IThread, InteractorListener {
 
-    private LslStackFrame[] stackFrames;
-    private LslDebugTarget target;
+    private LSLStackFrame[] stackFrames;
+    private LSLDebugTarget target;
     private boolean active;
     private boolean suspended;
     private boolean stepping;
     private boolean terminated;
     private Interactor interactor;
-    private String name = "LslThread"; //$NON-NLS-1$
+    private String name = "LSLThread"; //$NON-NLS-1$
     
-    public LslThread(LslDebugTarget target) {
+    public LSLThread(LSLDebugTarget target) {
         this.target = target;
         this.active = true;
         this.suspended = false;
         this.stepping = false;
-        stackFrames = new LslStackFrame[0];
+        stackFrames = new LSLStackFrame[0];
     }
 
     public IBreakpoint[] getBreakpoints() {
@@ -57,8 +57,8 @@ public class LslThread implements IThread, InteractorListener {
         return (stackFrames != null && stackFrames.length > 0);
     }
 
-    public void setStackFrames(LslStackFrame[] stackFrames) {
-        if (stackFrames == null) stackFrames = new LslStackFrame[0];
+    public void setStackFrames(LSLStackFrame[] stackFrames) {
+        if (stackFrames == null) stackFrames = new LSLStackFrame[0];
         this.stackFrames = stackFrames;
     }
     
@@ -74,8 +74,7 @@ public class LslThread implements IThread, InteractorListener {
         return getDebugTarget().getModelIdentifier();
     }
 
-    @SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -164,25 +163,25 @@ public class LslThread implements IThread, InteractorListener {
         target.setTerminated();
     }
 
-    public void suspended(LslScriptExecutionState state) {
+    public void suspended(LSLScriptExecutionState state) {
         setSuspended(true);
         this.name = state.getThreadInfo().getName();
         
-        this.stackFrames = new LslStackFrame[state.getThreadInfo().getFrames().length];
+        this.stackFrames = new LSLStackFrame[state.getThreadInfo().getFrames().length];
         
         for (int i = 0; i < this.stackFrames.length; i++) {
             Frame frame = state.getThreadInfo().getFrames()[i];
-            LslVariable[] variables = new LslVariable[frame.getBindings().length];
+            LSLVariable[] variables = new LSLVariable[frame.getBindings().length];
             
             int line = 0;
             
             if (i == 0) line = state.getCurrentLine();
             for (int j = 0; j < variables.length; j++) {
                 Binding b = frame.getBindings()[j];
-                variables[j] = new LslVariable(b.getName(), b.getVal().typeString(),
+                variables[j] = new LSLVariable(b.getName(), b.getVal().typeString(),
                         b.getVal().toString(), this.target);
             }
-            this.stackFrames[i] = new LslStackFrame(frame.getName(), frame.getFile(),
+            this.stackFrames[i] = new LSLStackFrame(frame.getName(), frame.getFile(),
                     this, this.getDebugTarget(), variables, line, i == 0);
         }
         

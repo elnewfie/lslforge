@@ -3,10 +3,13 @@ package lslforge;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-public class LslExpressionValidator {
+public class LSLExpressionValidator {
     private static class Expr {
-        public String type;
-        public String text;
+        @SuppressWarnings("unused")
+		public String type;
+        
+        @SuppressWarnings("unused")
+		public String text;
         
         public Expr(String type, String text) {
             this.type = type;
@@ -23,6 +26,6 @@ public class LslExpressionValidator {
     public static String validateExpression(String type, String expression) {
         Expr e = new Expr(type,expression);
         String xml = xstream.toXML(e);
-        return LslForgePlugin.validateExpression(xml);
+        return LSLForgePlugin.validateExpression(xml);
     }
 }

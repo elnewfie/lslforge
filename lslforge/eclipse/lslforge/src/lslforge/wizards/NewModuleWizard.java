@@ -3,7 +3,7 @@ package lslforge.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
@@ -16,10 +16,10 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class NewModuleWizard extends Wizard implements INewWizard {
-	private LslModuleWizardPage mainPage;
+	private LSLModuleWizardPage mainPage;
 	private IStructuredSelection selection;
-	private class LslModuleWizardPage extends LslFileCreationWizardPage {
-		public LslModuleWizardPage(IStructuredSelection selection) {
+	private class LSLModuleWizardPage extends LSLFileCreationWizardPage {
+		public LSLModuleWizardPage(IStructuredSelection selection) {
 			super("createModule", selection); //$NON-NLS-1$
 			setTitle(Messages.getString("NewModuleWizard.NEW_MODULE")); //$NON-NLS-1$
 			setPageComplete(false);
@@ -48,13 +48,13 @@ public class NewModuleWizard extends Wizard implements INewWizard {
 
 	public boolean performFinish() {
         IFile f = mainPage.createNewFile();
-        LslForgePlugin.openResource(getShell(), f);
+        LSLForgePlugin.openResource(getShell(), f);
 		return true;
 	}
 
 	public void addPages() {
 		super.addPages();
-		mainPage = new LslModuleWizardPage(selection);
+		mainPage = new LSLModuleWizardPage(selection);
 		addPage(mainPage);
 	}
 

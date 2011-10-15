@@ -14,9 +14,9 @@ import org.eclipse.jface.text.source.IAnnotationModel;
 import org.eclipse.jface.text.source.ISourceViewer;
 
 /** 
- * The LslAnnotationHover provides the hover support for editors.
+ * The LSLAnnotationHover provides the hover support for editors.
  */
-public class LslAnnotationHover implements IAnnotationHover {
+public class LSLAnnotationHover implements IAnnotationHover {
     private static final List<String> ANNOTATIONS_TO_DISPLAY; 
 
     static {

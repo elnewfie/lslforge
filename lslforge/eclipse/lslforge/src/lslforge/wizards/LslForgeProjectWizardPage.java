@@ -17,12 +17,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class LslForgeProjectWizardPage extends WizardPage implements ModifyListener {
+public class LSLForgeProjectWizardPage extends WizardPage implements ModifyListener {
 	private Text nameCtrl;
 	private Label labelCtrl;
-	protected LslForgeProjectWizardPage(String pageName) {
+	protected LSLForgeProjectWizardPage(String pageName) {
 		super(pageName);
-		setTitle(Messages.LslForgeProjectWizardPage_CreateAnLSLForgeProject);
+		setTitle(Messages.LSLForgeProjectWizardPage_CreateAnLSLForgeProject);
 		setPageComplete(false);
 	}
 
@@ -33,7 +33,7 @@ public class LslForgeProjectWizardPage extends WizardPage implements ModifyListe
 				| GridData.HORIZONTAL_ALIGN_FILL));
 		pageControl.setFont(parent.getFont());
 		labelCtrl = new Label(pageControl, SWT.HORIZONTAL | SWT.LEFT | SWT.SHADOW_NONE);
-		labelCtrl.setText(Messages.LslForgeProjectWizardPage_ProjectName);
+		labelCtrl.setText(Messages.LSLForgeProjectWizardPage_ProjectName);
 		labelCtrl.setEnabled(true);
 		nameCtrl = new Text(pageControl, SWT.SINGLE | SWT.BORDER);
 	    nameCtrl.setEnabled(true);
@@ -65,17 +65,17 @@ public class LslForgeProjectWizardPage extends WizardPage implements ModifyListe
 			if (name.trim().length() == 0) {
 				setPageComplete(false);
 				setErrorMessage(null);
-				setMessage(Messages.LslForgeProjectWizardPage_ENTER_PROJECT_NAME);
+				setMessage(Messages.LSLForgeProjectWizardPage_ENTER_PROJECT_NAME);
 			} else {
 				IStatus status = ResourcesPlugin.getWorkspace().validateName(name, IResource.PROJECT);
 				if (!status.isOK()) {
 					setErrorMessage(status.getMessage());
 					setPageComplete(false);
 				} else if (ResourcesPlugin.getWorkspace().getRoot().getProject(name).exists()) {
-					setErrorMessage(Messages.LslForgeProjectWizardPage_PROJECT_ALREADY_EXISTS);
+					setErrorMessage(Messages.LSLForgeProjectWizardPage_PROJECT_ALREADY_EXISTS);
 					setPageComplete(false);
 				} else if (Platform.getLocation().append(name).toFile().exists()) {
-					setErrorMessage(Messages.LslForgeProjectWizardPage_FOLDER_EXISTS_IN_WORKSPACE);
+					setErrorMessage(Messages.LSLForgeProjectWizardPage_FOLDER_EXISTS_IN_WORKSPACE);
 					setPageComplete(false);
 				} else {
 					setPageComplete(true);

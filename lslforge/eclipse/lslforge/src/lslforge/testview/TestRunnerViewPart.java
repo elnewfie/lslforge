@@ -1,6 +1,6 @@
 package lslforge.testview;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.lsltest.ITestListener;
 import lslforge.lsltest.TestManager;
 import lslforge.lsltest.TestResult;
@@ -40,7 +40,7 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
         public RerunTestsAction() {
             setText(Messages.getString("TestRunnerViewPart.RERUN_TESTS")); //$NON-NLS-1$
             setToolTipText(Messages.getString("TestRunnerViewPart.RERUN_TESTS")); //$NON-NLS-1$
-            ImageDescriptor descriptor = LslForgePlugin
+            ImageDescriptor descriptor = LSLForgePlugin
                     .imageDescriptorFromPlugin("icons/relaunch.gif"); //$NON-NLS-1$
             setHoverImageDescriptor(descriptor);
             setImageDescriptor(descriptor);
@@ -52,7 +52,7 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
         }
     }
 
-    private LslTestProgressBar progressBar;
+    private LSLTestProgressBar progressBar;
     private Composite parent;
     private TestResultCountDisplay counterPanel;
     private Composite counterComposite;
@@ -64,7 +64,7 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
     private TestManager testManager;
 
     public TestRunnerViewPart() {
-        testManager = LslForgePlugin.getDefault().getTestManager();
+        testManager = LSLForgePlugin.getDefault().getTestManager();
         testManager.addResultListener(this);
     }
 
@@ -136,7 +136,7 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
         counterPanel = new TestResultCountDisplay(composite);
         counterPanel.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
                 | GridData.HORIZONTAL_ALIGN_FILL));
-        progressBar = new LslTestProgressBar(composite);
+        progressBar = new LSLTestProgressBar(composite);
         progressBar.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL
                 | GridData.HORIZONTAL_ALIGN_FILL));
         return composite;
@@ -191,6 +191,6 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
     };
 
     private void refreshAsync() {
-        LslForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(refresher);
+        LSLForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(refresher);
     }
 }

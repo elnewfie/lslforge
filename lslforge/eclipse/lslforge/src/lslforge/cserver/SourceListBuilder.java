@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import lslforge.LslForgeElement;
-import lslforge.LslProjectNature;
+import lslforge.LSLForgeElement;
+import lslforge.LSLProjectNature;
 import lslforge.generated.Tuple2;
 import lslforge.generated.Tuple3;
 
@@ -36,13 +36,13 @@ public class SourceListBuilder implements IResourceVisitor {
 	}
 	
 	public boolean visit(IResource resource) throws CoreException {
-		LslForgeElement element = (LslForgeElement) resource.getAdapter(LslForgeElement.class);
+		LSLForgeElement element = (LSLForgeElement) resource.getAdapter(LSLForgeElement.class);
 	
 		if (element != null) {
 			IFile f = (IFile) resource;
 			IPath p = f.getLocation();
 			IPath pp = f.getProjectRelativePath();
-			String name = LslProjectNature.resourceToLslForgeName(resource);
+			String name = LSLProjectNature.resourceToLSLForgeName(resource);
 			
 			if (element.isModule()) {
 			    moduleNameToPath.put(name,pp.toString());

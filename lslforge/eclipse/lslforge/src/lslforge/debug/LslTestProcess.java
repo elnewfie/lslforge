@@ -1,25 +1,25 @@
 package lslforge.debug;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.launching.Messages;
 
 import org.eclipse.debug.core.ILaunch;
 
-public class LslTestProcess extends LslProcess {
+public class LSLTestProcess extends LSLProcess {
     private static final String UNIT_TESTER = "UnitTester"; //$NON-NLS-1$
     private String descriptor;
-    public LslTestProcess(String descriptor, ILaunch launch) {
+    public LSLTestProcess(String descriptor, ILaunch launch) {
         super(launch);
         this.descriptor = descriptor;
     }
     
     protected Interactor createInteractor(Process p) {
-        return new LslTestInteractor(launch.getLaunchMode(),LslForgePlugin.getDefault().getTestManager(),
+        return new LSLTestInteractor(launch.getLaunchMode(),LSLForgePlugin.getDefault().getTestManager(),
                 descriptor, p.getInputStream(), p.getOutputStream());
     }
     
     protected Process launchExecutable() {
-        return LslForgePlugin.launchCoreCommand(UNIT_TESTER, false);
+        return LSLForgePlugin.launchCoreCommand(UNIT_TESTER, false);
     }
     
     public String getLabel() {

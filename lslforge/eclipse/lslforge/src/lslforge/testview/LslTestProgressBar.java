@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Display;
 /**
  * A progress bar with a red/green indication for success or failure.
  */
-public class LslTestProgressBar extends Canvas implements DisposeListener, ControlListener,
+public class LSLTestProgressBar extends Canvas implements DisposeListener, ControlListener,
         PaintListener {
     private static final int BAR_HEIGHT = 16;
     private static final int BAR_WIDTH = 160;
@@ -46,7 +46,7 @@ public class LslTestProgressBar extends Canvas implements DisposeListener, Contr
 
     private Color stoppedColor;
 
-    public LslTestProgressBar(Composite parent) {
+    public LSLTestProgressBar(Composite parent) {
         super(parent, SWT.NONE);
         Display display = parent.getDisplay();
         failureColor = new Color(display, FAILURE_RGB);

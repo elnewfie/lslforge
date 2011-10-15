@@ -1,6 +1,6 @@
 package lslplus;
 
-public class LslProjectNature extends lslforge.LslProjectNature {
+public class LSLProjectNature extends lslforge.LSLProjectNature {
 	@SuppressWarnings("hiding")
 	public static String ID = "lslplus.lslPlusNature";	//$NON-NLS-1$
 

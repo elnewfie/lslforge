@@ -23,7 +23,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.lsltest.TestEvents;
 import lslforge.lsltest.TestManager;
 import lslforge.lsltest.TestEvents.AllCompleteEvent;
@@ -35,7 +35,7 @@ import lslforge.util.Util;
 /**
  * Interact with a running test session.
  */
-public class LslTestInteractor implements Runnable, Interactor {
+public class LSLTestInteractor implements Runnable, Interactor {
     private static class BreakpointData {
         private static XStream xstream = new XStream(new DomDriver());
         public String file;
@@ -134,7 +134,7 @@ public class LslTestInteractor implements Runnable, Interactor {
     private Thread thread;
     private boolean done = false;
     private boolean debugMode;
-    public LslTestInteractor(String launchMode, TestManager manager, String testDescriptor, InputStream in, 
+    public LSLTestInteractor(String launchMode, TestManager manager, String testDescriptor, InputStream in, 
             OutputStream out) {
         reader = new BufferedReader(new InputStreamReader(in));
         writer = new PrintStream(out);
@@ -194,12 +194,12 @@ public class LslTestInteractor implements Runnable, Interactor {
 
     private BreakpointData[] createBreakpointData() {
         IBreakpointManager bpm = getBreakpointManager();
-        IBreakpoint[] breakpoints = bpm.getBreakpoints(LslDebugTarget.LSLFORGE);
+        IBreakpoint[] breakpoints = bpm.getBreakpoints(LSLDebugTarget.LSLFORGE);
         LinkedList<BreakpointData> list = new LinkedList<BreakpointData>();
         for (int i = 0; i < breakpoints.length; i++) {
             try {
-                if (breakpoints[i] instanceof LslLineBreakpoint) {
-                    LslLineBreakpoint bp = (LslLineBreakpoint) breakpoints[i];
+                if (breakpoints[i] instanceof LSLLineBreakpoint) {
+                    LSLLineBreakpoint bp = (LSLLineBreakpoint) breakpoints[i];
                     int line = bp.getLineNumber();
                     IMarker marker = bp.getMarker();
                     IResource resource = marker.getResource();
@@ -247,7 +247,7 @@ public class LslTestInteractor implements Runnable, Interactor {
         writer.close();
     }
     
-    private void fireSuspended(LslScriptExecutionState state) {
+    private void fireSuspended(LSLScriptExecutionState state) {
         for (Iterator<InteractorListener> i = listeners.iterator(); i.hasNext();) {
             i.next().suspended(state);
         }
@@ -263,14 +263,14 @@ public class LslTestInteractor implements Runnable, Interactor {
         
         try {
             while ((line = reader.readLine()) != null) {
-                if (LslForgePlugin.DEBUG) Util.log("read:" + Util.URIDecode(line)); //$NON-NLS-1$
+                if (LSLForgePlugin.DEBUG) Util.log("read:" + Util.URIDecode(line)); //$NON-NLS-1$
                 TestEvent event = TestEvents.fromXML(Util.URIDecode(line));
                 
                 // kludge for the mo'
                 if (event instanceof TestCompleteEvent) {
                     manager.postTestResult(((TestCompleteEvent)event).getTestResult());
                     String cmd = continueText();
-                    if (LslForgePlugin.DEBUG) Util.log("writing: " + cmd); //$NON-NLS-1$
+                    if (LSLForgePlugin.DEBUG) Util.log("writing: " + cmd); //$NON-NLS-1$
                     writeOut(cmd);
                 } else if (event instanceof AllCompleteEvent) {
                     endSession();
@@ -279,7 +279,7 @@ public class LslTestInteractor implements Runnable, Interactor {
                     return;
                 } else if (event instanceof TestSuspendedEvent) {
                     // TODO: this is where we'd extract the debug info...
-                    if (LslForgePlugin.DEBUG) Util.log("hit a breakpoint... suspending!"); //$NON-NLS-1$
+                    if (LSLForgePlugin.DEBUG) Util.log("hit a breakpoint... suspending!"); //$NON-NLS-1$
                     fireSuspended(((TestSuspendedEvent)event).getScriptState());
                     return;
                 }

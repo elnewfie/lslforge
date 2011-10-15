@@ -2,7 +2,7 @@ package lslforge.simview;
 
 import java.util.LinkedList;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.sim.SimStatuses;
 
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -29,7 +29,7 @@ public class LogViewerLabelProvider implements ITableLabelProvider {
 
     private Image createImage(String path) {
         // TODO Auto-generated method stub
-        Image image = LslForgePlugin.createImage(path);
+        Image image = LSLForgePlugin.createImage(path);
         images.add(image);
         return image;
     }

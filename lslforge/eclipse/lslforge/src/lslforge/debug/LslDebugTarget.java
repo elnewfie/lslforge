@@ -1,6 +1,6 @@
 package lslforge.debug;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 
 import org.eclipse.core.resources.IMarkerDelta;
 import org.eclipse.core.runtime.IStatus;
@@ -16,21 +16,21 @@ import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IThread;
 
-public class LslDebugTarget implements IDebugTarget, IProcessListener {
+public class LSLDebugTarget implements IDebugTarget, IProcessListener {
     public static final String LSLFORGE = "lslforge"; //$NON-NLS-1$
     private String name;
-    private LslProcess process;
-    private LslThread thread;
+    private LSLProcess process;
+    private LSLThread thread;
     private IThread[] threads;
     private ILaunch launch;
     private boolean suspended = false;
     private boolean terminated;
-    public LslDebugTarget(String name, ILaunch launch, LslProcess process) {
+    public LSLDebugTarget(String name, ILaunch launch, LSLProcess process) {
         this.name = name;
         this.process = process;
         this.launch = launch;
-        thread = new LslThread(this);
-        threads = new LslThread[] { thread };
+        thread = new LSLThread(this);
+        threads = new LSLThread[] { thread };
         process.setThread(thread);
         process.addListener(this);
     }
@@ -127,7 +127,7 @@ public class LslDebugTarget implements IDebugTarget, IProcessListener {
 
     private DebugException notSupported() throws DebugException {
         return new DebugException(
-                new Status(IStatus.ERROR,LslForgePlugin.PLUGIN_ID,
+                new Status(IStatus.ERROR,LSLForgePlugin.PLUGIN_ID,
                         DebugException.NOT_SUPPORTED,"",null)); //$NON-NLS-1$
     }
 
@@ -151,8 +151,7 @@ public class LslDebugTarget implements IDebugTarget, IProcessListener {
         return launch;
     }
 
-    @SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 
         if (ILaunch.class.equals(adapter)) {
             return getLaunch();
@@ -160,7 +159,7 @@ public class LslDebugTarget implements IDebugTarget, IProcessListener {
         return null;
     }
 
-    public void processTerminated(LslProcess p) {
+    public void processTerminated(LSLProcess p) {
         setTerminated();
         p.removeListener(this);
     }

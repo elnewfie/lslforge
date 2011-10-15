@@ -11,10 +11,10 @@ import org.eclipse.core.runtime.PlatformObject;
  * @author rgreayer
  *
  */
-public class LslDerivedScript extends PlatformObject {
+public class LSLDerivedScript extends PlatformObject {
 	private IFile f;
 	
-	public LslDerivedScript(IFile f) {
+	public LSLDerivedScript(IFile f) {
 		this.f = f;
 	}
 	

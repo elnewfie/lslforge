@@ -185,8 +185,7 @@ public class SimProject {
         
         public IResource getResource() { return resource; }
 
-        @SuppressWarnings("unchecked")
-		public Object getAdapter(Class adapter) {
+		public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
             return Platform.getAdapterManager().getAdapter(this, adapter);
         }
         
@@ -1147,7 +1146,7 @@ public class SimProject {
                 
                 return NodeStatus.OK;
             } catch (NumberFormatException e) {
-            	Util.error(e,"que pasa?");
+            	Util.error(e,"que pasa?"); //$NON-NLS-1$
                 return SimProject.BAD_FORMAT;
             }
         }
@@ -1171,7 +1170,7 @@ public class SimProject {
                 Integer i = Integer.decode(s);
                 setValue(i);
             } catch (NumberFormatException e) {
-            	Util.error(e, "que?");
+            	Util.error(e, "que?"); //$NON-NLS-1$
                 // ignore
             }
         }

@@ -1,6 +1,6 @@
 package lslforge.wizards;
 
-import lslforge.LslForgePerspectiveFactory;
+import lslforge.LSLForgePerspectiveFactory;
 import lslforge.Messages;
 import lslforge.util.Util;
 
@@ -17,11 +17,11 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 
-public class LslForgeProjectWizard extends Wizard implements INewWizard {
-	private LslForgeProjectWizardPage page1;
+public class LSLForgeProjectWizard extends Wizard implements INewWizard {
+	private LSLForgeProjectWizardPage page1;
 	private IWorkbench workbench = null;
     private IWorkbenchWindow window;
-	public LslForgeProjectWizard() {
+	public LSLForgeProjectWizard() {
 		setDefaultPageImageDescriptor(image());
 	}
 
@@ -29,7 +29,7 @@ public class LslForgeProjectWizard extends Wizard implements INewWizard {
 //		IPath path = new Path("$nl$/icons/newlprj_wiz.png"); //$NON-NLS-1$
 		return Util.findDescriptor("$nl$/icons/newlprj_wiz.png"); //$NON-NLS-1$
 //		URL url = 
-//			FileLocator.find(LslForgePlugin.getDefault().getBundle(), path, null);
+//			FileLocator.find(LSLForgePlugin.getDefault().getBundle(), path, null);
 //		Util.log("Path = " + url.getPath()); //$NON-NLS-1$
 //		if (url != null) {
 //			return ImageDescriptor.createFromURL(url);
@@ -51,10 +51,10 @@ public class LslForgeProjectWizard extends Wizard implements INewWizard {
             p.setDefaultCharset("UTF-8",monitor); //$NON-NLS-1$
 			IProjectDescription description = p.getDescription();
 			String[] natures = description.getNatureIds();
-			String[] newNatures = (String[]) Util.append(natures, new String[] { "lslforge.lslForgeNature" }); //$NON-NLS-1$
+			String[] newNatures = (String[]) Util.append(natures, new String[] { "lslforge.LSLForgeNature" }); //$NON-NLS-1$
 			description.setNatureIds(newNatures);
 			p.setDescription(description, monitor);
-			workbench.showPerspective(LslForgePerspectiveFactory.PERSPECTIVE_ID, window);
+			workbench.showPerspective(LSLForgePerspectiveFactory.PERSPECTIVE_ID, window);
 		} catch (CoreException e) {
 			Util.error(e, e.getLocalizedMessage());
 		} finally {
@@ -65,7 +65,7 @@ public class LslForgeProjectWizard extends Wizard implements INewWizard {
 
 	public void addPages() {
 		super.addPages();
-		addPage(page1 = new LslForgeProjectWizardPage(Messages.LslForgeProjectWizard_CREATE_LSL_PLUS_PROJECT));
+		addPage(page1 = new LSLForgeProjectWizardPage(Messages.LSLForgeProjectWizard_CREATE_LSL_PLUS_PROJECT));
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {

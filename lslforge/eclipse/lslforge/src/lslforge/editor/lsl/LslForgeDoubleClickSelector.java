@@ -19,9 +19,9 @@ import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextViewer;
 
 /**
- * Double click strategy aware of LslForge identifier syntax rules.
+ * Double click strategy aware of LSLForge identifier syntax rules.
  */
-public class LslForgeDoubleClickSelector implements ITextDoubleClickStrategy {
+public class LSLForgeDoubleClickSelector implements ITextDoubleClickStrategy {
 
 	protected ITextViewer fText;
 	protected int fPos;
@@ -31,9 +31,9 @@ public class LslForgeDoubleClickSelector implements ITextDoubleClickStrategy {
 	protected static char[] fgBrackets= { '{', '}', '(', ')', '[', ']', '"', '"' };
 
 	/* 
-	 * Create a LslForgeDoubleClickSelector.
+	 * Create a LSLForgeDoubleClickSelector.
 	 */
-	 public LslForgeDoubleClickSelector() {
+	 public LSLForgeDoubleClickSelector() {
 		super();
 	}
 	

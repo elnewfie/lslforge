@@ -9,7 +9,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.HashSet;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.launching.Messages;
 import lslforge.util.Util;
 
@@ -24,7 +24,7 @@ import org.eclipse.debug.core.model.IProcess;
 import org.eclipse.debug.core.model.IStreamMonitor;
 import org.eclipse.debug.core.model.IStreamsProxy;
 
-public abstract class LslProcess extends Thread implements IProcess {
+public abstract class LSLProcess extends Thread implements IProcess {
 	protected Reader reader1;
 	protected Reader reader2;
 	protected ILaunch launch;
@@ -34,10 +34,10 @@ public abstract class LslProcess extends Thread implements IProcess {
     private boolean terminated = false;
     protected Interactor interactor;
     private HashSet<IProcessListener> listeners = new HashSet<IProcessListener>();
-    protected LslThread thread;
-    protected LslProcess() { }
+    protected LSLThread thread;
+    protected LSLProcess() { }
     
-    protected LslProcess(ILaunch launch) {
+    protected LSLProcess(ILaunch launch) {
         this.launch = launch;
     }
 	
@@ -46,10 +46,10 @@ public abstract class LslProcess extends Thread implements IProcess {
             public void run() {
                 
                 try {
-                    LslProcess.this.p.waitFor();
+                    LSLProcess.this.p.waitFor();
                     onTerminate();
                 } catch (InterruptedException e) {
-                    LslProcess.this.p.destroy();
+                    LSLProcess.this.p.destroy();
                     onTerminate();
                 } catch (Exception e) {
                     Util.error(e,e.getLocalizedMessage());
@@ -82,7 +82,7 @@ public abstract class LslProcess extends Thread implements IProcess {
 		try {
             return p.exitValue();
         } catch (IllegalThreadStateException e) {
-            throw new DebugException(new Status(IStatus.ERROR, LslForgePlugin.PLUGIN_ID, Messages.getString("TestLaunchDelegate.NOT_TERMINATED"))); //$NON-NLS-1$
+            throw new DebugException(new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID, Messages.getString("TestLaunchDelegate.NOT_TERMINATED"))); //$NON-NLS-1$
         }
 	}
 
@@ -115,8 +115,7 @@ public abstract class LslProcess extends Thread implements IProcess {
 	public void setAttribute(String key, String value) {
 	}
 
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
 		return Platform.getAdapterManager().getAdapter(this, adapter);
 	}
 
@@ -137,7 +136,7 @@ public abstract class LslProcess extends Thread implements IProcess {
 	    interactor.stop();
 	}
 	
-    public void setThread(LslThread thread) {
+    public void setThread(LSLThread thread) {
         this.thread = thread;
     }
 	

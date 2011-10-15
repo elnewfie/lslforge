@@ -31,12 +31,13 @@ import lslforge.generated.TextLocation;
 import lslforge.generated.TextLocation_TextLocation;
 import lslforge.generated.Tuple2;
 import lslforge.generated.Tuple3;
-import lslforge.language_metadata.LslParam;
+import lslforge.language_metadata.LSLParam;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -60,7 +61,7 @@ import org.eclipse.core.runtime.Status;
  * @author rgreayer
  *
  */
-public class LslProjectNature implements IProjectNature, IResourceChangeListener {
+public class LSLProjectNature implements IProjectNature, IResourceChangeListener {
 	public static final String OPTIMIZE = "optimize"; //$NON-NLS-1$
 
 	public static interface RecompileListener {
@@ -70,19 +71,19 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
     private static class BetterDeltaVisitor implements IResourceDeltaVisitor {
 		private boolean recompileAll = false;
 		private LinkedList<IResource> newDerivedResources = new LinkedList<IResource>();
-		private LinkedList<LslForgeElement> addsAndUpdates = new LinkedList<LslForgeElement>();
-		private LinkedList<LslForgeElement> removals = new LinkedList<LslForgeElement>();
+		private LinkedList<LSLForgeElement> addsAndUpdates = new LinkedList<LSLForgeElement>();
+		private LinkedList<LSLForgeElement> removals = new LinkedList<LSLForgeElement>();
 		private IProject project;
 		
 		public BetterDeltaVisitor(IProject p) {
 			project = p;
 		}
 		
-		public List<LslForgeElement> getAddsAndUpdates() {
+		public List<LSLForgeElement> getAddsAndUpdates() {
 			return addsAndUpdates;
 		}
 		
-		public List<LslForgeElement> getRemovals() {
+		public List<LSLForgeElement> getRemovals() {
 			return removals;
 		}
 		
@@ -101,7 +102,7 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 					return false; // don't continue down this branch...
 				}
 
-				LslForgeElement element = (LslForgeElement) resource.getAdapter(LslForgeElement.class);
+				LSLForgeElement element = (LSLForgeElement) resource.getAdapter(LSLForgeElement.class);
 				
 				if (element != null) {
 					if (element.isModule()) {
@@ -123,8 +124,8 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 						
 					}
 				} else {
-					LslDerivedScript script = 
-						(LslDerivedScript) resource.getAdapter(LslDerivedScript.class);
+					LSLDerivedScript script = 
+						(LSLDerivedScript) resource.getAdapter(LSLDerivedScript.class);
 					if (script != null && delta.getKind() == IResourceDelta.ADDED) {
 						newDerivedResources.add(resource);
 					} else if (script == null) {
@@ -157,7 +158,7 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 	
 	public static class EntryPointDefinition {
 		public String name;
-		public LslParam[] params;
+		public LSLParam[] params;
 		public String returnType;
 	}
 	
@@ -250,13 +251,13 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 		}
 		
 		public boolean visit(IResource resource) throws CoreException {
-			LslForgeElement element = (LslForgeElement) resource.getAdapter(LslForgeElement.class);
+			LSLForgeElement element = (LSLForgeElement) resource.getAdapter(LSLForgeElement.class);
 		
 			if (element != null) {
 				IFile f = (IFile) resource;
 				IPath p = f.getLocation();
 				IPath pp = f.getProjectRelativePath();
-				String name = resourceToLslForgeName(resource);
+				String name = resourceToLSLForgeName(resource);
 				
 				if (element.isModule()) {
 				    moduleNameToPath.put(name,pp.toString());
@@ -307,7 +308,7 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 		}
 	}
 	
-	public static String ID = "lslforge.lslForgeNature"; //$NON-NLS-1$
+	public static String ID = "lslforge.LSLForgeNature"; //$NON-NLS-1$
 	
 	private static final String LSLFORGE = "lslforge"; //$NON-NLS-1$
 
@@ -321,8 +322,8 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 	private Summary summary;
 
 	private CompilationServer cserver;
-	public LslProjectNature() {
-		if (LslForgePlugin.DEBUG) Util.log("creating project nature"); //$NON-NLS-1$
+	public LSLProjectNature() {
+		if (LSLForgePlugin.DEBUG) Util.log("creating project nature"); //$NON-NLS-1$
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 		cserver = new CompilationServer();
 	}
@@ -331,13 +332,13 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 	    return cserver;
 	}
 	
-	private synchronized void checkForErrors(boolean recompileAll, List<LslForgeElement> scriptChanges,
-			List<LslForgeElement> scriptRemovals) {
+	private synchronized void checkForErrors(boolean recompileAll, List<LSLForgeElement> scriptChanges,
+			List<LSLForgeElement> scriptRemovals) {
 		
 		try {
 			if (scriptRemovals != null) {
-				for (LslForgeElement e : scriptRemovals) {
-					String name = resourceToLslForgeName(e.getResource());
+				for (LSLForgeElement e : scriptRemovals) {
+					String name = resourceToLSLForgeName(e.getResource());
 					String path = e.getResource().getLocation().toOSString();
 					CompilationCommand_RemoveScript cmd = new CompilationCommand_RemoveScript();
 					cmd.el1 = new Tuple2<String, String>();
@@ -353,12 +354,12 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 			if (recompileAll || (scriptChanges != null && scriptChanges.size() != 0)) {
 				IProject[] ps = project.getReferencedProjects();
 				boolean optimize = 
-					LslForgePlugin.getDefault().getPreferenceStore().getBoolean(OPTIMIZE);
+					LSLForgePlugin.getDefault().getPreferenceStore().getBoolean(OPTIMIZE);
 				final lslforge.cserver.SourceListBuilder builder = 
 					new lslforge.cserver.SourceListBuilder(optimize);
 				
 				for (IProject p : ps) {
-			        if (p.hasNature(LslProjectNature.ID)) {
+			        if (p.hasNature(LSLProjectNature.ID)) {
 			        	p.accept(builder);
 			        }
 				}
@@ -376,10 +377,10 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 
 					response = r.get();
 				} else {
-					for (LslForgeElement e : scriptChanges) {
+					for (LSLForgeElement e : scriptChanges) {
 						CompilationCommand_UpdateScript cmd = new CompilationCommand_UpdateScript();
 						cmd.el1 = new Tuple2<String, String>();
-						cmd.el1.el1 = resourceToLslForgeName(e.getResource());
+						cmd.el1.el1 = resourceToLSLForgeName(e.getResource());
 						cmd.el1.el2 = e.getResource().getLocation().toOSString();
 						Result r = cserver.execute(cmd);
 						response = r.get(); // wait for response... only care about last one!
@@ -441,7 +442,7 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 			Util.error(e, e.getLocalizedMessage());
 		}
 		
-		LslForgePlugin.getDefault().errorStatusChanged();
+		LSLForgePlugin.getDefault().errorStatusChanged();
 		
         WorkspaceJob job = new WorkspaceJob(Messages.ProjectNature_REFRESH) {
 
@@ -509,14 +510,14 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 	    return ep.epType;
 	}
 	
-	public synchronized String[] getLslFiles() {
+	public synchronized String[] getLSLFiles() {
 		if (entryPoints == null) return new String[0];
 		String[] files = entryPoints.keySet().toArray(new String[entryPoints.size()]);
 		Arrays.sort(files);
 		return files;
 	}
 	
-	public String[] getLslScripts() {
+	public String[] getLSLScripts() {
 	    if (entryPoints == null) return new String[0];
 	    ArrayList<String> l = new ArrayList<String>();
 	    
@@ -533,7 +534,7 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 	    return scripts;
 	}
 	
-    public List<String> getLslModules() {
+    public List<String> getLSLModules() {
         ArrayList<String> l = new ArrayList<String>();
         if (entryPoints == null) return l;
         
@@ -647,8 +648,8 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
 		}
 	}
 
-    public void scheduleBuild(final boolean recompileAll, final List<LslForgeElement> scriptChanges,
-    		final List<LslForgeElement> scriptRemovals) {
+    public void scheduleBuild(final boolean recompileAll, final List<LSLForgeElement> scriptChanges,
+    		final List<LSLForgeElement> scriptRemovals) {
         Util.log("check errors!"); //$NON-NLS-1$
         WorkspaceJob job = new WorkspaceJob("EvaluateErrors") { //$NON-NLS-1$
 
@@ -689,7 +690,7 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
         return globalVariables.get(fileName);
     }
     
-    public static String resourceToLslForgeName(IResource r) {
+    public static String resourceToLSLForgeName(IResource r) {
         return r.getProjectRelativePath().toString().replace('/', '.');
     }
     
@@ -705,5 +706,30 @@ public class LslProjectNature implements IProjectNature, IResourceChangeListener
     	for (RecompileListener l : recompListeners) {
     		l.recompile();
     	}
+    }
+
+    /**
+     * Inspect the nature(s) associated with the project and, if LSLPlus appears in the list,
+     * replace it with LSLForge.
+     * @param project
+     */
+    public static void fixProjectNature(IProject project) {
+		try {
+			IProjectDescription description = project.getDescription();
+			String[] natures = description.getNatureIds();
+			
+			for(int i = 0; i < natures.length; i++) {
+				if(natures[i].equals("lslplus.lslPlusNature")) { //$NON-NLS-1$
+					//Replace with the new nature name
+					natures[i] = LSLProjectNature.ID;
+					break;
+				}
+			}
+			
+			description.setNatureIds(natures);
+			project.setDescription(description, null);
+		} catch (CoreException e) {
+			// Something went wrong
+		}
     }
 }

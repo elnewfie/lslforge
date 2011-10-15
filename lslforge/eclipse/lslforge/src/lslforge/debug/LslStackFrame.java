@@ -8,7 +8,7 @@ import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IThread;
 import org.eclipse.debug.core.model.IVariable;
 
-public class LslStackFrame implements IStackFrame{
+public class LSLStackFrame implements IStackFrame{
     private static final IRegisterGroup[] EMPTY_REGISTER_GROUP =
         new IRegisterGroup[0];
 
@@ -19,7 +19,7 @@ public class LslStackFrame implements IStackFrame{
     private IVariable[] variables;
     //private boolean stepping;
     private int line;
-    public LslStackFrame(
+    public LSLStackFrame(
             String name, 
             String file,
             IThread thread,
@@ -84,9 +84,8 @@ public class LslStackFrame implements IStackFrame{
         return getDebugTarget().getModelIdentifier();
     }
 
-    @SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
-        //Util.log("lslStackFrame - asked to adapt to: " + adapter);
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
+        //Util.log("LSLStackFrame - asked to adapt to: " + adapter);
         return null;
     }
 

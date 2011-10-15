@@ -13,12 +13,12 @@ import org.eclipse.ui.texteditor.RetargetTextEditorAction;
 /**
  * Contributes actions to the edit menu.
  */
-public class LslForgeActionContributor extends TextEditorActionContributor {
+public class LSLForgeActionContributor extends TextEditorActionContributor {
 
 	private RetargetTextEditorAction contentAssistProposal;
 	private RetargetTextEditorAction contentAssistTip;
 
-	public LslForgeActionContributor() {
+	public LSLForgeActionContributor() {
 		super();
 		contentAssistProposal= new RetargetTextEditorAction(Messages.getResourceBundle(), "ContentAssistProposal."); //$NON-NLS-1$
 		contentAssistProposal.setActionDefinitionId(ITextEditorActionDefinitionIds.CONTENT_ASSIST_PROPOSALS); 

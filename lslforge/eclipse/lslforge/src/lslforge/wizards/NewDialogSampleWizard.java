@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.util.Util;
 
 import org.eclipse.core.runtime.IStatus;
@@ -20,7 +20,7 @@ import org.osgi.framework.Bundle;
 public class NewDialogSampleWizard extends Wizard implements INewWizard {
 	private SampleWizardPage mainPage;
 	private IStructuredSelection selection;
-	private class SampleWizardPage extends LslSampleCreationWizardPage {
+	private class SampleWizardPage extends LSLSampleCreationWizardPage {
 		public SampleWizardPage(IStructuredSelection selection) {
 			super("createSample", selection); //$NON-NLS-1$
 			setTitle("Dialog Example"); //$NON-NLS-1$
@@ -31,7 +31,7 @@ public class NewDialogSampleWizard extends Wizard implements INewWizard {
 
 		
 		protected List<Sample> getSampleItems() {
-		    Bundle bundle = LslForgePlugin.getDefault().getBundle();
+		    Bundle bundle = LSLForgePlugin.getDefault().getBundle();
 		    Sample evhandlerSample =
 		        new Sample("eventhandler.lslm", bundle, //$NON-NLS-1$
 		                new Path("samples/dialog_example/eventhandler.lslm"), false); //$NON-NLS-1$

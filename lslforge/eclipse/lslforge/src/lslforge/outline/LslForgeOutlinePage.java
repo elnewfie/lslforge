@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import lslforge.LslForgeElement;
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
+import lslforge.LSLForgeElement;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.cserver.CompilationServer.Result;
-import lslforge.editor.LslForgeEditor;
+import lslforge.editor.LSLForgeEditor;
 import lslforge.generated.CodeElement_CodeElement;
 import lslforge.generated.CompilationCommand;
 import lslforge.generated.CompilationCommand_CheckModule;
@@ -59,11 +59,11 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
-public class LslForgeOutlinePage extends ContentOutlinePage {
-	private LslForgeContentProvider lpcp;
-	private LslForgeEditor editor;
+public class LSLForgeOutlinePage extends ContentOutlinePage {
+	private LSLForgeContentProvider lpcp;
+	private LSLForgeEditor editor;
 	
-	private class LslForgeLabelProvider extends LabelProvider {
+	private class LSLForgeLabelProvider extends LabelProvider {
 	    private Image functionImage = createImage("icons/function.gif"); //$NON-NLS-1$;
 	    private Image stateImage = createImage("icons/state.gif"); //$NON-NLS-1$;
 	    private Image handlerImage = createImage("icons/handler.gif"); //$NON-NLS-1$;
@@ -87,7 +87,7 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
 	    
 	    private Image createImage(String path) {
 	        if (images == null) images = new LinkedList<Image>();
-	        Image i = LslForgePlugin.createImage(path);
+	        Image i = LSLForgePlugin.createImage(path);
 	        if (i != null) images.add(i);
 	        return i;
 	    }
@@ -130,7 +130,7 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
 	}
 	
     
-	private class LslForgeContentProvider implements ITreeContentProvider {
+	private class LSLForgeContentProvider implements ITreeContentProvider {
 		private HashMap<Ctx<Handler>, String> parents  = 
 			new HashMap<Ctx<Handler>, String>();
 		private HashMap<String,Ctx<State>> states = new HashMap<String, Ctx<State>>();
@@ -165,7 +165,7 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
 		}
 
 		public Object[] getElements(Object inputElement) {
-		    LslForgeEditor e = (LslForgeEditor) inputElement;
+		    LSLForgeEditor e = (LSLForgeEditor) inputElement;
 		    IDocument d = e.getDocumentProvider().getDocument(e.getEditorInput());
 		    String text = d.get();
 
@@ -177,10 +177,10 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
 		        return null;
 		    }
 		    
-		    LslForgeElement element = (LslForgeElement) f.getAdapter(LslForgeElement.class);
+		    LSLForgeElement element = (LSLForgeElement) f.getAdapter(LSLForgeElement.class);
 		    
 		    if (element == null) {
-		        Util.error("can't adapt editor input to LslForgeElement"); //$NON-NLS-1$
+		        Util.error("can't adapt editor input to LSLForgeElement"); //$NON-NLS-1$
 		        return null;
 		    }
 		    
@@ -202,17 +202,27 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
                 cmd = cmdcm;
 		    }
 		    
-		    LslProjectNature n;
+		    LSLProjectNature n;
 		    try {
-                n = (LslProjectNature) f.getProject().getNature(LslProjectNature.ID);
+                n = (LSLProjectNature) f.getProject().getNature(LSLProjectNature.ID);
+                if(n == null) {
+                	//Try to add the nature
+                	LSLProjectNature.fixProjectNature(f.getProject());
+                	n = (LSLProjectNature) f.getProject().getNature(LSLProjectNature.ID);
+                }
+                	
+                if(n == null) {
+                	Util.error("This project does not have LSLForge support enabled."); //$NON-NLS-1$
+                	return null;
+                }
             } catch (CoreException e1) {
                 Util.error(e1, "can't get project nature!"); //$NON-NLS-1$
                 return null;
             }
 
-            Result r = n.getCompilationServer().execute(cmd);
             CompilationResponse response;
             try {
+            	Result r = n.getCompilationServer().execute(cmd);
                 response = r.get();
             } catch (InterruptedException e1) {
                 Util.error(e1, "can't check!"); //$NON-NLS-1$
@@ -220,6 +230,9 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
             } catch (ExecutionException e1) {
                 Util.error(e1, "can't check!"); //$NON-NLS-1$
                 return null;
+            } catch(Exception e1) {
+            	Util.error(e1, "can't check!");	//$NON-NLS-1$
+            	return null;
             }
             
             //LSLScript script0 = response.el1.el1;
@@ -323,7 +336,7 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
 		}
 	}
 	
-	public LslForgeOutlinePage(LslForgeEditor e) {
+	public LSLForgeOutlinePage(LSLForgeEditor e) {
 		this.editor = e;
 	}
 	
@@ -332,7 +345,7 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
 		return o;
 	}
 	
-	private static TextLocation_TextLocation getLoc(Object o, LslForgeContentProvider p) {
+	private static TextLocation_TextLocation getLoc(Object o, LSLForgeContentProvider p) {
 	    if (o instanceof String) { // name of state...
 	        o = p.getState((String) o);
 	    }
@@ -387,9 +400,9 @@ public class LslForgeOutlinePage extends ContentOutlinePage {
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		TreeViewer viewer = getTreeViewer();
-		lpcp = new LslForgeContentProvider();
+		lpcp = new LSLForgeContentProvider();
 		viewer.setContentProvider(lpcp);
-		viewer.setLabelProvider(new LslForgeLabelProvider());
+		viewer.setLabelProvider(new LSLForgeLabelProvider());
 		viewer.addSelectionChangedListener(this);
 		viewer.setInput(editor);
 	}

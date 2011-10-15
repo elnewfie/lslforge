@@ -9,15 +9,15 @@
             name="LSLForge Editor"
             icon="icons/obj16/lslforge.gif"
             extensions="lslp,lslm"
-            contributorClass="lslforge.editor.LslForgeActionContributor"
-            class="lslforge.editor.LslForgeEditor"
-            id="lslforge.editor.LslForgeEditor">
+            contributorClass="lslforge.editor.LSLForgeActionContributor"
+            class="lslforge.editor.LSLForgeEditor"
+            id="lslforge.editor.LSLForgeEditor">
       </editor>
       <editor
             class="lslforge.editor.TestEditor"
             extensions="lslt"
             icon="icons/obj16/lslforge-test.gif"
-            id="lslforge.editor.LslTestEditor"
+            id="lslforge.editor.LSLTestEditor"
             name="LSLForge Test Editor">
       </editor>
       <editor
@@ -25,17 +25,17 @@
             extensions="simp"
             icon="icons/obj16/lslforge-sim.gif"
             id="lslforge.editor.SimEditor"
-            name="LslForge Sim Editor">
+            name="LSLForge Sim Editor">
       </editor>
    </extension>
    
    <extension
-         id="LslForgeSetupParticipantName"
+         id="LSLForgeSetupParticipantName"
          name="%documentSetupParticipantName"
          point="org.eclipse.core.filebuffers.documentSetup">
       <participant
             extensions="lslp,lslm"
-            class="lslforge.editor.LslForgeDocumentSetupParticipant">
+            class="lslforge.editor.LSLForgeDocumentSetupParticipant">
       </participant>
    </extension>
    
@@ -48,11 +48,11 @@
    <extension
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
-            class="lslforge.launching.LaunchLslTestShortcut"
+            class="lslforge.launching.LaunchLSLTestShortcut"
             description="Launches a LSLForge Test"
             icon="icons/lslforgetestrun.gif"
-            id="lslforge.LaunchLslTest"
-            label="Launch Lsl Test"
+            id="lslforge.LaunchLSLTest"
+            label="Launch LSL Test"
             modes="run,debug">
          <contextualLaunch>
             <enablement>
@@ -64,17 +64,17 @@
                   <iterate
                         ifEmpty="false">
                      <adapt
-                           type="lslforge.lsltest.LslTestSuite">
+                           type="lslforge.lsltest.LSLTestSuite">
                      </adapt>
                   </iterate>
                </with></enablement>
          </contextualLaunch>
       </shortcut>
       <shortcut
-            class="lslforge.launching.LaunchLslSimShortcut"
+            class="lslforge.launching.LaunchLSLSimShortcut"
             icon="icons/launchlslforge.gif"
-            id="lslforge.LaunchLslSim"
-            label="Launch In Lsl Sim"
+            id="lslforge.LaunchLSLSim"
+            label="Launch In LSL Sim"
             modes="run, debug">
          <contextualLaunch>
             <enablement>
@@ -88,7 +88,7 @@
                            ifEmpty="false">
                         <or>
                            <adapt
-                                 type="lslforge.LslForgeScript">
+                                 type="lslforge.LSLForgeScript">
                            </adapt>
                            <adapt
                                  type="lslforge.sim.SimProject$WorldNode">
@@ -97,7 +97,7 @@
                      </iterate>
                   </with>
                   <instanceof
-                        value="lslforge.editor.LslForgeEditor">
+                        value="lslforge.editor.LSLForgeEditor">
                   </instanceof>
                </or>
             </enablement>
@@ -110,50 +110,50 @@
             adaptableType="org.eclipse.core.resources.IResource"
             class="lslforge.ResourceAdapterFactory">
          <adapter
-               type="lslforge.LslForgeElement">
+               type="lslforge.LSLForgeElement">
          </adapter>
          <adapter
-               type="lslforge.LslDerivedScript">
+               type="lslforge.LSLDerivedScript">
          </adapter>
          <adapter
-               type="lslforge.lsltest.LslTestSuite">
+               type="lslforge.lsltest.LSLTestSuite">
          </adapter>
          <adapter
-               type="lslforge.LslForgeScript">
+               type="lslforge.LSLForgeScript">
          </adapter>
          <adapter
                type="lslforge.sim.SimProject$WorldNode">
          </adapter>
       </factory>
       <factory
-            adaptableType="lslforge.LslForgeElement"
-            class="lslforge.LslForgeAdapterFactory">
+            adaptableType="lslforge.LSLForgeElement"
+            class="lslforge.LSLForgeAdapterFactory">
          <adapter
                type="org.eclipse.core.resources.IResource">
          </adapter>
          <adapter
-               type="lslforge.LslForgeScript">
+               type="lslforge.LSLForgeScript">
          </adapter>
       </factory>
       <factory
-            adaptableType="lslforge.LslDerivedScript"
-            class="lslforge.LslDerivedScriptAdapterFactory">
-         <adapter
-               type="org.eclipse.core.resources.IResource">
-         </adapter>
-      </factory>
-      <factory
-            adaptableType="lslforge.lsltest.LslTestSuite"
-            class="lslforge.lsltest.LslTestSuiteAdapterFactory">
+            adaptableType="lslforge.LSLDerivedScript"
+            class="lslforge.LSLDerivedScriptAdapterFactory">
          <adapter
                type="org.eclipse.core.resources.IResource">
          </adapter>
       </factory>
       <factory
-            adaptableType="lslforge.LslForgeScript"
-            class="lslforge.LslForgeAdapterFactory">
+            adaptableType="lslforge.lsltest.LSLTestSuite"
+            class="lslforge.lsltest.LSLTestSuiteAdapterFactory">
          <adapter
-               type="lslforge.LslForgeElement">
+               type="org.eclipse.core.resources.IResource">
+         </adapter>
+      </factory>
+      <factory
+            adaptableType="lslforge.LSLForgeScript"
+            class="lslforge.LSLForgeAdapterFactory">
+         <adapter
+               type="lslforge.LSLForgeElement">
          </adapter>
          <adapter
                type="org.eclipse.core.resources.IResource">
@@ -168,19 +168,19 @@
       </factory>
       <factory
             adaptableType="org.eclipse.ui.part.FileEditorInput"
-            class="lslforge.LslForgeAdapterFactory">
+            class="lslforge.LSLForgeAdapterFactory">
          <adapter
-               type="lslforge.LslForgeScript">
+               type="lslforge.LSLForgeScript">
          </adapter>
       </factory>
    </extension>
    <extension
-         id="lslForgeNature"
+         id="LSLForgeNature"
          name="LSLForge Project"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="lslforge.LslProjectNature">
+               class="lslforge.LSLProjectNature">
          </run>
       </runtime>
    </extension>
@@ -190,79 +190,79 @@
             class="lslforge.PropertyTester"
             id="lslforge.PropertyTester"
             namespace="lslforge"
-            properties="isInLslProject"
+            properties="isInLSLProject"
             type="org.eclipse.core.runtime.IAdaptable">
       </propertyTester>
    </extension>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
-            id="lslforge.LslForge"
+            id="lslforge.LSLForge"
             name="LSLForge">
       </category>
       <wizard
-            category="lslforge.LslForge"
-            class="lslforge.wizards.LslForgeProjectWizard"
-            finalPerspective="lslforge.LslForgePerspective"
+            category="lslforge.LSLForge"
+            class="lslforge.wizards.LSLForgeProjectWizard"
+            finalPerspective="lslforge.LSLForgePerspective"
             icon="icons/newlprj_wiz.gif"
-            id="lslforge.LslForgeProjectWizard"
+            id="lslforge.LSLForgeProjectWizard"
             name="LSLForge Project"
-            preferredPerspectives="lslforge.LslForgePerspective"
+            preferredPerspectives="lslforge.LSLForgePerspective"
             project="true">
          <description>
             Create a new LSLForge Project.  A LSLForge Project allows you to edit and test LSL code.
          </description>
       </wizard>
       <primaryWizard
-            id="lslforge.LslForgeProjectWizard">
+            id="lslforge.LSLForgeProjectWizard">
       </primaryWizard>
       <wizard
-            category="lslforge.LslForge"
+            category="lslforge.LSLForge"
             class="lslforge.wizards.NewTestWizard"
             icon="icons/obj16/lslforge-test.gif"
             id="lslforge.newTestWizard"
             name="New LSLForge Test"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.LslForge"
+            category="lslforge.LSLForge"
             class="lslforge.wizards.NewModuleWizard"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.module_wizard"
             name="New LSLForge Module"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.LslForge"
+            category="lslforge.LSLForge"
             class="lslforge.wizards.NewScriptWizard"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.script_wizard"
             name="New LSLForge Script"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.LslForge"
+            category="lslforge.LSLForge"
             class="lslforge.wizards.NewSimProjectWizard"
             icon="icons/obj16/lslforge-sim.gif"
             id="lslforge.newSimProjectWizard"
             name="New Sim Project File"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.LslForge"
+            category="lslforge.LSLForge"
             class="lslforge.wizards.NewSimEventHandler"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.newSimEventHandlerWizard"
             name="Sim Event Handler"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <wizard
-            category="lslforge.LslForge"
+            category="lslforge.LSLForge"
             class="lslforge.wizards.NewAvEventHandler"
             icon="icons/obj16/lslforge.gif"
             id="lslforge.newAvEventHandlerWizard"
             name="Avatar Event Handler"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <wizard
             category="lslforge.lslforge.examples"
@@ -270,7 +270,7 @@
             icon="icons/obj16/lslforge.gif"
             id="lslforge.HttpRpcExample"
             name="HTTP/RPC Example"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <wizard
             category="lslforge.lslforge.examples"
@@ -278,7 +278,7 @@
             icon="icons/obj16/lslforge.gif"
             id="lslforge.DialogExample"
             name="Dialog Example"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
       <category
             id="lslforge.lslforge.examples"
@@ -290,7 +290,7 @@
             icon="icons/obj16/lslforge.gif"
             id="lslforge.HttpRequestExample"
             name="HTTP Request Example"
-            preferredPerspectives="lslforge.LslForgePerspective">
+            preferredPerspectives="lslforge.LSLForgePerspective">
       </wizard>
    </extension>
    <extension
@@ -298,7 +298,7 @@
       <image
             icon="$nl$/icons/lsl_ovr.gif"
             id="lslforge.natureImage"
-            natureId="lslforge.lslForgeNature">
+            natureId="lslforge.LSLForgeNature">
       </image>
    </extension>
    <extension
@@ -383,9 +383,9 @@
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
-            class="lslforge.LslForgePerspectiveFactory"
+            class="lslforge.LSLForgePerspectiveFactory"
             icon="icons/lplus.gif"
-            id="lslforge.LslForgePerspective"
+            id="lslforge.LSLForgePerspective"
             name="LSLForge Perspective">
       </perspective>
    </extension>
@@ -418,15 +418,15 @@
    <extension
          point="org.eclipse.debug.core.breakpoints">
       <breakpoint
-            class="lslforge.debug.LslLineBreakpoint"
-            id="lslforge.LslLineBreakpoint"
+            class="lslforge.debug.LSLLineBreakpoint"
+            id="lslforge.LSLLineBreakpoint"
             markerType="lslforge.lslLineBreakpointMarker">
       </breakpoint>
    </extension>
    <extension
          point="org.eclipse.debug.ui.debugModelPresentations">
       <debugModelPresentation
-            class="lslforge.debug.LslDebugModelPresentation"
+            class="lslforge.debug.LSLDebugModelPresentation"
             id="lslforge">
       </debugModelPresentation>
    </extension>
@@ -449,13 +449,13 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            class="lslforge.preferences.LslForgePreferencePage"
+            class="lslforge.preferences.LSLForgePreferencePage"
             id="lslforge.preferences.page1"
             name="LSLForge">
       </page>
       <page
             category="lslforge.preferences.page1"
-            class="lslforge.preferences.LslForgeEditorPreferencePage"
+            class="lslforge.preferences.LSLForgeEditorPreferencePage"
             id="lslforge.preferences.editor_colors"
             name="Editor Appearance">
       </page>

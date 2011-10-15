@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.SimManager;
 import lslforge.sim.SimEvent;
 import lslforge.sim.SimEventListener;
@@ -37,7 +37,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 /**
  * Interact with a running test session.
  */
-public class LslSimInteractor implements Runnable, Interactor, SimEventListener {
+public class LSLSimInteractor implements Runnable, Interactor, SimEventListener {
     private static class BreakpointData {
         private static XStream xstream = new XStream(new DomDriver());
         public String file;
@@ -140,7 +140,7 @@ public class LslSimInteractor implements Runnable, Interactor, SimEventListener 
     private boolean debugMode;
     private LinkedList<SimEvent> eventQueue = new LinkedList<SimEvent>();
     
-    public LslSimInteractor(String launchMode, String simDescriptor, InputStream in, OutputStream out) {
+    public LSLSimInteractor(String launchMode, String simDescriptor, InputStream in, OutputStream out) {
         reader = new BufferedReader(new InputStreamReader(in));
         writer = new PrintStream(out);
         
@@ -199,12 +199,12 @@ public class LslSimInteractor implements Runnable, Interactor, SimEventListener 
 
     private BreakpointData[] createBreakpointData() {
         IBreakpointManager bpm = getBreakpointManager();
-        IBreakpoint[] breakpoints = bpm.getBreakpoints(LslDebugTarget.LSLFORGE);
+        IBreakpoint[] breakpoints = bpm.getBreakpoints(LSLDebugTarget.LSLFORGE);
         LinkedList<BreakpointData> list = new LinkedList<BreakpointData>();
         for (int i = 0; i < breakpoints.length; i++) {
             try {
-                if (breakpoints[i] instanceof LslLineBreakpoint) {
-                    LslLineBreakpoint bp = (LslLineBreakpoint) breakpoints[i];
+                if (breakpoints[i] instanceof LSLLineBreakpoint) {
+                    LSLLineBreakpoint bp = (LSLLineBreakpoint) breakpoints[i];
                     int line = bp.getLineNumber();
                     IMarker marker = bp.getMarker();
                     IResource resource = marker.getResource();
@@ -252,7 +252,7 @@ public class LslSimInteractor implements Runnable, Interactor, SimEventListener 
         writer.close();
     }
     
-    private void fireSuspended(LslScriptExecutionState state) {
+    private void fireSuspended(LSLScriptExecutionState state) {
         for (Iterator<InteractorListener> i = listeners.iterator(); i.hasNext();) {
             i.next().suspended(state);
         }
@@ -268,7 +268,7 @@ public class LslSimInteractor implements Runnable, Interactor, SimEventListener 
         
         try {
             while ((line = reader.readLine()) != null) {
-                //if (LslForgePlugin.DEBUG) Util.log("read:" + Util.URIDecode(line)); //$NON-NLS-1$
+                //if (LSLForgePlugin.DEBUG) Util.log("read:" + Util.URIDecode(line)); //$NON-NLS-1$
                 SimStatus status = SimStatuses.fromXML(Util.URIDecode(line));
                 
                 // kludge for the mo'
@@ -276,16 +276,16 @@ public class LslSimInteractor implements Runnable, Interactor, SimEventListener 
                     String cmd = continueText();
                     SimInfo info = (SimInfo)status;
                     simManager().setSimState(info.getState(), info.getMessages());
-                    //if (LslForgePlugin.DEBUG) Util.log("writing: " + cmd); //$NON-NLS-1$
+                    //if (LSLForgePlugin.DEBUG) Util.log("writing: " + cmd); //$NON-NLS-1$
                     writeOut(cmd);
                 } else if (status instanceof SimEnded) {
-                    if (LslForgePlugin.DEBUG) Util.log(Util.URIDecode(line));
+                    if (LSLForgePlugin.DEBUG) Util.log(Util.URIDecode(line));
                     SimEnded ended = (SimEnded) status;
                     simManager().setSimState(ended.getState(), ended.getMessages());
                     endSession();
                     fireComplete();
                 } else if (status instanceof SimSuspended) {
-                    if (LslForgePlugin.DEBUG) Util.log("hit a breakpoint... suspending!"); //$NON-NLS-1$
+                    if (LSLForgePlugin.DEBUG) Util.log("hit a breakpoint... suspending!"); //$NON-NLS-1$
                     simManager().setSimState(status.getState(), status.getMessages());
                     fireSuspended(((SimSuspended)status).getScriptState());
                     return;
@@ -308,7 +308,7 @@ public class LslSimInteractor implements Runnable, Interactor, SimEventListener 
     }
 
     private SimManager simManager() {
-        return LslForgePlugin.getDefault().getSimManager();
+        return LSLForgePlugin.getDefault().getSimManager();
     }
     
     private DebugPlugin getDebugPlugin() { return DebugPlugin.getDefault(); }

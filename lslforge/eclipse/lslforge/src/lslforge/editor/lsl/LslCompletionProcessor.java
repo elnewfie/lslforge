@@ -6,12 +6,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import lslforge.LslForgePlugin;
-import lslforge.language_metadata.LslConstant;
-import lslforge.language_metadata.LslFunction;
-import lslforge.language_metadata.LslHandler;
-import lslforge.language_metadata.LslParam;
-import lslforge.util.LslWordDetector;
+import lslforge.LSLForgePlugin;
+import lslforge.language_metadata.LSLConstant;
+import lslforge.language_metadata.LSLFunction;
+import lslforge.language_metadata.LSLHandler;
+import lslforge.language_metadata.LSLParam;
+import lslforge.util.LSLWordDetector;
 import lslforge.util.Util;
 
 import org.eclipse.jface.text.BadLocationException;
@@ -31,8 +31,8 @@ import org.eclipse.swt.graphics.Image;
 /**
  * LSLForge Completion Processor.
  */
-public class LslCompletionProcessor implements IContentAssistProcessor {
-	private static IWordDetector wordDetector = new LslWordDetector();
+public class LSLCompletionProcessor implements IContentAssistProcessor {
+	private static IWordDetector wordDetector = new LSLWordDetector();
 	private Image functionImage;
 	private Image handlerImage;
 	private Image constantImage;
@@ -98,7 +98,7 @@ public class LslCompletionProcessor implements IContentAssistProcessor {
 	protected static CompletionInfo[] possibleProposals = null;
 	protected IContextInformationValidator validator = new Validator();
 
-	public LslCompletionProcessor() {
+	public LSLCompletionProcessor() {
 		functionImage = Util.findDescriptor("$nl$/icons/function.gif").createImage(true); //$NON-NLS-1$
 		handlerImage = Util.findDescriptor("$nl$/icons/handler.gif").createImage(); //$NON-NLS-1$
 		constantImage = Util.findDescriptor("$nl$/icons/constant.gif").createImage(); //$NON-NLS-1$
@@ -107,11 +107,11 @@ public class LslCompletionProcessor implements IContentAssistProcessor {
 	
 	protected CompletionInfo [] getPossibleProposals() {
 		if (possibleProposals == null) {
-		    LslHandler handlers[] = LslForgePlugin.getDefault().getLslMetaData().getHandlers();
+		    LSLHandler handlers[] = LSLForgePlugin.getDefault().getLSLMetaData().getHandlers();
 		    CompletionInfo[] handlerNames = Util.arrayMap(new Util.ArrayMapFunc<CompletionInfo>() {
 			    		public Class<CompletionInfo> elementType() { return CompletionInfo.class; }
 				    	public CompletionInfo map(Object o) {
-				    		LslHandler handler = (LslHandler) o;
+				    		LSLHandler handler = (LSLHandler) o;
 				    		String proto = handler.getName() + formatParams(handler.getParams());
 				    		String startLine = proto + " {"; //$NON-NLS-1$
 				    		return new CompletionInfo(handler.getName(),
@@ -125,24 +125,24 @@ public class LslCompletionProcessor implements IContentAssistProcessor {
 		    CompletionInfo[] functions = Util.arrayMap(new Util.ArrayMapFunc<CompletionInfo>() {
 				public Class<CompletionInfo> elementType() { return CompletionInfo.class; }
 				public CompletionInfo map(Object o) {
-					LslFunction f = (LslFunction) o;
+					LSLFunction f = (LSLFunction) o;
 					return new CompletionInfo(f.getName(),
 							f.getName() + formatArgs(f.getParams()),
 							f.getName() + formatParams(f.getParams()),
 							f.getDescription(), functionImage, f.getName().length() + 1);
 				}
-		    }, LslForgePlugin.getDefault().getLslMetaData().getFunctions());
+		    }, LSLForgePlugin.getDefault().getLSLMetaData().getFunctions());
 
 		    CompletionInfo[] constants = Util.arrayMap(
 		    		new Util.ArrayMapFunc<CompletionInfo>() {
 						public Class<CompletionInfo> elementType() { return CompletionInfo.class; }
 						public CompletionInfo map(Object o) {
-							LslConstant k = (LslConstant) o;
+							LSLConstant k = (LSLConstant) o;
 							return new CompletionInfo(k.getName(),k.getName(),
 									k.getName() + " - " + k.getType(), //$NON-NLS-1$
 									k.getDescription(),constantImage, k.getName().length());
 						}
-		    		}, LslForgePlugin.getDefault().getLslMetaData().getConstants());
+		    		}, LSLForgePlugin.getDefault().getLSLMetaData().getConstants());
 		    CompletionInfo[] keywords = Util.arrayMap(
 		    		new Util.ArrayMapFunc<CompletionInfo>() {
 						public Class<CompletionInfo> elementType() { return CompletionInfo.class; }
@@ -157,7 +157,7 @@ public class LslCompletionProcessor implements IContentAssistProcessor {
 		return possibleProposals;
 	}
 	
-	private static String formatParams(LslParam[] params) {
+	private static String formatParams(LSLParam[] params) {
 		StringBuilder buf = new StringBuilder("("); //$NON-NLS-1$
 		String sep = ""; //$NON-NLS-1$
 		for (int i = 0; i < params.length; i++) {
@@ -168,7 +168,7 @@ public class LslCompletionProcessor implements IContentAssistProcessor {
 		return buf.append(")").toString(); //$NON-NLS-1$
 	}
 	
-	private static String formatArgs(LslParam[] params) {
+	private static String formatArgs(LSLParam[] params) {
 		StringBuilder buf = new StringBuilder("("); //$NON-NLS-1$
 		String sep = ""; //$NON-NLS-1$
 		for (int i = 0; i < params.length; i++) {

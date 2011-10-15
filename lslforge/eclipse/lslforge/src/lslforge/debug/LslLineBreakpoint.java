@@ -13,12 +13,12 @@ import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.LineBreakpoint;
 
-public class LslLineBreakpoint extends LineBreakpoint {
+public class LSLLineBreakpoint extends LineBreakpoint {
 
     public static final String MARKER_ID = "lslforge.lslLineBreakpointMarker"; //$NON-NLS-1$
 
-    public LslLineBreakpoint() { }
-    public LslLineBreakpoint(final IResource resource, final int line) throws DebugException {
+    public LSLLineBreakpoint() { }
+    public LSLLineBreakpoint(final IResource resource, final int line) throws DebugException {
         IWorkspaceRunnable wr= new IWorkspaceRunnable() {
             public void run(IProgressMonitor monitor) throws CoreException {
     
@@ -40,7 +40,7 @@ public class LslLineBreakpoint extends LineBreakpoint {
         run(getMarkerRule(resource), wr);
     }
     public String getModelIdentifier() {
-        return LslDebugTarget.LSLFORGE;
+        return LSLDebugTarget.LSLFORGE;
     }
 
     protected void register() throws CoreException {

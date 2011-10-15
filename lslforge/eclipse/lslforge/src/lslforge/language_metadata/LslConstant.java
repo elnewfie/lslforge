@@ -3,7 +3,7 @@
  */
 package lslforge.language_metadata;
 
-public class LslConstant {
+public class LSLConstant {
 	private String name;
 	private String type;
 	private String value;

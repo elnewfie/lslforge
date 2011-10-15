@@ -4,13 +4,13 @@
 package lslforge.language_metadata;
 
 
-public class LslHandler {
+public class LSLHandler {
 	private String name;
-	private LslParam[] params;
+	private LSLParam[] params;
 	private String description;
 	public String getName() { return name; }
 	public String getDescription() { return description; }
-	public LslParam[] getParams() { return params; }
+	public LSLParam[] getParams() { return params; }
 	public String signature() {
 		StringBuilder buf = new StringBuilder(name + "("); //$NON-NLS-1$
 		String sep = ""; //$NON-NLS-1$

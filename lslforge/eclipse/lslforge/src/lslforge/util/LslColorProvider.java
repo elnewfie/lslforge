@@ -16,7 +16,7 @@ import org.eclipse.swt.widgets.Display;
  * Manager for colors used in the LSLForge Editor.  This provider creates colors lazily as needed
  * and then caches them.
  */
-public class LslColorProvider implements IPropertyChangeListener {
+public class LSLColorProvider implements IPropertyChangeListener {
 
     public static final String DEFAULT_COLOR             = "default.color"; //$NON-NLS-1$
     public static final String HANDLER_COLOR             = "handler.color"; //$NON-NLS-1$
@@ -42,7 +42,7 @@ public class LslColorProvider implements IPropertyChangeListener {
     private HashSet<ColorProviderListener> listeners = new HashSet<ColorProviderListener>();
     private IPreferenceStore store;
 
-    public LslColorProvider(IPreferenceStore store) {
+    public LSLColorProvider(IPreferenceStore store) {
         PreferenceConverter.setDefault(store, DEFAULT_COLOR, DEFAULT);
         PreferenceConverter.setDefault(store, HANDLER_COLOR, HANDLER);
         PreferenceConverter.setDefault(store, KEYWORD_COLOR, KEYWORD);

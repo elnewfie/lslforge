@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import lslforge.LslExpressionValidator;
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
+import lslforge.LSLExpressionValidator;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.generated.GlobalSummary;
 import lslforge.generated.GlobalSummary_GlobalSummary;
 import lslforge.generated.LSLType;
@@ -24,14 +24,14 @@ import lslforge.gentree.Node;
 import lslforge.gentree.NodeFactory;
 import lslforge.gentree.NodeFactory2;
 import lslforge.gentree.NodeStatus;
-import lslforge.language_metadata.LslFunction;
-import lslforge.language_metadata.LslParam;
-import lslforge.lsltest.LslTest.CallExpectations;
-import lslforge.lsltest.LslTest.EntryPoint;
-import lslforge.lsltest.LslTest.ExpectedCall;
-import lslforge.lsltest.LslTest.GlobBinding;
-import lslforge.lsltest.LslTest.LslValue;
-import lslforge.lsltest.LslTest.MaybeValue;
+import lslforge.language_metadata.LSLFunction;
+import lslforge.language_metadata.LSLParam;
+import lslforge.lsltest.LSLTest.CallExpectations;
+import lslforge.lsltest.LSLTest.EntryPoint;
+import lslforge.lsltest.LSLTest.ExpectedCall;
+import lslforge.lsltest.LSLTest.GlobBinding;
+import lslforge.lsltest.LSLTest.LSLValue;
+import lslforge.lsltest.LSLTest.MaybeValue;
 import lslforge.util.Util;
 import lslforge.util.Util.Predicate;
 
@@ -82,9 +82,9 @@ public class TestProject {
         protected void onUpdate(String s) {
         }
         
-        public LslProjectNature nature() {
+        public LSLProjectNature nature() {
             try {
-                return (LslProjectNature) resource.getProject().getNature(LslProjectNature.ID);
+                return (LSLProjectNature) resource.getProject().getNature(LSLProjectNature.ID);
             } catch (CoreException e) {
                 Util.error(e, e.getLocalizedMessage());
                 return null;
@@ -314,7 +314,7 @@ public class TestProject {
     public static class BindingNode extends Node {
         private String type;
         public BindingNode(Node parent, String nodeName, String type) {
-            super(parent, nodeName, LslTest.defaultValueFor(type));
+            super(parent, nodeName, LSLTest.defaultValueFor(type));
             this.type = type;
         }
 
@@ -323,7 +323,7 @@ public class TestProject {
         }
 
         public NodeStatus checkValueString(String s) {
-            String result = LslExpressionValidator.validateExpression(type, s);
+            String result = LSLExpressionValidator.validateExpression(type, s);
             if (result == null) return NodeStatus.OK;
             return new NodeStatus(false, result);
         }
@@ -370,7 +370,7 @@ public class TestProject {
         }
 
         public NodeStatus checkValueString(String s) {
-            String result = LslExpressionValidator.validateExpression(type, s);
+            String result = LSLExpressionValidator.validateExpression(type, s);
             if (result == null) return NodeStatus.OK;
             return new NodeStatus(false, result);
         }
@@ -420,7 +420,7 @@ public class TestProject {
     public static class ArgumentNode extends Node {
         private String type;
         public ArgumentNode(Node parent, String nodeName, String type) {
-            super(parent, nodeName, LslTest.defaultValueFor(type));
+            super(parent, nodeName, LSLTest.defaultValueFor(type));
             this.type = type;
         }
 
@@ -433,7 +433,7 @@ public class TestProject {
         }
 
         public NodeStatus checkValueString(String s) {
-            String result = LslExpressionValidator.validateExpression(type, s);
+            String result = LSLExpressionValidator.validateExpression(type, s);
             if (result == null) return NodeStatus.OK;
             return new NodeStatus(false, result);
         }
@@ -599,14 +599,14 @@ public class TestProject {
         public ExpectedCallNode(Node parent, String nodeName, Object value) {
             super(parent, nodeName, value);
             final String name = (String)value;
-            LslFunction func = (LslFunction) Util.find(new Predicate() {
+            LSLFunction func = (LSLFunction) Util.find(new Predicate() {
                 public boolean test(Object o) {
-                    return name.equals(((LslFunction)o).getName());
+                    return name.equals(((LSLFunction)o).getName());
                 }
-            }, LslForgePlugin.getLLFunctions());
+            }, LSLForgePlugin.getLLFunctions());
             
             addChild(new ExpectedArgumentsListNode(this,"args", func.getParams())); //$NON-NLS-1$
-            addChild(new ReturnNode(this,"returns", func.getReturns(),LslTest.defaultValueFor(func.getReturns()))); //$NON-NLS-1$
+            addChild(new ReturnNode(this,"returns", func.getReturns(),LSLTest.defaultValueFor(func.getReturns()))); //$NON-NLS-1$
         }
 
         public ExpectedArgumentsListNode getArgumentListNode() {
@@ -652,7 +652,7 @@ public class TestProject {
 
     public static class ExpectedArgumentsListNode extends Node {
 
-        public ExpectedArgumentsListNode(Node parent, String nodeName, LslParam[] params) {
+        public ExpectedArgumentsListNode(Node parent, String nodeName, LSLParam[] params) {
             super(parent, nodeName, null);
             for (int i = 0; i < params.length; i++) {
                 addChild(new ExpectedArgumentNode(this,params[i].getName(), params[i].getType()));
@@ -753,11 +753,11 @@ public class TestProject {
         return n;
     }
     
-    public static SuiteNode fromLslTestSuite(LslTestSuite suite, boolean[] dirty) {
+    public static SuiteNode fromLSLTestSuite(LSLTestSuite suite, boolean[] dirty) {
         SuiteNode suiteNode = new SuiteNode(null, suite.getResource().getProjectRelativePath().lastSegment());
         suiteNode.setResource((IFile)suite.getResource());
         for (int i = 0; i < suite.getTests().length; i++) {
-            LslTest t = suite.getTests()[i];
+            LSLTest t = suite.getTests()[i];
             TestNode node = null;
             try {
                 node = new TestNode(suiteNode,t.getName(), t.getEntryPoint().getFileName() +
@@ -776,24 +776,24 @@ public class TestProject {
             if (args.size() == t.getArguments().length) {
                 int j = 0;
                 for (Node element : args) {
-                    LslValue v = t.getArguments()[j++];
+                    LSLValue v = t.getArguments()[j++];
                     ArgumentNode argNode = (ArgumentNode) element;
-                    argNode.setType(LslTest.lslTypeToString(v.getClass()));
+                    argNode.setType(LSLTest.lslTypeToString(v.getClass()));
                     argNode.setValue(v.toString());
                 }
             }
             
             ExpectedReturnNode returns = (ExpectedReturnNode) node.findChildByName("returns"); //$NON-NLS-1$
             if (t.getExpectedReturn().getVal() != null) {
-                returns.type = LslTest.lslTypeToString(t.getExpectedReturn().getVal().getClass());
+                returns.type = LSLTest.lslTypeToString(t.getExpectedReturn().getVal().getClass());
             }
             returns.setValue(t.getExpectedReturn().getVal()== null ? "" : t.getExpectedReturn().getVal().toString()); //$NON-NLS-1$
             
             BindingListNode initial = (BindingListNode) node.findChildByName("initial"); //$NON-NLS-1$
             
             for (Iterator<GlobBinding> it = t.getInitialBindings().iterator(); it.hasNext(); ) {
-                LslTest.GlobBinding binding = it.next();
-                BindingNode bn = new BindingNode(initial, binding.getName(), LslTest.lslTypeToString(binding.getValue().getClass()));
+                LSLTest.GlobBinding binding = it.next();
+                BindingNode bn = new BindingNode(initial, binding.getName(), LSLTest.lslTypeToString(binding.getValue().getClass()));
                 bn.setValue(binding.getValue().toString());
                 initial.addChild(bn);
             }
@@ -801,8 +801,8 @@ public class TestProject {
             BindingListNode finals = (BindingListNode) node.findChildByName("final"); //$NON-NLS-1$
             
             for (Iterator<GlobBinding> it = t.getFinalBindings().iterator(); it.hasNext(); ) {
-                LslTest.GlobBinding binding = it.next();
-                BindingNode bn = new BindingNode(finals, binding.getName(), LslTest.lslTypeToString(binding.getValue().getClass()));
+                LSLTest.GlobBinding binding = it.next();
+                BindingNode bn = new BindingNode(finals, binding.getName(), LSLTest.lslTypeToString(binding.getValue().getClass()));
                 bn.setValue(binding.getValue().toString());
                 finals.addChild(bn);
             }
@@ -814,12 +814,12 @@ public class TestProject {
             List<ExpectedCall> expectedCalls = t.getExpectations().getExpectedCalls();
             
             for (Iterator<ExpectedCall> it = expectedCalls.iterator(); it.hasNext(); ) {
-                LslTest.ExpectedCall call = it.next();
+                LSLTest.ExpectedCall call = it.next();
                 ExpectedCallNode callNode = new ExpectedCallNode(expectations, "call", call.getName()); //$NON-NLS-1$
                 ExpectedArgumentsListNode expectedArgs = (ExpectedArgumentsListNode) callNode.findChildByName("args"); //$NON-NLS-1$
                 ReturnNode returnVal = (ReturnNode) callNode.findChildByName("returns"); //$NON-NLS-1$
                 
-                if (returnVal.type.equals(LslTest.lslTypeToString(call.getReturns().getClass()))) {
+                if (returnVal.type.equals(LSLTest.lslTypeToString(call.getReturns().getClass()))) {
                     returnVal.setValue(call.getReturns().toString());
                 }
                 List<MaybeValue> callArgs = call.getArgs();
@@ -827,11 +827,11 @@ public class TestProject {
                 Iterator<Node> it2 = argNodes.iterator();
                 Iterator<MaybeValue> it1 = callArgs.iterator();
                 while (it1.hasNext() && it2.hasNext()) {
-                    LslTest.MaybeValue val = it1.next();
+                    LSLTest.MaybeValue val = it1.next();
                     ExpectedArgumentNode expectNode = (ExpectedArgumentNode) it2.next();
                     String type = expectNode.getType();
                     if (val.getVal() == null) continue;
-                    if (!LslTest.lslTypeToString(val.getVal().getClass()).equals(type)) break;
+                    if (!LSLTest.lslTypeToString(val.getVal().getClass()).equals(type)) break;
                     expectNode.setValue(val.getVal() == null ? "" : val.getVal().toString()); //$NON-NLS-1$
                 }
                 expectations.addChild(callNode);
@@ -841,15 +841,15 @@ public class TestProject {
         return suiteNode;
     }
     
-    public static LslTestSuite toLslTestSuite(SuiteNode suiteNode) {
-        LslTestSuite suite = new LslTestSuite();
+    public static LSLTestSuite toLSLTestSuite(SuiteNode suiteNode) {
+        LSLTestSuite suite = new LSLTestSuite();
         suite.setIResource(suiteNode.resource);
         
         List<Node> testNodes = suiteNode.getChildren();
         
         for (Iterator<Node> it = testNodes.iterator(); it.hasNext();) {
             TestNode tn = (TestNode) it.next();
-            LslTest test = new LslTest();
+            LSLTest test = new LSLTest();
             test.setSuite(suite);
             test.setName(tn.getName());
             EntryPoint ep = new EntryPoint();
@@ -858,10 +858,10 @@ public class TestProject {
             test.setEntryPoint(ep);
             ArgumentsListNode argumentsNode = tn.getArguments();
             List<Node> argumentsList = argumentsNode.getChildren();
-            LslValue[] args = new LslValue[argumentsList.size()];
+            LSLValue[] args = new LSLValue[argumentsList.size()];
             for (int index = 0; index < args.length; index++) {
                 ArgumentNode argNode = (ArgumentNode) argumentsList.get(index);
-                args[index] = LslTest.mkLslType(argNode.getType(), argNode.getValueString());
+                args[index] = LSLTest.mkLSLType(argNode.getType(), argNode.getValueString());
             }
             
             test.setArguments(args);
@@ -870,7 +870,7 @@ public class TestProject {
             if (returnNode.getValue() == null) {
                 test.setExpectedReturn(new MaybeValue());
             } else {
-                test.setExpectedReturn(new MaybeValue(LslTest.mkLslType(returnNode.type, returnNode.getValueString())));
+                test.setExpectedReturn(new MaybeValue(LSLTest.mkLSLType(returnNode.type, returnNode.getValueString())));
             }
             
             test.setInitialBindings(convertBindings(tn.getInitialBindings()));
@@ -893,14 +893,14 @@ public class TestProject {
                     if (argNode.getValue() == null) {
                         callArgs.add(new MaybeValue());
                     } else {
-                        callArgs.add(new MaybeValue(LslTest.mkLslType(argNode.getType(), 
+                        callArgs.add(new MaybeValue(LSLTest.mkLSLType(argNode.getType(), 
                                 argNode.getValueString())));
                     }
                 }
                 call.setName(callNode.getValueString());
                 
                 ReturnNode returnVal = callNode.getReturn();
-                call.setReturns(LslTest.mkLslType(returnVal.type, returnVal.getValueString()));
+                call.setReturns(LSLTest.mkLSLType(returnVal.type, returnVal.getValueString()));
                 expectedCalls.add(call);
             }
             test.setExpectations(expectations);
@@ -917,7 +917,7 @@ public class TestProject {
             BindingNode bindingNode = (BindingNode) ib.next();
             GlobBinding binding = new GlobBinding();
             binding.setName(bindingNode.getName());
-            binding.setValue(LslTest.mkLslType(bindingNode.type, bindingNode.getValueString()));
+            binding.setValue(LSLTest.mkLSLType(bindingNode.type, bindingNode.getValueString()));
             bindings.add(binding);
         }
         

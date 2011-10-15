@@ -1,6 +1,6 @@
 package lslforge.debug;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -10,18 +10,18 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 
-public class LslVariable implements IVariable {
+public class LSLVariable implements IVariable {
 
     private String name;
     private String typeName;
-    private LslDebugValue value;
-    private LslDebugTarget target;
+    private LSLDebugValue value;
+    private LSLDebugTarget target;
     
-    public LslVariable(String name, String typeName, String valueString,
-            LslDebugTarget target) {
+    public LSLVariable(String name, String typeName, String valueString,
+            LSLDebugTarget target) {
         this.name = name;
         this.typeName = typeName;
-        this.value = new LslDebugValue(typeName, valueString, target);
+        this.value = new LSLDebugValue(typeName, valueString, target);
         this.target = target;
     }
     public String getName() throws DebugException {
@@ -52,18 +52,17 @@ public class LslVariable implements IVariable {
         return target.getModelIdentifier();
     }
 
-    @SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
         return null;
     }
 
     public void setValue(String expression) throws DebugException {
-        throw new DebugException(new Status(IStatus.ERROR, LslForgePlugin.PLUGIN_ID, 
+        throw new DebugException(new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID, 
                 DebugException.NOT_SUPPORTED, "",null)); //$NON-NLS-1$
     }
 
     public void setValue(IValue value) throws DebugException {
-        throw new DebugException(new Status(IStatus.ERROR, LslForgePlugin.PLUGIN_ID, 
+        throw new DebugException(new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID, 
                 DebugException.NOT_SUPPORTED, "",null)); //$NON-NLS-1$
     }
 
@@ -72,12 +71,12 @@ public class LslVariable implements IVariable {
     }
 
     public boolean verifyValue(String expression) throws DebugException {
-        throw new DebugException(new Status(IStatus.ERROR, LslForgePlugin.PLUGIN_ID, 
+        throw new DebugException(new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID, 
                 DebugException.NOT_SUPPORTED, "",null)); //$NON-NLS-1$
     }
 
     public boolean verifyValue(IValue value) throws DebugException {
-        throw new DebugException(new Status(IStatus.ERROR, LslForgePlugin.PLUGIN_ID, 
+        throw new DebugException(new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID, 
                 DebugException.NOT_SUPPORTED, "",null)); //$NON-NLS-1$
     }
 

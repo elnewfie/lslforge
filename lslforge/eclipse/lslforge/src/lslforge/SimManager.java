@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import lslforge.debug.LslSimProcess;
+import lslforge.debug.LSLSimProcess;
 import lslforge.sim.SimEvent;
 import lslforge.sim.SimEventDefinition;
 import lslforge.sim.SimEventListener;
@@ -51,7 +51,7 @@ public class SimManager implements SimEventListener {
     private HashSet<SimEventListener> simEventListeners = new HashSet<SimEventListener>();
     private HashSet<SimMetaDataListener> simMetaDataListeners = new HashSet<SimMetaDataListener>();
     private volatile boolean active  = false;
-    private LslSimProcess process = null;
+    private LSLSimProcess process = null;
     private SimState simState;
     private volatile HashMap<String,SimEventDefinition> eventDescriptors = null;
     private SimKeyManager keyManager = new SimKeyManager();
@@ -87,10 +87,10 @@ public class SimManager implements SimEventListener {
         }
     }
     
-    public synchronized void simLaunched(LslSimProcess process) {
+    public synchronized void simLaunched(LSLSimProcess process) {
         active = true;
         this.process = process;
-        LslForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
+        LSLForgePlugin.getDefault().getWorkbench().getDisplay().asyncExec(new Runnable() {
             public void run() { showSimWatcherInActivePage(findSimWatcherInActivePage());}
         });
 
@@ -125,7 +125,7 @@ public class SimManager implements SimEventListener {
         IWorkbenchPage page= null;
         try {
             try {
-                page= LslForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+                page= LSLForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
             } catch (NullPointerException e) {
             }
 
@@ -149,7 +149,7 @@ public class SimManager implements SimEventListener {
     }
 
     private SimWatcherViewPart findSimWatcherInActivePage() {
-        IWorkbenchPage page= LslForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
+        IWorkbenchPage page= LSLForgePlugin.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage();
         if (page == null)
             return null;
         return (SimWatcherViewPart) page.findView(SimWatcherViewPart.ID);
@@ -222,9 +222,9 @@ public class SimManager implements SimEventListener {
         Job job = new Job("BuildSimMetaData") { //$NON-NLS-1$
 
             protected IStatus run(IProgressMonitor monitor) {
-                String metaDataString = LslForgePlugin.runTask(SIM_META_DATA, ""); //$NON-NLS-1$
+                String metaDataString = LSLForgePlugin.runTask(SIM_META_DATA, ""); //$NON-NLS-1$
                 Util.log("metaDataString = " + metaDataString); //$NON-NLS-1$
-                if (metaDataString == null) return new Status(IStatus.ERROR, LslForgePlugin.PLUGIN_ID,
+                if (metaDataString == null) return new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID,
                         Messages.SimManager_Cant_Get_Simulator_Information);
                 SimMetaData metaData = SimMetaData.fromXML(metaDataString);
                 
@@ -236,7 +236,7 @@ public class SimManager implements SimEventListener {
                 
                 eventDescriptors = map;
                 fireSimMetaDataReady();
-                return new Status(IStatus.OK,LslForgePlugin.PLUGIN_ID, Messages.SimManager_OK);
+                return new Status(IStatus.OK,LSLForgePlugin.PLUGIN_ID, Messages.SimManager_OK);
             }
             
         };

@@ -52,7 +52,7 @@ import org.eclipse.ui.ide.undo.CreateFolderOperation;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 import org.osgi.framework.Bundle;
 
-abstract public class LslSampleCreationWizardPage extends WizardPage implements Listener {
+abstract public class LSLSampleCreationWizardPage extends WizardPage implements Listener {
     public static class Sample {
         private String name;
         private Bundle bundle;
@@ -129,12 +129,12 @@ abstract public class LslSampleCreationWizardPage extends WizardPage implements 
 					public void run() {
 						if (e.getCause() instanceof CoreException) {
 							ErrorDialog.openError(getContainer().getShell(),
-											Messages.getString("LslFileCreationWizardPage.FILE_CREATION_PROBLEMS"), //$NON-NLS-1$
+											Messages.getString("LSLFileCreationWizardPage.FILE_CREATION_PROBLEMS"), //$NON-NLS-1$
 											null,((CoreException) e.getCause()).getStatus());
 						} else {
 							MessageDialog
-									.openError(getContainer().getShell(),Messages.getString("LslFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
-											NLS.bind(Messages.getString("LslFileCreationWizardPage.INTERNAL_ERROR"), e.getMessage())); //$NON-NLS-1$
+									.openError(getContainer().getShell(),Messages.getString("LSLFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
+											NLS.bind(Messages.getString("LSLFileCreationWizardPage.INTERNAL_ERROR"), e.getMessage())); //$NON-NLS-1$
 						}
 					}
 				});
@@ -166,7 +166,7 @@ abstract public class LslSampleCreationWizardPage extends WizardPage implements 
 	 * @param selection
 	 *            the current resource selection
 	 */
-	public LslSampleCreationWizardPage(String pageName,
+	public LSLSampleCreationWizardPage(String pageName,
 			IStructuredSelection selection) {
 		super(pageName);
 		setPageComplete(false);
@@ -190,7 +190,7 @@ abstract public class LslSampleCreationWizardPage extends WizardPage implements 
 		// resource and container group
 		resourceGroup = new ResourceAndContainerGroup(topLevel, this,
 				getNewFileLabel(),
-				Messages.getString("LslFileCreationWizardPage.FILE"), false, //$NON-NLS-1$
+				Messages.getString("LSLFileCreationWizardPage.FILE"), false, //$NON-NLS-1$
 				SIZING_CONTAINER_GROUP_HEIGHT);
 		resourceGroup.setAllowExistingResources(false);
 		initialPopulateContainerNameField();
@@ -229,8 +229,8 @@ abstract public class LslSampleCreationWizardPage extends WizardPage implements 
 			Util.error(e,e.getLocalizedMessage());
 			MessageDialog.openError(
 					getContainer().getShell(),
-					Messages.getString("LslFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
-					NLS.bind(Messages.getString("LslFileCreationWizardPage.INTERNAL_ERROR"),e.getTargetException().getMessage())); //$NON-NLS-1$
+					Messages.getString("LSLFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
+					NLS.bind(Messages.getString("LSLFileCreationWizardPage.INTERNAL_ERROR"),e.getTargetException().getMessage())); //$NON-NLS-1$
 
 			return;
 		}
@@ -253,7 +253,7 @@ abstract public class LslSampleCreationWizardPage extends WizardPage implements 
 	 * <br><br>
 	 * The current file name will include the file extension if 
 	 * the preconditions are met.
-	 * @see LslSampleCreationWizardPage#setFileExtension(String)
+	 * @see LSLSampleCreationWizardPage#setFileExtension(String)
 	 * 
 	 * @return the file name, its anticipated initial value, or
 	 *         <code>null</code> if no file name is known
@@ -270,7 +270,7 @@ abstract public class LslSampleCreationWizardPage extends WizardPage implements 
 	 * Returns the file extension to use when creating the new file.
 	 * 
 	 * @return the file extension or <code>null</code>.
-	 * @see LslSampleCreationWizardPage#setFileExtension(String)
+	 * @see LSLSampleCreationWizardPage#setFileExtension(String)
 	 * @since 3.3 
 	 */
 	public String getFileExtension() {
@@ -302,7 +302,7 @@ abstract public class LslSampleCreationWizardPage extends WizardPage implements 
 	 *         component group
 	 */
 	protected String getNewFileLabel() {
-		return Messages.getString("LslFileCreationWizardPage.FILE_NAME"); //$NON-NLS-1$
+		return Messages.getString("LSLFileCreationWizardPage.FILE_NAME"); //$NON-NLS-1$
 	}
 
 	/**

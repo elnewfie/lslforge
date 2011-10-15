@@ -42,7 +42,7 @@ public class InstallHandler extends BaseInstallHandler {
             for (int i = 0; i < files.length; i++) {
                 doit(files[i]);
             }
-        } else if ("LslForge".equals(f.getName())) { //$NON-NLS-1$
+        } else if ("LSLForge".equals(f.getName())) { //$NON-NLS-1$
             try {
                 Util.chmod(f);
             } catch (IOException e) {

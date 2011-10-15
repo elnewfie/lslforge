@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
@@ -19,8 +19,8 @@ import org.eclipse.ui.IWorkbench;
 
 public abstract class NewFileSampleWizard extends Wizard {
 
-    class LslModuleWizardPage extends LslFileCreationWizardPage {
-    	public LslModuleWizardPage(IStructuredSelection selection) {
+    class LSLModuleWizardPage extends LSLFileCreationWizardPage {
+    	public LSLModuleWizardPage(IStructuredSelection selection) {
     		super("createModule", selection); //$NON-NLS-1$
     		setTitle(title);
     		setPageComplete(false);
@@ -31,7 +31,7 @@ public abstract class NewFileSampleWizard extends Wizard {
     
     	protected InputStream getInitialContents() {
     	    try {
-                return FileLocator.openStream(LslForgePlugin.getDefault().getBundle(),
+                return FileLocator.openStream(LSLForgePlugin.getDefault().getBundle(),
                         new Path(pathToSample), false);
             } catch (IOException e) {
                 Util.error(e, e.getLocalizedMessage());
@@ -44,7 +44,7 @@ public abstract class NewFileSampleWizard extends Wizard {
     	}
     }
 
-    private LslModuleWizardPage mainPage;
+    private LSLModuleWizardPage mainPage;
     private IStructuredSelection selection;
     private String pathToSample;
     private String title;
@@ -61,13 +61,13 @@ public abstract class NewFileSampleWizard extends Wizard {
 
     public boolean performFinish() {
         IFile f = mainPage.createNewFile();
-        LslForgePlugin.openResource(getShell(), f);
+        LSLForgePlugin.openResource(getShell(), f);
     	return true;
     }
 
     public void addPages() {
     	super.addPages();
-    	mainPage = new LslModuleWizardPage(selection);
+    	mainPage = new LSLModuleWizardPage(selection);
     	addPage(mainPage);
     }
 

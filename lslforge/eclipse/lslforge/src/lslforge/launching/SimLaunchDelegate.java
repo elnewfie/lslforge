@@ -1,11 +1,11 @@
 package lslforge.launching;
 
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.SimManager;
-import lslforge.debug.LslDebugTarget;
-import lslforge.debug.LslSimProcess;
-import lslforge.debug.LslSourceLocator;
+import lslforge.debug.LSLDebugTarget;
+import lslforge.debug.LSLSimProcess;
+import lslforge.debug.LSLSourceLocator;
 import lslforge.sim.SimKeyManager;
 import lslforge.sim.SimProject;
 import lslforge.sim.SimWorldDef;
@@ -27,7 +27,7 @@ public class SimLaunchDelegate extends LaunchConfigurationDelegate {
             IProgressMonitor monitor) throws CoreException {
         Util.log("launch!!!"); //$NON-NLS-1$
 
-        String fullPath = configuration.getAttribute(LaunchLslTestShortcut.LC_RESOURCE_NAME, BLANK);
+        String fullPath = configuration.getAttribute(LaunchLSLTestShortcut.LC_RESOURCE_NAME, BLANK);
         Path path = new Path(fullPath);
         IResource resource = ResourcesPlugin.getWorkspace().getRoot().findMember(path);
         if (resource == null) {
@@ -40,28 +40,28 @@ public class SimLaunchDelegate extends LaunchConfigurationDelegate {
         SimProject.WorldNode world = (SimProject.WorldNode) resource.getAdapter(SimProject.WorldNode.class);
         
         if (world == null) {
-            String name = LslProjectNature.resourceToLslForgeName(resource);
+            String name = LSLProjectNature.resourceToLSLForgeName(resource);
             def =  SimWorldDef.mkSimpleWorld(new SimKeyManager(), name);
         } else {
             def = SimProject.toSimWorldDef(world);
         }
-        LslProjectNature nature = (LslProjectNature) resource.getProject().getNature(LslProjectNature.ID);
+        LSLProjectNature nature = (LSLProjectNature) resource.getProject().getNature(LSLProjectNature.ID);
         String sourceDescriptor = nature.projectSourceList();
         //SimWorldDef def =  SimWorldDef.mkSimpleWorld(simManager().getKeyManager(), name);
         String testDescriptor = "<sim-descriptor>" + sourceDescriptor + //$NON-NLS-1$
                                 SimWorldDef.toXML(def) + 
                                 "</sim-descriptor>";  //$NON-NLS-1$
-        if (LslForgePlugin.DEBUG) Util.log(testDescriptor);
-        LslSimProcess p = new LslSimProcess(testDescriptor, launch);
-        LslDebugTarget target = new LslDebugTarget("lslforge-test", launch, p); //$NON-NLS-1$
+        if (LSLForgePlugin.DEBUG) Util.log(testDescriptor);
+        LSLSimProcess p = new LSLSimProcess(testDescriptor, launch);
+        LSLDebugTarget target = new LSLDebugTarget("lslforge-test", launch, p); //$NON-NLS-1$
         p.go();
         simManager().simLaunched(p);
         launch.addDebugTarget(target);
         launch.addProcess(p);
-        launch.setSourceLocator(new LslSourceLocator());
+        launch.setSourceLocator(new LSLSourceLocator());
     }
 
     private SimManager simManager() {
-        return LslForgePlugin.getDefault().getSimManager();
+        return LSLForgePlugin.getDefault().getSimManager();
     }
 }

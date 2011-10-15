@@ -3,16 +3,15 @@ package lslforge.lsltest;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-public class LslTestSuiteAdapterFactory implements IAdapterFactory {
+public class LSLTestSuiteAdapterFactory implements IAdapterFactory {
 
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
-		if (!(adaptableObject instanceof LslTestSuite) ||
+	public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType) {
+		if (!(adaptableObject instanceof LSLTestSuite) ||
 		    !(IResource.class.equals(adapterType))) return null;
-		return ((LslTestSuite)adaptableObject).getResource();
+		return ((LSLTestSuite)adaptableObject).getResource();
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return new Class[] { IResource.class };
 	}

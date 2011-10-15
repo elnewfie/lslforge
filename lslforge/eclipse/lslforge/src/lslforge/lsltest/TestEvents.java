@@ -1,6 +1,6 @@
 package lslforge.lsltest;
 
-import lslforge.debug.LslScriptExecutionState;
+import lslforge.debug.LSLScriptExecutionState;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -17,15 +17,15 @@ public class TestEvents {
     public static class AllCompleteEvent extends TestEvent {}
     
     public static class TestSuspendedEvent extends TestEvent {
-        LslScriptExecutionState scriptState;
-        public LslScriptExecutionState getScriptState() { return scriptState; }
+        LSLScriptExecutionState scriptState;
+        public LSLScriptExecutionState getScriptState() { return scriptState; }
     }
     
     private static XStream xstream;
     
     static {
         xstream = new XStream(new DomDriver());
-        LslScriptExecutionState.configureXStream(xstream);
+        LSLScriptExecutionState.configureXStream(xstream);
         TestResult.configureXStream(xstream);
         xstream.alias("test-complete", TestCompleteEvent.class); //$NON-NLS-1$
         xstream.alias("all-complete", AllCompleteEvent.class); //$NON-NLS-1$

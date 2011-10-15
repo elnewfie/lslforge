@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.BaseException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.generated.CompilationCommand;
 import lslforge.generated.CompilationResponse;
 import lslforge.generated.InitAll;
@@ -168,7 +168,7 @@ public class CompilationServer {
     
     protected void startProcess() {
     	synchronized (this) {
-	    	process = LslForgePlugin.launchCoreCommand(COMPILATION_SERVER, true);
+	    	process = LSLForgePlugin.launchCoreCommand(COMPILATION_SERVER, true);
 	    	reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 	    	writer = new PrintStream(new PrintStream(process.getOutputStream()));
     	}

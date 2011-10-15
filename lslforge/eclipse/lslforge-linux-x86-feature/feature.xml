@@ -16,6 +16,10 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import plugin="lslforge" version="0.1.0" match="greaterOrEqual"/>
+   </requires>
+
    <plugin
          id="lslforge_linux_x86"
          download-size="0"

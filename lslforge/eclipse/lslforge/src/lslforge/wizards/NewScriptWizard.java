@@ -3,7 +3,7 @@ package lslforge.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
@@ -16,14 +16,14 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class NewScriptWizard extends Wizard implements INewWizard {
-	private LslScriptWizardPage mainPage;
+	private LSLScriptWizardPage mainPage;
 	private IStructuredSelection selection;
-	private class LslScriptWizardPage extends LslFileCreationWizardPage {
+	private class LSLScriptWizardPage extends LSLFileCreationWizardPage {
 		private static final String DEFAULT_SCRIPT_CONTENTS = 
 		    "\n\ndefault {\n    state_entry() {\n        llOwnerSay(\"Hello " + //$NON-NLS-1$
 		    "Scripter\");\n    }\n}\n"; //$NON-NLS-1$
 
-        public LslScriptWizardPage(IStructuredSelection selection) {
+        public LSLScriptWizardPage(IStructuredSelection selection) {
 			super("createModule", selection); //$NON-NLS-1$
 			setTitle(Messages.getString("NewScriptWizard.NEW_SCRIPT")); //$NON-NLS-1$
 			setPageComplete(false);
@@ -53,13 +53,13 @@ public class NewScriptWizard extends Wizard implements INewWizard {
 
 	public boolean performFinish() {
 		IFile f = mainPage.createNewFile();
-		LslForgePlugin.openResource(getShell(), f);
+		LSLForgePlugin.openResource(getShell(), f);
 		return true;
 	}
 
 	public void addPages() {
 		super.addPages();
-		mainPage = new LslScriptWizardPage(selection);
+		mainPage = new LSLScriptWizardPage(selection);
 		addPage(mainPage);
 	}
 

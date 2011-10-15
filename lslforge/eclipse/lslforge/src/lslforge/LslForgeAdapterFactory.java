@@ -6,46 +6,45 @@ import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.ui.part.FileEditorInput;
 
 /**
- * An adapter factory that can create adapters for LslForgeElement objects.
- * It can adapt LslForgeElements into their underlying resource objects.
+ * An adapter factory that can create adapters for LSLForgeElement objects.
+ * It can adapt LSLForgeElements into their underlying resource objects.
  * @author rgreayer
  *
  */
-public class LslForgeAdapterFactory implements IAdapterFactory {
+public class LSLForgeAdapterFactory implements IAdapterFactory {
 
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
-		if (adaptableObject instanceof LslForgeElement &&
+	public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType) {
+		if (adaptableObject instanceof LSLForgeElement &&
 		    adapterType == IResource.class) {
-			LslForgeElement e = (LslForgeElement) adaptableObject;
+			LSLForgeElement e = (LSLForgeElement) adaptableObject;
 			return e.getResource();
-		} else if (adaptableObject instanceof LslForgeElement &&
-		        LslForgeScript.class.equals(adapterType)) {
-		    LslForgeElement element = (LslForgeElement)adaptableObject;
+		} else if (adaptableObject instanceof LSLForgeElement &&
+		        LSLForgeScript.class.equals(adapterType)) {
+		    LSLForgeElement element = (LSLForgeElement)adaptableObject;
 		    if (element.isScript()) {
-		        return new LslForgeScript((IFile)element.getResource());
+		        return new LSLForgeScript((IFile)element.getResource());
 		    }
-		} else if (adaptableObject instanceof LslForgeScript &&
+		} else if (adaptableObject instanceof LSLForgeScript &&
 		           IResource.class.equals(adapterType)) {
 		    
-		    return ((LslForgeScript)adaptableObject).getResource();
-		} else if (adaptableObject instanceof LslForgeScript &&
-		           LslForgeElement.class.equals(adapterType)) {
-		    return new LslForgeScript((IFile)((LslForgeScript)adaptableObject).getResource());
+		    return ((LSLForgeScript)adaptableObject).getResource();
+		} else if (adaptableObject instanceof LSLForgeScript &&
+		           LSLForgeElement.class.equals(adapterType)) {
+		    return new LSLForgeScript((IFile)((LSLForgeScript)adaptableObject).getResource());
 		} else if (adaptableObject instanceof FileEditorInput && 
-		        LslForgeScript.class.equals(adapterType)) {
+		        LSLForgeScript.class.equals(adapterType)) {
 		    FileEditorInput inp = (FileEditorInput) adaptableObject;
-		    return new LslForgeScript(inp.getFile());
+		    return new LSLForgeScript(inp.getFile());
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return new Class[] {
 				IResource.class,
-				LslForgeElement.class,
-				LslForgeScript.class
+				LSLForgeElement.class,
+				LSLForgeScript.class
 		};
 	}
 

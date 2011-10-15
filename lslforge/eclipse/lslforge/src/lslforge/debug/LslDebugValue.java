@@ -6,13 +6,13 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 
-public class LslDebugValue implements IValue {
+public class LSLDebugValue implements IValue {
 
     private String typeName;
     private String valueString;
-    private LslDebugTarget target;
+    private LSLDebugTarget target;
     
-    public LslDebugValue(String typeName, String valueString, LslDebugTarget target) {
+    public LSLDebugValue(String typeName, String valueString, LSLDebugTarget target) {
         this.typeName = typeName;
         this.valueString = valueString;
         this.target = target;
@@ -50,8 +50,7 @@ public class LslDebugValue implements IValue {
         return target.getModelIdentifier();
     }
 
-    @SuppressWarnings("unchecked")
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
         return null;
     }
 

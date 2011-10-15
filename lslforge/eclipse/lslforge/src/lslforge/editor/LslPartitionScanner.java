@@ -9,7 +9,7 @@ import org.eclipse.jface.text.rules.*;
 /**
  * This scanner recognizes LSL multi-line comments.  Derived heavily from eclipse examples.
  */
-public class LslPartitionScanner extends RuleBasedPartitionScanner {
+public class LSLPartitionScanner extends RuleBasedPartitionScanner {
 
 	public final static String LSL_MULTILINE_COMMENT= "__lsl_multiline_comment"; //$NON-NLS-1$
 	public final static String[] LSL_PARTITION_TYPES= new String[] { LSL_MULTILINE_COMMENT };
@@ -44,7 +44,7 @@ public class LslPartitionScanner extends RuleBasedPartitionScanner {
 	/**
 	 * Sets up the partitioner.
 	 */
-	public LslPartitionScanner() {
+	public LSLPartitionScanner() {
 		super();
 
 		IToken comment= new Token(LSL_MULTILINE_COMMENT);

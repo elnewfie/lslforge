@@ -3,8 +3,8 @@ package lslforge.wizards;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import lslforge.LslForgePlugin;
-import lslforge.lsltest.LslTestSuite;
+import lslforge.LSLForgePlugin;
+import lslforge.lsltest.LSLTestSuite;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
@@ -17,10 +17,10 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 public class NewTestWizard extends Wizard implements INewWizard {
-	private LslTestWizardPage mainPage;
+	private LSLTestWizardPage mainPage;
 	private IStructuredSelection selection;
-	private class LslTestWizardPage extends LslFileCreationWizardPage {
-		public LslTestWizardPage(IStructuredSelection selection) {
+	private class LSLTestWizardPage extends LSLFileCreationWizardPage {
+		public LSLTestWizardPage(IStructuredSelection selection) {
 			super("createTest", selection); //$NON-NLS-1$
 			setTitle(Messages.getString("NewTestWizard.Title")); //$NON-NLS-1$
 			setPageComplete(false);
@@ -31,7 +31,7 @@ public class NewTestWizard extends Wizard implements INewWizard {
 
 		protected InputStream getInitialContents() {
 			return new ByteArrayInputStream(
-					LslTestSuite.empty().toXml().getBytes());
+					LSLTestSuite.empty().toXml().getBytes());
 		}
 
 		protected IStatus validateFileName(String fileName) {
@@ -49,13 +49,13 @@ public class NewTestWizard extends Wizard implements INewWizard {
 
 	public boolean performFinish() {
         IFile f = mainPage.createNewFile();
-        LslForgePlugin.openResource(getShell(), f);
+        LSLForgePlugin.openResource(getShell(), f);
 		return true;
 	}
 
 	public void addPages() {
 		super.addPages();
-		mainPage = new LslTestWizardPage(selection);
+		mainPage = new LSLTestWizardPage(selection);
 		addPage(mainPage);
 	}
 

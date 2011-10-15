@@ -6,7 +6,7 @@ import org.eclipse.jface.text.rules.IWordDetector;
  * An LSLForge word detector.  An LSLForge word is like a Java word, except that it might
  * contain a '$'.
  */
-public class LslWordDetector implements IWordDetector {
+public class LSLWordDetector implements IWordDetector {
 	public boolean isWordPart(char character) {
 		return Character.isJavaIdentifierPart(character) || character == '$';
 	}

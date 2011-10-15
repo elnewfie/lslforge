@@ -1,6 +1,6 @@
 package lslforge.launching;
 
-import lslforge.LslForgeScript;
+import lslforge.LSLForgeScript;
 import lslforge.sim.SimProject;
 import lslforge.util.Util;
 
@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 
-public class LaunchLslSimShortcut implements ILaunchShortcut {
+public class LaunchLSLSimShortcut implements ILaunchShortcut {
 
 	public static final String LC_RESOURCE_NAME = "resource_name"; //$NON-NLS-1$
 
@@ -31,10 +31,10 @@ public class LaunchLslSimShortcut implements ILaunchShortcut {
 
     private void adaptAndLaunch(String mode, Object o) {
         if (o instanceof IAdaptable) {
-            LslForgeScript s = null;
+            LSLForgeScript s = null;
             SimProject.WorldNode w = null;
             IResource r = null;
-            if ((s = (LslForgeScript)((IAdaptable)o).getAdapter(LslForgeScript.class)) != null) {
+            if ((s = (LSLForgeScript)((IAdaptable)o).getAdapter(LSLForgeScript.class)) != null) {
                 r = s.getResource();
             } else if ((w = (SimProject.WorldNode)((IAdaptable)o).getAdapter(SimProject.WorldNode.class)) != null) {
                 r = w.getResource();

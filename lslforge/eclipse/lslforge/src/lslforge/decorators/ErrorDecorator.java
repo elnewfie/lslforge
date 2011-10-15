@@ -3,8 +3,8 @@ package lslforge.decorators;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IMarker;
@@ -28,7 +28,7 @@ public class ErrorDecorator implements ILightweightLabelDecorator {
 	private ImageDescriptor descriptor;
 	
 	public ErrorDecorator() {
-		LslForgePlugin.getDefault().setErrorDecorator(this);
+		LSLForgePlugin.getDefault().setErrorDecorator(this);
 		descriptor = Util.findDescriptor(ICON_PATH);
 	}
 
@@ -44,8 +44,8 @@ public class ErrorDecorator implements ILightweightLabelDecorator {
 		try {
 		    if (!project.isOpen()) return;
 			project.open(null);
-			if (project.hasNature(LslProjectNature.ID)) { 
-				LslProjectNature nature = (LslProjectNature) project.getNature(LslProjectNature.ID);
+			if (project.hasNature(LSLProjectNature.ID)) { 
+				LSLProjectNature nature = (LSLProjectNature) project.getNature(LSLProjectNature.ID);
 				
 				if (nature == null) return;
 

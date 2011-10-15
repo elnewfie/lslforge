@@ -47,7 +47,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.undo.CreateFileOperation;
 import org.eclipse.ui.ide.undo.WorkspaceUndoUtil;
 
-abstract public class LslFileCreationWizardPage extends WizardPage implements Listener {
+abstract public class LSLFileCreationWizardPage extends WizardPage implements Listener {
 	private final class CreateFileRunnable implements IRunnableWithProgress {
 		private final InputStream initialContents;
 		private final IFile newFileHandle;
@@ -61,7 +61,7 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 		public void run(IProgressMonitor monitor) {
 			CreateFileOperation op = new CreateFileOperation(newFileHandle,
 					linkTargetPath, initialContents,
-					Messages.getString("LslFileCreationWizardPage.CREATE_FILE")); //$NON-NLS-1$
+					Messages.getString("LSLFileCreationWizardPage.CREATE_FILE")); //$NON-NLS-1$
 			try {
 				PlatformUI.getWorkbench().getOperationSupport()
 						.getOperationHistory().execute(
@@ -80,12 +80,12 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 					public void run() {
 						if (e.getCause() instanceof CoreException) {
 							ErrorDialog.openError(getContainer().getShell(),
-											Messages.getString("LslFileCreationWizardPage.FILE_CREATION_PROBLEMS"), //$NON-NLS-1$
+											Messages.getString("LSLFileCreationWizardPage.FILE_CREATION_PROBLEMS"), //$NON-NLS-1$
 											null,((CoreException) e.getCause()).getStatus());
 						} else {
 							MessageDialog
-									.openError(getContainer().getShell(),Messages.getString("LslFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
-											NLS.bind(Messages.getString("LslFileCreationWizardPage.INTERNAL_ERROR"), e.getCause().getMessage())); //$NON-NLS-1$
+									.openError(getContainer().getShell(),Messages.getString("LSLFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
+											NLS.bind(Messages.getString("LSLFileCreationWizardPage.INTERNAL_ERROR"), e.getCause().getMessage())); //$NON-NLS-1$
 						}
 					}
 				});
@@ -122,7 +122,7 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 	 * @param selection
 	 *            the current resource selection
 	 */
-	public LslFileCreationWizardPage(String pageName,
+	public LSLFileCreationWizardPage(String pageName,
 			IStructuredSelection selection) {
 		super(pageName);
 		setPageComplete(false);
@@ -146,7 +146,7 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 		// resource and container group
 		resourceGroup = new ResourceAndContainerGroup(topLevel, this,
 				getNewFileLabel(),
-				Messages.getString("LslFileCreationWizardPage.FILE"), false, //$NON-NLS-1$
+				Messages.getString("LSLFileCreationWizardPage.FILE"), false, //$NON-NLS-1$
 				SIZING_CONTAINER_GROUP_HEIGHT);
 		resourceGroup.setAllowExistingResources(false);
 		initialPopulateContainerNameField();
@@ -193,7 +193,7 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 			getContainer().run(true, true, op);
 			IProjectDescription description = p.getDescription();
 			String[] natures = description.getNatureIds();
-			String[] newNatures = (String[]) Util.append(natures, new String[] { "lslforge.lslForgeNature" }); //$NON-NLS-1$
+			String[] newNatures = (String[]) Util.append(natures, new String[] { "lslforge.LSLForgeNature" }); //$NON-NLS-1$
 			description.setNatureIds(newNatures);
 			p.setDescription(description, new NullProgressMonitor());
 		} catch (InterruptedException e) {
@@ -204,16 +204,16 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 			Util.error(e,e.getLocalizedMessage());
 			MessageDialog.openError(
 					getContainer().getShell(),
-					Messages.getString("LslFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
-					NLS.bind(Messages.getString("LslFileCreationWizardPage.INTERNAL_ERROR"),e.getTargetException().getMessage())); //$NON-NLS-1$
+					Messages.getString("LSLFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
+					NLS.bind(Messages.getString("LSLFileCreationWizardPage.INTERNAL_ERROR"),e.getTargetException().getMessage())); //$NON-NLS-1$
 
 			return null;
 		} catch (CoreException e) {
 			Util.error(e,e.getLocalizedMessage());
 			MessageDialog.openError(
 					getContainer().getShell(),
-					Messages.getString("LslFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
-					NLS.bind(Messages.getString("LslFileCreationWizardPage.INTERNAL_ERROR"),e.getMessage())); //$NON-NLS-1$
+					Messages.getString("LSLFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
+					NLS.bind(Messages.getString("LSLFileCreationWizardPage.INTERNAL_ERROR"),e.getMessage())); //$NON-NLS-1$
 		}
 
 		newFile = newFileHandle;
@@ -238,7 +238,7 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 	 * <br><br>
 	 * The current file name will include the file extension if 
 	 * the preconditions are met.
-	 * @see LslFileCreationWizardPage#setFileExtension(String)
+	 * @see LSLFileCreationWizardPage#setFileExtension(String)
 	 * 
 	 * @return the file name, its anticipated initial value, or
 	 *         <code>null</code> if no file name is known
@@ -255,7 +255,7 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 	 * Returns the file extension to use when creating the new file.
 	 * 
 	 * @return the file extension or <code>null</code>.
-	 * @see LslFileCreationWizardPage#setFileExtension(String)
+	 * @see LSLFileCreationWizardPage#setFileExtension(String)
 	 * @since 3.3 
 	 */
 	public String getFileExtension() {
@@ -287,7 +287,7 @@ abstract public class LslFileCreationWizardPage extends WizardPage implements Li
 	 *         component group
 	 */
 	protected String getNewFileLabel() {
-		return Messages.getString("LslFileCreationWizardPage.FILE_NAME"); //$NON-NLS-1$
+		return Messages.getString("LSLFileCreationWizardPage.FILE_NAME"); //$NON-NLS-1$
 	}
 
 	/**

@@ -22,15 +22,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import lslforge.decorators.ErrorDecorator;
-import lslforge.editor.LslPartitionScanner;
-import lslforge.editor.lsl.LslCodeScanner;
-import lslforge.language_metadata.LslConstant;
-import lslforge.language_metadata.LslFunction;
-import lslforge.language_metadata.LslHandler;
-import lslforge.language_metadata.LslMetaData;
-import lslforge.language_metadata.LslParam;
+import lslforge.editor.LSLPartitionScanner;
+import lslforge.editor.lsl.LSLCodeScanner;
+import lslforge.language_metadata.LSLConstant;
+import lslforge.language_metadata.LSLFunction;
+import lslforge.language_metadata.LSLHandler;
+import lslforge.language_metadata.LSLMetaData;
+import lslforge.language_metadata.LSLParam;
 import lslforge.lsltest.TestManager;
-import lslforge.util.LslColorProvider;
+import lslforge.util.LSLColorProvider;
 import lslforge.util.Util;
 import lslforge.util.Util.ArrayMapFunc;
 
@@ -58,12 +58,12 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * @author rgreayer
  *
  */
-public class LslForgePlugin extends AbstractUIPlugin {
+public class LSLForgePlugin extends AbstractUIPlugin {
 	public static final String LSLFORGE_NATIVE_PATH = "lslforge.native_path"; //$NON-NLS-1$
-    private static final Pattern LSLFORGE_CORE_VERSION_PAT = Pattern.compile("^0\\.6(\\..*)?$"); //$NON-NLS-1$
-	private static final String LSLFORGE_CORE_VERSION = "0.6.*"; //$NON-NLS-1$
-	private static final String LSL_EXECUTABLE = "LslForge" + ((File.separatorChar == '\\') ? ".exe" : "");  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-	private static final String LSL_COMMAND = "LslForge"; //$NON-NLS-1$
+    private static final Pattern LSLFORGE_CORE_VERSION_PAT = Pattern.compile("^0\\.1(\\..*)?$"); //$NON-NLS-1$
+	private static final String LSLFORGE_CORE_VERSION = "0.1.*"; //$NON-NLS-1$
+	private static final String LSL_EXECUTABLE = "LSLForge" + ((File.separatorChar == '\\') ? ".exe" : "");  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+	private static final String LSL_COMMAND = "LSLForge"; //$NON-NLS-1$
 	
     private static class ValidationResult {
         public boolean ok;
@@ -72,7 +72,7 @@ public class LslForgePlugin extends AbstractUIPlugin {
     
     public static final boolean DEBUG = true;
 
-    private static LslForgePlugin instance;
+    private static LSLForgePlugin instance;
 
     public final static String LSL_PARTITIONING = "__lsl_partitioning"; //$NON-NLS-1$
     
@@ -87,7 +87,7 @@ public class LslForgePlugin extends AbstractUIPlugin {
      * 
      * @return the default plug-in instance
      */
-    public static LslForgePlugin getDefault() {
+    public static LSLForgePlugin getDefault() {
         return instance;
     }
     public static ImageDescriptor imageDescriptorFromPlugin(String path) {
@@ -257,7 +257,7 @@ public class LslForgePlugin extends AbstractUIPlugin {
             buf.append("The LSLForge native executable was not found!\n"); //$NON-NLS-1$ TODO
         }
         buf.append("The LSLForge native executable is available from Hackage:\n"); //$NON-NLS-1$ TODO
-        buf.append("http://hackage.haskell.org/cgi-bin/hackage-scripts/pacakge/LslForge\n\n"); //$NON-NLS-1$ TODO
+        buf.append("http://hackage.haskell.org/cgi-bin/hackage-scripts/package/LSLForge\n\n"); //$NON-NLS-1$ TODO
         buf.append("Please also see the Help documentation for LSLForge, under 'Installation'"); //$NON-NLS-1$ TODO
         getWorkbench().getDisplay().asyncExec(new Runnable() {
             public void run() {
@@ -379,15 +379,15 @@ public class LslForgePlugin extends AbstractUIPlugin {
         return e.msg;
     }
     
-    private LslCodeScanner fCodeScanner;
+    private LSLCodeScanner fCodeScanner;
 
-    private LslColorProvider fColorProvider;
+    private LSLColorProvider fColorProvider;
 
     private ErrorDecorator fErrorDecorator;
 
-    private LslPartitionScanner fPartitionScanner;
+    private LSLPartitionScanner fPartitionScanner;
 
-    private LslMetaData lslMetaData = null;
+    private LSLMetaData lSLMetaData = null;
 
     private TestManager testManager = null;
 
@@ -398,30 +398,30 @@ public class LslForgePlugin extends AbstractUIPlugin {
     /**
      * Creates a new plug-in instance.
      */
-    public LslForgePlugin() {
+    public LSLForgePlugin() {
         instance = this;
     }
 
-    private LslMetaData buildMetaData() {
+    private LSLMetaData buildMetaData() {
         String result = runTask("MetaData", ""); //$NON-NLS-1$//$NON-NLS-2$
         if (result == null) {
-            Util.error(Messages.LslForgePlugin_NO_META_DATA);
-            return new LslMetaData();
+            Util.error(Messages.LSLForgePlugin_NO_META_DATA);
+            return new LSLMetaData();
         }
         if (DEBUG) Util.log("Meta-Data: " + result); //$NON-NLS-1$
         XStream xstream = new XStream(new DomDriver());
 
-        xstream.alias("lslmeta", LslMetaData.class); //$NON-NLS-1$
-        xstream.alias("handler", LslHandler.class); //$NON-NLS-1$
-        xstream.alias("param", LslParam.class); //$NON-NLS-1$
-        xstream.alias("function", LslFunction.class); //$NON-NLS-1$
-        xstream.alias("constant", LslConstant.class); //$NON-NLS-1$
-        LslMetaData md = null;
+        xstream.alias("lslmeta", LSLMetaData.class); //$NON-NLS-1$
+        xstream.alias("handler", LSLHandler.class); //$NON-NLS-1$
+        xstream.alias("param", LSLParam.class); //$NON-NLS-1$
+        xstream.alias("function", LSLFunction.class); //$NON-NLS-1$
+        xstream.alias("constant", LSLConstant.class); //$NON-NLS-1$
+        LSLMetaData md = null;
         try {
-            md = (LslMetaData) xstream.fromXML(result);
+            md = (LSLMetaData) xstream.fromXML(result);
         } catch (Exception e) {
-            Util.error(e, Messages.LslForgePlugin_COULD_NOT_DESERIALIZE_META_DATA);
-            md = new LslMetaData();
+            Util.error(e, Messages.LSLForgePlugin_COULD_NOT_DESERIALIZE_META_DATA);
+            md = new LSLMetaData();
         }
         return md;
     }
@@ -441,7 +441,7 @@ public class LslForgePlugin extends AbstractUIPlugin {
      * 
      * @return the singleton LSL code scanner
      */
-    public LslCodeScanner getLslCodeScanner() {
+    public LSLCodeScanner getLSLCodeScanner() {
         if (fCodeScanner == null) {
             String[] handlerNames = Util.arrayMap(new Util.ArrayMapFunc<String>() {
                 public Class<String> elementType() {
@@ -449,28 +449,28 @@ public class LslForgePlugin extends AbstractUIPlugin {
                 }
 
                 public String map(Object o) {
-                    return ((LslHandler) o).getName();
+                    return ((LSLHandler) o).getName();
                 }
-            }, getLslMetaData().getHandlers());
+            }, getLSLMetaData().getHandlers());
             String[] predefFuncs = Util.arrayMap(new Util.ArrayMapFunc<String>() {
                 public Class<String> elementType() {
                     return String.class;
                 }
 
                 public String map(Object o) {
-                    return ((LslFunction) o).getName();
+                    return ((LSLFunction) o).getName();
                 }
-            }, getLslMetaData().getFunctions());
+            }, getLSLMetaData().getFunctions());
             String[] predefConsts = Util.arrayMap(new Util.ArrayMapFunc<String>() {
                 public Class<String> elementType() {
                     return String.class;
                 }
 
                 public String map(Object o) {
-                    return ((LslConstant) o).getName();
+                    return ((LSLConstant) o).getName();
                 }
-            }, getLslMetaData().getConstants());
-            fCodeScanner = new LslCodeScanner(getLslColorProvider(), handlerNames, predefFuncs,
+            }, getLSLMetaData().getConstants());
+            fCodeScanner = new LSLCodeScanner(getLSLColorProvider(), handlerNames, predefFuncs,
                     predefConsts, this.getPreferenceStore());
         }
         return fCodeScanner;
@@ -481,17 +481,17 @@ public class LslForgePlugin extends AbstractUIPlugin {
      * 
      * @return the singleton Java color provider
      */
-    public LslColorProvider getLslColorProvider() {
+    public LSLColorProvider getLSLColorProvider() {
         if (fColorProvider == null)
-            fColorProvider = new LslColorProvider(this.getPreferenceStore());
+            fColorProvider = new LSLColorProvider(this.getPreferenceStore());
         return fColorProvider;
     }
     
-    public synchronized LslMetaData getLslMetaData() {
-        if (lslMetaData == null) {
-            lslMetaData = buildMetaData();
+    public synchronized LSLMetaData getLSLMetaData() {
+        if (lSLMetaData == null) {
+            lSLMetaData = buildMetaData();
         }
-        return lslMetaData;
+        return lSLMetaData;
     }
     
     /**
@@ -499,9 +499,9 @@ public class LslForgePlugin extends AbstractUIPlugin {
      * 
      * @return a scanner for creating Java partitions
      */
-    public LslPartitionScanner getLslPartitionScanner() {
+    public LSLPartitionScanner getLSLPartitionScanner() {
         if (fPartitionScanner == null)
-            fPartitionScanner = new LslPartitionScanner();
+            fPartitionScanner = new LSLPartitionScanner();
         return fPartitionScanner;
     }
 
@@ -516,22 +516,22 @@ public class LslForgePlugin extends AbstractUIPlugin {
         return simManager;
     }
     public static synchronized String[] getStatefulFunctions() {
-        if (LslForgePlugin.statefulFunctions == null) {
+        if (LSLForgePlugin.statefulFunctions == null) {
             List<String> funcs = Util.filtMap(new ArrayMapFunc<String>() {
                 public Class<String> elementType() { return String.class; }
                 public String map(Object o) {
-                    LslFunction f = (LslFunction) o;
+                    LSLFunction f = (LSLFunction) o;
                     return f.isStateless() ? null : f.getName();
                 }
             }, getLLFunctions());
             
-            LslForgePlugin.statefulFunctions = funcs.toArray(new String[funcs.size()]);
+            LSLForgePlugin.statefulFunctions = funcs.toArray(new String[funcs.size()]);
         }
         
-        return LslForgePlugin.statefulFunctions;
+        return LSLForgePlugin.statefulFunctions;
     }
-    public static LslFunction[] getLLFunctions() {
-        return getDefault().getLslMetaData().getFunctions();
+    public static LSLFunction[] getLLFunctions() {
+        return getDefault().getLSLMetaData().getFunctions();
     }
 
     public void start(BundleContext context) throws Exception {

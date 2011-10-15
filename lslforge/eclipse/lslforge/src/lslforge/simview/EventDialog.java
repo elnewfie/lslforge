@@ -2,7 +2,7 @@ package lslforge.simview;
 
 import java.util.HashMap;
 
-import lslforge.LslForgePlugin;
+import lslforge.LSLForgePlugin;
 import lslforge.SimManager;
 import lslforge.sim.SimEvent;
 import lslforge.sim.SimEventArg;
@@ -195,7 +195,7 @@ public class EventDialog extends Dialog {
     }
 
     private SimManager simManager() {
-        return LslForgePlugin.getDefault().getSimManager();
+        return LSLForgePlugin.getDefault().getSimManager();
     }
 
     public SimEvent getEvent() {

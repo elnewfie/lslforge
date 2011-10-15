@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import lslforge.util.ColorProviderListener;
-import lslforge.util.LslColorProvider;
-import lslforge.util.LslWhitespaceDetector;
-import lslforge.util.LslWordDetector;
+import lslforge.util.LSLColorProvider;
+import lslforge.util.LSLWhitespaceDetector;
+import lslforge.util.LSLWordDetector;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.text.TextAttribute;
@@ -28,7 +28,7 @@ import org.eclipse.swt.SWT;
 /**
  *  An LSLForge rule-based code scanner.
  */
-public class LslCodeScanner extends RuleBasedScanner implements ColorProviderListener, IPropertyChangeListener {
+public class LSLCodeScanner extends RuleBasedScanner implements ColorProviderListener, IPropertyChangeListener {
     public static final int DEFAULT_STYLE_INDEX = 0;
     public static final int HANDLER_STYLE_INDEX = 1;
     public static final int KEYWORD_STYLE_INDEX = 2;
@@ -94,7 +94,7 @@ public class LslCodeScanner extends RuleBasedScanner implements ColorProviderLis
 
     private IPreferenceStore store;
 
-    private LslColorProvider provider;
+    private LSLColorProvider provider;
     
     private static int computeBit(boolean pred, int bitConst) {
         return pred ? bitConst : 0;
@@ -105,7 +105,7 @@ public class LslCodeScanner extends RuleBasedScanner implements ColorProviderLis
     }
     
     /**
-     * Creates an LslForge code scanner.
+     * Creates an LSLForge code scanner.
      * 
      * @param provider the color provider
      * @param handlerNames
@@ -113,7 +113,7 @@ public class LslCodeScanner extends RuleBasedScanner implements ColorProviderLis
      * @param predefConstNames
      * @param store 
      */
-    public LslCodeScanner(LslColorProvider provider, String[] handlerNames,
+    public LSLCodeScanner(LSLColorProvider provider, String[] handlerNames,
             String[] predefFuncNames, String[] predefConstNames, IPreferenceStore store) {
         this.provider = provider;
         this.handlerNames = handlerNames;
@@ -143,25 +143,25 @@ public class LslCodeScanner extends RuleBasedScanner implements ColorProviderLis
         return x;
     }
     
-    private void initRules(LslColorProvider provider, String[] handlerNames,
+    private void initRules(LSLColorProvider provider, String[] handlerNames,
             String[] predefFuncNames, String[] predefConstNames) {
-        IToken keyword = new Token(new TextAttribute(provider.getColor(LslColorProvider.KEYWORD_COLOR),
+        IToken keyword = new Token(new TextAttribute(provider.getColor(LSLColorProvider.KEYWORD_COLOR),
                 null, computeBits(KEYWORD_STYLE)));
-        IToken type = new Token(new TextAttribute(provider.getColor(LslColorProvider.TYPE_COLOR), null,
+        IToken type = new Token(new TextAttribute(provider.getColor(LSLColorProvider.TYPE_COLOR), null,
                 computeBits(TYPE_STYLE)));
-        IToken string = new Token(new TextAttribute(provider.getColor(LslColorProvider.STRING_COLOR), null,
+        IToken string = new Token(new TextAttribute(provider.getColor(LSLColorProvider.STRING_COLOR), null,
                 computeBits(STRING_STYLE)));
         IToken comment = new Token(new TextAttribute(provider
-                .getColor(LslColorProvider.SINGLE_LINE_COMMENT_COLOR), null,
+                .getColor(LSLColorProvider.SINGLE_LINE_COMMENT_COLOR), null,
                 computeBits(SINGLE_LINE_COMMENT_STYLE)));
-        IToken other = new Token(new TextAttribute(provider.getColor(LslColorProvider.DEFAULT_COLOR), null,
+        IToken other = new Token(new TextAttribute(provider.getColor(LSLColorProvider.DEFAULT_COLOR), null,
                 computeBits(DEFAULT_STYLE)));
-        IToken handler = new Token(new TextAttribute(provider.getColor(LslColorProvider.HANDLER_COLOR),
+        IToken handler = new Token(new TextAttribute(provider.getColor(LSLColorProvider.HANDLER_COLOR),
                 null, computeBits(HANDLER_STYLE)));
         IToken predefFunc = new Token(new TextAttribute(provider
-                .getColor(LslColorProvider.PREDEF_FUNC_COLOR), null, computeBits(PREDEF_FUNC_STYLE)));
+                .getColor(LSLColorProvider.PREDEF_FUNC_COLOR), null, computeBits(PREDEF_FUNC_STYLE)));
         IToken predefConst = new Token(new TextAttribute(provider
-                .getColor(LslColorProvider.PREDEF_CONST_COLOR), null, computeBits(PREDEF_CONST_STYLE)));
+                .getColor(LSLColorProvider.PREDEF_CONST_COLOR), null, computeBits(PREDEF_CONST_STYLE)));
         List<IRule> rules = new ArrayList<IRule>();
 
         // Add rule for single line comments.
@@ -172,10 +172,10 @@ public class LslCodeScanner extends RuleBasedScanner implements ColorProviderLis
         rules.add(new SingleLineRule("'", "'", string, '\\')); //$NON-NLS-2$ //$NON-NLS-1$
 
         // Add generic whitespace rule.
-        rules.add(new WhitespaceRule(new LslWhitespaceDetector()));
+        rules.add(new WhitespaceRule(new LSLWhitespaceDetector()));
 
         // Add word rule for keywords, types, handlers, constants and functions.
-        WordRule wordRule = new WordRule(new LslWordDetector(), other);
+        WordRule wordRule = new WordRule(new LSLWordDetector(), other);
         addWordsToRule(wordRule, lslForgeKeywords, keyword);
         addWordsToRule(wordRule, lslForgeTypes, type);
         addWordsToRule(wordRule, handlerNames, handler);

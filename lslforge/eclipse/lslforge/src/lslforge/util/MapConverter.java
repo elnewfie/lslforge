@@ -47,9 +47,10 @@ public class MapConverter implements Converter {
         
     }
 
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
-        Map m = (Map) createCollection(context.getRequiredType());
+        @SuppressWarnings("rawtypes")
+		Map m = (Map) createCollection(context.getRequiredType());
         while (reader.hasMoreChildren()) {
             reader.moveDown();
             String key = null;
@@ -77,14 +78,13 @@ public class MapConverter implements Converter {
         return m;
     }
 
-    @SuppressWarnings("unchecked")
-	public boolean canConvert(Class type) {
+	public boolean canConvert(@SuppressWarnings("rawtypes") Class type) {
         return Map.class.isAssignableFrom(type);
     }
 
-    @SuppressWarnings("unchecked")
-	private Object createCollection(Class type) {
-        Class defaultType = mapper.defaultImplementationOf(type);
+	private Object createCollection(@SuppressWarnings("rawtypes") Class type) {
+        @SuppressWarnings("rawtypes")
+		Class defaultType = mapper.defaultImplementationOf(type);
         try {
             return defaultType.newInstance();
         } catch (InstantiationException e) {

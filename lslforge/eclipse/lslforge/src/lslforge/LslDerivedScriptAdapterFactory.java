@@ -4,24 +4,23 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 
 /**
- * An adaptor factory that can adapt LslDerivedScript objects into other
+ * An adaptor factory that can adapt LSLDerivedScript objects into other
  * objects.
  * 
  * @author rgreayer
  *
  */
-public class LslDerivedScriptAdapterFactory implements IAdapterFactory {
+public class LSLDerivedScriptAdapterFactory implements IAdapterFactory {
 
 	
-	@SuppressWarnings("unchecked")
-	public Object getAdapter(Object adaptableObject, Class adapterType) {
-		if (adaptableObject instanceof LslDerivedScript && adapterType == IResource.class) {
-			return ((LslDerivedScript)adaptableObject).getResource();
+	public Object getAdapter(Object adaptableObject, @SuppressWarnings("rawtypes") Class adapterType) {
+		if (adaptableObject instanceof LSLDerivedScript && adapterType == IResource.class) {
+			return ((LSLDerivedScript)adaptableObject).getResource();
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	public Class[] getAdapterList() {
 		return new Class[] {
 				IResource.class

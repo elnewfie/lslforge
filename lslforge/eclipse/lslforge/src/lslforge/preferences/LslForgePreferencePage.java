@@ -2,8 +2,8 @@ package lslforge.preferences;
 
 import java.io.IOException;
 
-import lslforge.LslForgePlugin;
-import lslforge.LslProjectNature;
+import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IProject;
@@ -16,27 +16,27 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class LslForgePreferencePage extends FieldEditorPreferencePage implements
+public class LSLForgePreferencePage extends FieldEditorPreferencePage implements
         IWorkbenchPreferencePage {
 
-    private static final String LSLFORGE_PREFERENCE_PAGE_ENABLE_OPTIMIZATIONS = "LslForgePreferencePage.ENABLE_OPTIMIZATIONS"; //$NON-NLS-1$
-    private static final String LSLFORGE_EXECUTABLE_PATH = "LslForgePreferencePage.LSLForgeExecutablePath"; //$NON-NLS-1$
+    private static final String LSLFORGE_PREFERENCE_PAGE_ENABLE_OPTIMIZATIONS = "LSLForgePreferencePage.ENABLE_OPTIMIZATIONS"; //$NON-NLS-1$
+    private static final String LSLFORGE_EXECUTABLE_PATH = "LSLForgePreferencePage.LSLForgeExecutablePath"; //$NON-NLS-1$
 
-    public LslForgePreferencePage() throws IOException {
-        setPreferenceStore(LslForgePlugin.getDefault().getPreferenceStore());
+    public LSLForgePreferencePage() throws IOException {
+        setPreferenceStore(LSLForgePlugin.getDefault().getPreferenceStore());
     }
 
     public void init(IWorkbench workbench) {
     }
 
     protected IPreferenceStore doGetPreferenceStore() {
-        return LslForgePlugin.getDefault().getPreferenceStore();
+        return LSLForgePlugin.getDefault().getPreferenceStore();
     }
 
     protected void createFieldEditors() {
-        addField(new FileFieldEditor(LslForgePlugin.LSLFORGE_NATIVE_PATH,
+        addField(new FileFieldEditor(LSLForgePlugin.LSLFORGE_NATIVE_PATH,
                 Messages.getString(LSLFORGE_EXECUTABLE_PATH), getFieldEditorParent())); 
-        addField(new BooleanFieldEditor(LslProjectNature.OPTIMIZE,
+        addField(new BooleanFieldEditor(LSLProjectNature.OPTIMIZE,
                 Messages.getString(LSLFORGE_PREFERENCE_PAGE_ENABLE_OPTIMIZATIONS), getFieldEditorParent()));
     }
 
@@ -45,7 +45,7 @@ public class LslForgePreferencePage extends FieldEditorPreferencePage implements
             IProject[] p = ResourcesPlugin.getWorkspace().getRoot().getProjects();
             for (int i = 0; i < p.length; i++) {
                 try {
-                    LslProjectNature nature = (LslProjectNature) p[i].getNature(LslProjectNature.ID);
+                    LSLProjectNature nature = (LSLProjectNature) p[i].getNature(LSLProjectNature.ID);
                     if (nature != null) nature.scheduleBuild(true,null,null);
                 } catch (CoreException e) {
                     Util.error(e, "problem determining project nature"); //$NON-NLS-1$

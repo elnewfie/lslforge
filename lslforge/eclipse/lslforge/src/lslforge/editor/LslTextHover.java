@@ -4,10 +4,10 @@ package lslforge.editor;
 import java.util.HashMap;
 import java.util.Map;
 
-import lslforge.LslForgePlugin;
-import lslforge.language_metadata.LslFunction;
-import lslforge.language_metadata.LslHandler;
-import lslforge.util.LslWordDetector;
+import lslforge.LSLForgePlugin;
+import lslforge.language_metadata.LSLFunction;
+import lslforge.language_metadata.LSLHandler;
+import lslforge.util.LSLWordDetector;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.BadPartitioningException;
@@ -21,9 +21,9 @@ import org.eclipse.jface.text.Region;
 /**
  * Example implementation for an <code>ITextHover</code> which hovers over Java code.
  */
-public class LslTextHover implements ITextHover {
+public class LSLTextHover implements ITextHover {
 
-	private static LslWordDetector detector = new LslWordDetector();
+	private static LSLWordDetector detector = new LSLWordDetector();
 	private static HashMap<String,String> hoverInfo = null;
 
 	/**
@@ -39,7 +39,7 @@ public class LslTextHover implements ITextHover {
 				IDocumentExtension3 doc3 = (IDocumentExtension3) doc;
 				
 				if (!IDocument.DEFAULT_CONTENT_TYPE.equals(
-						doc3.getContentType(LslForgePlugin.LSL_PARTITIONING,hoverRegion.getOffset(), false))) {
+						doc3.getContentType(LSLForgePlugin.LSL_PARTITIONING,hoverRegion.getOffset(), false))) {
 					return null;
 				}
 				if (hoverRegion.getLength() > -1) {
@@ -78,12 +78,12 @@ public class LslTextHover implements ITextHover {
 	private static synchronized HashMap<String,String> getHoverInfo() {
 		if (hoverInfo == null) {
 			hoverInfo = new HashMap<String,String>();
-			LslHandler handlers[] = LslForgePlugin.getDefault().getLslMetaData().getHandlers();
+			LSLHandler handlers[] = LSLForgePlugin.getDefault().getLSLMetaData().getHandlers();
 			for (int i = 0; i < handlers.length; i++) {
 				hoverInfo.put(handlers[i].getName(), handlers[i].fullDescription());
 			}
 			
-			LslFunction functions[] = LslForgePlugin.getDefault().getLslMetaData().getFunctions();
+			LSLFunction functions[] = LSLForgePlugin.getDefault().getLSLMetaData().getFunctions();
 			for (int i = 0; i < functions.length; i++) {
 				hoverInfo.put(functions[i].getName(), functions[i].fullDescription());
 			}
