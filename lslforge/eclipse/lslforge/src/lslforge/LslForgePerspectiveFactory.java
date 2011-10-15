@@ -19,7 +19,7 @@ public class LSLForgePerspectiveFactory implements IPerspectiveFactory {
 		String editorArea = layout.getEditorArea();
 		
 		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f, editorArea); //$NON-NLS-1$
-		left.addView(IPageLayout.ID_RES_NAV);
+		left.addView(IPageLayout.ID_PROJECT_EXPLORER);
 		
 		IFolderLayout bottom = layout.createFolder("bottom", IPageLayout.BOTTOM, 0.75f, editorArea); //$NON-NLS-1$
 		bottom.addView(IPageLayout.ID_PROBLEM_VIEW);

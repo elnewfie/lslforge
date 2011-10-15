@@ -52,7 +52,7 @@ public class LaunchLSLTestShortcut implements ILaunchShortcut {
 		}
 	
 		if (config == null) {
-			ILaunchConfigurationWorkingCopy wc = getConfigurationType().newInstance(null, debugPlugin().getLaunchManager().generateUniqueLaunchConfigurationNameFrom(r.getName()));
+			ILaunchConfigurationWorkingCopy wc = getConfigurationType().newInstance(null, debugPlugin().getLaunchManager().generateLaunchConfigurationName(r.getName()));
 			wc.setAttribute(LC_RESOURCE_NAME, name);
 			config = wc.doSave();
 		}

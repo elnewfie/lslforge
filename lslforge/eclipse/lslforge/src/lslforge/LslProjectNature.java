@@ -242,13 +242,13 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 			}
 		}
 		
-		public String getModulePath(String name) {
-			return moduleNameToPath.get(name);
-		}
-
-		public String getScriptPath(String name) {
-			return scriptNameToPath.get(name);
-		}
+//		public String getModulePath(String name) {
+//			return moduleNameToPath.get(name);
+//		}
+//
+//		public String getScriptPath(String name) {
+//			return scriptNameToPath.get(name);
+//		}
 		
 		public boolean visit(IResource resource) throws CoreException {
 			LSLForgeElement element = (LSLForgeElement) resource.getAdapter(LSLForgeElement.class);
@@ -633,7 +633,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 				public IStatus runInWorkspace(IProgressMonitor monitor)
 						throws CoreException {
 				    for (IResource r : newDerivedResources) {
-						r.setDerived(true);
+						r.setDerived(true, monitor);
 						if (r instanceof IFile) {
 						    ((IFile)r).setCharset("UTF-8", monitor); //$NON-NLS-1$
 						}

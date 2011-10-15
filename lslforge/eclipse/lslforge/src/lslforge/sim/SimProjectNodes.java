@@ -42,23 +42,23 @@ public class SimProjectNodes {
         }
 
 		private void addNextp() {
-			addChild(new HexIntNode(this,NEXTP, 0x7fffffff, "Next Owner Permissions"));
+			addChild(new HexIntNode(this,NEXTP, 0x7fffffff, Messages.SimProjectNodes_NEXT_OWNER_PERM));
 		}
 
 		private void addEverybodyp() {
-			addChild(new HexIntNode(this,EVERYBODYP, 0x7fffffff, "Everybody Permissions"));
+			addChild(new HexIntNode(this,EVERYBODYP, 0x7fffffff, Messages.SimProjectNodes_EVERYBODY_PERM));
 		}
 
 		private void addGroupp() {
-			addChild(new HexIntNode(this,GROUPP, 0x7fffffff, "Group Permissions"));
+			addChild(new HexIntNode(this,GROUPP, 0x7fffffff, Messages.SimProjectNodes_GROUP_PERM));
 		}
 
 		private void addOwnerp() {
-			addChild(new HexIntNode(this,OWNERP, 0x7fffffff, "Owner Permissions"));
+			addChild(new HexIntNode(this,OWNERP, 0x7fffffff, Messages.SimProjectNodes_OWNER_PERM));
 		}
 
 		private void addBasep() {
-			addChild(new HexIntNode(this,BASEP, 0x7fffffff, "Base Permissions"));
+			addChild(new HexIntNode(this,BASEP, 0x7fffffff, Messages.SimProjectNodes_BASE_PERM));
 		}
 		
 		@Override
