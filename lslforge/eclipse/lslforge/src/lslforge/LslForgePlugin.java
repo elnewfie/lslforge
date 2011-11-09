@@ -35,6 +35,8 @@ import lslforge.util.Util;
 import lslforge.util.Util.ArrayMapFunc;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -49,6 +51,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -542,6 +546,19 @@ public class LSLForgePlugin extends AbstractUIPlugin {
             testManager = new TestManager();
             simManager  = new SimManager();
         }
+  
+        //Add a listener to the bundle
+        context.addBundleListener(new BundleListener() {
+			public void bundleChanged(BundleEvent event) {
+				//Wait until everything is loaded and ready
+				if(event.getType() == BundleEvent.STARTED) {
+					//Check open projects and convert them
+					for(IProject project: ResourcesPlugin.getWorkspace().getRoot().getProjects()) {
+						LSLProjectNature.fixProjectNature(project);
+					}
+				}
+			}
+		});
     }
     
     private boolean checkVersion(final String version) {
