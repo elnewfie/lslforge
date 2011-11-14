@@ -545,6 +545,26 @@ allConstants = [
     Constant "PSYS_SRC_TARGET_KEY" (IVal 20),
     Constant "PSYS_SRC_TEXTURE" (IVal 12),
     Constant "PUBLIC_CHANNEL" (IVal 0),
+
+    Constant "RC_DETECT_PHANTOM" (IVal 1),
+
+    Constant "RC_DATA_FLAGS" (IVal 2),
+    Constant "RC_GET_NORMAL" (IVal 1),
+    Constant "RC_GET_ROOT_KEY" (IVal 2),
+    Constant "RC_GET_LINK_NUM" (IVal 4),
+
+    Constant "RC_MAX_HITS" (IVal 3),
+
+    Constant "RC_REJECT_TYPES" (IVal 0),
+    Constant "RC_REJECT_AGENTS" (IVal 1),
+    Constant "RC_REJECT_PHYSICAL" (IVal 2),
+    Constant "RC_REJECT_NONPHYSICAL" (IVal 4),
+    Constant "RC_REJECT_LAND" (IVal 8),
+
+    Constant "RCERR_UNKNOWN" (IVal -1),
+    Constant "RCERR_SIM_PERF_LOW" (IVal -2),
+    Constant "RCERR_CAST_TIME_EXCEEDED" (IVal -3),
+
     Constant "RAD_TO_DEG" (FVal 57.29578),
     Constant "REGION_FLAG_ALLOW_DAMAGE" (IVal 1),
     Constant "REGION_FLAG_ALLOW_DIRECT_TELEPORT" (IVal (1 `shiftL` 20)),
