@@ -474,7 +474,7 @@ allConstants = [
     Constant "PRIM_PHYSICS_SHAPE_TYPE" (IVal 30),
     Constant "PRIM_PHYSICS_SHAPE_PRIM" (IVal 0),
     Constant "PRIM_PHYSICS_SHAPE_CONVEX" (IVal 2),
-    Constant "PRIM_PHYSICS_SHAPE_NONE" (IVal 1
+    Constant "PRIM_PHYSICS_SHAPE_NONE" (IVal 1),
     Constant "PRIM_POINT_LIGHT" llcPrimPointLight,
     Constant "PRIM_POS_LOCAL" (IVal 33),
     Constant "PRIM_POSITION" llcPrimPosition,
