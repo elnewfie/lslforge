@@ -1,0 +1,8 @@
+*.class
+*.exe
+lslforge/haskell/dist/*
+lslforge/eclipse/update-site/dist/*
+lslforge/eclipse/update-site/plugins/*
+lslforge/eclipse/update-site/features/*
+lslforge/eclipse/update-site/artifacts.*
+lslforge/eclipse/update-site/content.*
