@@ -22,7 +22,8 @@ public class ResourceAdapterFactory implements IAdapterFactory {
 			IFile f = (IFile) adaptableObject;
 			String ext = f.getFileExtension();
 			if (LSLForgeElement.class.equals(adapterType) && ("lslp".equals(ext) //$NON-NLS-1$
-			                                         || "lslm".equals(ext))) { //$NON-NLS-1$
+			                                         || "lslm".equals(ext) //$NON-NLS-1$
+			                                         || "lsl".equals(ext))) { //$NON-NLS-1$
 				return new LSLForgeElement(f);
 			} else if ("lslp".equals(ext) && LSLForgeScript.class.equals(adapterType)) { //$NON-NLS-1$
 			    return new LSLForgeScript(f);

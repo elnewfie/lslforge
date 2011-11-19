@@ -103,6 +103,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 				}
 
 				LSLForgeElement element = (LSLForgeElement) resource.getAdapter(LSLForgeElement.class);
+				LSLDerivedScript script = (LSLDerivedScript) resource.getAdapter(LSLDerivedScript.class);
 				
 				if (element != null) {
 					if (element.isModule()) {
@@ -113,19 +114,19 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 						      ((delta.getFlags() & IResourceDelta.REPLACED) != 0 ||
 						       (delta.getFlags() & IResourceDelta.CONTENT) != 0)));
 					}  else {
-						if (delta.getKind() == IResourceDelta.ADDED ||
-							(delta.getKind() == IResourceDelta.CHANGED &&
-									((delta.getFlags() & IResourceDelta.REPLACED) != 0 ||
-										    (delta.getFlags() & IResourceDelta.CONTENT) != 0))) {
-							addsAndUpdates.add(element);
-						} else if (delta.getKind() == IResourceDelta.REMOVED) {
-							removals.add(element);
+						//Is it a script, or just a derived file?
+						if(script == null) {
+							if (delta.getKind() == IResourceDelta.ADDED ||
+								(delta.getKind() == IResourceDelta.CHANGED &&
+										((delta.getFlags() & IResourceDelta.REPLACED) != 0 ||
+											    (delta.getFlags() & IResourceDelta.CONTENT) != 0))) {
+								addsAndUpdates.add(element);
+							} else if (delta.getKind() == IResourceDelta.REMOVED) {
+								removals.add(element);
+							}
 						}
-						
 					}
 				} else {
-					LSLDerivedScript script = 
-						(LSLDerivedScript) resource.getAdapter(LSLDerivedScript.class);
 					if (script != null && delta.getKind() == IResourceDelta.ADDED) {
 						newDerivedResources.add(resource);
 					} else if (script == null) {
@@ -446,7 +447,8 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 		
         WorkspaceJob job = new WorkspaceJob(Messages.ProjectNature_REFRESH) {
 
-            public IStatus runInWorkspace(IProgressMonitor monitor)
+            @Override
+			public IStatus runInWorkspace(IProgressMonitor monitor)
                     throws CoreException {
                 project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
                 return new Status(IStatus.OK, "lslforge", Messages.ProjectNature_REFRESHED_OK); //$NON-NLS-1$
@@ -630,6 +632,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 		if (newDerivedResources != null && newDerivedResources.size() > 0) {
 			WorkspaceJob job = new WorkspaceJob("MarkDerived") { //$NON-NLS-1$
 
+				@Override
 				public IStatus runInWorkspace(IProgressMonitor monitor)
 						throws CoreException {
 				    for (IResource r : newDerivedResources) {
@@ -653,7 +656,8 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
         Util.log("check errors!"); //$NON-NLS-1$
         WorkspaceJob job = new WorkspaceJob("EvaluateErrors") { //$NON-NLS-1$
 
-        	public IStatus runInWorkspace(IProgressMonitor monitor) {
+        	@Override
+			public IStatus runInWorkspace(IProgressMonitor monitor) {
         		checkForErrors(recompileAll, scriptChanges, scriptRemovals);
         		return new Status(IStatus.OK,LSLFORGE, Messages.ProjectNature_OK);
         	}

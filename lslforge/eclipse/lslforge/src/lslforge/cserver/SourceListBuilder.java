@@ -47,7 +47,7 @@ public class SourceListBuilder implements IResourceVisitor {
 			if (element.isModule()) {
 			    moduleNameToPath.put(name,pp.toString());
 			    moduleMap.put(name,p.toOSString());
-			} else if (element.isScript() && !modulesOnly) {
+			} else if (element.isScript(true) && !modulesOnly) {
 				scriptNameToPath.put(name, pp.toString());
 				scriptMap.put(name, p.toOSString());
 			}
