@@ -16,12 +16,14 @@ public class LSLSimProcess extends LSLProcess {
 	    this.simDescription = descriptor;
 	}
 
-    protected Interactor createInteractor(Process p) {
+    @Override
+	protected Interactor createInteractor(Process p) {
         return new LSLSimInteractor(launch.getLaunchMode(),simDescription, 
                 p.getInputStream(), p.getOutputStream());
     }
 
-    protected Process launchExecutable() {
+    @Override
+	protected Process launchExecutable() {
         return LSLForgePlugin.launchCoreCommand(SYSTEM_TESTER, false);
     }
 	
@@ -29,6 +31,7 @@ public class LSLSimProcess extends LSLProcess {
 		return "LSL Simulator"; //$NON-NLS-1$
 	}
 
+	@Override
 	protected void onTerminate() {
 	    super.onTerminate();
 	    simManager().simStopped();

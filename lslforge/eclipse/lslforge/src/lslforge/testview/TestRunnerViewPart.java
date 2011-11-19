@@ -47,7 +47,8 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
             setEnabled(false);
         }
 
-        public void run() {
+        @Override
+		public void run() {
             rerunTestRun();
         }
     }
@@ -68,7 +69,8 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
         testManager.addResultListener(this);
     }
 
-    public void dispose() {
+    @Override
+	public void dispose() {
         super.dispose();
         testManager.removeResultListener(this);
     }
@@ -77,7 +79,8 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
         return counterComposite != null;
     }
 
-    public void createPartControl(Composite parent) {
+    @Override
+	public void createPartControl(Composite parent) {
 
         this.parent = parent;
         GridLayout gridLayout = new GridLayout();
@@ -99,13 +102,15 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
 
         Composite empty = new Composite(top, SWT.NONE);
         empty.setLayout(new Layout() {
-            protected Point computeSize(Composite composite, int wHint, int hHint,
+            @Override
+			protected Point computeSize(Composite composite, int wHint, int hHint,
                     boolean flushCache) {
                 return new Point(1, 1); // (0, 0) does not work with
                                         // super-intelligent ViewForm
             }
 
-            protected void layout(Composite composite, boolean flushCache) {
+            @Override
+			protected void layout(Composite composite, boolean flushCache) {
             }
         });
         top.setTopLeft(empty); // makes ViewForm draw the horizontal separator
@@ -142,7 +147,8 @@ public class TestRunnerViewPart extends ViewPart implements ITestListener {
         return composite;
     }
 
-    public void setFocus() {
+    @Override
+	public void setFocus() {
     }
 
     private void configureToolBar() {

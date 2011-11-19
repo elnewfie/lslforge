@@ -65,7 +65,8 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
      * <code>AbstractTextEditor</code> method extend the actions to add those
      * specific to the receiver
      */
-    protected void createActions() {
+    @Override
+	protected void createActions() {
         super.createActions();
 
         IAction a = new TextOperationAction(Messages.getResourceBundle(),
@@ -85,7 +86,8 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
      * 
      * @param monitor the progress monitor
      */
-    public void doSave(IProgressMonitor monitor) {
+    @Override
+	public void doSave(IProgressMonitor monitor) {
         setCharSet();
         super.doSave(monitor);
     }
@@ -93,7 +95,8 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     /**
      * doSaveAs specialization of the AbstractTextEditor's doSaveAs()...
      */
-    public void doSaveAs() {
+    @Override
+	public void doSaveAs() {
         setCharSet();
         super.doSaveAs();
     }
@@ -106,7 +109,8 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
             Util.error(e, "can't set charset"); //$NON-NLS-1$
         }
     }
-    protected void editorContextMenuAboutToShow(IMenuManager menu) {
+    @Override
+	protected void editorContextMenuAboutToShow(IMenuManager menu) {
         super.editorContextMenuAboutToShow(menu);
         addAction(menu, "ContentAssistProposal"); //$NON-NLS-1$
         addAction(menu, "ContentAssistTip"); //$NON-NLS-1$
@@ -118,6 +122,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
      * @param required the required type
      * @return an adapter for the required type or <code>null</code>
      */
+	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
         if (IContentOutlinePage.class.equals(required)) {
             if (outlinePage == null) {
@@ -136,6 +141,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     }
 
     
+	@Override
 	protected void initializeEditor() {
         super.initializeEditor();
         
@@ -157,7 +163,8 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         return null;
     }
     
-    protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
+    @Override
+	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
         fAnnotationAccess = createAnnotationAccess();
         fOverviewRuler = createOverviewRuler(getSharedColors());
 
@@ -170,14 +177,16 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         return viewer;
     }
 
-    public void dispose() {
+    @Override
+	public void dispose() {
         LSLProjectNature n = nature();
         if (n != null) n.removeRecompileListener(this);
         ((LSLSourceViewerConfiguration)this.getSourceViewerConfiguration()).dispose();
         super.dispose();
     }
     
-    public void createPartControl(Composite parent) {
+    @Override
+	public void createPartControl(Composite parent) {
         super.createPartControl(parent);
         ProjectionViewer viewer = (ProjectionViewer) getSourceViewer();
         fProjectionSupport = new ProjectionSupport(viewer, getAnnotationAccess(), getSharedColors());
@@ -300,7 +309,8 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         }
     }
     
-    protected void adjustHighlightRange(int offset, int length) {
+    @Override
+	protected void adjustHighlightRange(int offset, int length) {
         ISourceViewer viewer = getSourceViewer();
         if (viewer instanceof ITextViewerExtension5) {
             ITextViewerExtension5 extension = (ITextViewerExtension5) viewer;

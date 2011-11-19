@@ -101,7 +101,8 @@ public class SimProjectLabelProvider extends LabelProvider implements ITableLabe
         return null;
     }
 
-    public void dispose() {
+    @Override
+	public void dispose() {
         super.dispose();
         for (Iterator<Image> i = images.iterator(); i.hasNext(); ) {
             Image img = i.next();

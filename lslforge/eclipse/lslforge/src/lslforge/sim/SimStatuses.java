@@ -34,7 +34,8 @@ public class SimStatuses {
         public String getKey() { return key; }
         public String getName() { return name; }
         
-        public String toString() {
+        @Override
+		public String toString() {
             return name + " - " + key; //$NON-NLS-1$
         }
         
@@ -54,7 +55,8 @@ public class SimStatuses {
             return toString();
         }
         
-        public String toString() {
+        @Override
+		public String toString() {
             return name + " - " + key; //$NON-NLS-1$
         }
     }

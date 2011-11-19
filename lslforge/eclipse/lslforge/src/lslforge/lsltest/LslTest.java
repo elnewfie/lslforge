@@ -49,7 +49,8 @@ public class LSLTest {
 	    
 	    public Class<?> getType() { return type; }
 	    
-	    public String toString() {
+	    @Override
+		public String toString() {
 	        return val == null ? BLANK : val.toString();
 	    }
 
@@ -59,6 +60,7 @@ public class LSLTest {
 	}
 	
 	public static class LSLVoid extends LSLValue {
+		@Override
 		public String toString() { return BLANK; }
 	}
 
@@ -69,6 +71,7 @@ public class LSLTest {
 			this.val = val;
 		}
 		
+		@Override
 		public String toString() {
 			return val;
 		}
@@ -82,6 +85,7 @@ public class LSLTest {
 			this.val = val;
 		}
 		
+		@Override
 		public String toString() {
 			return val;
 		}
@@ -94,6 +98,7 @@ public class LSLTest {
 			this.val = val;
 		}
 		
+		@Override
 		public String toString() {
 			return val;
 		}
@@ -106,6 +111,7 @@ public class LSLTest {
 			this.val = val;
 		}
 		
+		@Override
 		public String toString() {
 			return val;
 		}
@@ -123,6 +129,7 @@ public class LSLTest {
 			else this.val = val;
 		}
 		
+		@Override
 		public String toString() {
 			StringBuilder buf = new StringBuilder("["); //$NON-NLS-1$
 			String sep = BLANK;
@@ -150,7 +157,8 @@ public class LSLTest {
 	    String val;
 	    public LSLList1(String val) { this.val  = val; }
 	    public String getVal() { return val; }
-	    public String toString() { return val; }
+	    @Override
+		public String toString() { return val; }
 	}
 	
 	public static class LSLVector extends LSLValue {
@@ -162,6 +170,7 @@ public class LSLTest {
 		public String getVal() {
 		    return val;
 		}
+		@Override
 		public String toString() {
 			return val;
 		}
@@ -176,7 +185,8 @@ public class LSLTest {
         public String getVal() {
             return val;
         }
-        public String toString() {
+        @Override
+		public String toString() {
             return val;
         }
     }
@@ -197,7 +207,8 @@ public class LSLTest {
             return path;
         }
         
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             if (o == null || !(o instanceof EntryPoint)) return false;
             EntryPoint other = (EntryPoint) o;
             return Util.safeEquals(fileName, other.fileName) &&
@@ -302,6 +313,7 @@ public class LSLTest {
 	    this.expectations.postInit();
 	}
 
+	@Override
 	public String toString() {
 		return "Test \"" + name + "\"";  //$NON-NLS-1$//$NON-NLS-2$
 	}

@@ -26,11 +26,13 @@ public class LSLForgeActionContributor extends TextEditorActionContributor {
 		contentAssistTip.setActionDefinitionId(ITextEditorActionDefinitionIds.CONTENT_ASSIST_CONTEXT_INFORMATION);
 	}
 	
+	@Override
 	public void dispose() {
 		mySetActiveEditor(null);
 		super.dispose();
 	}
 	
+	@Override
 	public void init(IActionBars bars) {
 		super.init(bars);
 		
@@ -54,6 +56,7 @@ public class LSLForgeActionContributor extends TextEditorActionContributor {
 		contentAssistTip.setAction(getAction(editor, "ContentAssistTip")); //$NON-NLS-1$
 	}
 	
+	@Override
 	public void setActiveEditor(IEditorPart part) {
 		super.setActiveEditor(part);
 		mySetActiveEditor(part);

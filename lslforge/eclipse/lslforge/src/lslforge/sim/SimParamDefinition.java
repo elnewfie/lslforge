@@ -7,27 +7,32 @@ public class SimParamDefinition {
         public abstract String getControlID();
     }
     public static class SimParamPrim extends SimParamType { 
-        public String getControlID() {
+        @Override
+		public String getControlID() {
             return "prim"; //$NON-NLS-1$
         }
     }
     public static class SimParamAvatar extends SimParamType { 
-        public String getControlID() {
+        @Override
+		public String getControlID() {
             return "avatar"; //$NON-NLS-1$
         }
     }
     public static class SimParamObject extends SimParamType {
-        public String getControlID() {
+        @Override
+		public String getControlID() {
             return "object"; //$NON-NLS-1$
         }
     }
     public static class SimParamKey extends SimParamType { 
-        public String getControlID() {
+        @Override
+		public String getControlID() {
             return "any-key"; //$NON-NLS-1$
         }
     }
     public static class SimParamScript extends SimParamType { 
-        public String getControlID() {
+        @Override
+		public String getControlID() {
             return "script"; //$NON-NLS-1$
         }
     }
@@ -36,7 +41,8 @@ public class SimParamDefinition {
         
         public String getValueType() { return valueType; }
         
-        public String getControlID() {
+        @Override
+		public String getControlID() {
             return "expression-" + valueType; //$NON-NLS-1$
         }
     }

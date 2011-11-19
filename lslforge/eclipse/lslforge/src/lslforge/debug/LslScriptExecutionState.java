@@ -19,8 +19,10 @@ public class LSLScriptExecutionState {
             val = i;
         }
         public int getVal() { return val; }
-        public String toString() { return Integer.toString(val); }
-        public String typeString() { return "integer"; } //$NON-NLS-1$
+        @Override
+		public String toString() { return Integer.toString(val); }
+        @Override
+		public String typeString() { return "integer"; } //$NON-NLS-1$
     }
     
     public static class FloatValue extends Value {
@@ -29,8 +31,10 @@ public class LSLScriptExecutionState {
             val = f;
         }
         public float getVal() { return val; }
-        public String toString() { return Float.toString(val); }
-        public String typeString() { return "float"; } //$NON-NLS-1$
+        @Override
+		public String toString() { return Float.toString(val); }
+        @Override
+		public String typeString() { return "float"; } //$NON-NLS-1$
     }
     
     public static class StringValue extends Value {
@@ -41,8 +45,10 @@ public class LSLScriptExecutionState {
         public String getVal() { return val; }
         
         // TODO FIX!!!
-        public String toString() { return val; } 
-        public String typeString() { return "string"; } //$NON-NLS-1$
+        @Override
+		public String toString() { return val; } 
+        @Override
+		public String typeString() { return "string"; } //$NON-NLS-1$
     }
    
     public static class KeyValue extends Value {
@@ -52,8 +58,10 @@ public class LSLScriptExecutionState {
         }
         public String getVal() { return val; }
         // TODO FIX!!!
-        public String toString() { return val; } 
-        public String typeString() { return "key"; } //$NON-NLS-1$
+        @Override
+		public String toString() { return val; } 
+        @Override
+		public String typeString() { return "key"; } //$NON-NLS-1$
     }
     
     public static class VectorValue extends Value {
@@ -68,10 +76,12 @@ public class LSLScriptExecutionState {
         public float getY() { return y;}
         public float getZ() { return z;}
         
-        public String toString() {
+        @Override
+		public String toString() {
             return "<" + x + "," + y + "," + z + ">";  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$//$NON-NLS-4$
         }
-        public String typeString() { return "vector"; } //$NON-NLS-1$
+        @Override
+		public String typeString() { return "vector"; } //$NON-NLS-1$
     }
 
     public static class RotationValue extends Value {
@@ -88,10 +98,12 @@ public class LSLScriptExecutionState {
         public float getZ() { return z;}
         public float getS() { return s;}
         
-        public String toString() {
+        @Override
+		public String toString() {
             return "<" + x + "," + y + "," + z + "," + s + ">"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
         }
-        public String typeString() { return "rotation"; } //$NON-NLS-1$
+        @Override
+		public String typeString() { return "rotation"; } //$NON-NLS-1$
     }
     
     public static class ListValue extends Value {
@@ -102,7 +114,8 @@ public class LSLScriptExecutionState {
         
         public Value[] getElements() { return elements; }
         
-        public String toString() {
+        @Override
+		public String toString() {
             StringBuilder buf = new StringBuilder("["); //$NON-NLS-1$
             String sep = ""; //$NON-NLS-1$
             if (elements == null) return "[]"; //$NON-NLS-1$
@@ -115,7 +128,8 @@ public class LSLScriptExecutionState {
             buf.append("]"); //$NON-NLS-1$
             return buf.toString();
         }
-        public String typeString() { return "list"; } //$NON-NLS-1$
+        @Override
+		public String typeString() { return "list"; } //$NON-NLS-1$
     }
     
     public static class Binding {

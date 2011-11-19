@@ -96,7 +96,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return getButton(IDialogConstants.OK_ID);
         }
         
-        protected Control createButtonBar(Composite parent) {
+        @Override
+		protected Control createButtonBar(Composite parent) {
              Control c = super.createButtonBar(parent);
              
              okButton().addListener(SWT.Show, new Listener() {
@@ -111,7 +112,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return combo.getSelectionIndex() >= 0 && combo2.getSelectionIndex() >= 0;
         }
         
-        protected Control createDialogArea(Composite parent) {
+        @Override
+		protected Control createDialogArea(Composite parent) {
             getShell().setText(Messages.getString("LSLTestEditor.ENTER_TEST_ENTRY_POINT")); //$NON-NLS-1$
             Composite  composite = (Composite) super.createDialogArea(parent);
             GridLayout layout = (GridLayout) composite.getLayout();
@@ -224,7 +226,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return combo.getSelectionIndex() >= 0;
         }
 
-        protected Control createButtonBar(Composite parent) {
+        @Override
+		protected Control createButtonBar(Composite parent) {
             Control c = super.createButtonBar(parent);
             okButton().setEnabled(false);
             okButton().addListener(SWT.Show, new Listener() {
@@ -235,7 +238,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return c;
         }
         
-        protected Control createDialogArea(Composite parent) {
+        @Override
+		protected Control createDialogArea(Composite parent) {
             getShell().setText("Select Global"); //$NON-NLS-1$ TODO
             Composite  composite = (Composite) super.createDialogArea(parent);
             Label nameLabel = new Label(composite, SWT.LEFT|SWT.HORIZONTAL);
@@ -287,7 +291,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return combo.getSelectionIndex() >= 0;
         }
 
-        protected Control createButtonBar(Composite parent) {
+        @Override
+		protected Control createButtonBar(Composite parent) {
             Control c = super.createButtonBar(parent);
             
             okButton().addListener(SWT.Show, new Listener() {
@@ -298,7 +303,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return c;
         }
         
-        protected Control createDialogArea(Composite parent) {
+        @Override
+		protected Control createDialogArea(Composite parent) {
             getShell().setText("Expected function call"); //$NON-NLS-1$ TODO
             Composite  composite = (Composite) super.createDialogArea(parent);
             Label nameLabel = new Label(composite, SWT.LEFT|SWT.HORIZONTAL);
@@ -344,21 +350,24 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.value = value;
         }
 
-        public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             oldValue = n.getValueString();
             n.updateValue(value);
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             oldValue = n.getValueString();
             n.updateValue(value);
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             n.updateValue(oldValue);
             decChangeCount();
             return Status.OK_STATUS;
@@ -376,21 +385,24 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.name = name;
         }
 
-        public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             oldName = n.getNameDisplay();
             n.updateName(name);
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             oldName = n.getNameDisplay();
             n.updateName(name);
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             n.updateName(oldName);
             decChangeCount();
             return Status.OK_STATUS;
@@ -408,19 +420,22 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.factory = factory;
         }
 
-        public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             n.addChild(addedNode = factory.createNode(n));
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             n.addChild(addedNode = factory.createNode(n));
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             n.removeChild(addedNode);
             decChangeCount();
             return Status.OK_STATUS;
@@ -438,7 +453,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.factory = factory;
         }
 
-        public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             Node parent = n.getParent();
             if (parent != null) {
                 parent.insertChildAfter(addedNode = factory.createNode(parent), n);
@@ -447,7 +463,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return Status.OK_STATUS;
         }
 
-        public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             Node parent = n.getParent();
             if (parent != null) {
                 parent.insertChildAfter(addedNode = factory.createNode(parent), n);
@@ -456,7 +473,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return Status.OK_STATUS;
         }
 
-        public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             if (n.getParent() != null) {
                 n.getParent().removeChild(addedNode);
                 decChangeCount();
@@ -476,7 +494,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.factory = factory;
         }
 
-        public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             Node parent = n.getParent();
             if (parent != null) {
                 incChangeCount();
@@ -485,7 +504,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return Status.OK_STATUS;
         }
 
-        public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             Node parent = n.getParent();
             if (parent != null) {
                 incChangeCount();
@@ -494,7 +514,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             return Status.OK_STATUS;
         }
 
-        public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             if (n.getParent() != null) {
                 n.getParent().removeChild(addedNode);
                 decChangeCount();
@@ -514,19 +535,22 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.index = index;
         }
 
-        public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             parent.removeChild(child);
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             parent.removeChild(child);
             incChangeCount();
             return Status.OK_STATUS;
         }
 
-        public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
+        @Override
+		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
             parent.addChild(child,index);
             decChangeCount();
             return Status.OK_STATUS;
@@ -540,7 +564,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.factory = factory;
         }
         
-        public void run() {
+        @Override
+		public void run() {
             Node n = getSelectedNode();
             NodeFactory f = null;
             if (factory instanceof NodeFactory2) {
@@ -567,7 +592,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.factory = factory;
         }
         
-        public void run() {
+        @Override
+		public void run() {
             Node n = getSelectedNode();
             NodeFactory f = factory;
             if (f instanceof NodeFactory2) {
@@ -591,7 +617,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             this.factory = factory;
         }
         
-        public void run() {
+        @Override
+		public void run() {
             Node n = getSelectedNode();
             NodeFactory f = factory;
             if (f instanceof NodeFactory2) {
@@ -613,7 +640,8 @@ public class TestEditor extends EditorPart implements NodeListener {
             super("Delete Node"); //$NON-NLS-1$
         }
         
-        public void run() {
+        @Override
+		public void run() {
             Node n = getSelectedNode();
             int index = n.getParent().getChildren().indexOf(n);
             DeleteNodeOperation operation = new DeleteNodeOperation(n.getParent(), n, index);
@@ -634,11 +662,13 @@ public class TestEditor extends EditorPart implements NodeListener {
 			super(viewer);
 		}
 
+		@Override
 		protected boolean canEdit(Object element) {
 		    Node n = (Node) element;
 			return n.isValueChangeable();
 		}
 
+		@Override
 		protected CellEditor getCellEditor(Object element) {
 			final Node n = (Node) element;
 			
@@ -667,6 +697,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 			return curEditor;
 		}
 
+		@Override
 		protected Object getValue(Object element) {
 			Node n = (Node) element;
 			if (n.hasValueChoices()) {
@@ -685,6 +716,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 			}
 		}
 
+		@Override
 		protected void setValue(Object element, Object value) {
 			Node n = (Node) element;
 			String newValue = null;
@@ -719,12 +751,14 @@ public class TestEditor extends EditorPart implements NodeListener {
             super(viewer);
         }
 
-        protected boolean canEdit(Object element) {
+        @Override
+		protected boolean canEdit(Object element) {
             Node n = (Node) element;
             return n.isNameChangeable();
         }
 
-        protected CellEditor getCellEditor(Object element) {
+        @Override
+		protected CellEditor getCellEditor(Object element) {
             final Node n = (Node) element;
             
             curEditor = new TextCellEditor(fTree);
@@ -739,12 +773,14 @@ public class TestEditor extends EditorPart implements NodeListener {
             return curEditor;
         }
 
-        protected Object getValue(Object element) {
+        @Override
+		protected Object getValue(Object element) {
             Node n = (Node) element;
             return n.getNameDisplay();
         }
 
-        protected void setValue(Object element, Object value) {
+        @Override
+		protected void setValue(Object element, Object value) {
             Node n = (Node) element;
             if (value == null) return;            
             NodeStatus status = n.checkNameString((String)value);
@@ -802,7 +838,8 @@ public class TestEditor extends EditorPart implements NodeListener {
 	    fireIfDirtyStateChanged(curCount);
 	}
 	
-    public void doSave(IProgressMonitor monitor) {
+    @Override
+	public void doSave(IProgressMonitor monitor) {
 		String val = TestProject.toLSLTestSuite(world).toXml();
 		if (LSLForgePlugin.DEBUG) Util.log("world = " + val); //$NON-NLS-1$
 		try {
@@ -814,9 +851,11 @@ public class TestEditor extends EditorPart implements NodeListener {
 		
 	}
 
+	@Override
 	public void doSaveAs() {
 	}
 
+	@Override
 	public void init(IEditorSite site, IEditorInput input)
 			throws PartInitException {
 		this.setSite(site);  
@@ -848,14 +887,17 @@ public class TestEditor extends EditorPart implements NodeListener {
 		}
 	}
 
+	@Override
 	public boolean isDirty() {
 		return changeCount != 0;
 	}
 
+	@Override
 	public boolean isSaveAsAllowed() {
 		return false;
 	}
 
+	@Override
 	public void createPartControl(Composite parent) {
         PlatformUI.getWorkbench().getHelpSystem().setHelp(parent, "lslforge.simProjectEditor"); //$NON-NLS-1$
 		//control = new Composite(parent, SWT.NULL);
@@ -864,6 +906,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 		createUndoRedoActions();
 	}
 
+	@Override
 	public void setFocus() {
 	}
 
@@ -885,6 +928,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 		
 		TreeViewerColumn column2 = new TreeViewerColumn(fTreeViewer, fColumn2);
 		column2.setLabelProvider(new CellLabelProvider() {
+			@Override
 			public void update(ViewerCell cell) {
 			    Node n = (Node) cell.getElement();
 			    cell.setImage(fLabelProvider.getColumnImage(n,1));
@@ -894,7 +938,8 @@ public class TestEditor extends EditorPart implements NodeListener {
 		});
         TreeViewerColumn column1 = new TreeViewerColumn(fTreeViewer, fColumn1);
         column1.setLabelProvider(new CellLabelProvider() {
-            public void update(ViewerCell cell) {
+            @Override
+			public void update(ViewerCell cell) {
                 Node n = (Node) cell.getElement();
                 cell.setImage(fLabelProvider.getColumnImage(n,0));
                 if (n == null) cell.setText(BLANK);
@@ -960,6 +1005,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 		fColumn1.setText(Messages.getString("LSLTestEditor.ITEM"));  //$NON-NLS-1$
 		fColumn1.setWidth(200);
 		fColumn1.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});
@@ -968,6 +1014,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 		fColumn2.setText(Messages.getString("LSLTestEditor.VALUE"));  //$NON-NLS-1$
 		fColumn2.setWidth(100);
 		fColumn2.addSelectionListener(new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 			}
 		});

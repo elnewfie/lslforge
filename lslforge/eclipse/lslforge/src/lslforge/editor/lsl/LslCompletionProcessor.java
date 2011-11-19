@@ -44,6 +44,7 @@ public class LSLCompletionProcessor implements IContentAssistProcessor {
 			return text1.compareTo(text2);
 		}
 
+		@Override
 		public boolean equals(Object aProposal) {
 			return false;
 		}

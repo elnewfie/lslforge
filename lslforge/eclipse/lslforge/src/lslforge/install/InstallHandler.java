@@ -14,7 +14,8 @@ import org.eclipse.update.core.ISite;
 
 public class InstallHandler extends BaseInstallHandler {
 
-    public void completeConfigure() throws CoreException {
+    @Override
+	public void completeConfigure() throws CoreException {
         try {
             if (File.separatorChar == '\\') return; // windows...
             ISite site = feature.getSite();

@@ -62,7 +62,8 @@ public class EventDialog extends Dialog {
         okButton().setEnabled(valid);
     }
     
-    protected Control createButtonBar(Composite parent) {
+    @Override
+	protected Control createButtonBar(Composite parent) {
         Control c = super.createButtonBar(parent);
         okButton().setEnabled(false);
         okButton().addListener(SWT.Show, new Listener() {
@@ -73,7 +74,8 @@ public class EventDialog extends Dialog {
         return c;
     }
     
-    protected Control createDialogArea(Composite parent) {
+    @Override
+	protected Control createDialogArea(Composite parent) {
         getShell().setText("Event: " + desc.getName()); //$NON-NLS-1$ TODO
         Composite  composite = (Composite) super.createDialogArea(parent);
         Label descriptionLabel = new Label(composite, SWT.LEAD|SWT.HORIZONTAL|SWT.WRAP);

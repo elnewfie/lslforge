@@ -29,7 +29,8 @@ public abstract class NewFileSampleWizard extends Wizard {
     		
     	}
     
-    	protected InputStream getInitialContents() {
+    	@Override
+		protected InputStream getInitialContents() {
     	    try {
                 return FileLocator.openStream(LSLForgePlugin.getDefault().getBundle(),
                         new Path(pathToSample), false);
@@ -39,7 +40,8 @@ public abstract class NewFileSampleWizard extends Wizard {
             } 
     	}
     
-    	protected IStatus validateFileName(String fileName) {
+    	@Override
+		protected IStatus validateFileName(String fileName) {
     		return new Status(IStatus.OK,  "lslforge",""); //$NON-NLS-1$ //$NON-NLS-2$
     	}
     }
@@ -59,13 +61,15 @@ public abstract class NewFileSampleWizard extends Wizard {
         this.pathToSample = pathToSample;
     }
 
-    public boolean performFinish() {
+    @Override
+	public boolean performFinish() {
         IFile f = mainPage.createNewFile();
         LSLForgePlugin.openResource(getShell(), f);
     	return true;
     }
 
-    public void addPages() {
+    @Override
+	public void addPages() {
     	super.addPages();
     	mainPage = new LSLModuleWizardPage(selection);
     	addPage(mainPage);

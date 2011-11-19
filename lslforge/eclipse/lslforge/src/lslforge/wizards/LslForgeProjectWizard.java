@@ -39,6 +39,7 @@ public class LSLForgeProjectWizard extends Wizard implements INewWizard {
 		
 	}
 
+	@Override
 	public boolean performFinish() {
 		IProject p = ResourcesPlugin.getWorkspace().getRoot().getProject(page1.getProjectName());
 		if (p.exists()) return false;
@@ -63,6 +64,7 @@ public class LSLForgeProjectWizard extends Wizard implements INewWizard {
 		return true;
 	}
 
+	@Override
 	public void addPages() {
 		super.addPages();
 		addPage(page1 = new LSLForgeProjectWizardPage(Messages.LSLForgeProjectWizard_CREATE_LSL_PLUS_PROJECT));

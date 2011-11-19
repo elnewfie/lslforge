@@ -24,11 +24,13 @@ public class LSLForgeEditorPreferencePage extends FieldEditorPreferencePage impl
     public void init(IWorkbench workbench) {
     }
 
-    protected IPreferenceStore doGetPreferenceStore() {
+    @Override
+	protected IPreferenceStore doGetPreferenceStore() {
         return LSLForgePlugin.getDefault().getPreferenceStore();
     }
 
-    protected void createFieldEditors() {
+    @Override
+	protected void createFieldEditors() {
 //        addField(new ColorFieldEditor(LSLColorProvider.DEFAULT_COLOR, "Default color", getFieldEditorParent()));
 //        addField(new ColorFieldEditor(LSLColorProvider.HANDLER_COLOR, "Handler color", getFieldEditorParent()));
 //        addField(new ColorFieldEditor(LSLColorProvider.KEYWORD_COLOR, "Keyword color", getFieldEditorParent()));

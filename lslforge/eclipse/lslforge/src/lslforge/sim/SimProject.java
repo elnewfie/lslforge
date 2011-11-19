@@ -147,35 +147,43 @@ public class SimProject {
             addChild(new DefaultAvatarNode(this));
         }
         
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return getValue().toString();
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
             this.setValue(s);
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
         
@@ -202,37 +210,45 @@ public class SimProject {
             addChild(new ObjectPropertiesNode(this));
         }
         
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return ""; //$NON-NLS-1$
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public void updateName(String name) {
+        @Override
+		public void updateName(String name) {
             List<Node> prims = findChildrenByType(PrimNode.class);
             Node root = prims.get(0);
             super.setName(name);
             root.setName(name);
         }
         
-        protected void childUpdated(Node child, Object oldValue) {
+        @Override
+		protected void childUpdated(Node child, Object oldValue) {
 //            if (child instanceof GridCoordinateNode) {
 //                Node prim = child.findAncestorOfType(PrimNode.class);
 //                if (!isFirstChildOfType(prim, PrimNode.class)) return;
@@ -255,7 +271,8 @@ public class SimProject {
         }
         
         
-        protected void onChildRemoved(Node n) {
+        @Override
+		protected void onChildRemoved(Node n) {
             if (n instanceof PrimNode) {
                 List<Node> prims = findChildrenByType(PrimNode.class);
                 if (n == prims.get(0)) {
@@ -267,11 +284,13 @@ public class SimProject {
             }
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
 
@@ -338,40 +357,49 @@ public class SimProject {
             return props.getProperty("owner"); //$NON-NLS-1$
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return ""; //$NON-NLS-1$
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public void updateName(String name) {
+        @Override
+		public void updateName(String name) {
             List<Node> prims = getParent().findChildrenByType(PrimNode.class);
             if (prims.indexOf(this) == 0) getParent().setName(name);
             super.setName(name);
         }
         
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             List<Node> prims = getParent().findChildrenByType(PrimNode.class);
            
             return prims.size() > 1;
@@ -410,38 +438,47 @@ public class SimProject {
             super(parent, nodeName, value);
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return ID_TO_DISPLAY.get(getName());
         }
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return ""; //$NON-NLS-1$
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
         }
         
         abstract public Map<String,Object> getData();
@@ -464,7 +501,8 @@ public class SimProject {
             return findChildByName(string).getValueString();
         }
 
-        public Map<String,Object> getData() {
+        @Override
+		public Map<String,Object> getData() {
             HashMap<String,Object> map = new HashMap<String,Object>();
             GridPositionNode node = (GridPositionNode) findChildByName("pos"); //$NON-NLS-1$
             map.put("position", node.getVector()); //$NON-NLS-1$
@@ -490,7 +528,8 @@ public class SimProject {
             addChild(new GridPositionNode(this,"pos")); //$NON-NLS-1$
         }
 
-        public Map<String,Object> getData() {
+        @Override
+		public Map<String,Object> getData() {
             HashMap<String,Object> map = new HashMap<String,Object>();
             GridPositionNode node = (GridPositionNode) findChildByName("pos"); //$NON-NLS-1$
             map.put("position", node.getVector()); //$NON-NLS-1$
@@ -505,7 +544,8 @@ public class SimProject {
             addChild(new GridPositionNode(this,"pos")); //$NON-NLS-1$
         }
 
-        public Map<String,Object> getData() {
+        @Override
+		public Map<String,Object> getData() {
             HashMap<String,Object> map = new HashMap<String,Object>();
             GridPositionNode node = (GridPositionNode) findChildByName("pos"); //$NON-NLS-1$
             map.put("pos", node.getVector()); //$NON-NLS-1$
@@ -526,7 +566,8 @@ public class SimProject {
             addChild(new EventHandlerNode(this,"event-handler", null)); //$NON-NLS-1$
         }
 
-        protected void onFix() {
+        @Override
+		protected void onFix() {
             // 0.7.0
             Node n = findChildByName("event-handler"); //$NON-NLS-1$
             if (n == null) {
@@ -534,7 +575,8 @@ public class SimProject {
             }
         }
         
-        public void onRemove() {
+        @Override
+		public void onRemove() {
             findRoot().accept(new NodeVisitor() {
                 public void visit(Node n) {
                     if (n instanceof AvatarReferenceNode) {
@@ -546,26 +588,32 @@ public class SimProject {
             });
         }
         
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return new NodeFactory[0];
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return ""; //$NON-NLS-1$
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
         }
 
-        public void updateName(final String s) {
+        @Override
+		public void updateName(final String s) {
             final String name = getName();
             Node root = findRoot();
             
@@ -580,17 +628,20 @@ public class SimProject {
             super.updateName(s);
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             List<Node> list = getParent().findChildrenByType(AvatarNode.class);
             NodeStatus error = AVATAR_NAME_IN_USE;
             return SimProject.checkNameUnique(this, name, list, error);
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
 
@@ -611,15 +662,18 @@ public class SimProject {
             super(parent, DEFAULT_AVATAR_ID);
         }
         
-        public boolean isDeletable() { return false; }
-        public boolean isNameChangeable() { return false; }
+        @Override
+		public boolean isDeletable() { return false; }
+        @Override
+		public boolean isNameChangeable() { return false; }
     }
     
     public static class ScriptNode extends Node {
         private static final NodeFactory[] LEGAL_CHILD_NODES = new NodeFactory[0];
         private static final NodeStatus SCRIPT_NAME_IN_USE =
         	new NodeStatus(false, "Script name already in use"); //$NON-NLS-1$ TODO
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
         
@@ -627,39 +681,48 @@ public class SimProject {
             super(parent, name, scriptId);
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return (String)getValue();
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
             setValue(s);
         }
         
-        public boolean hasValueChoices() {
+        @Override
+		public boolean hasValueChoices() {
             return true;
         }
         
-        public String getChoicesId() {
+        @Override
+		public String getChoicesId() {
             return "scripts"; //$NON-NLS-1$
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return checkNameUnique(this, name, getParent().getChildren(), SCRIPT_NAME_IN_USE);
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
     }
@@ -670,45 +733,55 @@ public class SimProject {
             super(parent, nodeName, value);
         }
 
-        public String getChoicesId() {
+        @Override
+		public String getChoicesId() {
             return "avatars"; //$NON-NLS-1$
         }
 
-        public boolean hasValueChoices() {
+        @Override
+		public boolean hasValueChoices() {
             return true;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return (String) getValue();
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             if (getParent() instanceof PrimPropertiesNode)
                 return ((PrimPropertiesNode)getParent()).isInRootPrim();
             return true;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        public void onUpdate(final String s) {
+        @Override
+		public void onUpdate(final String s) {
             setValue(s);
             
             ObjectNode n = findObjectParent();
@@ -733,36 +806,44 @@ public class SimProject {
             super(parent, name, value);
         }
         
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return (String)getValue();
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             if (s == null) return new NodeStatus(false, "string cannot be null"); //$NON-NLS-1$ TODO
             return NodeStatus.OK;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
             setValue(s);
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
     }
@@ -773,46 +854,57 @@ public class SimProject {
             super(parent, nodeName, null);
         }
 
-        public boolean hasValueChoices() { return true; }
-        public String getChoicesId() {
+        @Override
+		public boolean hasValueChoices() { return true; }
+        @Override
+		public String getChoicesId() {
             return "optional-module"; //$NON-NLS-1$
         }
         
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return "Event Handler"; //$NON-NLS-1$ TODO
         }
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             if (getValue() == null) {
                 return "(none)"; //$NON-NLS-1$ TODO
             }
             return getValue().toString();
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             if ("(none)".equals(s)) setValue(null); //$NON-NLS-1$ TODO
             else setValue(s);
         }
@@ -828,38 +920,47 @@ public class SimProject {
             addChild(new GridCoordinateNode(this, "z", 0)); //$NON-NLS-1$
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return ID_TO_DISPLAY.get(getName());
         }
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return null;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
         }
     
         public LVector getVector() {
@@ -883,32 +984,41 @@ public class SimProject {
             addChild(new AnyNaturalNode(this,"y",0)); //$NON-NLS-1$
         }
         
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return displayName;
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return null;
         }
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
         public Object getDerivedValue() {
             AnyNaturalNode xnode = (AnyNaturalNode) this.findChildByName("x"); //$NON-NLS-1$
@@ -931,13 +1041,16 @@ public class SimProject {
             this.displayName = displayName;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return displayName;
         }
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             try {
                 float f = Float.parseFloat(s);
                 
@@ -949,22 +1062,28 @@ public class SimProject {
                 return SimProject.BAD_FORMAT;
             }
         }
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return getValue().toString();
         }
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             try {
                 float f = Float.parseFloat(s);
                 setValue(new Float(f));
@@ -993,20 +1112,24 @@ public class SimProject {
             super(parent, name, new Float(value));
         }
         
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return NAME_TO_DISPLAY.get(getName());
         }
         
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return getValue().toString();
         }
 
         
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             /* very hacky... */
             if (getParent() != null && getParent().getParent() != null &&
                 getParent().getParent() instanceof PrimPropertiesNode) {
@@ -1016,7 +1139,8 @@ public class SimProject {
             return true;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             try {
                 float f = Float.parseFloat(s);
                 
@@ -1027,7 +1151,8 @@ public class SimProject {
             }
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
             try {
                 float f = Float.parseFloat(s);
                 setValue(new Float(f));
@@ -1036,15 +1161,18 @@ public class SimProject {
             }
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
         
@@ -1068,15 +1196,18 @@ public class SimProject {
             this.displayName = displayName;
         }
         
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
              return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             try {
                 int i = Integer.parseInt(s);
                 
@@ -1087,19 +1218,23 @@ public class SimProject {
             }
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return getValue().toString();
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
             try {
                 int i = Integer.parseInt(s);
                 setValue(new Integer(i));
@@ -1108,7 +1243,8 @@ public class SimProject {
             }
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
         
@@ -1132,15 +1268,18 @@ public class SimProject {
         	return displayName;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
              return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             try {
             	Integer.decode(s);
                 
@@ -1151,21 +1290,25 @@ public class SimProject {
             }
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
         	Integer i = (Integer) getValue();
         	
             return "0x" + Integer.toHexString(i); //$NON-NLS-1$
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public void onUpdate(String s) {
+        @Override
+		public void onUpdate(String s) {
             try {
                 Integer i = Integer.decode(s);
                 setValue(i);
@@ -1175,7 +1318,8 @@ public class SimProject {
             }
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
         

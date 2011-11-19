@@ -51,35 +51,43 @@ public class TestProject {
             super(null, testSuiteName, null);
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return null;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILDREN;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
         
         public LSLProjectNature nature() {
@@ -151,35 +159,43 @@ public class TestProject {
             return (BindingListNode) findChildByName("final"); //$NON-NLS-1$
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return getValue().toString();
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
 
         public String getFilename() {
@@ -202,36 +218,45 @@ public class TestProject {
             }
         }
 
-        public String getNameDisplay() { return "Arguments"; } //$NON-NLS-1$ TODO
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public String getNameDisplay() { return "Arguments"; } //$NON-NLS-1$ TODO
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return null;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
     }
     
@@ -244,40 +269,49 @@ public class TestProject {
         }
 
         
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return displayName;
         }
 
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return null;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILDREN;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
         
     }
@@ -318,37 +352,45 @@ public class TestProject {
             this.type = type;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             String result = LSLExpressionValidator.validateExpression(type, s);
             if (result == null) return NodeStatus.OK;
             return new NodeStatus(false, result);
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return (String)getValue();
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             setValue(s);
         }
         
@@ -361,42 +403,51 @@ public class TestProject {
             this.type = type;
         }
         
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return "Returns (" + type + ")"; //$NON-NLS-1$ //$NON-NLS-2$ TODO
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             String result = LSLExpressionValidator.validateExpression(type, s);
             if (result == null) return NodeStatus.OK;
             return new NodeStatus(false, result);
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             String s = (String)getValue();
             return s == null ? "" : s; //$NON-NLS-1$
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return !"void".equals(type); //$NON-NLS-1$
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             setValue(s);
         }
     }
@@ -406,12 +457,14 @@ public class TestProject {
             super(parent, "returns" , type, value); //$NON-NLS-1$
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             if (s.trim().equals("")) return NodeStatus.OK; //$NON-NLS-1$
             return super.checkValueString(s);
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             super.onUpdate("".equals(s.trim())? null : s); //$NON-NLS-1$
         }
         
@@ -424,41 +477,50 @@ public class TestProject {
             this.type = type;
         }
 
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return getName() + " (" + type + ") ";  //$NON-NLS-1$//$NON-NLS-2$
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             String result = LSLExpressionValidator.validateExpression(type, s);
             if (result == null) return NodeStatus.OK;
             return new NodeStatus(false, result);
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return (String)getValue();
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             setValue(s);
         }
 
@@ -479,7 +541,8 @@ public class TestProject {
             addChild(new ExpectationsModeNode(this,"nice")); //$NON-NLS-1$
         }
 
-        public String getNameDisplay() {
+        @Override
+		public String getNameDisplay() {
             return "Call Expectations"; //$NON-NLS-1$ TODO
         }
         
@@ -492,35 +555,43 @@ public class TestProject {
             return findChildrenByType(ExpectedCallNode.class);
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return null;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILDREN;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
         
     }
@@ -531,45 +602,56 @@ public class TestProject {
             super(parent, "mode", value); //$NON-NLS-1$
         }
 
-        public String getNameDisplay() { return "Call handler mode"; } //$NON-NLS-1$ TODO
+        @Override
+		public String getNameDisplay() { return "Call handler mode"; } //$NON-NLS-1$ TODO
         
-        public String getChoicesId() {
+        @Override
+		public String getChoicesId() {
             return "expectations-mode"; //$NON-NLS-1$
         }
 
-        public boolean hasValueChoices() {
+        @Override
+		public boolean hasValueChoices() {
             return true;
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return (String)getValue();
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return true;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             setValue(s);
         }
         
@@ -617,35 +699,43 @@ public class TestProject {
             return (ReturnNode) findChildByName("returns"); //$NON-NLS-1$
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return (String) getValue();
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
         
     }
@@ -659,35 +749,43 @@ public class TestProject {
             }
         }
 
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return NodeStatus.OK;
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return null;
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return false;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return false;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return EMPTY_FACTORY_LIST;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
     }
     
@@ -697,17 +795,20 @@ public class TestProject {
             super(parent, nodeName, type);
         }
 
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             if (s.trim().equals("")) return NodeStatus.OK; //$NON-NLS-1$
             return super.checkValueString(s);
         }
 
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             if (getValue() == null) return ""; //$NON-NLS-1$
             return super.getValueString();
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
             
             super.onUpdate("".equals(s.trim()) ? null : s); //$NON-NLS-1$
         }

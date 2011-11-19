@@ -191,7 +191,8 @@ public class SimManager implements SimEventListener {
     public void putEvent(final SimEvent event) {
         // TODO: there must be an Eclipse approved way to do this (Job?)
         Thread t = new Thread() {
-            public void run() {
+            @Override
+			public void run() {
                 try {
                     synchronized (simEventListeners) {
                         for (Iterator<SimEventListener> i = simEventListeners.iterator(); i.hasNext(); ) {
@@ -221,7 +222,8 @@ public class SimManager implements SimEventListener {
     private void buildSimMetaData() {
         Job job = new Job("BuildSimMetaData") { //$NON-NLS-1$
 
-            protected IStatus run(IProgressMonitor monitor) {
+            @Override
+			protected IStatus run(IProgressMonitor monitor) {
                 String metaDataString = LSLForgePlugin.runTask(SIM_META_DATA, ""); //$NON-NLS-1$
                 Util.log("metaDataString = " + metaDataString); //$NON-NLS-1$
                 if (metaDataString == null) return new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID,

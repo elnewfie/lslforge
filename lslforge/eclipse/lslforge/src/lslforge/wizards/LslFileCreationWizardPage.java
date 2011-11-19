@@ -423,6 +423,7 @@ abstract public class LSLFileCreationWizardPage extends WizardPage implements Li
 	/*
 	 * @see DialogPage.setVisible(boolean)
 	 */
+	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		if (visible) {

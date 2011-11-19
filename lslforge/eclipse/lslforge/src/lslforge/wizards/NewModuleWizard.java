@@ -28,11 +28,13 @@ public class NewModuleWizard extends Wizard implements INewWizard {
 			
 		}
 
+		@Override
 		protected InputStream getInitialContents() {
 			return new ByteArrayInputStream(
 					"$module ()\n".getBytes()); //$NON-NLS-1$
 		}
 
+		@Override
 		protected IStatus validateFileName(String fileName) {
 			return new Status(IStatus.OK,  "lslforge",""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -46,12 +48,14 @@ public class NewModuleWizard extends Wizard implements INewWizard {
 		return Util.findDescriptor("$nl$/icons/new_test.png"); //$NON-NLS-1$
 	}
 
+	@Override
 	public boolean performFinish() {
         IFile f = mainPage.createNewFile();
         LSLForgePlugin.openResource(getShell(), f);
 		return true;
 	}
 
+	@Override
 	public void addPages() {
 		super.addPages();
 		mainPage = new LSLModuleWizardPage(selection);

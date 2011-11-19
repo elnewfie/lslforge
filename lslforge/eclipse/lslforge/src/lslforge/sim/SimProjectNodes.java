@@ -81,8 +81,10 @@ public class SimProjectNodes {
         	return new SimWorldDef.ItemPermissions(base,ownerp,groupp,everybodyp,nextp);
         }
         
-        public String getNameDisplay() { return "Properties"; } //$NON-NLS-1$ TODO
-        public Map<String,Object> getData() {
+        @Override
+		public String getNameDisplay() { return "Properties"; } //$NON-NLS-1$ TODO
+        @Override
+		public Map<String,Object> getData() {
             HashMap<String,Object> map = new HashMap<String,Object>();
             for (Iterator<Node> i = this.getChildren().iterator(); i.hasNext();) {
                 Node n = i.next();
@@ -123,7 +125,8 @@ public class SimProjectNodes {
             pn.addChild(n);
         }
         
-        public NodeStatus checkNameString(String name) {
+        @Override
+		public NodeStatus checkNameString(String name) {
             return SimProject.checkNameUnique(this, name, getParent().getChildren(), SCRIPT_NAME_IN_USE);
         }
 
@@ -134,26 +137,32 @@ public class SimProjectNodes {
         
         public abstract InventoryItem getInventoryItem();
         
-        public String getValueString() {
+        @Override
+		public String getValueString() {
             return ""; //$NON-NLS-1$
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
 
-        public boolean isNameChangeable() {
+        @Override
+		public boolean isNameChangeable() {
             return true;
         }
 
-        public boolean isValueChangeable() {
+        @Override
+		public boolean isValueChangeable() {
             return false;
         }
 
-        protected void onUpdate(String s) {
+        @Override
+		protected void onUpdate(String s) {
         }
         
-        public NodeStatus checkValueString(String s) {
+        @Override
+		public NodeStatus checkValueString(String s) {
             return NodeStatus.OK;
         }
 
@@ -165,7 +174,8 @@ public class SimProjectNodes {
             super(parent, "line", value); //$NON-NLS-1$
         }
 
-        public boolean isDeletable() {
+        @Override
+		public boolean isDeletable() {
             return true;
         }
     }
@@ -203,11 +213,13 @@ public class SimProjectNodes {
             super(parent, nodeName, value);
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILD_NODES;
         }
 
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             String creator = (String) props.get("creator"); //$NON-NLS-1$
             ItemPermissions perms = InventoryPropertiesNode.mkPerms(props);
@@ -242,9 +254,11 @@ public class SimProjectNodes {
             super(parent, nodeName, value);
         }
 
-        public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
+        @Override
+		public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
         
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             String creator = (String) props.get("creator"); //$NON-NLS-1$
             ItemPermissions perms = InventoryPropertiesNode.mkPerms(props);
@@ -273,9 +287,11 @@ public class SimProjectNodes {
             super(parent, nodeName, value);
         }
 
-        public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
+        @Override
+		public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
         
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             String creator = (String) props.get("creator"); //$NON-NLS-1$
             ItemPermissions perms = InventoryPropertiesNode.mkPerms(props);
@@ -304,9 +320,11 @@ public class SimProjectNodes {
             super(parent, nodeName, value);
         }
 
-        public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
+        @Override
+		public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
         
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             String creator = (String) props.get("creator"); //$NON-NLS-1$
             ItemPermissions perms = InventoryPropertiesNode.mkPerms(props);
@@ -335,9 +353,11 @@ public class SimProjectNodes {
             super(parent, nodeName, value);
         }
 
-        public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
+        @Override
+		public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
         
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             String creator = (String) props.get("creator"); //$NON-NLS-1$
             ItemPermissions perms = InventoryPropertiesNode.mkPerms(props);
@@ -368,9 +388,11 @@ public class SimProjectNodes {
             		new Float(1.0f), 0.0f, 10f, "Duration")); //$NON-NLS-1$ TODO
         }
 
-        public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
+        @Override
+		public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
         
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             String creator = (String) props.get("creator"); //$NON-NLS-1$
             Float duration = (Float) props.get("duration"); //$NON-NLS-1$
@@ -403,9 +425,11 @@ public class SimProjectNodes {
             		new Float(1.0f), 0.0f, 120f, "Duration")); //$NON-NLS-1$ TODO
         }
 
-        public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
+        @Override
+		public NodeFactory[] legalChildNodes() { return SimProject.EMPTY_FACTORY_LIST; }
         
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             String creator = (String) props.get("creator"); //$NON-NLS-1$
             Float duration = (Float) props.get("duration"); //$NON-NLS-1$
@@ -438,7 +462,8 @@ public class SimProjectNodes {
             addProperty(new SimProject.RegionNode(this,"region", "Region"));  //$NON-NLS-1$//$NON-NLS-2$
         }
 
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             Map<String,Object> props = getProperties();
             Region region = (Region) props.get("region"); //$NON-NLS-1$
             LVector position = (LVector) props.get("position"); //$NON-NLS-1$
@@ -447,7 +472,8 @@ public class SimProjectNodes {
             return new Landmark(getName(), creator, region, position, perms);
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return SimProject.EMPTY_FACTORY_LIST; 
         }
     }
@@ -478,7 +504,8 @@ public class SimProjectNodes {
             super(parent, nodeName, value);
         }
 
-        public InventoryItem getInventoryItem() {
+        @Override
+		public InventoryItem getInventoryItem() {
             List<Node> primNodes = findChildrenByType(PrimNode.class);
             Prim prims[] = new Prim[primNodes.size()];
             int j = 0;
@@ -492,7 +519,8 @@ public class SimProjectNodes {
             return new SimWorldDef.InventoryObject(getName(),creator,prims,perms);
         }
 
-        public NodeFactory[] legalChildNodes() {
+        @Override
+		public NodeFactory[] legalChildNodes() {
             return LEGAL_CHILDREN;
         }
     }

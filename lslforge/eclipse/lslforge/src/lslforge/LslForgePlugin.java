@@ -538,7 +538,8 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         return getDefault().getLSLMetaData().getFunctions();
     }
 
-    public void start(BundleContext context) throws Exception {
+    @Override
+	public void start(BundleContext context) throws Exception {
     	super.start(context);
         getPreferenceStore().setDefault(LSLFORGE_NATIVE_PATH, ""); //$NON-NLS-1$
     	//checkVersion();

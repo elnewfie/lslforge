@@ -43,7 +43,8 @@ public abstract class LSLProcess extends Thread implements IProcess {
 	
     protected Thread createProcessMonitor() {
         return new Thread() {
-            public void run() {
+            @Override
+			public void run() {
                 
                 try {
                     LSLProcess.this.p.waitFor();

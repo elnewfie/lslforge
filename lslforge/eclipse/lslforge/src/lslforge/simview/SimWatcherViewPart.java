@@ -51,7 +51,8 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
             setEnabled(false);
         }
 
-        public void run() {
+        @Override
+		public void run() {
             getSimManager().stopSim();
         }
     }
@@ -72,7 +73,8 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
             setEnabled(false);
         }
 
-        public void run() {
+        @Override
+		public void run() {
             SimEventDefinition def = simManager.getAnEventDefinition(userEventName);
             
             if (def == null) {
@@ -103,7 +105,8 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
             setEnabled(false);
         }
 
-        public void run() {
+        @Override
+		public void run() {
             SimEventDefinition def = simManager.getAnEventDefinition("Touch Prim"); //$NON-NLS-1$ TODO
             
             if (def == null) {
@@ -151,7 +154,8 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
         simManager.addSimMetaDataListener(this);
     }
 
-    public void dispose() {
+    @Override
+	public void dispose() {
         super.dispose();
         simManager.removeSimListener(this);
         simManager.removeSimMetaDataListener(this);
@@ -162,7 +166,8 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
         return counterComposite != null;
     }
 
-    public void createPartControl(Composite parent) {
+    @Override
+	public void createPartControl(Composite parent) {
         this.parent = parent;
         final Shell parentShell = this.getSite().getShell();
         GridLayout gridLayout = new GridLayout();
@@ -244,12 +249,14 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
 
         Composite empty = new Composite(top, SWT.NONE);
         empty.setLayout(new Layout() {
-            protected Point computeSize(Composite composite, int wHint, int hHint,
+            @Override
+			protected Point computeSize(Composite composite, int wHint, int hHint,
                     boolean flushCache) {
                 return new Point(1, 1);
             }
 
-            protected void layout(Composite composite, boolean flushCache) {
+            @Override
+			protected void layout(Composite composite, boolean flushCache) {
             }
         });
         top.setTopLeft(empty);
@@ -276,7 +283,8 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
         fColumn1.setText("Time");  //$NON-NLS-1$
         fColumn1.setWidth(100);
         fColumn1.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
+            @Override
+			public void widgetSelected(SelectionEvent e) {
             }
         });
 
@@ -284,7 +292,8 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
         fColumn2.setText("Source");  //$NON-NLS-1$
         fColumn2.setWidth(300);
         fColumn2.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
+            @Override
+			public void widgetSelected(SelectionEvent e) {
             }
         });
         
@@ -292,14 +301,16 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
         fColumn3.setText("Message");  //$NON-NLS-1$
         fColumn3.setWidth(350);
         fColumn3.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(SelectionEvent e) {
+            @Override
+			public void widgetSelected(SelectionEvent e) {
             }
         });
 
         tree.setHeaderVisible(true);
     }
 
-    public void setFocus() {
+    @Override
+	public void setFocus() {
     }
 
     private void configureToolBar() {

@@ -19,14 +19,13 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Iterator;
 
+import org.eclipse.jface.text.DefaultInformationControl;
+import org.eclipse.jface.text.Region;
+import org.eclipse.jface.text.TextPresentation;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.graphics.Drawable;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Display;
-
-import org.eclipse.jface.text.DefaultInformationControl;
-import org.eclipse.jface.text.Region;
-import org.eclipse.jface.text.TextPresentation;
 
 
 /**
@@ -108,7 +107,8 @@ public class HTMLTextPresenter implements DefaultInformationControl.IInformation
      * @return something
      * @deprecated
      */
-    public String updatePresentation(Display display, String hoverInfo, TextPresentation presentation, int maxWidth, int maxHeight) {
+    @Deprecated
+	public String updatePresentation(Display display, String hoverInfo, TextPresentation presentation, int maxWidth, int maxHeight) {
         return updatePresentation((Drawable)display, hoverInfo, presentation, maxWidth, maxHeight);
     }
 

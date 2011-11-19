@@ -58,7 +58,8 @@ public class LSLTestProgressBar extends Canvas implements DisposeListener, Contr
         addPaintListener(this);
     }
 
-    public Point computeSize(int wHint, int hHint, boolean changed) {
+    @Override
+	public Point computeSize(int wHint, int hHint, boolean changed) {
         checkWidget();
         return new Point(wHint == SWT.DEFAULT ? BAR_WIDTH : wHint,
                          hHint == SWT.DEFAULT ? BAR_HEIGHT : hHint);

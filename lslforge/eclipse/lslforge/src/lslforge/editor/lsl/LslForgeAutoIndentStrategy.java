@@ -16,7 +16,8 @@ public class LSLForgeAutoIndentStrategy extends DefaultIndentLineAutoEditStrateg
     public LSLForgeAutoIndentStrategy() {
     }
 
-    public void customizeDocumentCommand(IDocument document, DocumentCommand command) {
+    @Override
+	public void customizeDocumentCommand(IDocument document, DocumentCommand command) {
         if (command.length == 0 && command.text != null && endsWithDelimiter(document, command.text))
             smartIndentAfterNewLine(document, command);
         else if ("}".equals(command.text)) { //$NON-NLS-1$

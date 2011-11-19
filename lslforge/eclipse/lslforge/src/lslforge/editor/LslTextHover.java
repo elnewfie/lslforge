@@ -32,6 +32,7 @@ public class LSLTextHover implements ITextHover {
 	 * @return hover info string
 	 * @deprecated
      */
+	@Deprecated
 	public String getHoverInfo(ITextViewer textViewer, IRegion hoverRegion) {
 		if (hoverRegion != null) {
 			try {

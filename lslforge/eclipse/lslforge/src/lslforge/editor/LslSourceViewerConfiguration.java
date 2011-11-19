@@ -85,7 +85,8 @@ implements ScannerChangeListener {
     /*
      * (non-Javadoc) Method declared on SourceViewerConfiguration
      */
-    public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
+    @Override
+	public IAnnotationHover getAnnotationHover(ISourceViewer sourceViewer) {
         return new LSLAnnotationHover();
     }
 
@@ -93,7 +94,8 @@ implements ScannerChangeListener {
      * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getAutoEditStrategies(org.eclipse.jface.text.source.ISourceViewer,
      *      java.lang.String)
      */
-    public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
+    @Override
+	public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
         IAutoEditStrategy strategy = (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType) ? new LSLForgeAutoIndentStrategy()
                 : new DefaultIndentLineAutoEditStrategy());
         return new IAutoEditStrategy[] { strategy };
@@ -102,14 +104,16 @@ implements ScannerChangeListener {
     /*
      * @see org.eclipse.jface.text.source.SourceViewerConfiguration#getConfiguredDocumentPartitioning(org.eclipse.jface.text.source.ISourceViewer)
      */
-    public String getConfiguredDocumentPartitioning(ISourceViewer sourceViewer) {
+    @Override
+	public String getConfiguredDocumentPartitioning(ISourceViewer sourceViewer) {
         return LSLForgePlugin.LSL_PARTITIONING;
     }
 
     /*
      * (non-Javadoc) Method declared on SourceViewerConfiguration
      */
-    public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
+    @Override
+	public String[] getConfiguredContentTypes(ISourceViewer sourceViewer) {
         return new String[] { IDocument.DEFAULT_CONTENT_TYPE,
                 LSLPartitionScanner.LSL_MULTILINE_COMMENT };
     }
@@ -117,7 +121,8 @@ implements ScannerChangeListener {
     /*
      * (non-Javadoc) Method declared on SourceViewerConfiguration
      */
-    public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
+    @Override
+	public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) {
 
         ContentAssistant assistant = new ContentAssistant();
         assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
@@ -150,7 +155,8 @@ implements ScannerChangeListener {
     /*
      * (non-Javadoc) Method declared on SourceViewerConfiguration
      */
-    public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer,
+    @Override
+	public ITextDoubleClickStrategy getDoubleClickStrategy(ISourceViewer sourceViewer,
             String contentType) {
         return new LSLForgeDoubleClickSelector();
     }
@@ -158,14 +164,16 @@ implements ScannerChangeListener {
     /*
      * (non-Javadoc) Method declared on SourceViewerConfiguration
      */
-    public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
+    @Override
+	public String[] getIndentPrefixes(ISourceViewer sourceViewer, String contentType) {
         return new String[] { "\t", "    " }; //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     /*
      * (non-Javadoc) Method declared on SourceViewerConfiguration
      */
-    public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
+    @Override
+	public IPresentationReconciler getPresentationReconciler(ISourceViewer sourceViewer) {
 
         LSLColorProvider provider = LSLForgePlugin.getDefault().getLSLColorProvider();
         PresentationReconciler reconciler = new PresentationReconciler();
@@ -191,11 +199,13 @@ implements ScannerChangeListener {
     	return reconciler;
     }
 
-    public int getTabWidth(ISourceViewer sourceViewer) {
+    @Override
+	public int getTabWidth(ISourceViewer sourceViewer) {
         return 4;
     }
 
-    public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
+    @Override
+	public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) {
         return new LSLTextHover();
     }
 

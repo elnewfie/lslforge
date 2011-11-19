@@ -13,7 +13,8 @@ public class NodeStatus {
         this.error = error;
     }
     
-    public String toString() { return error; }
+    @Override
+	public String toString() { return error; }
     
     public boolean isOk() { return ok; }
 }

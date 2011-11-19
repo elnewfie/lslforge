@@ -30,6 +30,7 @@ public class NewHttpRequestSampleWizard extends Wizard implements INewWizard {
 		}
 
 		
+		@Override
 		protected List<Sample> getSampleItems() {
 		    Bundle bundle = LSLForgePlugin.getDefault().getBundle();
 		    Sample evhandlerSample =
@@ -45,12 +46,14 @@ public class NewHttpRequestSampleWizard extends Wizard implements INewWizard {
 		    return list;
         }
 
+		@Override
 		protected String getNewFileLabel() {
             return Messages.getString("NewHttpRequestSampleWizard.1"); //$NON-NLS-1$
         }
 
 
-        protected IStatus validateFileName(String fileName) {
+        @Override
+		protected IStatus validateFileName(String fileName) {
 			return new Status(IStatus.OK,  "lslforge",""); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
@@ -63,11 +66,13 @@ public class NewHttpRequestSampleWizard extends Wizard implements INewWizard {
 		return Util.findDescriptor("$nl$/icons/new_test.png"); //$NON-NLS-1$
 	}
 
+	@Override
 	public boolean performFinish() {
         mainPage.createSample();
 		return true;
 	}
 
+	@Override
 	public void addPages() {
 		super.addPages();
 		mainPage = new SampleWizardPage(selection);

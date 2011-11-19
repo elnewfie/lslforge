@@ -13,12 +13,14 @@ public class LSLTestProcess extends LSLProcess {
         this.descriptor = descriptor;
     }
     
-    protected Interactor createInteractor(Process p) {
+    @Override
+	protected Interactor createInteractor(Process p) {
         return new LSLTestInteractor(launch.getLaunchMode(),LSLForgePlugin.getDefault().getTestManager(),
                 descriptor, p.getInputStream(), p.getOutputStream());
     }
     
-    protected Process launchExecutable() {
+    @Override
+	protected Process launchExecutable() {
         return LSLForgePlugin.launchCoreCommand(UNIT_TESTER, false);
     }
     

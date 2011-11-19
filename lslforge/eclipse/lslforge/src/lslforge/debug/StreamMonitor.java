@@ -38,6 +38,7 @@ public class StreamMonitor implements IStreamMonitor {
 	}
 	
 	private Thread t = new Thread() {
+		@Override
 		public void run() {
 			char[] cbuf = new char[512];
 			int count = 0;

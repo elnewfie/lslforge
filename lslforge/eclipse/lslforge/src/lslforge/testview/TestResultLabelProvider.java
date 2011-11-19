@@ -71,11 +71,13 @@ public class TestResultLabelProvider extends LabelProvider implements ITableLabe
         return null;
     }
 
-    public Image getImage(Object element) {
+    @Override
+	public Image getImage(Object element) {
          return getColumnImage(element, 0);
     }
 
-    public String getText(Object element) {
+    @Override
+	public String getText(Object element) {
         return getColumnText(element, 0);
     }
     

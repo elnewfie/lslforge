@@ -70,7 +70,8 @@ public class LSLForgeOutlinePage extends ContentOutlinePage {
         private Image varImage = createImage("icons/var.gif"); //$NON-NLS-1$;
         private Image importImage = createImage("icons/import.gif"); //$NON-NLS-1$;
         private LinkedList<Image> images;
-	    public Image getImage(Object element) {
+	    @Override
+		public Image getImage(Object element) {
 	        if (element instanceof String) {
 	            return stateImage;
 	        } else if (element instanceof Ctx_Ctx) {
@@ -93,7 +94,8 @@ public class LSLForgeOutlinePage extends ContentOutlinePage {
 	    }
 
 
-	    public String getText(Object element) {
+	    @Override
+		public String getText(Object element) {
 	    	// heres where ptn matching would be nice
 	    	if (element instanceof LSLScript_LSLScript) return "script"; //$NON-NLS-1$
 	    	else if (element instanceof String) return (String) element;
@@ -397,6 +399,7 @@ public class LSLForgeOutlinePage extends ContentOutlinePage {
 		}
 	}
 	
+	@Override
 	public void createControl(Composite parent) {
 		super.createControl(parent);
 		TreeViewer viewer = getTreeViewer();
@@ -407,7 +410,8 @@ public class LSLForgeOutlinePage extends ContentOutlinePage {
 		viewer.setInput(editor);
 	}
 	
-    public void selectionChanged(SelectionChangedEvent event) {
+    @Override
+	public void selectionChanged(SelectionChangedEvent event) {
 		super.selectionChanged(event);
 		ISelection selection = event.getSelection();
 		if (selection.isEmpty())

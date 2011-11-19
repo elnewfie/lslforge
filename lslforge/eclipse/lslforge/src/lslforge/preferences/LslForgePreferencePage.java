@@ -29,18 +29,21 @@ public class LSLForgePreferencePage extends FieldEditorPreferencePage implements
     public void init(IWorkbench workbench) {
     }
 
-    protected IPreferenceStore doGetPreferenceStore() {
+    @Override
+	protected IPreferenceStore doGetPreferenceStore() {
         return LSLForgePlugin.getDefault().getPreferenceStore();
     }
 
-    protected void createFieldEditors() {
+    @Override
+	protected void createFieldEditors() {
         addField(new FileFieldEditor(LSLForgePlugin.LSLFORGE_NATIVE_PATH,
                 Messages.getString(LSLFORGE_EXECUTABLE_PATH), getFieldEditorParent())); 
         addField(new BooleanFieldEditor(LSLProjectNature.OPTIMIZE,
                 Messages.getString(LSLFORGE_PREFERENCE_PAGE_ENABLE_OPTIMIZATIONS), getFieldEditorParent()));
     }
 
-    public boolean performOk() {
+    @Override
+	public boolean performOk() {
         if (super.performOk()) {
             IProject[] p = ResourcesPlugin.getWorkspace().getRoot().getProjects();
             for (int i = 0; i < p.length; i++) {
