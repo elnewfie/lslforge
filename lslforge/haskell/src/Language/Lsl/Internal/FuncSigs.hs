@@ -343,6 +343,7 @@ funcSigs = [
     ("llSetObjectName",LLVoid,[LLString]),
     ("llSetParcelMusicURL",LLVoid,[LLString]),
     ("llSetPayPrice",LLVoid,[LLInteger,LLList]),
+    ("llSetPhysicsMaterial",LLVoid,[LLInteger,LLFloat,LLFloat,LLFloat,LLFloat]),
     ("llSetPos",LLVoid,[LLVector]),
     ("llSetPrimMediaParams",LLInteger,[LLInteger,LLList]),
     ("llSetPrimURL",LLVoid,[LLString]),
@@ -791,7 +792,8 @@ funcDescriptions = [
     ("llGetMemoryLimit", ([], "Get the maximum memory a script can use.\n")),
     ("llSetMemoryLimit", (["limit"], "Request limit bytes to be reserved for this script. Returns the integer TRUE or FALSE indicating if the memory limit was set.\n")),
     ("llSetKeyframedMotion", (["keyframes", "options"], "Specify a list of times, positions, and orientations to be followed by an object. The object will be smoothly moved between keyframes by the simulator.\n")),
-    ("llManageEstateAccess", (["action", "avatar"], "Use to add or remove agents from the estate's agent access or ban lists or groups from the estate's group access list.\n"))
+    ("llManageEstateAccess", (["action", "avatar"], "Use to add or remove agents from the estate's agent access or ban lists or groups from the estate's group access list.\n")),
+    ("llSetPhysicsMaterial", (["material_bits", "gravity_multiplier", "restitution", "friction", "density"], "\n"))
     
 
 ]
