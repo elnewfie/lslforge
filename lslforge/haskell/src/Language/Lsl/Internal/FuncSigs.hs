@@ -241,6 +241,7 @@ funcSigs = [
     ("llMakeFire",LLVoid,[LLInteger,LLFloat,LLFloat,LLFloat,LLFloat,LLString,LLVector]),
     ("llMakeFountain",LLVoid,[LLInteger,LLFloat,LLFloat,LLFloat,LLFloat,LLInteger,LLString,LLVector,LLFloat]),
     ("llMakeSmoke",LLVoid,[LLInteger,LLFloat,LLFloat,LLFloat,LLFloat,LLString,LLVector]),
+    ("llManageEstateAccess",LLIneger,[LLInteger, LLKey]),
     ("llMapDestination",LLVoid,[LLString,LLVector,LLVector]),
     ("llMessageLinked",LLVoid,[LLInteger,LLInteger,LLString,LLKey]),
     ("llMinEventDelay",LLVoid,[LLFloat]),
@@ -787,6 +788,9 @@ funcDescriptions = [
     ("llSetLinkMedia", (["link","face","params"], "Set the media params for a particular face on the linked prim(s) without a delay.\n")),
     ("llGetMemoryLimit", ([], "Get the maximum memory a script can use.\n")),
     ("llSetMemoryLimit", (["limit"], "Request limit bytes to be reserved for this script. Returns the integer TRUE or FALSE indicating if the memory limit was set.\n")),
-    ("llSetKeyframedMotion", (["keyframes", "options"], "Specify a list of times, positions, and orientations to be followed by an object. The object will be smoothly moved between keyframes by the simulator.\n"))
-    ]
+    ("llSetKeyframedMotion", (["keyframes", "options"], "Specify a list of times, positions, and orientations to be followed by an object. The object will be smoothly moved between keyframes by the simulator.\n")),
+    ("llManageEstateAccess", (["action", "avatar"], "Use to add or remove agents from the estate's agent access or ban lists or groups from the estate's group access list.\n"))
+    
+
+]
 
