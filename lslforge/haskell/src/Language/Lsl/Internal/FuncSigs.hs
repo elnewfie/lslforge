@@ -160,6 +160,7 @@ funcSigs = [
     ("llGetParcelPrimOwners",LLList,[LLVector]),
     ("llGetPermissions",LLInteger,[]),
     ("llGetPermissionsKey",LLKey,[]),
+    ("llGetPhysicsMaterial",LLList,[]),
     ("llGetPos",LLVector,[]),
     ("llGetPrimitiveParams",LLList,[LLList]),
     ("llGetPrimMediaParams",LLList,[LLInteger,LLList]), 
@@ -793,7 +794,8 @@ funcDescriptions = [
     ("llSetMemoryLimit", (["limit"], "Request limit bytes to be reserved for this script. Returns the integer TRUE or FALSE indicating if the memory limit was set.\n")),
     ("llSetKeyframedMotion", (["keyframes", "options"], "Specify a list of times, positions, and orientations to be followed by an object. The object will be smoothly moved between keyframes by the simulator.\n")),
     ("llManageEstateAccess", (["action", "avatar"], "Use to add or remove agents from the estate's agent access or ban lists or groups from the estate's group access list.\n")),
-    ("llSetPhysicsMaterial", (["material_bits", "gravity_multiplier", "restitution", "friction", "density"], "\n"))
+    ("llSetPhysicsMaterial", (["material_bits", "gravity_multiplier", "restitution", "friction", "density"], "Sets physics material.\n"))
+    ("llGetPhysicsMaterial", ([], "Returns a list of the form [float gravity_multiplier, float restitution, float friction, float density] \n"))
     
 
 ]
