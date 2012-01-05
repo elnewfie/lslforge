@@ -53,14 +53,28 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     private ProjectionSupport fProjectionSupport;
     
     private LSLForgeOutlinePage outlinePage;
+    
+    private boolean forceReadOnly = false;
+    
+    
     /**
      * Create an instance of the editor.
      */
     public LSLForgeEditor() {
         super();
     }
+    
+    @Override
+	public boolean isEditable() {
+    	if(forceReadOnly) return false;
+		return super.isEditable();
+	}
+    
+    public void setReadOnly() {
+    	forceReadOnly = true;
+    }
 
-    /**
+	/**
      * The <code>LSLForgeEditor</code> implementation of this
      * <code>AbstractTextEditor</code> method extend the actions to add those
      * specific to the receiver
@@ -125,10 +139,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
 	@Override
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class required) {
         if (IContentOutlinePage.class.equals(required)) {
-            if (outlinePage == null) {
-                outlinePage = new LSLForgeOutlinePage(this);
-            }
-            return outlinePage;
+            return getOutlinePage();
         }
 
         if (fProjectionSupport != null) {
@@ -140,6 +151,13 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         return super.getAdapter(required);
     }
 
+    public IContentOutlinePage getOutlinePage() {
+        if (outlinePage == null) {
+            outlinePage = new LSLForgeOutlinePage(this);
+        }
+    	
+    	return outlinePage;
+    }
     
 	@Override
 	protected void initializeEditor() {
@@ -301,11 +319,13 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     }
     
     public void updateOutline() {
-        asyncExec(new Runnable() {
-            public void run() {
-                outlinePage.update();
-            }
-        });
+    	if(outlinePage != null) {
+    		asyncExec(new Runnable() {
+    			public void run() {
+    				outlinePage.update();
+    			}
+    		});
+    	}
     }
     
     private void asyncExec(Runnable r) {
