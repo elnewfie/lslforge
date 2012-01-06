@@ -349,6 +349,7 @@ funcSigs = [
     ("llSetPrimMediaParams",LLInteger,[LLInteger,LLList]),
     ("llSetPrimURL",LLVoid,[LLString]),
     ("llSetPrimitiveParams",LLVoid,[LLList]),
+    ("llSetRegionPos",LLInteger,[LLVector]),
     ("llSetRemoteScriptAccessPin",LLVoid,[LLInteger]),
     ("llSetRot",LLVoid,[LLRot]),
     ("llSetScale",LLVoid,[LLVector]),
@@ -797,8 +798,8 @@ funcDescriptions = [
     ("llManageEstateAccess", (["action", "avatar"], "Use to add or remove agents from the estate's agent access or ban lists or groups from the estate's group access list.\n")),
     ("llSetPhysicsMaterial", (["material_bits", "gravity_multiplier", "restitution", "friction", "density"], "Sets physics material.\n")),
     ("llGetPhysicsMaterial", ([], "Returns a list of the form [float gravity_multiplier, float restitution, float friction, float density] \n")),
-    ("llTransferLindenDollars", (["destination", "amount"], "Transfer amount of L$ money from script owner to destination avatar.\nReturns a key used in a matching transaction_result event for the success or failure of the transfer. If the transaction is successful, this key will show in the transaction history.\n"))
-    
+    ("llTransferLindenDollars", (["destination", "amount"], "Transfer amount of L$ money from script owner to destination avatar.\nReturns a key used in a matching transaction_result event for the success or failure of the transfer. If the transaction is successful, this key will show in the transaction history.\n")),
+    ("llSetRegionPos", (["coordinates"], "Set region pos.\n"))
 
 ]
 
