@@ -73,6 +73,8 @@ lslEventDescriptors = [
      "raised when a state is exited"),
     ("timer", [], EventDeliveryScript, [],
      "raised when the timer set up by llSetTimerEvent triggers"),
+    ("transaction_result",[(LLKey,"id"),(LLInteger,"success"),(LLString,"data")], EventDeliveryPrim, [],
+     "triggered when task receives asynchronous data from llTransfer* function(s) call"),
     ("touch", [(LLInteger,"num_detected")], EventDeliveryPrim,
      [EventAdditionalAvatarKeys "Avatar key" "Key of agent touching prim",
       EventAdditionalVectors "Grab vector" "Force applied by agent grabbing prim",
