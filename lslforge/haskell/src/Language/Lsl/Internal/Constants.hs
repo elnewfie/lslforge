@@ -586,9 +586,9 @@ allConstants = [
     Constant "RC_REJECT_NONPHYSICAL" (IVal 4),
     Constant "RC_REJECT_LAND" (IVal 8),
 
-    Constant "RCERR_UNKNOWN" (IVal -1),
-    Constant "RCERR_SIM_PERF_LOW" (IVal -2),
-    Constant "RCERR_CAST_TIME_EXCEEDED" (IVal -3),
+    Constant "RCERR_UNKNOWN" (IVal (-1)),
+    Constant "RCERR_SIM_PERF_LOW" (IVal (-2)),
+    Constant "RCERR_CAST_TIME_EXCEEDED" (IVal (-3)),
 
     Constant "RAD_TO_DEG" (FVal 57.29578),
     Constant "REGION_FLAG_ALLOW_DAMAGE" (IVal 1),
