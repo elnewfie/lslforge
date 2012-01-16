@@ -8,7 +8,23 @@
       <editor
             name="LSLForge Editor"
             icon="icons/obj16/lslforge.gif"
-            extensions="lslp,lslm"
+            extensions="lslp"
+            contributorClass="lslforge.editor.LSLForgeActionContributor"
+            class="lslforge.editor.LSLForgeEditor"
+            id="lslforge.editor.LSLForgeEditor">
+      </editor>
+      <editor
+            name="LSLForge Editor"
+            icon="icons/obj16/lsl-file.gif"
+            extensions="lsl"
+            contributorClass="lslforge.editor.LSLForgeActionContributor"
+            class="lslforge.editor.LSLForgeEditor"
+            id="lslforge.editor.LSLForgeEditor">
+      </editor>
+      <editor
+            name="LSLForge Editor"
+            icon="icons/obj16/lslm-file.gif"
+            extensions="lslm"
             contributorClass="lslforge.editor.LSLForgeActionContributor"
             class="lslforge.editor.LSLForgeEditor"
             id="lslforge.editor.LSLForgeEditor">
