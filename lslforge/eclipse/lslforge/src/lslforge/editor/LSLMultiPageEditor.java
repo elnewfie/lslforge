@@ -30,12 +30,8 @@ import org.eclipse.ui.part.PageBookView;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 /**
- * An example showing how to create a multi-page editor.
- * This example has 3 pages:
- * <ul>
- * <li>page 0 contains a nested text editor.
- * <li>page 1 allows you to change the font used in page 2
- * </ul>
+ * Multi-page editor that displays both the LSLForge source file and the
+ * compiled output
  */
 public class LSLMultiPageEditor extends MultiPageEditorPart implements IResourceChangeListener{
 
@@ -48,16 +44,12 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 	private LSLForgeEditor currentEditor = null;
 	private int compiledPage = -1;
 
-	/**
-	 * Creates a multi-page editor example.
-	 */
 	public LSLMultiPageEditor() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
 	/**
-	 * Creates page 0 of the multi-page editor,
-	 * which contains a text editor.
+	 * Creates the main source editor tab
 	 */
 	void createSourcePage() {
 		try {
@@ -67,11 +59,12 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 			
 			compiledPage = addPage(sourceEditor, getEditorInput());
 			setPageText(compiledPage, sourceEditor.getTitle());
+			setPartName(sourceEditor.getTitle());
 			
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
 				getSite().getShell(),
-				"Error creating nested text editor",
+				"Error creating editor contents", //$NON-NLS-1$
 				null,
 				e.getStatus());
 		}
@@ -85,38 +78,12 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 				compiledEditor.updateOutline();
 				compiledPage = addPage(compiledEditor, compiledEditorInput);
 				setPageText(compiledPage, compiledEditorInput.getName());
-//				if(getOutlinePage() != null) {
-//					getOutlinePage().addEditor(compiledEditor);
-//				}
-				
-			} else {
-				return;
-				//TODO Create something here....
-//				Composite composite = new Composite(getContainer(), SWT.NONE);
-//				GridLayout layout = new GridLayout();
-//				composite.setLayout(layout);
-//				layout.numColumns = 2;
-		//
-//				Button fontButton = new Button(composite, SWT.NONE);
-//				GridData gd = new GridData(GridData.BEGINNING);
-//				gd.horizontalSpan = 2;
-//				fontButton.setLayoutData(gd);
-//				fontButton.setText("Change Font...");
-//				
-//				fontButton.addSelectionListener(new SelectionAdapter() {
-//					public void widgetSelected(SelectionEvent event) {
-////						setFont();
-//					}
-//				});
-		//
-//				compiledPage = addPage(composite);
-//				setPageText(compiledPage, "<no file>");
 			}
 			
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
 				getSite().getShell(),
-				"Error creating nested text editor",
+				"Error creating compiled editor contents", //$NON-NLS-1$
 				null,
 				e.getStatus());
 		}
@@ -213,10 +180,9 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 	 * checks that the input is an instance of <code>IFileEditorInput</code>.
 	 */
 	@Override
-	public void init(IEditorSite site, IEditorInput editorInput)
-		throws PartInitException {
+	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (!(editorInput instanceof IFileEditorInput))
-			throw new PartInitException("Invalid Input: Must be IFileEditorInput");
+			throw new PartInitException("Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
 		
 		//Try to open the associated .lsl file that goes with this file
 		IFileEditorInput ei = (IFileEditorInput)editorInput;
@@ -227,6 +193,7 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		
 		super.init(site, editorInput);
 	}
+	
 	/* (non-Javadoc)
 	 * Method declared on IEditorPart.
 	 */

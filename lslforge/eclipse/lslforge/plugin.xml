@@ -6,12 +6,20 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            name="LSLForge Editor"
-            icon="icons/obj16/lslforge.gif"
-            extensions="lsl,lslp,lslm"
-            contributorClass="lslforge.editor.LSLForgeActionContributor"
             class="lslforge.editor.LSLForgeEditor"
-            id="lslforge.editor.LSLForgeEditor">
+            contributorClass="lslforge.editor.LSLForgeActionContributor"
+            extensions="lsl,lslm"
+            icon="icons/obj16/lslforge.gif"
+            id="lslforge.editor.LSLForgeEditor"
+            name="LSLForge Editor">
+      </editor>
+      <editor
+            class="lslforge.editor.LSLMultiPageEditor"
+            contributorClass="lslforge.editor.LSLMultiPageEditorContributor"
+            extensions="lslp"
+            icon="icons/obj16/lslforge.gif"
+            id="lslforge.editor.MultiPageEditor"
+            name="LSLForge MultiPage Editor">
       </editor>
       <editor
             class="lslforge.editor.TestEditor"

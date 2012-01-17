@@ -243,7 +243,7 @@ funcSigs = [
     ("llMakeFire",LLVoid,[LLInteger,LLFloat,LLFloat,LLFloat,LLFloat,LLString,LLVector]),
     ("llMakeFountain",LLVoid,[LLInteger,LLFloat,LLFloat,LLFloat,LLFloat,LLInteger,LLString,LLVector,LLFloat]),
     ("llMakeSmoke",LLVoid,[LLInteger,LLFloat,LLFloat,LLFloat,LLFloat,LLString,LLVector]),
-    ("llManageEstateAccess",LLIneger,[LLInteger, LLKey]),
+    ("llManageEstateAccess",LLInteger,[LLInteger, LLKey]),
     ("llMapDestination",LLVoid,[LLString,LLVector,LLVector]),
     ("llMessageLinked",LLVoid,[LLInteger,LLInteger,LLString,LLKey]),
     ("llMinEventDelay",LLVoid,[LLFloat]),
@@ -799,7 +799,4 @@ funcDescriptions = [
     ("llSetPhysicsMaterial", (["material_bits", "gravity_multiplier", "restitution", "friction", "density"], "Sets physics material.\n")),
     ("llGetPhysicsMaterial", ([], "Returns a list of the form [float gravity_multiplier, float restitution, float friction, float density] \n")),
     ("llTransferLindenDollars", (["destination", "amount"], "Transfer amount of L$ money from script owner to destination avatar.\nReturns a key used in a matching transaction_result event for the success or failure of the transfer. If the transaction is successful, this key will show in the transaction history.\n")),
-    ("llSetRegionPos", (["coordinates"], "Set region pos.\n"))
-
-]
-
+    ("llSetRegionPos", (["coordinates"], "Set region pos.\n"))    ]
