@@ -8,8 +8,16 @@
       <editor
             class="lslforge.editor.LSLForgeEditor"
             contributorClass="lslforge.editor.LSLForgeActionContributor"
-            extensions="lsl,lslm"
+            extensions="lsl"
             icon="icons/obj16/lslforge.gif"
+            id="lslforge.editor.LSLForgeEditor"
+            name="LSLForge Editor">
+      </editor>
+      <editor
+            class="lslforge.editor.LSLForgeEditor"
+            contributorClass="lslforge.editor.LSLForgeActionContributor"
+            extensions="lslm"
+            icon="icons/obj16/lslm-file.gif"
             id="lslforge.editor.LSLForgeEditor"
             name="LSLForge Editor">
       </editor>
