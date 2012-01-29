@@ -3,17 +3,17 @@
    <description name="LSLForge Update Site" url="http://lslforge.googlecode.com/git/eclipse">
       LSLForge Update Site
    </description>
-   <feature url="features/lslforge_0.1.0.jar" id="lslforge" version="0.1.0">
-      <category name="LSLForge_0.1.0"/>
+   <feature url="features/lslforge_0.1.1.jar" id="lslforge" version="0.1.1">
+      <category name="LSLForge_0.1.1"/>
    </feature>
-   <feature url="features/lslforge_part_linux_x86_0.1.0.jar" id="lslforge_part_linux_x86" version="0.1.0">
-      <category name="LSLForge_0.1.0"/>
+   <feature url="features/lslforge_part_linux_x86_0.1.1.jar" id="lslforge_part_linux_x86" version="0.1.1">
+      <category name="LSLForge_0.1.1"/>
    </feature>
-   <feature url="features/lslforge_part_macosx_x86_0.1.0.jar" id="lslforge_part_macosx_x86" version="0.1.0">
-      <category name="LSLForge_0.1.0"/>
+   <feature url="features/lslforge_part_macosx_x86_0.1.1.jar" id="lslforge_part_macosx_x86" version="0.1.1">
+      <category name="LSLForge_0.1.1"/>
    </feature>
-   <feature url="features/lslforge_part_win32_x86_0.1.0.jar" id="lslforge_part_win32_x86" version="0.1.0">
-      <category name="LSLForge_0.1.0"/>
+   <feature url="features/lslforge_part_win32_x86_0.1.1.jar" id="lslforge_part_win32_x86" version="0.1.1">
+      <category name="LSLForge_0.1.1"/>
    </feature>
-   <category-def name="LSLForge_0.1.0" label="LSLForge 0.1.0"/>
+   <category-def name="LSLForge_0.1.1" label="LSLForge 0.1.1"/>
 </site>

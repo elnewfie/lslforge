@@ -37,6 +37,7 @@ import org.eclipse.jface.text.source.projection.ProjectionSupport;
 import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
@@ -215,6 +216,9 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         fProjectionSupport.install();
         viewer.doOperation(ProjectionViewer.TOGGLE);
 
+        
+        if(forceReadOnly)
+        	getSourceViewer().getTextWidget().setBackground(new Color(getSourceViewer().getTextWidget().getDisplay(), 230, 230, 230));
 
         LSLProjectNature n = nature();
         if (n != null) n.addRecompileListener(this);

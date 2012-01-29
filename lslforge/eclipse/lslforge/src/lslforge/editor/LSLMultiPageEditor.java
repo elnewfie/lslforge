@@ -19,14 +19,10 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.part.MultiPageEditorPart;
-import org.eclipse.ui.part.PageBook;
-import org.eclipse.ui.part.PageBookView;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 /**
@@ -36,11 +32,14 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 public class LSLMultiPageEditor extends MultiPageEditorPart implements IResourceChangeListener{
 
 	/** The text editor used in page 0. */
-	private LSLForgeEditor sourceEditor;
+	private LSLForgeEditor sourceEditor = null;
+	private IFileEditorInput sourceEditorInput = null;
+	
 	private LSLForgeMultiOutlinePage outlinePage = null;
 
 	private IFileEditorInput compiledEditorInput = null;
 	private LSLForgeEditor compiledEditor = null;
+	
 	private LSLForgeEditor currentEditor = null;
 	private int compiledPage = -1;
 
@@ -48,18 +47,20 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 	}
+	
 	/**
 	 * Creates the main source editor tab
 	 */
 	void createSourcePage() {
 		try {
-			sourceEditor = new LSLForgeEditor();
-			currentEditor = sourceEditor;
-			sourceEditor.updateOutline();
-			
-			compiledPage = addPage(sourceEditor, getEditorInput());
-			setPageText(compiledPage, sourceEditor.getTitle());
-			setPartName(sourceEditor.getTitle());
+			if(ResourcesPlugin.getWorkspace().getRoot().exists(sourceEditorInput.getFile().getFullPath())) {
+				sourceEditor = new LSLForgeEditor();
+				currentEditor = sourceEditor;
+				sourceEditor.updateOutline();
+				
+				int newPage = addPage(sourceEditor, sourceEditorInput);
+				setPageText(newPage, sourceEditorInput.getName());
+			}
 			
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
@@ -74,7 +75,12 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		try {
 			if(ResourcesPlugin.getWorkspace().getRoot().exists(compiledEditorInput.getFile().getFullPath())) {
 				compiledEditor = new LSLForgeEditor();
-				compiledEditor.setReadOnly();
+				
+				//Set read-only when we have a .lslp file to go with it
+				if(ResourcesPlugin.getWorkspace().getRoot().exists(sourceEditorInput.getFile().getFullPath())) {
+					compiledEditor.setReadOnly();
+				}
+				
 				compiledEditor.updateOutline();
 				compiledPage = addPage(compiledEditor, compiledEditorInput);
 				setPageText(compiledPage, compiledEditorInput.getName());
@@ -115,6 +121,17 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 	protected void createPages() {
 		createSourcePage();
 		createCompiledPage();
+		
+		//Now set the title name
+		if(ResourcesPlugin.getWorkspace().getRoot().exists(sourceEditorInput.getFile().getFullPath())) {
+			setPartName(sourceEditor.getTitle());
+			currentEditor = sourceEditor;
+		} else {
+			setPartName(compiledEditor.getTitle());
+			currentEditor = compiledEditor;
+		}
+		
+		getOutlinePage().setPageActive(currentEditor.getOutlinePage());
 	}
 	
 	@Override
@@ -184,11 +201,21 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		if (!(editorInput instanceof IFileEditorInput))
 			throw new PartInitException("Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
 		
-		//Try to open the associated .lsl file that goes with this file
+		//Try to open the associated .lsl/.lslp file that goes with this file
 		IFileEditorInput ei = (IFileEditorInput)editorInput;
-		if(ei.getFile().getFileExtension().equals("lslp")) { //$NON-NLS-1$
-			IPath eiPath = ei.getFile().getFullPath().removeFileExtension().addFileExtension("lsl"); //$NON-NLS-1$
+		String extension = ei.getFile().getFileExtension();
+		IPath basePath = ei.getFile().getFullPath().removeFileExtension();
+		
+		if("lslp".equals(extension)) { //$NON-NLS-1$
+			sourceEditorInput = (IFileEditorInput)editorInput;
+			IPath eiPath = basePath.addFileExtension("lsl"); //$NON-NLS-1$
 			compiledEditorInput = new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFile(eiPath));
+			
+		} else if("lsl".equals(extension)) { //$NON-NLS-1$
+			IPath eiPath = basePath.addFileExtension("lslp"); //$NON-NLS-1$
+			sourceEditorInput = new FileEditorInput(ResourcesPlugin.getWorkspace().getRoot().getFile(eiPath));
+			compiledEditorInput = (IFileEditorInput)editorInput;
+			setInput(sourceEditorInput);
 		}
 		
 		super.init(site, editorInput);
@@ -199,7 +226,7 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 	 */
 	@Override
 	public boolean isSaveAsAllowed() {
-		return true;
+		return false;
 	}
 
 	/**
@@ -276,38 +303,5 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		}
 		
 		return matches;
-	}
-	
-	public class LSLForgePageBookView extends PageBookView {
-		@Override
-		protected IPage createDefaultPage(PageBook book) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected PageRec doCreatePage(IWorkbenchPart part) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected void doDestroyPage(IWorkbenchPart part, PageRec pageRecord) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		protected IWorkbenchPart getBootstrapPart() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected boolean isImportant(IWorkbenchPart part) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-		
 	}
 }

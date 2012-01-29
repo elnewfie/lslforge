@@ -2,7 +2,7 @@
 <feature
       id="lslforge_part_win32_x86"
       label="lslforge_part_win32_x86"
-      version="0.1.0">
+      version="0.1.1">
 
    <requires>
       <import plugin="lslforge" version="0.1.0" match="greaterOrEqual"/>

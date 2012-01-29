@@ -1,5 +1,5 @@
 Name:           LSLForge
-version:        0.1.0
+version:        0.1.1
 Synopsis:	    An execution and testing framework for the Linden Scripting Language (LSL)
 Description:	
 	Provides a framework for executing Linden Scripting Language scripts offline,
@@ -11,7 +11,7 @@ Homepage:       http:/lslforge.googlecode.com/
 License:        BSD3
 License-file:   LICENSE
 Category:	    Language
-Copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011
+Copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2012
 Author:         Robert Greayer <robgreayer@yahoo.com>
 Maintainer:	    "Newfie Pendragon" <elnewfie@yahoo.com>
 Stability:	    experimental
