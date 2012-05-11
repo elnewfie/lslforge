@@ -5,15 +5,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import lslforge.LSLForgePlugin;
+import lslforge.editor.LSLForgeEditor;
 import lslforge.language_metadata.LSLConstant;
 import lslforge.language_metadata.LSLFunction;
 import lslforge.language_metadata.LSLHandler;
 import lslforge.language_metadata.LSLParam;
+import lslforge.outline.LSLForgeOutlinePage;
+import lslforge.outline.items.Function;
+import lslforge.outline.items.OutlineItem;
 import lslforge.util.LSLWordDetector;
 import lslforge.util.Util;
-
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextViewer;
@@ -33,10 +35,13 @@ import org.eclipse.swt.graphics.Image;
  */
 public class LSLCompletionProcessor implements IContentAssistProcessor {
 	private static IWordDetector wordDetector = new LSLWordDetector();
-	private Image functionImage;
-	private Image handlerImage;
-	private Image constantImage;
-	private Image keywordImage;
+	private final Image functionImage;
+	private final Image handlerImage;
+	private final Image constantImage;
+	private final Image keywordImage;
+	
+	private final LSLForgeEditor editor;
+	
 	private static final Comparator<ICompletionProposal> PROPOSAL_COMPARATOR = new Comparator<ICompletionProposal>() {
 		public int compare(ICompletionProposal aProposal1, ICompletionProposal aProposal2) {
 			String text1 = aProposal1.getDisplayString();
@@ -104,7 +109,9 @@ public class LSLCompletionProcessor implements IContentAssistProcessor {
 	protected static CompletionInfo[] possibleProposals = null;
 	protected IContextInformationValidator validator = new Validator();
 
-	public LSLCompletionProcessor() {
+	public LSLCompletionProcessor(LSLForgeEditor editor) {
+		this.editor = editor;
+		
 		functionImage = Util.findDescriptor("$nl$/icons/function.gif").createImage(true); //$NON-NLS-1$
 		handlerImage = Util.findDescriptor("$nl$/icons/handler.gif").createImage(); //$NON-NLS-1$
 		constantImage = Util.findDescriptor("$nl$/icons/constant.gif").createImage(); //$NON-NLS-1$
@@ -207,6 +214,37 @@ public class LSLCompletionProcessor implements IContentAssistProcessor {
 		List<ICompletionProposal> proposals = new ArrayList<ICompletionProposal>();
 		Couple c = guessTextLine(viewer.getDocument(), documentOffset);
 		String prefix = c.o;
+		
+		//First, retrieve any proposals from the document outline
+		if(editor.getOutlinePage() instanceof LSLForgeOutlinePage) {
+			LSLForgeOutlinePage outlinePage = (LSLForgeOutlinePage)editor.getOutlinePage();
+			List<OutlineItem> items =  outlinePage.getOutline();
+			for(OutlineItem item: items) {
+				if(item.getName().startsWith(prefix)) {
+					String displayText;
+					if(item instanceof Function) {
+						displayText = ((Function)item).toPrototype();
+					} else {
+						displayText = item.getName();
+					}
+					
+					proposals.add(
+						new CompletionProposal(
+							item.getName(), 
+							documentOffset - prefix.length(),
+							prefix.length(),
+							item.getName().length(), 
+							item.getImage(),
+							item.getName(),
+							new ContextInformation(item.getName(), displayText),
+							displayText
+						)
+					);
+				}
+			}
+		}
+		
+		
 		possibleProposals = getPossibleProposals();
 		//String[] rules = fgProposals.getRules(prefix);
 		for (int i = 0; i < possibleProposals.length; i++) {

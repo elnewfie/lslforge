@@ -14,9 +14,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
 import lslforge.LSLForgePlugin;
-
+import lslforge.generated.Ctx;
+import lslforge.generated.Ctx_Ctx;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
@@ -417,4 +417,10 @@ public class Util {
             System.out.print(cc);
         }
     }
+    
+	public static <T> T ctxItem(Ctx<T> c) {
+		T o = ((Ctx_Ctx<T>)c).ctxItem;
+		return o;
+	}
+    
 }

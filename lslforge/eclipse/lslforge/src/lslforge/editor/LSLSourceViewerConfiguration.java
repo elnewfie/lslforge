@@ -14,7 +14,6 @@ package lslforge.editor;
 
 import java.util.HashSet;
 import java.util.Iterator;
-
 import lslforge.LSLForgePlugin;
 import lslforge.editor.imported.HTMLTextPresenter;
 import lslforge.editor.lsl.LSLCodeScanner;
@@ -23,7 +22,6 @@ import lslforge.editor.lsl.LSLForgeAutoIndentStrategy;
 import lslforge.editor.lsl.LSLForgeDoubleClickSelector;
 import lslforge.editor.lsl.ScannerChangeListener;
 import lslforge.util.LSLColorProvider;
-
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.IAutoEditStrategy;
@@ -54,9 +52,9 @@ import org.eclipse.swt.widgets.Shell;
 public class LSLSourceViewerConfiguration extends SourceViewerConfiguration 
 implements ScannerChangeListener {
 
-    private HashSet<SourceViewerConfigurationListener> listeners = new HashSet<SourceViewerConfigurationListener>();
-    private LSLCodeScanner scanner;
-    private LSLForgeEditor editor;
+    private final HashSet<SourceViewerConfigurationListener> listeners = new HashSet<SourceViewerConfigurationListener>();
+    private final LSLCodeScanner scanner;
+    private final LSLForgeEditor editor;
     
     static class SingleTokenScanner extends BufferedRuleBasedScanner {
         public SingleTokenScanner(TextAttribute attribute) {
@@ -126,7 +124,7 @@ implements ScannerChangeListener {
 
         ContentAssistant assistant = new ContentAssistant();
         assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
-        assistant.setContentAssistProcessor(new LSLCompletionProcessor(),
+        assistant.setContentAssistProcessor(new LSLCompletionProcessor(editor),
                 IDocument.DEFAULT_CONTENT_TYPE);
 
         assistant.enableAutoActivation(true);

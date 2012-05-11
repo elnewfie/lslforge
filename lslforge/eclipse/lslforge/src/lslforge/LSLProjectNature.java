@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import lslforge.cserver.CompilationServer;
 import lslforge.cserver.CompilationServer.Result;
 import lslforge.generated.CompilationCommand_Init;
@@ -33,7 +32,6 @@ import lslforge.generated.Tuple2;
 import lslforge.generated.Tuple3;
 import lslforge.language_metadata.LSLParam;
 import lslforge.util.Util;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -70,10 +68,10 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 	
     private static class BetterDeltaVisitor implements IResourceDeltaVisitor {
 		private boolean recompileAll = false;
-		private LinkedList<IResource> newDerivedResources = new LinkedList<IResource>();
-		private LinkedList<LSLForgeElement> addsAndUpdates = new LinkedList<LSLForgeElement>();
-		private LinkedList<LSLForgeElement> removals = new LinkedList<LSLForgeElement>();
-		private IProject project;
+		private final LinkedList<IResource> newDerivedResources = new LinkedList<IResource>();
+		private final LinkedList<LSLForgeElement> addsAndUpdates = new LinkedList<LSLForgeElement>();
+		private final LinkedList<LSLForgeElement> removals = new LinkedList<LSLForgeElement>();
+		private final IProject project;
 		
 		public BetterDeltaVisitor(IProject p) {
 			project = p;
@@ -218,11 +216,11 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 		private static final String SCRIPTS_END = "</scripts>"; //$NON-NLS-1$
 		private static final String SOURCE_LIST_BEGIN = "<source_files>"; //$NON-NLS-1$
 		private static final String SOURCE_LIST_END = "</source_files>"; //$NON-NLS-1$
-		private HashMap<String,String> moduleMap = new HashMap<String,String>();
-		private HashMap<String,String> moduleNameToPath = new HashMap<String,String>();
-		private HashMap<String,String> scriptMap = new HashMap<String,String>();
-		private HashMap<String,String> scriptNameToPath = new HashMap<String,String>();
-		private boolean optimize;
+		private final HashMap<String,String> moduleMap = new HashMap<String,String>();
+		private final HashMap<String,String> moduleNameToPath = new HashMap<String,String>();
+		private final HashMap<String,String> scriptMap = new HashMap<String,String>();
+		private final HashMap<String,String> scriptNameToPath = new HashMap<String,String>();
+		private final boolean optimize;
 		private boolean modulesOnly = true;
 		
 		public SourceListBuilder(boolean addOptimizeOption) {
@@ -315,14 +313,14 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 
 	private static final String LSLFORGE_PROBLEM = "lslforge.problem"; //$NON-NLS-1$
 
-	private HashSet<RecompileListener> recompListeners = new HashSet<RecompileListener>();
+	private final HashSet<RecompileListener> recompListeners = new HashSet<RecompileListener>();
 	private Map<String,LinkedList<EPSummary>> entryPoints;
 	private Map<String,LinkedList<GlobalSummary>> globalVariables;
 	private IProject project;
 	
 	private Summary summary;
 
-	private CompilationServer cserver;
+	private final CompilationServer cserver;
 	public LSLProjectNature() {
 		if (LSLForgePlugin.DEBUG) Util.log("creating project nature"); //$NON-NLS-1$
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
@@ -383,6 +381,12 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 						cmd.el1 = new Tuple2<String, String>();
 						cmd.el1.el1 = resourceToLSLForgeName(e.getResource());
 						cmd.el1.el2 = e.getResource().getLocation().toOSString();
+						
+						//RJN
+//						Map<String, Object> extra = new HashMap<String, Object>();
+//						extra.put("preprocess", new Object());
+						
+//						Result r = cserver.execute(cmd, extra);
 						Result r = cserver.execute(cmd);
 						response = r.get(); // wait for response... only care about last one!
 					}

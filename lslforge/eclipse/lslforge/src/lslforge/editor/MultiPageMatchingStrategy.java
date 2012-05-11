@@ -27,10 +27,34 @@ public class MultiPageMatchingStrategy implements IEditorMatchingStrategy {
 			return false;	//Assume bad right now
 		}
 		
-		IPath baseFileA = fileEditorRef.getFile().getFullPath().removeFileExtension();
-		IPath baseFileB = fileInput.getFile().getFullPath().removeFileExtension();
+		IPath baseFileA = fileEditorRef.getFile().getFullPath();
+		IPath baseFileB = fileInput.getFile().getFullPath();
 		
-		return baseFileA.equals(baseFileB);
-	}
+		//Are we dealing with two module files?
+		if(isModuleFile(baseFileA) && isModuleFile(baseFileB)) {
+			return baseFileA.equals(baseFileB);
+		}
+		
+		if(isScriptFile(baseFileA) && isScriptFile(baseFileB)) {
+			//Remove the extensions and compare
+			baseFileA = baseFileA.removeFileExtension();
+			baseFileB = baseFileB.removeFileExtension();
+			
+			return baseFileA.equals(baseFileB);
+		}
 
+		return false;
+	}
+	
+	private boolean isScriptFile(IPath file) {
+		if("lslp".equals(file.getFileExtension())) return true; //$NON-NLS-1$
+		if("lsl".equals(file.getFileExtension())) return true; //$NON-NLS-1$
+		return false;
+	}
+	
+	private boolean isModuleFile(IPath file) {
+		if("lslm".equals(file.getFileExtension())) return true; //$NON-NLS-1$
+		
+		return false;
+	}
 }

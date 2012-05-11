@@ -1,5 +1,9 @@
 package lslforge.outline;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.swt.SWT;
@@ -13,6 +17,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 public class LSLForgeMultiOutlinePage extends Page implements IContentOutlinePage {
 	protected PageBook fPagebook;
 	protected IContentOutlinePage fCurrentPage;
+	private boolean sorted = false;
 
 	@Override
 	public void createControl(Composite parent) {
@@ -22,8 +27,6 @@ public class LSLForgeMultiOutlinePage extends Page implements IContentOutlinePag
 	}
 
 	public void setPageActive(IContentOutlinePage page) {
-		// clearActionBars();
-
 		if (page != null) {
 			fCurrentPage = page;
 			if (fPagebook == null) {
@@ -38,7 +41,22 @@ public class LSLForgeMultiOutlinePage extends Page implements IContentOutlinePag
 			}
 
 			fPagebook.showPage(control);
+			
+			if(page instanceof LSLForgeOutlinePage) {
+				((LSLForgeOutlinePage)page).sortItems(sorted);
+			}
+			
 		}
+	}
+
+	@Override
+	public void setActionBars(IActionBars actionBars) {
+		IToolBarManager toolbar = actionBars.getToolBarManager();
+		toolbar.add(new SortAction());
+		toolbar.update(false);
+		actionBars.updateActionBars();
+		
+		super.setActionBars(actionBars);
 	}
 
 	@Override
@@ -52,11 +70,6 @@ public class LSLForgeMultiOutlinePage extends Page implements IContentOutlinePag
 			return fPagebook;
 		else
 			return null;
-	}
-
-	@Override
-	public void setActionBars(IActionBars actionBars) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -82,4 +95,26 @@ public class LSLForgeMultiOutlinePage extends Page implements IContentOutlinePag
 	public void setSelection(ISelection selection) {
 		if(fCurrentPage != null) fCurrentPage.setSelection(selection);
 	}
+	
+    private class SortAction extends Action {
+    	
+		@Override
+		public ImageDescriptor getImageDescriptor() {
+			return LSLForgeOutlinePage.image;
+		}
+
+		@Override
+		public int getStyle() {
+			return IAction.AS_CHECK_BOX;
+		}
+
+		@Override
+		public void run() {
+			sorted = !sorted;
+			if(fCurrentPage instanceof LSLForgeOutlinePage) {
+				((LSLForgeOutlinePage)fCurrentPage).sortItems(sorted);
+			}
+			super.run();
+		}
+    }
 }
