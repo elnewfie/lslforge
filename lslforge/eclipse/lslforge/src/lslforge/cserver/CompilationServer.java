@@ -5,45 +5,52 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.BaseException;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-
 import lslforge.LSLForgePlugin;
 import lslforge.generated.CompilationCommand;
 import lslforge.generated.CompilationResponse;
 import lslforge.generated.InitAll;
 import lslforge.util.Util;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.core.BaseException;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class CompilationServer {
 	private static final String COMPILATION_SERVER = "CompilationServer"; //$NON-NLS-1$
 	
 	private volatile boolean shutdown = false;
-	private LinkedBlockingQueue<CommandAndResult> commandQueue;
+	private final LinkedBlockingQueue<CommandAndResult> commandQueue;
 	private PrintStream writer;
     private BufferedReader reader;
-    private XStream xstream;
+    private final XStream xstream;
     private Process process;
-    private Thread interactorThread;
-	private Thread monitorThread;
-    private HashSet<RestartListener> listeners = new HashSet<RestartListener>();
+    private final Thread interactorThread;
+	private final Thread monitorThread;
+    private final HashSet<RestartListener> listeners = new HashSet<RestartListener>();
     
     public static class CommandAndResult {
-    	private CompilationCommand command;
-    	private Result result;
+    	private final CompilationCommand command;
+    	private final Result result;
+    	private Map<String, Object> extras = null;
     	public CommandAndResult(CompilationCommand command) {
     		this.command = command;
     		this.result = new Result();
     	}
     	
+    	public CommandAndResult(CompilationCommand command, Map<String, Object> extras) {
+    		this.command = command;
+    		this.result = new Result();
+    		this.extras = extras;
+    	}
+    	
     	public CompilationCommand getCommand() { return command; }
     	public Result getResult() { return result; }
+    	public Map<String, Object> getExtras() { return extras; }
     }
     
     public static class Result implements Future<CompilationResponse> {
@@ -99,7 +106,7 @@ public class CompilationServer {
 		}
     }
     
-    private Runnable interactor = new Runnable() {
+    private final Runnable interactor = new Runnable() {
 	    public void run() {
 	    	while (!shutdown) {
 	    		try {
@@ -107,6 +114,7 @@ public class CompilationServer {
 					synchronized (CompilationServer.this) {
 						try {
 							String xmlOut = xstream.toXML(cmdInfo.getCommand());
+							
 							Util.log("command to server: " + xmlOut); //$NON-NLS-1$
 					        writer.println(Util.URIEncode(xmlOut));
 					        writer.flush();
@@ -131,7 +139,7 @@ public class CompilationServer {
 	    }	
 	};
 	
-	private Runnable monitor = new Runnable() {
+	private final Runnable monitor = new Runnable() {
 
 		public void run() {
 			while (!shutdown) {
@@ -158,6 +166,15 @@ public class CompilationServer {
 		interactorThread.start();
 	}
     
+	public Result execute(CompilationCommand cmd, Map<String, Object> extras) {
+    	CommandAndResult cr = new CommandAndResult(cmd, extras);
+    	
+    	this.commandQueue.add(cr);
+    	
+    	return cr.getResult();
+		
+	}
+	
     public Result execute(CompilationCommand cmd) {
     	CommandAndResult cr = new CommandAndResult(cmd);
     	

@@ -4,5 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="lib" path="xstream-1.2.2.jar" sourcepath="xstream-1.2.2-sources.jar"/>
+	<classpathentry kind="lib" path="antlr-3.4-complete-no-antlrv2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

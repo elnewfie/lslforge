@@ -2,7 +2,6 @@ package lslforge.editor;
 
 import java.util.Iterator;
 import java.util.List;
-
 import lslforge.LSLForgePlugin;
 import lslforge.LSLProjectNature;
 import lslforge.debug.LSLLineBreakpoint;
@@ -13,7 +12,6 @@ import lslforge.generated.TextLocation;
 import lslforge.generated.TextLocation_TextLocation;
 import lslforge.outline.LSLForgeOutlinePage;
 import lslforge.util.Util;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -48,11 +46,29 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
  * LSLForge text editor.
  */
 public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurationListener, LSLProjectNature.RecompileListener {
-    public static final String ID = "lslforge.editor.LSLForgeEditor"; //$NON-NLS-1$
+    @Override
+	public void gotoMarker(IMarker marker) {
+    	IResource markerFile = marker.getResource();
+    	IResource editorFile = (IResource)getEditorInput().getAdapter(IResource.class);
+    	if(markerFile.equals(editorFile)) {
+    		super.gotoMarker(marker);
+    		if(editorFile instanceof IFile)
+    			if(parentEditor != null) 
+    				parentEditor.setActiveByFile((IFile)editorFile);
+    		
+    	} else {
+    		//Try to pass it to the multipage editor to sort out
+    		if(parentEditor != null)
+    			parentEditor.gotoMarker(marker);
+    	}
+	}
+
+	public static final String ID = "lslforge.editor.LSLForgeEditor"; //$NON-NLS-1$
 
     /** The projection support */
     private ProjectionSupport fProjectionSupport;
     
+    private LSLMultiPageEditor parentEditor = null;
     private LSLForgeOutlinePage outlinePage;
     
     private boolean forceReadOnly = false;
@@ -75,6 +91,9 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     	forceReadOnly = true;
     }
 
+    public void setParent(LSLMultiPageEditor parent) {
+    	this.parentEditor = parent;
+    }
 	/**
      * The <code>LSLForgeEditor</code> implementation of this
      * <code>AbstractTextEditor</code> method extend the actions to add those
@@ -339,5 +358,4 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
 	public void recompile() {
 		updateOutline();
 	}
-
 }

@@ -143,25 +143,15 @@ public class LSLCodeScanner extends RuleBasedScanner implements ColorProviderLis
         return x;
     }
     
-    private void initRules(LSLColorProvider provider, String[] handlerNames,
-            String[] predefFuncNames, String[] predefConstNames) {
-        IToken keyword = new Token(new TextAttribute(provider.getColor(LSLColorProvider.KEYWORD_COLOR),
-                null, computeBits(KEYWORD_STYLE)));
-        IToken type = new Token(new TextAttribute(provider.getColor(LSLColorProvider.TYPE_COLOR), null,
-                computeBits(TYPE_STYLE)));
-        IToken string = new Token(new TextAttribute(provider.getColor(LSLColorProvider.STRING_COLOR), null,
-                computeBits(STRING_STYLE)));
-        IToken comment = new Token(new TextAttribute(provider
-                .getColor(LSLColorProvider.SINGLE_LINE_COMMENT_COLOR), null,
-                computeBits(SINGLE_LINE_COMMENT_STYLE)));
-        IToken other = new Token(new TextAttribute(provider.getColor(LSLColorProvider.DEFAULT_COLOR), null,
-                computeBits(DEFAULT_STYLE)));
-        IToken handler = new Token(new TextAttribute(provider.getColor(LSLColorProvider.HANDLER_COLOR),
-                null, computeBits(HANDLER_STYLE)));
-        IToken predefFunc = new Token(new TextAttribute(provider
-                .getColor(LSLColorProvider.PREDEF_FUNC_COLOR), null, computeBits(PREDEF_FUNC_STYLE)));
-        IToken predefConst = new Token(new TextAttribute(provider
-                .getColor(LSLColorProvider.PREDEF_CONST_COLOR), null, computeBits(PREDEF_CONST_STYLE)));
+    private void initRules(LSLColorProvider provider, String[] handlerNames, String[] predefFuncNames, String[] predefConstNames) {
+        IToken keyword = new Token(new TextAttribute(provider.getColor(LSLColorProvider.KEYWORD_COLOR),  null, computeBits(KEYWORD_STYLE)));
+        IToken type = new Token(new TextAttribute(provider.getColor(LSLColorProvider.TYPE_COLOR), null, computeBits(TYPE_STYLE)));
+        IToken string = new Token(new TextAttribute(provider.getColor(LSLColorProvider.STRING_COLOR), null, computeBits(STRING_STYLE)));
+        IToken comment = new Token(new TextAttribute(provider.getColor(LSLColorProvider.SINGLE_LINE_COMMENT_COLOR), null, computeBits(SINGLE_LINE_COMMENT_STYLE)));
+        IToken other = new Token(new TextAttribute(provider.getColor(LSLColorProvider.DEFAULT_COLOR), null, computeBits(DEFAULT_STYLE)));
+        IToken handler = new Token(new TextAttribute(provider.getColor(LSLColorProvider.HANDLER_COLOR), null, computeBits(HANDLER_STYLE)));
+        IToken predefFunc = new Token(new TextAttribute(provider.getColor(LSLColorProvider.PREDEF_FUNC_COLOR), null, computeBits(PREDEF_FUNC_STYLE)));
+        IToken predefConst = new Token(new TextAttribute(provider.getColor(LSLColorProvider.PREDEF_CONST_COLOR), null, computeBits(PREDEF_CONST_STYLE)));
         List<IRule> rules = new ArrayList<IRule>();
 
         // Add rule for single line comments.

@@ -2,7 +2,7 @@
 <feature
       id="lslforge_part_macosx_x86"
       label="lslforge_part_macosx_x86"
-      version="0.1.1">
+      version="0.1.2">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -17,7 +17,7 @@
    </license>
 
    <requires>
-      <import plugin="lslforge" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="lslforge" version="0.1.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin

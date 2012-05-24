@@ -1,11 +1,14 @@
 package lslforge.editor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import lslforge.LSLForgePlugin;
 import lslforge.outline.LSLForgeMultiOutlinePage;
-
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -13,6 +16,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -30,35 +34,40 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
  * compiled output
  */
 public class LSLMultiPageEditor extends MultiPageEditorPart implements IResourceChangeListener{
-
+	private static final Image IMAGE = LSLForgePlugin.createImage("icons/obj16/lslforge.gif"); //$NON-NLS-1$
+	
 	/** The text editor used in page 0. */
 	private LSLForgeEditor sourceEditor = null;
 	private IFileEditorInput sourceEditorInput = null;
-	
-	private LSLForgeMultiOutlinePage outlinePage = null;
-
 	private IFileEditorInput compiledEditorInput = null;
 	private LSLForgeEditor compiledEditor = null;
 	
+	private LSLForgeMultiOutlinePage outlinePage = null;
 	private LSLForgeEditor currentEditor = null;
 	private int compiledPage = -1;
+	
+	private final Map<Integer, LSLForgeEditor> pages;
 
 	public LSLMultiPageEditor() {
 		super();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
+		pages = new HashMap<Integer, LSLForgeEditor>();
 	}
 	
 	/**
 	 * Creates the main source editor tab
 	 */
 	void createSourcePage() {
+
 		try {
 			if(ResourcesPlugin.getWorkspace().getRoot().exists(sourceEditorInput.getFile().getFullPath())) {
 				sourceEditor = new LSLForgeEditor();
+				sourceEditor.setParent(this);
 				currentEditor = sourceEditor;
 				sourceEditor.updateOutline();
 				
 				int newPage = addPage(sourceEditor, sourceEditorInput);
+				pages.put(newPage, sourceEditor);
 				setPageText(newPage, sourceEditorInput.getName());
 			}
 			
@@ -75,6 +84,7 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		try {
 			if(ResourcesPlugin.getWorkspace().getRoot().exists(compiledEditorInput.getFile().getFullPath())) {
 				compiledEditor = new LSLForgeEditor();
+				compiledEditor.setParent(this);
 				
 				//Set read-only when we have a .lslp file to go with it
 				if(ResourcesPlugin.getWorkspace().getRoot().exists(sourceEditorInput.getFile().getFullPath())) {
@@ -83,6 +93,7 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 				
 				compiledEditor.updateOutline();
 				compiledPage = addPage(compiledEditor, compiledEditorInput);
+				pages.put(compiledPage, compiledEditor);
 				setPageText(compiledPage, compiledEditorInput.getName());
 			}
 			
@@ -132,6 +143,9 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		}
 		
 		getOutlinePage().setPageActive(currentEditor.getOutlinePage());
+		if(getEditorInput() instanceof IFileEditorInput) {
+			setActiveByFile(((IFileEditorInput)getEditorInput()).getFile());
+		}
 	}
 	
 	@Override
@@ -188,8 +202,36 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 	 * Method declared on IEditorPart
 	 */
 	public void gotoMarker(IMarker marker) {
-		setActivePage(0);
-		IDE.gotoMarker(getEditor(0), marker);
+		IEditorPart editor = setActivePage(marker.getResource());
+		if(editor != null)
+			IDE.gotoMarker(editor, marker);
+	}
+	
+	public IEditorPart setActivePage(IResource resource) {
+		for(int page: pages.keySet()) {
+			IEditorPart editor = pages.get(page);
+			IResource testPage = (IResource)editor.getEditorInput().getAdapter(IResource.class);
+			if(testPage.equals(resource)) {
+				setActivePage(page);
+				return editor;
+			}
+		}
+		
+		return null;
+	}
+	
+	public IEditorPart setActiveByFile(IFile file) {
+		for(int page: pages.keySet()) {
+			if(!(pages.get(page).getEditorInput() instanceof IFileEditorInput)) continue;	//Skip to next item
+			IFileEditorInput input = (IFileEditorInput)pages.get(page).getEditorInput();
+			if(input.getFile().equals(file)) {
+				//This is the one
+				setActivePage(page);
+				return pages.get(page);
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
@@ -200,6 +242,8 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 	public void init(IEditorSite site, IEditorInput editorInput) throws PartInitException {
 		if (!(editorInput instanceof IFileEditorInput))
 			throw new PartInitException("Invalid Input: Must be IFileEditorInput"); //$NON-NLS-1$
+		
+		setTitleImage(IMAGE);
 		
 		//Try to open the associated .lsl/.lslp file that goes with this file
 		IFileEditorInput ei = (IFileEditorInput)editorInput;
