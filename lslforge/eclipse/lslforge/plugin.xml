@@ -481,5 +481,61 @@
             name="Editor Appearance">
       </page>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <dynamic
+               class="lslforge.project.ProjectContributionItem"
+               id="lslforge.project.projectContributionItem">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <iterate>
+                     <instanceof
+                           value="org.eclipse.core.resources.IProject">
+                     </instanceof>
+                  </iterate>
+                  <count
+                        value="1">
+                  </count>
+               </with>
+            </visibleWhen>
+         </dynamic>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            category="lslforge.project.support"
+            categoryId="lslforge.support"
+            id="lslforge.project.addSupport"
+            name="Add LSLForge Support">
+      </command>
+      <command
+            category="lslforge.project.support"
+            categoryId="lslforge.support"
+            id="lslforge.project.removeSupport"
+            name="Remove LSLForge Support">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="lslforge.project.AddSupportHandler"
+            commandId="lslforge.project.addSupport">
+      </handler>
+      <handler
+            class="lslforge.project.RemoveSupportHandler"
+            commandId="lslforge.project.removeSupport">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="lslforge.preferences.PreferenceHelper">
+      </initializer>
+   </extension>
 </plugin>

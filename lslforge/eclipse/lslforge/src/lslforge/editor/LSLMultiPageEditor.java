@@ -45,6 +45,7 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 	private LSLForgeMultiOutlinePage outlinePage = null;
 	private LSLForgeEditor currentEditor = null;
 	private int compiledPage = -1;
+	private int rememberedPage = -1;
 	
 	private final Map<Integer, LSLForgeEditor> pages;
 
@@ -348,4 +349,12 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 		
 		return matches;
 	}
+	
+	protected void restoreSelection() {
+		setActivePage(rememberedPage);
+	}
+
+	protected void rememberSelection() {
+		rememberedPage = getActivePage();
+	}	
 }

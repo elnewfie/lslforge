@@ -740,4 +740,54 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 			// Something went wrong
 		}
     }
+
+
+    /**
+     * Checks if the specified project supports LSLForge plugin functionality.
+     * @param project
+     * @return true or false
+     * @throws CoreException 
+     */
+    public static boolean hasProjectNature(IProject project) throws CoreException {
+    	return project.getDescription().hasNature(LSLProjectNature.ID);
+    }
+    
+    public static void addProjectNature(IProject project) throws CoreException {
+    	//Make sure it doesn't exist already, since we dont want to add it twice
+    	if(hasProjectNature(project)) return;
+    	
+    	//Now add it
+    	IProjectDescription desc = project.getDescription();
+    	String[] natures = desc.getNatureIds();
+    	String[] newNatures = new String[natures.length + 1];
+    	for(int i = 0; i < natures.length; i++) {
+    		newNatures[i] = natures[i];
+    	}
+    	newNatures[natures.length] = LSLProjectNature.ID;
+    	
+    	//And save it
+    	desc.setNatureIds(newNatures);
+    	project.setDescription(desc, null);
+    }
+    
+    public static void removeProjectNature(IProject project) throws CoreException {
+    	//Skip it if it doesn't exist
+    	if(!hasProjectNature(project)) return;
+    	
+    	//Now remove it
+    	IProjectDescription desc = project.getDescription();
+    	
+    	List<String> natures = new ArrayList<String>();
+    	for(String theNature: desc.getNatureIds()) {
+    		if(!LSLProjectNature.ID.equals(theNature)) {
+    			natures.add(theNature);
+    		}
+    	}
+    	
+    	//And save it
+    	String[] newNatures = new String[natures.size()];
+    	natures.toArray(newNatures);
+    	desc.setNatureIds(newNatures);
+    	project.setDescription(desc, null);
+    }    
 }

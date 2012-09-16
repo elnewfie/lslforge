@@ -37,6 +37,8 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.ITextEditorActionDefinitionIds;
 import org.eclipse.ui.texteditor.TextOperationAction;
@@ -173,7 +175,15 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
 
     public IContentOutlinePage getOutlinePage() {
         if (outlinePage == null) {
-            outlinePage = new LSLForgeOutlinePage(this);
+        	IEditorInput input = this.getEditorInput();
+        	if(input instanceof IFileEditorInput) {
+        		IFileEditorInput feInput = (IFileEditorInput)input;
+        		try {
+					if(LSLProjectNature.hasProjectNature(feInput.getFile().getProject())) {
+						outlinePage = new LSLForgeOutlinePage(this);
+					}
+				} catch (CoreException e) { }	//Do nothing and let the outline page stay null
+        	}
         }
     	
     	return outlinePage;
@@ -357,5 +367,18 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
 
 	public void recompile() {
 		updateOutline();
+	}
+	
+
+	@Override
+	protected void rememberSelection() {
+		if(parentEditor != null) parentEditor.rememberSelection();
+		super.rememberSelection();
+	}
+
+	@Override
+	protected void restoreSelection() {
+		super.restoreSelection();
+		if(parentEditor != null) parentEditor.restoreSelection();
 	}
 }

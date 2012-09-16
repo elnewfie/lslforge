@@ -195,7 +195,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.debug.ui,
  org.eclipse.ui.ide,
  org.eclipse.help,
- org.eclipse.update.core,
  org.eclipse.search;bundle-version="3.6.0"
 Bundle-ActivationPolicy: lazy
 Import-Package: com.ibm.icu.text;version="3.6.1",
