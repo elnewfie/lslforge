@@ -421,6 +421,7 @@ allConstants = [
     Constant "PERMISSION_RELEASE_OWNERSHIP" (IVal 0x40),
     Constant "PERMISSION_REMAP_CONTROLS" (IVal 0x8),
     Constant "PERMISSION_TAKE_CONTROLS" llcPermissionTakeControls,
+    Constant "PERMISSION_TELEPORT" (IVal 0x1000),
     Constant "PERMISSION_TRACK_CAMERA" (IVal 0x400),
     Constant "PERMISSION_TRIGGER_ANIMATION" llcPermissionTriggerAnimation,
     Constant "PERM_ALL" (IVal 0x7FFFFFFF),

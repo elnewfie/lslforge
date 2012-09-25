@@ -1,4 +1,0 @@
-default {
-    state_entry() {
-    }
-}

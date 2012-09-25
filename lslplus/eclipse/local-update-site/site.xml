@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <feature url="features/lslplus_0.10.1.jar" id="lslplus" version="0.10.1"/>
-   <feature url="features/lslplus-part-macosx-x86_0.10.1.jar" id="lslplus-part-macosx-x86" version="0.10.1"/>
-   <feature url="features/lslplus-part-win32-x86_0.10.1.jar" id="lslplus-part-win32-x86" version="0.10.1" os="win32" arch="x86"/>
-   <feature url="features/lslplus_part_linux_x86_0.10.1.jar" id="lslplus_part_linux_x86" version="0.10.1"/>
-</site>

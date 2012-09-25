@@ -1,5 +1,0 @@
-// module1.lslm
-
-$module (integer DEBUG)
-
-$import debug.lslm(DEBUG=DEBUG) my_; 
