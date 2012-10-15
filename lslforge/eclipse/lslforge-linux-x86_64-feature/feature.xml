@@ -2,7 +2,7 @@
 <feature
       id="lslforge_part_linux_x86_64"
       label="lslforge_part_linux_x86_64"
-      version="0.1.2">
+      version="0.1.3">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]
@@ -17,7 +17,7 @@
    </license>
 
    <requires>
-      <import plugin="lslforge" version="0.1.2" match="greaterOrEqual"/>
+      <import plugin="lslforge" version="0.1.3" match="greaterOrEqual"/>
    </requires>
 
    <plugin
