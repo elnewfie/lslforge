@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.outline.LSLForgeMultiOutlinePage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -33,7 +34,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
  * Multi-page editor that displays both the LSLForge source file and the
  * compiled output
  */
-public class LSLMultiPageEditor extends MultiPageEditorPart implements IResourceChangeListener{
+public class LSLMultiPageEditor extends MultiPageEditorPart implements IResourceChangeListener, LSLProjectNature.RecompileListener {
 	private static final Image IMAGE = LSLForgePlugin.createImage("icons/obj16/lslforge.gif"); //$NON-NLS-1$
 	
 	/** The text editor used in page 0. */
@@ -286,10 +287,15 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 				if(deltas.length > 0) {
 					//What kind of change was recorded?
 					for(IResourceDelta delta: deltas) {
-						switch(delta.getKind()) {
+						int kind = delta.getKind();
+						switch(kind) {
 						case IResourceDelta.ADDED:
 							//Compiled file added, so add its corresponding tab
 							createCompiledPage();
+							break;
+							
+						case IResourceDelta.CHANGED:
+							//We have this here for debugging purposes
 							break;
 							
 						case IResourceDelta.REMOVED:
@@ -356,5 +362,10 @@ public class LSLMultiPageEditor extends MultiPageEditorPart implements IResource
 
 	protected void rememberSelection() {
 		rememberedPage = getActivePage();
+	}
+
+	public void recompile() {
+		// TODO Auto-generated method stub
+		
 	}	
 }

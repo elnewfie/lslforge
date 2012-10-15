@@ -29,13 +29,14 @@ public class LSLForgeMultiOutlinePage extends Page implements IContentOutlinePag
 	public void setPageActive(IContentOutlinePage page) {
 		if (page != null) {
 			fCurrentPage = page;
-			if (fPagebook == null) {
+			if (fPagebook == null || fPagebook.isDisposed()) {
 				return;
 			}
 
 			Control control = page.getControl();
 
-			if (control == null || control.isDisposed()) {
+			//if (control == null || control.isDisposed()) {
+			if (control == null) {
 				page.createControl(fPagebook);
 				control = page.getControl();
 			}

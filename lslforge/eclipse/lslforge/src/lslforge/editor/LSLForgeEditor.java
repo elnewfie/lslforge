@@ -48,7 +48,8 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
  * LSLForge text editor.
  */
 public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurationListener, LSLProjectNature.RecompileListener {
-    @Override
+	@Deprecated
+	@Override
 	public void gotoMarker(IMarker marker) {
     	IResource markerFile = marker.getResource();
     	IResource editorFile = (IResource)getEditorInput().getAdapter(IResource.class);
@@ -128,7 +129,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         super.doSave(monitor);
     }
 
-    /**
+	/**
      * doSaveAs specialization of the AbstractTextEditor's doSaveAs()...
      */
     @Override
@@ -355,7 +356,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     	if(outlinePage != null) {
     		asyncExec(new Runnable() {
     			public void run() {
-    				outlinePage.update();
+					outlinePage.update();
     			}
     		});
     	}
@@ -368,7 +369,6 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
 	public void recompile() {
 		updateOutline();
 	}
-	
 
 	@Override
 	protected void rememberSelection() {

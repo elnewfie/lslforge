@@ -532,10 +532,4 @@
             commandId="lslforge.project.removeSupport">
       </handler>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="lslforge.preferences.PreferenceHelper">
-      </initializer>
-   </extension>
 </plugin>

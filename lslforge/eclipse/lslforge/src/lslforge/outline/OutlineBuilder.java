@@ -3,6 +3,7 @@ package lslforge.outline;
 import java.util.ArrayList;
 import java.util.List;
 import lslforge.LSLForgeElement;
+import lslforge.LSLForgePlugin;
 import lslforge.LSLProjectNature;
 import lslforge.cserver.CompilationServer.Result;
 import lslforge.editor.LSLForgeEditor;
@@ -16,6 +17,7 @@ import lslforge.generated.CompilationResponse_ScriptResponse;
 import lslforge.generated.Ctx;
 import lslforge.generated.Ctx_Ctx;
 import lslforge.generated.ErrInfo;
+import lslforge.generated.ErrInfo_ErrInfo;
 import lslforge.generated.FuncDec_FuncDec;
 import lslforge.generated.Func_Func;
 import lslforge.generated.GlobDef;
@@ -41,9 +43,11 @@ import lslforge.generated.SourceContext;
 import lslforge.generated.SourceContext_SourceContext;
 import lslforge.generated.State;
 import lslforge.generated.State_State;
+import lslforge.generated.TextLocation;
 import lslforge.generated.TextLocation_TextLocation;
 import lslforge.generated.Var;
 import lslforge.generated.Var_Var;
+import lslforge.language_metadata.LSLFunction;
 import lslforge.outline.DocumentOutline.DocumentType;
 import lslforge.outline.items.Function;
 import lslforge.outline.items.Import;
@@ -53,6 +57,8 @@ import lslforge.outline.items.TextPosition;
 import lslforge.outline.items.Variable;
 import lslforge.util.Util;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.IDocument;
@@ -113,12 +119,13 @@ public class OutlineBuilder
 		}
 
 		// Parse it, grab the errors
-		parseResponse(response);
 		if (type == DocumentType.SCRIPT) {
 			errors = ((CompilationResponse_ScriptResponse) response).el1.el2;
 		} else {
 			errors = ((CompilationResponse_ModuleResponse) response).el1.el2;
 		}
+		parseResponse(response);
+		parseErrors(file);
 
 		return;
 	}
@@ -156,6 +163,41 @@ public class OutlineBuilder
 		}
 	}
 
+	private void parseErrors(IResource resource) {
+		try {
+			resource.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			
+			for(ErrInfo ei: errors) {
+				ErrInfo_ErrInfo err = (ErrInfo_ErrInfo)ei;
+				
+				IMarker marker = resource.createMarker(LSLProjectNature.LSLFORGE_PROBLEM);
+                marker.setAttribute(IMarker.MESSAGE, err.el2);
+                marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+                if (err.el1 instanceof Maybe_Just) {
+                	TextLocation_TextLocation errLoc = (TextLocation_TextLocation)((Maybe_Just<TextLocation>)err.el1).el1;
+                    int lineOffset0 = errLoc.textLine0 - 1;
+                    int lineOffset1 = errLoc.textLine1 - 1;
+                    marker.setAttribute(IMarker.LINE_NUMBER, errLoc.textLine0);
+                    int[] offsets = Util.findOffsetsFor(
+                    	new int[] { lineOffset0, lineOffset1 }, 
+                        new int[] { errLoc.textColumn0 - 1, errLoc.textColumn1 - 1 }, 
+                        (IFile)resource
+                    );
+                    if (offsets != null) {
+                        if (offsets[0] == offsets[1]) offsets[1]++;
+                        marker.setAttribute(IMarker.CHAR_START, offsets[0]);
+                        marker.setAttribute(IMarker.CHAR_END, offsets[1]);
+                    }
+                }
+			}
+			
+		} catch (CoreException e) {
+			Util.error(e.getMessage());
+			return;
+		}
+		
+	}
+	
 	private void parseResponse(CompilationResponse response) {
 		List<GlobDef> globals;
 		if (type == DocumentType.SCRIPT) {
@@ -164,6 +206,8 @@ public class OutlineBuilder
 			globals = ((LModule_LModule) ((CompilationResponse_ModuleResponse) response).el1.el1).el1;
 		}
 
+		LSLFunction[] functions = LSLForgePlugin.getLLFunctions();
+		
 		// First, extract our global variables and functions
 		for (GlobDef g : globals) {
 			// Is it a variable?
@@ -172,12 +216,13 @@ public class OutlineBuilder
 				GlobDef_GV gf = (GlobDef_GV) g;
 				Ctx_Ctx<?> c = (Ctx_Ctx<?>) gf.el1;
 				Maybe<SourceContext> m = c.srcCtx;
-
+				
 				// Extract the position, name, and datatype
 				TextPosition textPos = getTextPosition(m, document);
-				Variable newVar = new Variable(getRawText(g), getDataType(g));
+				String varName = getRawText(g);
+				Variable newVar = new Variable(varName, getDataType(g));
 				newVar.setTextPosition(textPos);
-
+				
 				// Add it
 				items.add(newVar);
 
@@ -190,9 +235,11 @@ public class OutlineBuilder
 				Func_Func f = (Func_Func)Util.ctxItem(gf.el1);
 				FuncDec_FuncDec fd = (FuncDec_FuncDec) f.el1;
 				
+				
 				// Extract the position, name, and datatype
 				TextPosition textPos = getTextPosition(m, document);
-				Function newFunc = new Function(getRawText(g), getDataType(g));
+				String funcName = getRawText(g);
+				Function newFunc = new Function(funcName, getDataType(g));
 				newFunc.setTextPosition(textPos);
 				for(Ctx<Var> parm: fd.funcParms) {
 					Var_Var v = (Var_Var)Util.ctxItem(parm);
@@ -200,9 +247,12 @@ public class OutlineBuilder
 				}
 				newFunc.toPrototype();
 
+				//Newfie - commented out for now, will return in super form later
+				//if(parseFuncErrors(functions, m, funcName)) continue;
+
 				items.add(newFunc);
 
-				// An import statement?
+			// An import statement?
 			} else if (g instanceof GlobDef_GI) {
 				// Unravel this mess
 				GlobDef_GI gi = (GlobDef_GI) g;
@@ -251,6 +301,44 @@ public class OutlineBuilder
 				}
 			}
 		}
+	}
+
+	private boolean parseFuncErrors(LSLFunction[] functions, Maybe<SourceContext> m, String funcName) {
+		//Check if it's already defined LL function
+		for(LSLFunction func: functions) {
+			if(funcName.equals(func.getName())) {
+				//Create an error entry for this
+		        Maybe_Just<SourceContext> j = (Maybe_Just<SourceContext>) m;
+		        SourceContext_SourceContext sc = (SourceContext_SourceContext) j.el1;
+		        TextLocation_TextLocation tl = (TextLocation_TextLocation) sc.srcTextLocation;
+				
+		        TextLocation_TextLocation locErr = new TextLocation_TextLocation();
+		        locErr.textLine0 = tl.textLine0;
+		        locErr.textColumn0 = tl.textColumn0;
+		        locErr.textLine1 = tl.textLine0;
+		        locErr.textColumn1 = tl.textColumn0 + funcName.length();
+		        
+				ErrInfo_ErrInfo err = new ErrInfo_ErrInfo();
+				Maybe_Just<TextLocation> loc = new Maybe_Just<TextLocation>();
+				loc.el1 = locErr;
+				
+				err.el1 = loc;
+				err.el2 = funcName + " is an already defined LSL function."; //$NON-NLS-1$
+				
+				errors.add(err);
+				
+				//Remove the compiled file if necessary
+				
+				try {
+					IFile compiledName = Util.getScriptCompiledName(file);
+					if(compiledName != null)
+						compiledName.delete(true, null);
+				} catch (CoreException e) { }
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public String getRawText(Object element) {

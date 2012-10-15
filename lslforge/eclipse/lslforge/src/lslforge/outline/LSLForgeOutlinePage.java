@@ -2,20 +2,26 @@ package lslforge.outline;
 
 import java.util.List;
 import lslforge.LSLForgePlugin;
+import lslforge.LSLProjectNature;
 import lslforge.editor.LSLForgeEditor;
 import lslforge.outline.items.OutlineItem;
 import lslforge.outline.items.TextPosition;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.texteditor.IElementStateListener;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
@@ -37,36 +43,57 @@ public class LSLForgeOutlinePage extends ContentOutlinePage
 
 	@Override
 	public void createControl(Composite parent) {
+		if(parent.isDisposed()) return;	//Skip if it is shut down
+		
 		super.createControl(parent);
 		TreeViewer viewer = getTreeViewer();
 
-		docOutline = new DocumentOutline();
-		viewer.setContentProvider(docOutline);
-		viewer.setLabelProvider(docOutline);
-		viewer.setInput(editor);
-
-		// Hook up our listener, so we know when to rebuild the outline
-		editor.getDocumentProvider().addElementStateListener(new IElementStateListener() {
-			public void elementMoved(Object originalElement, Object movedElement) {
-				docOutline.markChanged();
+		//See if this project supports the outline view
+		boolean supported = true;
+		if(this.editor.getEditorInput() instanceof IFileEditorInput) {
+			try {
+				IProject project = ((IFileEditorInput)this.editor.getEditorInput()).getFile().getProject();
+				if(!LSLProjectNature.hasProjectNature(project)) supported = false;
+			} catch (CoreException e) {
+				supported = false;
 			}
-
-			public void elementDirtyStateChanged(Object element, boolean isDirty) {
-				docOutline.markChanged();
-			}
-
-			public void elementDeleted(Object element) {
-				docOutline.markChanged();
-			}
-
-			public void elementContentReplaced(Object element) {
-				docOutline.markChanged();
-			}
-
-			public void elementContentAboutToBeReplaced(Object element) {
-				docOutline.markChanged();
-			}
-		});
+		}
+		
+		if(supported) {
+			docOutline = new DocumentOutline();
+			viewer.setContentProvider(docOutline);
+			viewer.setLabelProvider(docOutline);
+			viewer.setInput(editor);
+			
+			// Hook up our listener, so we know when to rebuild the outline
+			editor.getDocumentProvider().addElementStateListener(new IElementStateListener() {
+				public void elementMoved(Object originalElement, Object movedElement) {
+					docOutline.markChanged();
+				}
+				
+				public void elementDirtyStateChanged(Object element, boolean isDirty) {
+					docOutline.markChanged();
+				}
+				
+				public void elementDeleted(Object element) {
+					docOutline.markChanged();
+				}
+				
+				public void elementContentReplaced(Object element) {
+					docOutline.markChanged();
+				}
+				
+				public void elementContentAboutToBeReplaced(Object element) {
+					docOutline.markChanged();
+				}
+			});
+			
+		} else {
+			EmptyOutline outline = new EmptyOutline();
+			viewer.setContentProvider(outline);
+			viewer.setLabelProvider(outline);
+			viewer.setInput(editor);
+		}
 	}
 
 	@Override
@@ -141,5 +168,27 @@ public class LSLForgeOutlinePage extends ContentOutlinePage
 			super.run();
 		}
 
+	}
+	
+	private class EmptyOutline extends LabelProvider implements ITreeContentProvider {
+		public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		}
+
+		public Object[] getElements(Object inputElement) {
+			return new String[] { Messages.LSLForgeOutlinePage_OutlineUnsupported };
+		}
+
+		public Object[] getChildren(Object parentElement) {
+			return null;
+		}
+
+		public Object getParent(Object element) {
+			return null;
+		}
+
+		public boolean hasChildren(Object element) {
+			return false;
+		}
+		
 	}
 }

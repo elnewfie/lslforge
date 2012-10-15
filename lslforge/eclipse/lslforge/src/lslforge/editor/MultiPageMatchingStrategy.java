@@ -42,11 +42,6 @@ public class MultiPageMatchingStrategy implements IEditorMatchingStrategy {
 			
 			if(baseFileA.equals(baseFileB)) {
 				//If we end up switching to the multipage editor, flip the tab to the right one
-				if(editorRef.getEditor(false) instanceof LSLMultiPageEditor) {
-					LSLMultiPageEditor editor = (LSLMultiPageEditor)editorRef.getEditor(false);
-					editor.setActiveByFile(fileInput.getFile());
-				}
-				
 				return true;
 			}
 		}

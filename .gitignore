@@ -1,8 +1,17 @@
 *.class
 *.exe
+*.hi
+*.o
 lslforge/haskell/dist/*
 lslforge/eclipse/update-site/dist/*
 lslforge/eclipse/update-site/plugins/*
 lslforge/eclipse/update-site/features/*
 lslforge/eclipse/update-site/artifacts.*
 lslforge/eclipse/update-site/content.*
+lslforge/eclipse/lslforge-linux-x86/os/linux/x86/LSLForge
+lslforge/eclipse/lslforge-win32-x86/os/win32/x86/LSLForge.exe
+lslforge/build_*
+lslforge/copy_*
+/lslforge/rename_files.sh
+/lslforge/eclipse/lslforge-linux-x86_64/os/linux/x86_64
+/lslforge/eclipse/lslforge-macosx-x86/os/macosx/x86/LSLForge

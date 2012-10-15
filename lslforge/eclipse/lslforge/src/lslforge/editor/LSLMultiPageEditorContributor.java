@@ -1,8 +1,6 @@
 package lslforge.editor;
 
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.actions.ActionFactory;
@@ -25,7 +23,6 @@ public class LSLMultiPageEditorContributor extends MultiPageEditorActionBarContr
 	 */
 	public LSLMultiPageEditorContributor() {
 		super();
-		createActions();
 	}
 	
 	protected IAction getAction(ITextEditor editor, String actionID) {
@@ -56,25 +53,5 @@ public class LSLMultiPageEditorContributor extends MultiPageEditorActionBarContr
 			actionBars.setGlobalActionHandler(IDEActionFactory.BOOKMARK.getId(), getAction(editor, IDEActionFactory.BOOKMARK.getId()));
 			actionBars.updateActionBars();
 		}
-	}
-	private void createActions() {
-//		sampleAction = new Action() {
-//			@Override
-//			public void run() {
-//				MessageDialog.openInformation(null, "LSLForge", "Sample Action Executed");
-//			}
-//		};
-//		sampleAction.setText("Sample Action");
-//		sampleAction.setToolTipText("Sample Action tool tip");
-//		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(IDE.SharedImages.IMG_OBJS_TASK_TSK));
-	}
-	public void contributeToMenu(IMenuManager manager) {
-//		IMenuManager menu = new MenuManager("Editor &Menu");
-//		manager.prependToGroup(IWorkbenchActionConstants.MB_ADDITIONS, menu);
-//		menu.add(sampleAction);
-	}
-	public void contributeToToolBar(IToolBarManager manager) {
-//		manager.add(new Separator());
-//		manager.add(sampleAction);
 	}
 }

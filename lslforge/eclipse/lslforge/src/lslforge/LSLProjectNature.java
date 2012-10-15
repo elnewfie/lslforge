@@ -311,7 +311,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 	
 	private static final String LSLFORGE = "lslforge"; //$NON-NLS-1$
 
-	private static final String LSLFORGE_PROBLEM = "lslforge.problem"; //$NON-NLS-1$
+	public static final String LSLFORGE_PROBLEM = "lslforge.problem"; //$NON-NLS-1$
 
 	private final HashSet<RecompileListener> recompListeners = new HashSet<RecompileListener>();
 	private Map<String,LinkedList<EPSummary>> entryPoints;
