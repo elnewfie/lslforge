@@ -120,9 +120,8 @@ public class CompilationServer {
 					        writer.flush();
 							
 							String line = reader.readLine();
-							Util.log(Util.URIDecode(line));
-							CompilationResponse response = 
-								(CompilationResponse) xstream.fromXML(Util.URIDecode(line));
+							line = Util.URIDecode(line);
+							CompilationResponse response =  (CompilationResponse) xstream.fromXML(line);
 							cmdInfo.getResult().put(response);
 						} catch (IOException e) {
 							cmdInfo.getResult().put(e);

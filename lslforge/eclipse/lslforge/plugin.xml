@@ -509,14 +509,10 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            category="lslforge.project.support"
-            categoryId="lslforge.support"
             id="lslforge.project.addSupport"
             name="Add LSLForge Support">
       </command>
       <command
-            category="lslforge.project.support"
-            categoryId="lslforge.support"
             id="lslforge.project.removeSupport"
             name="Remove LSLForge Support">
       </command>

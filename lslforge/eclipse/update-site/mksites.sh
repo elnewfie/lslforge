@@ -8,6 +8,8 @@ fi
 unzip artifacts.jar
 unzip content.jar
 
+ln -s dist/$1 current_release
+
 for site in `awk '{print $1;}' siteurls.txt`
 do
     url=`grep "^$site " siteurls.txt | awk '{print $2;}'`
