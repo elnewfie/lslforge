@@ -11,7 +11,7 @@ import java.util.HashSet;
 
 import lslforge.LSLForgePlugin;
 import lslforge.launching.Messages;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -53,7 +53,7 @@ public abstract class LSLProcess extends Thread implements IProcess {
                     LSLProcess.this.p.destroy();
                     onTerminate();
                 } catch (Exception e) {
-                    Util.error(e,e.getLocalizedMessage());
+                    Log.error(e);
                     onTerminate();
                 }
             }

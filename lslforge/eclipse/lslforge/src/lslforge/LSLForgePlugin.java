@@ -31,6 +31,7 @@ import lslforge.language_metadata.LSLMetaData;
 import lslforge.language_metadata.LSLParam;
 import lslforge.lsltest.TestManager;
 import lslforge.util.LSLColorProvider;
+import lslforge.util.Log;
 import lslforge.util.Util;
 import lslforge.util.Util.ArrayMapFunc;
 
@@ -111,7 +112,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
                         try {
                             IDE.openEditor(activePage, resource, true);
                         } catch (PartInitException e) {
-                            Util.error(e, e.getLocalizedMessage());
+                            Log.error(e);
                         }
                     }
                 });
@@ -139,7 +140,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
             writer.close();
             return process;
         } catch (IOException e) {
-            Util.error(e, e.getMessage());
+            Log.error(e);
             return null;
         }
     }
@@ -166,7 +167,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         try {
             Util.chmod(new File(exeName));
         } catch (IOException e) {
-            Util.error(e, "can't change mode of native executable"); //$NON-NLS-1$
+            Log.error("can't change mode of native executable", e); //$NON-NLS-1$
         }
         return execute(command, redir, exeName);
     }
@@ -179,7 +180,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
 
             return process;
         } catch (IOException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
             return null;
         }
     }
@@ -210,7 +211,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
                     return true;
                 }
             } catch (IOException e) {
-                Util.error(e, "can't locate " + url); //$NON-NLS-1$
+                Log.error("can't locate " + url, e); //$NON-NLS-1$
             }
         }
         
@@ -225,7 +226,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
                     return true;
                 }
             } catch (IOException e) {
-                Util.error(e, "can't locate " + url); //$NON-NLS-1$
+                Log.error("can't locate " + url, e); //$NON-NLS-1$
             }
         }
         
@@ -301,7 +302,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
     }
     
     private void setExecutablePath(String path) {
-        Util.log("executablePath = " + path); //$NON-NLS-1$
+        Log.info("executablePath = " + path); //$NON-NLS-1$
         this.executablePath = path;
     }
     
@@ -333,7 +334,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
             
             return f.getAbsolutePath();
         } catch (IOException e) {
-            Util.error(e, "can't compute default path"); //$NON-NLS-1$
+            Log.error("can't compute default path", e); //$NON-NLS-1$
             return ""; //$NON-NLS-1$
         }
     }
@@ -357,21 +358,21 @@ public class LSLForgePlugin extends AbstractUIPlugin {
             
             return buf.toString();
         } catch (IOException e) {
-            Util.error(e,e.getLocalizedMessage());
+            Log.error(e);
             return null;
         } finally {
             try { 
                 reader.close();
             } catch (IOException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
     
     static String validateExpression(String expression) {
-        if (DEBUG) Util.log("expression: " + expression); //$NON-NLS-1$
+        Log.debug("expression: " + expression); //$NON-NLS-1$
         String result = runTask("ExpressionHandler", expression); //$NON-NLS-1$
-        if (DEBUG) Util.log("result: " + result); //$NON-NLS-1$
+        Log.debug("result: " + result); //$NON-NLS-1$
         if (result == null) {
             return "Can't evaluate expression (internal error)"; //$NON-NLS-1$ TODO
         }
@@ -409,10 +410,10 @@ public class LSLForgePlugin extends AbstractUIPlugin {
     private LSLMetaData buildMetaData() {
         String result = runTask("MetaData", ""); //$NON-NLS-1$//$NON-NLS-2$
         if (result == null) {
-            Util.error(Messages.LSLForgePlugin_NO_META_DATA);
+            Log.error(Messages.LSLForgePlugin_NO_META_DATA);
             return new LSLMetaData();
         }
-        if (DEBUG) Util.log("Meta-Data: " + result); //$NON-NLS-1$
+        Log.debug("Meta-Data: " + result); //$NON-NLS-1$
         XStream xstream = new XStream(new DomDriver());
 
         xstream.alias("lslmeta", LSLMetaData.class); //$NON-NLS-1$
@@ -424,7 +425,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         try {
             md = (LSLMetaData) xstream.fromXML(result);
         } catch (Exception e) {
-            Util.error(e, Messages.LSLForgePlugin_COULD_NOT_DESERIALIZE_META_DATA);
+            Log.error(Messages.LSLForgePlugin_COULD_NOT_DESERIALIZE_META_DATA, e);
             md = new LSLMetaData();
         }
         return md;

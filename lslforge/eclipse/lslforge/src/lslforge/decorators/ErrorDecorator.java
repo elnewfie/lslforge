@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import lslforge.LSLForgePlugin;
 import lslforge.LSLProjectNature;
+import lslforge.util.Log;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IMarker;
@@ -38,7 +39,7 @@ public class ErrorDecorator implements ILightweightLabelDecorator {
 		if (!resource.exists()) return;
 		IProject project = resource.getProject();
 		if (project == null) {
-			Util.error(Messages.getString("ErrorDecorator.PROJECT_FOR") + resource.getName() + Messages.getString("ErrorDecorator.IS_NULL")); //$NON-NLS-1$ //$NON-NLS-2$
+			Log.error(Messages.getString("ErrorDecorator.PROJECT_FOR") + resource.getName() + Messages.getString("ErrorDecorator.IS_NULL")); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 		try {
@@ -56,7 +57,7 @@ public class ErrorDecorator implements ILightweightLabelDecorator {
 				return;
 			}
 		} catch (CoreException e) {
-			Util.error(e,"exception caught trying to determine project nature!"); //$NON-NLS-1$
+			Log.error("exception caught trying to determine project nature!", e); //$NON-NLS-1$
 			return;
 		}
 

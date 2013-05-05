@@ -35,7 +35,7 @@ public class TestEvents {
     }
     
     public static TestEvent fromXML(String xml) {
-        //Util.log(xml);
+        //Log.log(xml);
         return (TestEvent) xstream.fromXML(xml);
     }
     

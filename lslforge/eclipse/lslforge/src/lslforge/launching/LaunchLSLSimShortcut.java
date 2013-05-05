@@ -2,7 +2,7 @@ package lslforge.launching;
 
 import lslforge.LSLForgeScript;
 import lslforge.sim.SimProject;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -44,7 +44,7 @@ public class LaunchLSLSimShortcut implements ILaunchShortcut {
                     ILaunchConfiguration config = findConfig(r);
                     DebugUITools.launch(config, mode);
                 } catch (CoreException e) {
-                    Util.error(e, e.getLocalizedMessage());
+                    Log.error(e);
                 }
             }
         }

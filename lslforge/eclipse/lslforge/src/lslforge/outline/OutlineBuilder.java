@@ -55,6 +55,7 @@ import lslforge.outline.items.OutlineItem;
 import lslforge.outline.items.OutlineItem.DataType;
 import lslforge.outline.items.TextPosition;
 import lslforge.outline.items.Variable;
+import lslforge.util.Log;
 import lslforge.util.Util;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -92,7 +93,7 @@ public class OutlineBuilder
 		LSLForgeElement element = (LSLForgeElement) file.getAdapter(LSLForgeElement.class);
 		
 		if (element == null) {
-			Util.error("can't adapt editor input to LSLForgeElement"); //$NON-NLS-1$
+			Log.error("can't adapt editor input to LSLForgeElement"); //$NON-NLS-1$
 			return;
 		}
 
@@ -114,7 +115,7 @@ public class OutlineBuilder
 		try {
 			response = compile(file, cmd);
 		} catch (Exception e1) {
-			Util.error(e1, "Unable to compile script/module"); //$NON-NLS-1$
+			Log.error("Unable to compile script/module", e1); //$NON-NLS-1$
 			return;
 		}
 
@@ -192,7 +193,7 @@ public class OutlineBuilder
 			}
 			
 		} catch (CoreException e) {
-			Util.error(e.getMessage());
+			Log.error(e.getMessage(), e);
 			return;
 		}
 		
@@ -421,7 +422,7 @@ public class OutlineBuilder
                 return  new TextPosition(start, end);
             }
         } catch (BadLocationException e) {
-            Util.error(e, "can't calculate text position"); //$NON-NLS-1$
+            Log.error("can't calculate text position", e); //$NON-NLS-1$
         }
         
         return null;

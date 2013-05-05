@@ -13,7 +13,7 @@ import lslforge.gentree.NodeStatus;
 import lslforge.gentree.NodeVisitor;
 import lslforge.sim.SimProject;
 import lslforge.sim.SimWorldDef;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
@@ -295,7 +295,7 @@ public class SimEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -315,7 +315,7 @@ public class SimEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -335,7 +335,7 @@ public class SimEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -353,7 +353,7 @@ public class SimEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -458,7 +458,7 @@ public class SimEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
 		}
 	}
@@ -509,7 +509,7 @@ public class SimEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -559,19 +559,19 @@ public class SimEditor extends EditorPart implements NodeListener {
     @Override
 	public void doSave(IProgressMonitor monitor) {
 		String val = SimProject.toXml(world);
-		if (LSLForgePlugin.DEBUG) Util.log("world = " + val); //$NON-NLS-1$
+		Log.debug("world = " + val); //$NON-NLS-1$
 		try {
 			file.setContents(new ByteArrayInputStream(val.getBytes()), IResource.FORCE | IResource.KEEP_HISTORY, monitor);
 			zeroChangeCount();
 		} catch (CoreException e) {
-			Util.error(e, e.getLocalizedMessage());
+			Log.error(e);
 		}
 		
 		try {
 		    SimWorldDef def = SimProject.toSimWorldDef(world);
-		    Util.log(SimWorldDef.toXML(def));
+		    Log.info(SimWorldDef.toXML(def));
 		} catch (Exception e) {
-		    Util.error(e, e.getLocalizedMessage());
+		    Log.error(e);
 		}
 	}
 
@@ -599,7 +599,7 @@ public class SimEditor extends EditorPart implements NodeListener {
 			try {
 				world = SimProject.fromXml(file.getContents(), file);
 			} catch (CoreException e) {
-				Util.error(e, "Corrupted sim project file: " + e.getMessage()); //$NON-NLS-1$
+				Log.error("Corrupted sim project file", e); //$NON-NLS-1$
 				world = null;
 			}
 		}

@@ -1,7 +1,7 @@
 package lslforge.project;
 
 import lslforge.LSLProjectNature;
-import lslforge.util.Util;
+import lslforge.util.Log;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -20,7 +20,7 @@ public class RemoveSupportHandler extends AbstractHandler
 				LSLProjectNature.removeProjectNature(project);
 				MessageDialog.openInformation(HandlerUtil.getActiveShellChecked(event), Messages.RemoveSupportHandler_removeSupport, Messages.RemoveSupportHandler_removeSupportReply);
 			} catch (CoreException e) {
-				Util.error(e.getMessage());
+				Log.error(e);
 				MessageDialog.openInformation(
 						HandlerUtil.getActiveShellChecked(event), 
 						Messages.RemoveSupportHandler_removeSupport, 

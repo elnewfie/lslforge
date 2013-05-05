@@ -2,7 +2,7 @@ package lslforge;
 
 import lslforge.lsltest.LSLTestSuite;
 import lslforge.sim.SimProject;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
@@ -35,7 +35,7 @@ public class ResourceAdapterFactory implements IAdapterFactory {
 					suite.setIResource(f);
 					return suite;
 				} catch (CoreException e) {
-					Util.error(e, e.getLocalizedMessage());
+					Log.error(e);
 					return null;
 				}
 			} else if ("simp".equals(ext) && SimProject.WorldNode.class.equals(adapterType)) { //$NON-NLS-1$
@@ -43,7 +43,7 @@ public class ResourceAdapterFactory implements IAdapterFactory {
 			        SimProject.WorldNode node = SimProject.fromXml(f.getContents(), f);
 			        return node;
 			    } catch (CoreException e) {
-			        Util.error(e, e.getLocalizedMessage());
+			        Log.error(e);
 			        return null;
 			    }
 			}

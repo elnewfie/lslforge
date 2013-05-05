@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import lslforge.LSLForgePlugin;
 import lslforge.LSLProjectNature;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -51,7 +51,7 @@ public class LSLForgePreferencePage extends FieldEditorPreferencePage implements
                     LSLProjectNature nature = (LSLProjectNature) p[i].getNature(LSLProjectNature.ID);
                     if (nature != null) nature.scheduleBuild(true,null,null);
                 } catch (CoreException e) {
-                    Util.error(e, "problem determining project nature"); //$NON-NLS-1$
+                    Log.error("problem determining project nature", e); //$NON-NLS-1$
                 }
             }
             return true;

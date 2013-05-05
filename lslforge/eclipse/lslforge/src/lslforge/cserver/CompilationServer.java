@@ -15,6 +15,7 @@ import lslforge.LSLForgePlugin;
 import lslforge.generated.CompilationCommand;
 import lslforge.generated.CompilationResponse;
 import lslforge.generated.InitAll;
+import lslforge.util.Log;
 import lslforge.util.Util;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.core.BaseException;
@@ -115,7 +116,7 @@ public class CompilationServer {
 						try {
 							String xmlOut = xstream.toXML(cmdInfo.getCommand());
 							
-							Util.log("command to server: " + xmlOut); //$NON-NLS-1$
+							Log.info("command to server: " + xmlOut); //$NON-NLS-1$
 					        writer.println(Util.URIEncode(xmlOut));
 					        writer.flush();
 							
@@ -132,7 +133,7 @@ public class CompilationServer {
 						}
 					}
 				} catch (InterruptedException e) {
-					Util.error("interrupted!"); //$NON-NLS-1$
+					Log.error("interrupted!"); //$NON-NLS-1$
 				}
 	    	}
 	    }	
@@ -187,6 +188,7 @@ public class CompilationServer {
 	    	process = LSLForgePlugin.launchCoreCommand(COMPILATION_SERVER, true);
 	    	reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 	    	writer = new PrintStream(new PrintStream(process.getOutputStream()));
+	    	Log.debug("Compilation server process started"); //$NON-NLS-1$
     	}
     	
     	synchronized (listeners) {
@@ -213,5 +215,6 @@ public class CompilationServer {
     	interactorThread.interrupt();
     	monitorThread.interrupt();
     	process.destroy();
+    	Log.debug("Compilation server process stopped"); //$NON-NLS-1$
     }
 }

@@ -1,7 +1,7 @@
 package lslforge.launching;
 
 import lslforge.lsltest.LSLTestSuite;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -32,7 +32,7 @@ public class LaunchLSLTestShortcut implements ILaunchShortcut {
 				ILaunchConfiguration config = findConfig(s);
 				DebugUITools.launch(config, mode);
 			} catch (CoreException e) {
-				Util.error(e, e.getLocalizedMessage());
+				Log.error(e);
 			}
 		}
 	}

@@ -29,7 +29,7 @@ import lslforge.sim.SimWorldDef.Prim;
 import lslforge.sim.SimWorldDef.Region;
 import lslforge.sim.SimWorldDef.ScriptInfo;
 import lslforge.sim.SimWorldDef.SimObject;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -1285,7 +1285,7 @@ public class SimProject {
                 
                 return NodeStatus.OK;
             } catch (NumberFormatException e) {
-            	Util.error(e,"que pasa?"); //$NON-NLS-1$
+            	Log.error("que pasa?", e); //$NON-NLS-1$
                 return SimProject.BAD_FORMAT;
             }
         }
@@ -1313,8 +1313,7 @@ public class SimProject {
                 Integer i = Integer.decode(s);
                 setValue(i);
             } catch (NumberFormatException e) {
-            	Util.error(e, "que?"); //$NON-NLS-1$
-                // ignore
+            	Log.error("que?", e); //$NON-NLS-1$
             }
         }
 

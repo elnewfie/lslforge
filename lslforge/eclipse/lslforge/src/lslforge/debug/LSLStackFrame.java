@@ -85,7 +85,7 @@ public class LSLStackFrame implements IStackFrame{
     }
 
 	public Object getAdapter(@SuppressWarnings("rawtypes") Class adapter) {
-        //Util.log("LSLStackFrame - asked to adapt to: " + adapter);
+        //Log.log("LSLStackFrame - asked to adapt to: " + adapter);
         return null;
     }
 

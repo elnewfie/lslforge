@@ -23,13 +23,13 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import lslforge.LSLForgePlugin;
 import lslforge.lsltest.TestEvents;
 import lslforge.lsltest.TestManager;
 import lslforge.lsltest.TestEvents.AllCompleteEvent;
 import lslforge.lsltest.TestEvents.TestCompleteEvent;
 import lslforge.lsltest.TestEvents.TestEvent;
 import lslforge.lsltest.TestEvents.TestSuspendedEvent;
+import lslforge.util.Log;
 import lslforge.util.Util;
 
 /**
@@ -211,7 +211,7 @@ public class LSLTestInteractor implements Runnable, Interactor {
                     list.add(new BreakpointData(fullPath.toOSString(), line));
                 }
             } catch (CoreException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
         return list.toArray(new BreakpointData[list.size()]);
@@ -263,14 +263,14 @@ public class LSLTestInteractor implements Runnable, Interactor {
         
         try {
             while ((line = reader.readLine()) != null) {
-                if (LSLForgePlugin.DEBUG) Util.log("read:" + Util.URIDecode(line)); //$NON-NLS-1$
+                Log.debug("read:" + Util.URIDecode(line)); //$NON-NLS-1$
                 TestEvent event = TestEvents.fromXML(Util.URIDecode(line));
                 
                 // kludge for the mo'
                 if (event instanceof TestCompleteEvent) {
                     manager.postTestResult(((TestCompleteEvent)event).getTestResult());
                     String cmd = continueText();
-                    if (LSLForgePlugin.DEBUG) Util.log("writing: " + cmd); //$NON-NLS-1$
+                    Log.debug("writing: " + cmd); //$NON-NLS-1$
                     writeOut(cmd);
                 } else if (event instanceof AllCompleteEvent) {
                     endSession();
@@ -279,15 +279,15 @@ public class LSLTestInteractor implements Runnable, Interactor {
                     return;
                 } else if (event instanceof TestSuspendedEvent) {
                     // TODO: this is where we'd extract the debug info...
-                    if (LSLForgePlugin.DEBUG) Util.log("hit a breakpoint... suspending!"); //$NON-NLS-1$
+                    Log.debug("hit a breakpoint... suspending!"); //$NON-NLS-1$
                     fireSuspended(((TestSuspendedEvent)event).getScriptState());
                     return;
                 }
             }
         } catch (IOException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
         } catch (RuntimeException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
             try {
                 endSession();
             } catch (Exception e1) {

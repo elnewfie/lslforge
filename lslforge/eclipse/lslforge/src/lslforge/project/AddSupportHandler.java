@@ -1,7 +1,7 @@
 package lslforge.project;
 
 import lslforge.LSLProjectNature;
-import lslforge.util.Util;
+import lslforge.util.Log;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -20,7 +20,7 @@ public class AddSupportHandler extends AbstractHandler
 				LSLProjectNature.addProjectNature(project);
 				MessageDialog.openInformation(HandlerUtil.getActiveShellChecked(event), Messages.AddSupportHandler_AddSupport, Messages.AddSupportHandler_AddSupportReply);
 			} catch (CoreException e) {
-				Util.error(e.getMessage());
+				Log.error(e);
 				MessageDialog.openInformation(
 						HandlerUtil.getActiveShellChecked(event), 
 						Messages.AddSupportHandler_AddSupport, 

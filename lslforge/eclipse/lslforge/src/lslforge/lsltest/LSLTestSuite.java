@@ -19,7 +19,7 @@ import lslforge.lsltest.LSLTest.LSLValue;
 import lslforge.lsltest.LSLTest.LSLVector;
 import lslforge.lsltest.LSLTest.LSLVoid;
 import lslforge.lsltest.LSLTest.MaybeValue;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -268,7 +268,7 @@ public class LSLTestSuite implements IAdaptable {
         try {
             return (LSLProjectNature) resource.getProject().getNature(LSLProjectNature.ID);
         } catch (CoreException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
             return null;
         }
     }

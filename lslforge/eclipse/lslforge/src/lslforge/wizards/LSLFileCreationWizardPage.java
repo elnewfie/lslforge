@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.Iterator;
 
+import lslforge.util.Log;
 import lslforge.util.Util;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -201,7 +202,7 @@ abstract public class LSLFileCreationWizardPage extends WizardPage implements Li
 		} catch (InvocationTargetException e) {
 			// Execution Exceptions are handled above but we may still get
 			// unexpected runtime errors.
-			Util.error(e,e.getLocalizedMessage());
+			Log.error(e);
 			MessageDialog.openError(
 					getContainer().getShell(),
 					Messages.getString("LSLFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$
@@ -209,7 +210,7 @@ abstract public class LSLFileCreationWizardPage extends WizardPage implements Li
 
 			return null;
 		} catch (CoreException e) {
-			Util.error(e,e.getLocalizedMessage());
+			Log.error(e);
 			MessageDialog.openError(
 					getContainer().getShell(),
 					Messages.getString("LSLFileCreationWizardPage.CREATION_PROBLEMS"), //$NON-NLS-1$

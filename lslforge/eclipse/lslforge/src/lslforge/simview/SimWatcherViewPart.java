@@ -11,7 +11,7 @@ import lslforge.sim.SimEventDefinition;
 import lslforge.sim.SimMetaDataListener;
 import lslforge.sim.SimStatuses;
 import lslforge.sim.SimStatuses.SimState;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -78,7 +78,7 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
             SimEventDefinition def = simManager.getAnEventDefinition(userEventName);
             
             if (def == null) {
-                Util.error("event definition not found: " + userEventName); //$NON-NLS-1$
+                Log.error("event definition not found: " + userEventName); //$NON-NLS-1$
                 return;
             }
             EventDialog dlg = //new TouchDialog(parentShell);
@@ -110,7 +110,7 @@ public class SimWatcherViewPart extends ViewPart implements SimListener, SimMeta
             SimEventDefinition def = simManager.getAnEventDefinition("Touch Prim"); //$NON-NLS-1$ TODO
             
             if (def == null) {
-                Util.error("event definition not found: Touch Prim"); //$NON-NLS-1$
+                Log.error("event definition not found: Touch Prim"); //$NON-NLS-1$
                 return;
             }
             EventDialog dlg = //new TouchDialog(parentShell);

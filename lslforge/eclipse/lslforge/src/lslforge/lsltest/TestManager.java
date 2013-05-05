@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import lslforge.LSLForgePlugin;
 import lslforge.testview.TestRunnerViewPart;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
@@ -116,7 +116,7 @@ public class TestManager {
             //  show the result view if it isn't shown yet
             return (TestRunnerViewPart) page.showView(TestRunnerViewPart.ID);
         } catch (PartInitException pie) {
-            Util.error(pie, pie.getLocalizedMessage());
+            Log.error(pie);
             return null;
         } finally{
             //restore focus stolen by the creation of the result view

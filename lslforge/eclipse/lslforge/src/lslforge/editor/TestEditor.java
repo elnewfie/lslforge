@@ -24,6 +24,7 @@ import lslforge.lsltest.TestProject;
 import lslforge.lsltest.TestProject.BindingListNode;
 import lslforge.lsltest.TestProject.SuiteNode;
 import lslforge.lsltest.TestProject.TestNode;
+import lslforge.util.Log;
 import lslforge.util.Util;
 
 import org.eclipse.core.commands.ExecutionException;
@@ -152,7 +153,7 @@ public class TestEditor extends EditorPart implements NodeListener {
                         combo2.setEnabled(false);
                         okButton().setEnabled(false);
                     }
-                    if (LSLForgePlugin.DEBUG) Util.log("fileName = " + fileName + ", path = " + path); //$NON-NLS-1$ //$NON-NLS-2$
+                    Log.debug("fileName = " + fileName + ", path = " + path); //$NON-NLS-1$ //$NON-NLS-2$
                 }
             });
             
@@ -169,7 +170,7 @@ public class TestEditor extends EditorPart implements NodeListener {
                     } else {
                         path = null;
                     }
-                    if (LSLForgePlugin.DEBUG) Util.log("path = " + path); //$NON-NLS-1$
+                    Log.debug("path = " + path); //$NON-NLS-1$
                 }
             });
             return composite;
@@ -580,7 +581,7 @@ public class TestEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -605,7 +606,7 @@ public class TestEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -630,7 +631,7 @@ public class TestEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -649,7 +650,7 @@ public class TestEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -740,7 +741,7 @@ public class TestEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
 		}
 	}
@@ -791,7 +792,7 @@ public class TestEditor extends EditorPart implements NodeListener {
             try {
                 operationsHistory.execute(operation, null, null);
             } catch (ExecutionException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
     }
@@ -841,12 +842,12 @@ public class TestEditor extends EditorPart implements NodeListener {
     @Override
 	public void doSave(IProgressMonitor monitor) {
 		String val = TestProject.toLSLTestSuite(world).toXml();
-		if (LSLForgePlugin.DEBUG) Util.log("world = " + val); //$NON-NLS-1$
+		Log.debug("world = " + val); //$NON-NLS-1$
 		try {
 			file.setContents(new ByteArrayInputStream(val.getBytes()), IResource.FORCE | IResource.KEEP_HISTORY, monitor);
 			zeroChangeCount();
 		} catch (CoreException e) {
-			Util.error(e, e.getLocalizedMessage());
+			Log.error(e);
 		}
 		
 	}
@@ -877,10 +878,10 @@ public class TestEditor extends EditorPart implements NodeListener {
 				world = TestProject.fromLSLTestSuite(LSLTestSuite.fromXml(file.getContents(), file), dirty);
 				if (dirty[0]) incChangeCount();
 			} catch (CoreException e) {
-				Util.error(e, "Corrupted sim project file: " + e.getMessage()); //$NON-NLS-1$
+				Log.error("Corrupted sim project file", e); //$NON-NLS-1$
 				world = null;
 			} catch (Exception e) {
-                Util.error(e, "Corrupted sim project file: " + e.getMessage()); //$NON-NLS-1$
+                Log.error("Corrupted sim project file", e); //$NON-NLS-1$
                 world = null;
 			    
 			}

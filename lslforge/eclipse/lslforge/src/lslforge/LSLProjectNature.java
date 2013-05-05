@@ -31,6 +31,7 @@ import lslforge.generated.TextLocation_TextLocation;
 import lslforge.generated.Tuple2;
 import lslforge.generated.Tuple3;
 import lslforge.language_metadata.LSLParam;
+import lslforge.util.Log;
 import lslforge.util.Util;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -148,7 +149,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 				}
 				return false;
 			} catch (CoreException e) {
-				Util.error(e,"problem getting referenced projects");
+				Log.error("problem getting referenced projects", e);
 				return false;
 			}
 
@@ -322,7 +323,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 
 	private final CompilationServer cserver;
 	public LSLProjectNature() {
-		if (LSLForgePlugin.DEBUG) Util.log("creating project nature"); //$NON-NLS-1$
+		Log.debug("creating project nature"); //$NON-NLS-1$
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
 		cserver = new CompilationServer();
 	}
@@ -339,6 +340,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 				for (LSLForgeElement e : scriptRemovals) {
 					String name = resourceToLSLForgeName(e.getResource());
 					String path = e.getResource().getLocation().toOSString();
+					Log.debug("Removing file " + path); //$NON-NLS-1$
 					CompilationCommand_RemoveScript cmd = new CompilationCommand_RemoveScript();
 					cmd.el1 = new Tuple2<String, String>();
 					cmd.el1.el1 = name;
@@ -366,6 +368,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 				builder.setModulesOnly(false);
 				project.accept(builder);
 				if (recompileAll) {
+					Log.debug("Recompiling all files"); //$NON-NLS-1$
 					Tuple3<Boolean, LinkedList<Tuple2<String, String>>, 
 						LinkedList<Tuple2<String, String>>> cinfo = builder
 							.compilationInfo();
@@ -381,6 +384,8 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 						cmd.el1 = new Tuple2<String, String>();
 						cmd.el1.el1 = resourceToLSLForgeName(e.getResource());
 						cmd.el1.el2 = e.getResource().getLocation().toOSString();
+
+						Log.debug("Compiling file: " + cmd.el1.el2); //$NON-NLS-1$
 						
 						//RJN
 //						Map<String, Object> extra = new HashMap<String, Object>();
@@ -393,7 +398,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 				}
 				
 				if (!(response instanceof CompilationResponse_FullSourceValidation)) {
-					Util.error("unexpected response from compilation server"); //$NON-NLS-1$
+					Log.error("unexpected response from compilation server"); //$NON-NLS-1$
 					return;
 				}
 				CompilationResponse_FullSourceValidation validation = 
@@ -442,9 +447,9 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 				});
 			}
 		} catch (CoreException e) {
-			Util.error(e, e.getLocalizedMessage());
+			Log.error(e);
 		} catch (Exception e) {
-			Util.error(e, e.getLocalizedMessage());
+			Log.error(e);
 		}
 		
 		LSLForgePlugin.getDefault().errorStatusChanged();
@@ -605,17 +610,17 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
                             }
                         }
 					    
-                        Util.log("Marked " + key); //$NON-NLS-1$
+                        Log.info("Marked " + key); //$NON-NLS-1$
 					}
 				} catch (CoreException e) {
-					Util.error(e, "error reading file"); //$NON-NLS-1$
+					Log.error("error reading file", e); //$NON-NLS-1$
 				}
 			}
 		}
 	}
 	
 	public void resourceChanged(IResourceChangeEvent event) {
-	    Util.log("resource changed in " + this.project.getName()); //$NON-NLS-1$
+	    Log.info("resource changed in " + this.project.getName()); //$NON-NLS-1$
 		final IResourceDelta delta = event.getDelta();
 
 		//DeltaVisitor dv = new DeltaVisitor();
@@ -626,7 +631,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 		    recompileAll = dv.isRecompileAll();
 		} catch (CoreException e) {
 			recompileAll = true;
-			Util.error(e, e.getLocalizedMessage());
+			Log.error(e);
 		}
 		
 		if (recompileAll) onRecompAll();
@@ -657,7 +662,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 
     public void scheduleBuild(final boolean recompileAll, final List<LSLForgeElement> scriptChanges,
     		final List<LSLForgeElement> scriptRemovals) {
-        Util.log("check errors!"); //$NON-NLS-1$
+    	Log.info("Scheduling build, recompileAll: " + (recompileAll ? "yes" : "no")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkspaceJob job = new WorkspaceJob("EvaluateErrors") { //$NON-NLS-1$
 
         	@Override

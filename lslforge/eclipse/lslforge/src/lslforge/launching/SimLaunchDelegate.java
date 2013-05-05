@@ -9,7 +9,7 @@ import lslforge.debug.LSLSourceLocator;
 import lslforge.sim.SimKeyManager;
 import lslforge.sim.SimProject;
 import lslforge.sim.SimWorldDef;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -25,7 +25,7 @@ public class SimLaunchDelegate extends LaunchConfigurationDelegate {
     private static final String BLANK = ""; //$NON-NLS-1$
     public void launch(ILaunchConfiguration configuration, String mode, ILaunch launch,
             IProgressMonitor monitor) throws CoreException {
-        Util.log("launch!!!"); //$NON-NLS-1$
+        Log.info("launch!!!"); //$NON-NLS-1$
 
         String fullPath = configuration.getAttribute(LaunchLSLTestShortcut.LC_RESOURCE_NAME, BLANK);
         Path path = new Path(fullPath);
@@ -51,7 +51,7 @@ public class SimLaunchDelegate extends LaunchConfigurationDelegate {
         String testDescriptor = "<sim-descriptor>" + sourceDescriptor + //$NON-NLS-1$
                                 SimWorldDef.toXML(def) + 
                                 "</sim-descriptor>";  //$NON-NLS-1$
-        if (LSLForgePlugin.DEBUG) Util.log(testDescriptor);
+        Log.debug(testDescriptor);
         LSLSimProcess p = new LSLSimProcess(testDescriptor, launch);
         LSLDebugTarget target = new LSLDebugTarget("lslforge-test", launch, p); //$NON-NLS-1$
         p.go();

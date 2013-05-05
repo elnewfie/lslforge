@@ -11,6 +11,7 @@ import lslforge.generated.Maybe_Just;
 import lslforge.generated.TextLocation;
 import lslforge.generated.TextLocation_TextLocation;
 import lslforge.outline.LSLForgeOutlinePage;
+import lslforge.util.Log;
 import lslforge.util.Util;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -143,7 +144,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         try {
             f.setCharset("UTF-8", null); //$NON-NLS-1$
         } catch (CoreException e) {
-            Util.error(e, "can't set charset"); //$NON-NLS-1$
+            Log.error("can't set charset",e); //$NON-NLS-1$
         }
     }
     @Override
@@ -206,7 +207,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
         	try {
 				return (LSLProjectNature) resource.getProject().getNature(LSLProjectNature.ID);
 			} catch (CoreException e) {
-				Util.error(e, "can't get project nature"); //$NON-NLS-1$
+				Log.error("can't get project nature", e); //$NON-NLS-1$
 			}
         }
         return null;
@@ -275,11 +276,11 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
                             breakpointManager().removeBreakpoint(bp, true);
                         }
                     } catch (CoreException e1) {
-                        Util.error(e1,e1.getLocalizedMessage());
+                        Log.error(e1);
                     }
                         
                 } else {
-                    if (LSLForgePlugin.DEBUG) Util.log("resource is null, can't create breakpoint"); //$NON-NLS-1$
+                    Log.debug("resource is null, can't create breakpoint"); //$NON-NLS-1$
                 }
             }
 

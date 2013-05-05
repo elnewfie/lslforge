@@ -8,7 +8,7 @@ import lslforge.debug.LSLSourceLocator;
 import lslforge.debug.LSLTestProcess;
 import lslforge.lsltest.LSLTestSuite;
 import lslforge.lsltest.TestManager;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -26,7 +26,7 @@ public class TestLaunchDelegate extends LaunchConfigurationDelegate {
 
     public void launch(ILaunchConfiguration configuration, String mode,
 			ILaunch launch, IProgressMonitor monitor) throws CoreException {
-		if (LSLForgePlugin.DEBUG) Util.log("launch!!!"); //$NON-NLS-1$
+		Log.debug("launch!!!"); //$NON-NLS-1$
 
 		String fullPath = configuration.getAttribute(LaunchLSLTestShortcut.LC_RESOURCE_NAME, BLANK);
 		Path path = new Path(fullPath);
@@ -42,7 +42,7 @@ public class TestLaunchDelegate extends LaunchConfigurationDelegate {
 		String sourceDescriptor = nature.projectSourceList();
 		String suiteDescriptor = suite.toXml();
 		String testDescriptor = "<test-descriptor>" + sourceDescriptor + suiteDescriptor + "</test-descriptor>";  //$NON-NLS-1$//$NON-NLS-2$
-		if (LSLForgePlugin.DEBUG) Util.log(testDescriptor);
+		Log.debug(testDescriptor);
 		TestManager testManager = LSLForgePlugin.getDefault().getTestManager();
 		testManager.testLaunched(configuration, launch, suite.getTests().length);
 		LSLTestProcess p = new LSLTestProcess(testDescriptor, launch);

@@ -1,6 +1,6 @@
 package lslforge.editor.lsl;
 
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
@@ -244,7 +244,7 @@ public class LSLForgeAutoIndentStrategy extends DefaultIndentLineAutoEditStrateg
             command.text = buf.toString();
 
         } catch (BadLocationException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
         }
     }
 
@@ -285,7 +285,7 @@ public class LSLForgeAutoIndentStrategy extends DefaultIndentLineAutoEditStrateg
                 }
             }
         } catch (BadLocationException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
         }
     }
 }

@@ -13,7 +13,7 @@ import lslforge.sim.SimMetaDataListener;
 import lslforge.sim.SimStatuses;
 import lslforge.sim.SimStatuses.SimState;
 import lslforge.simview.SimWatcherViewPart;
-import lslforge.util.Util;
+import lslforge.util.Log;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -110,7 +110,7 @@ public class SimManager implements SimEventListener {
             try {
                 process.terminate();
             } catch (DebugException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
         
@@ -139,7 +139,7 @@ public class SimManager implements SimEventListener {
             //  show the result view if it isn't shown yet
             return (SimWatcherViewPart) page.showView(SimWatcherViewPart.ID);
         } catch (PartInitException pie) {
-            Util.error(pie, pie.getLocalizedMessage());
+            Log.error(pie);
             return null;
         } finally{
             //restore focus stolen by the creation of the result view
@@ -201,7 +201,7 @@ public class SimManager implements SimEventListener {
                         }
                     }
                 } catch (Exception e) {
-                    Util.error(e,e.getLocalizedMessage());
+                    Log.error(e);
                 }
             }
         };
@@ -225,7 +225,7 @@ public class SimManager implements SimEventListener {
             @Override
 			protected IStatus run(IProgressMonitor monitor) {
                 String metaDataString = LSLForgePlugin.runTask(SIM_META_DATA, ""); //$NON-NLS-1$
-                Util.log("metaDataString = " + metaDataString); //$NON-NLS-1$
+                Log.info("metaDataString = " + metaDataString); //$NON-NLS-1$
                 if (metaDataString == null) return new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID,
                         Messages.SimManager_Cant_Get_Simulator_Information);
                 SimMetaData metaData = SimMetaData.fromXML(metaDataString);

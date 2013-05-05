@@ -8,6 +8,7 @@ import lslforge.LSLForgeElement;
 import lslforge.LSLProjectNature;
 import lslforge.generated.Tuple2;
 import lslforge.generated.Tuple3;
+import lslforge.util.Log;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -59,6 +60,8 @@ public class SourceListBuilder implements IResourceVisitor {
 		LinkedList<Tuple2<String, String>>, 
 		LinkedList<Tuple2<String,String>>> compilationInfo() {
 		
+		Log.debug("Building source list");
+		
 		Tuple3<Boolean, 
 		LinkedList<Tuple2<String, String>>, 
 		LinkedList<Tuple2<String,String>>> result = 
@@ -71,6 +74,7 @@ public class SourceListBuilder implements IResourceVisitor {
 		LinkedList<Tuple2<String,String>> modules = new LinkedList<Tuple2<String,String>>();
 		for (Map.Entry<String, String> entry : moduleMap.entrySet()) {
 			Tuple2<String,String> tup = new Tuple2<String, String>();
+			Log.debug("Adding " + entry.getKey() + " to modules"); //$NON-NLS-1$ //$NON-NLS-2$
 			tup.el1 = entry.getKey();
 			tup.el2 = entry.getValue();
 			modules.add(tup);
@@ -80,12 +84,15 @@ public class SourceListBuilder implements IResourceVisitor {
 		LinkedList<Tuple2<String,String>> scripts = new LinkedList<Tuple2<String,String>>();
 		for (Map.Entry<String, String> entry : scriptMap.entrySet()) {
 			Tuple2<String,String> tup = new Tuple2<String, String>();
+			Log.debug("Adding " + entry.getKey() + " to scripts"); //$NON-NLS-1$ //$NON-NLS-2$
 			tup.el1 = entry.getKey();
 			tup.el2 = entry.getValue();
 			scripts.add(tup);
 		}
 		
 		result.el3 = scripts;
+		
+		Log.debug("Building source list completed."); //$NON-NLS-1$
 		return result;
 	}
 	

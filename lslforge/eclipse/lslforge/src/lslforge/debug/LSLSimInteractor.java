@@ -19,6 +19,7 @@ import lslforge.sim.SimStatuses.SimEnded;
 import lslforge.sim.SimStatuses.SimInfo;
 import lslforge.sim.SimStatuses.SimStatus;
 import lslforge.sim.SimStatuses.SimSuspended;
+import lslforge.util.Log;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
@@ -216,7 +217,7 @@ public class LSLSimInteractor implements Runnable, Interactor, SimEventListener 
                     list.add(new BreakpointData(fullPath.toOSString(), line));
                 }
             } catch (CoreException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
             }
         }
         return list.toArray(new BreakpointData[list.size()]);
@@ -268,7 +269,6 @@ public class LSLSimInteractor implements Runnable, Interactor, SimEventListener 
         
         try {
             while ((line = reader.readLine()) != null) {
-                //if (LSLForgePlugin.DEBUG) Util.log("read:" + Util.URIDecode(line)); //$NON-NLS-1$
                 SimStatus status = SimStatuses.fromXML(Util.URIDecode(line));
                 
                 // kludge for the mo'
@@ -276,29 +276,29 @@ public class LSLSimInteractor implements Runnable, Interactor, SimEventListener 
                     String cmd = continueText();
                     SimInfo info = (SimInfo)status;
                     simManager().setSimState(info.getState(), info.getMessages());
-                    //if (LSLForgePlugin.DEBUG) Util.log("writing: " + cmd); //$NON-NLS-1$
+                    //Log.debug("writing: " + cmd); //$NON-NLS-1$
                     writeOut(cmd);
                 } else if (status instanceof SimEnded) {
-                    if (LSLForgePlugin.DEBUG) Util.log(Util.URIDecode(line));
+                    Log.debug(Util.URIDecode(line));
                     SimEnded ended = (SimEnded) status;
                     simManager().setSimState(ended.getState(), ended.getMessages());
                     endSession();
                     fireComplete();
                 } else if (status instanceof SimSuspended) {
-                    if (LSLForgePlugin.DEBUG) Util.log("hit a breakpoint... suspending!"); //$NON-NLS-1$
+                    Log.debug("hit a breakpoint... suspending!"); //$NON-NLS-1$
                     simManager().setSimState(status.getState(), status.getMessages());
                     fireSuspended(((SimSuspended)status).getScriptState());
                     return;
                 } else {
-                    Util.error("Unrecognized status: " + status); //$NON-NLS-1$
+                    Log.error("Unrecognized status: " + status); //$NON-NLS-1$
                 }
             }
         } catch (IOException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
         } catch (RuntimeException e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
             if (line != null) {
-                Util.log("input was: " + Util.URIDecode(line)); //$NON-NLS-1$
+                Log.debug("input was: " + Util.URIDecode(line)); //$NON-NLS-1$
             }
             try {
                 endSession();

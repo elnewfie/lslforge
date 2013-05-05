@@ -24,9 +24,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 
 public class Util {
@@ -89,7 +87,7 @@ public class Util {
             }
             return result;
         } catch (Exception e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
             return null;
         } finally {
             if (reader != null) {
@@ -141,7 +139,7 @@ public class Util {
             }
             return result;
         } catch (Exception e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
             return null;
         }
     }
@@ -165,32 +163,10 @@ public class Util {
             
             return list;
         } catch (Exception e) {
-            Util.error(e, e.getLocalizedMessage());
+            Log.error(e);
             return null;
         }
     }
-	/*
-	 * Add a log entry
-	 */
-	public static void error(Throwable e, String message) {
-		IStatus status= new Status(
-			IStatus.ERROR, 
-			"lslforge",  //$NON-NLS-1$
-			IStatus.ERROR, 
-			message, 
-			e); 
-		LSLForgePlugin.getDefault().getLog().log(status);
-	}
-
-	public static void log(String message) {
-		IStatus status= new Status(
-			IStatus.INFO, 
-			"lslforge",  //$NON-NLS-1$
-			IStatus.INFO, 
-			message, 
-			null); 
-		LSLForgePlugin.getDefault().getLog().log(status);
-	}
 
 	public static Object[] append(Object[] lst,Object[] lst1) {
 		Object[] l = (Object[]) Array.newInstance(lst.getClass().getComponentType(), lst.length + lst1.length);
@@ -239,16 +215,6 @@ public class Util {
 		}
 		
 		return l;
-	}
-	
-	public static void error(String message) {
-		IStatus status= new Status(
-				IStatus.INFO, 
-				"lslforge",  //$NON-NLS-1$
-				IStatus.INFO, 
-				message, 
-				null); 
-			LSLForgePlugin.getDefault().getLog().log(status);
 	}
 	
 	public static interface ArrayMapFunc<T> {

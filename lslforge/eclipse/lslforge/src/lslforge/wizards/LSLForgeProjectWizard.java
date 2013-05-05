@@ -2,6 +2,7 @@ package lslforge.wizards;
 
 import lslforge.LSLForgePerspectiveFactory;
 import lslforge.Messages;
+import lslforge.util.Log;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IProject;
@@ -30,7 +31,7 @@ public class LSLForgeProjectWizard extends Wizard implements INewWizard {
 		return Util.findDescriptor("$nl$/icons/newlprj_wiz.png"); //$NON-NLS-1$
 //		URL url = 
 //			FileLocator.find(LSLForgePlugin.getDefault().getBundle(), path, null);
-//		Util.log("Path = " + url.getPath()); //$NON-NLS-1$
+//		Log.log("Path = " + url.getPath()); //$NON-NLS-1$
 //		if (url != null) {
 //			return ImageDescriptor.createFromURL(url);
 //		} else {
@@ -57,7 +58,7 @@ public class LSLForgeProjectWizard extends Wizard implements INewWizard {
 			p.setDescription(description, monitor);
 			workbench.showPerspective(LSLForgePerspectiveFactory.PERSPECTIVE_ID, window);
 		} catch (CoreException e) {
-			Util.error(e, e.getLocalizedMessage());
+			Log.error(e);
 		} finally {
 			monitor.done();
 		}

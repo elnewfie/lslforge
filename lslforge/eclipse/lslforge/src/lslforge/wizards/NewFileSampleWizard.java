@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import lslforge.LSLForgePlugin;
+import lslforge.util.Log;
 import lslforge.util.Util;
 
 import org.eclipse.core.resources.IFile;
@@ -35,7 +36,7 @@ public abstract class NewFileSampleWizard extends Wizard {
                 return FileLocator.openStream(LSLForgePlugin.getDefault().getBundle(),
                         new Path(pathToSample), false);
             } catch (IOException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
                 return new ByteArrayInputStream("$module ()\n// can't find template!".getBytes()); //$NON-NLS-1$ TODO
             } 
     	}

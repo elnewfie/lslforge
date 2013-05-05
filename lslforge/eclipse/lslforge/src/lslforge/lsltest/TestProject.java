@@ -32,6 +32,7 @@ import lslforge.lsltest.LSLTest.ExpectedCall;
 import lslforge.lsltest.LSLTest.GlobBinding;
 import lslforge.lsltest.LSLTest.LSLValue;
 import lslforge.lsltest.LSLTest.MaybeValue;
+import lslforge.util.Log;
 import lslforge.util.Util;
 import lslforge.util.Util.Predicate;
 
@@ -94,7 +95,7 @@ public class TestProject {
             try {
                 return (LSLProjectNature) resource.getProject().getNature(LSLProjectNature.ID);
             } catch (CoreException e) {
-                Util.error(e, e.getLocalizedMessage());
+                Log.error(e);
                 return null;
             }
         }
@@ -864,7 +865,7 @@ public class TestProject {
                 node = new TestNode(suiteNode,t.getName(), t.getEntryPoint().getFileName() +
                         "/" + t.getEntryPoint().getPath()); //$NON-NLS-1$
             } catch (RuntimeException e) {
-                Util.error(e, "couldn't load test"); //$NON-NLS-1$
+                Log.error("couldn't load test", e); //$NON-NLS-1$
                 if (dirty.length >= 0) dirty[0] = true;
                 continue;
             }
