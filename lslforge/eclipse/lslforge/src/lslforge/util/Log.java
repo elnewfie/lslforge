@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 public class Log {
-	private static final String pluginId = "lslforge"; 			//$NON-NLS-1$
+	public static final String pluginId = "lslforge"; 			//$NON-NLS-1$
 	private static int minLogLevel = IStatus.INFO;
 	
 	private Log() {}		//Force as non-instantiable

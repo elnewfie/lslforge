@@ -122,6 +122,10 @@ public class LSLForgeOutlinePage extends ContentOutlinePage
 
 	public void update() {
 		if(docOutline != null) docOutline.markChanged();
+		refresh();
+	}
+	
+	public void refresh() {
 		TreeViewer viewer = getTreeViewer();
 		if (viewer != null) viewer.refresh();
 	}

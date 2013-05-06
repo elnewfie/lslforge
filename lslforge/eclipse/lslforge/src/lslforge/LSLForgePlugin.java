@@ -75,7 +75,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         public String msg;            
     }
     
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     private static LSLForgePlugin instance;
 
@@ -542,6 +542,15 @@ public class LSLForgePlugin extends AbstractUIPlugin {
     @Override
 	public void start(BundleContext context) throws Exception {
     	super.start(context);
+    	
+    	//Set up our logging
+    	if(DEBUG) {
+    		Log.setMinLogLevel("debug"); //$NON-NLS-1$
+    	} else {
+    		//Only interested in unusual log entries
+    		Log.setMinLogLevel("warning"); //$NON-NLS-1$
+    	}
+    	
         getPreferenceStore().setDefault(LSLFORGE_NATIVE_PATH, ""); //$NON-NLS-1$
     	//checkVersion();
         if (determineExecutable()) {
