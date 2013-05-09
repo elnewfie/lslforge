@@ -60,6 +60,8 @@ lslEventDescriptors = [
      "raised when a script rezzes another object.  The id is the GUID of the object that it rezzed"),
     ("on_rez", [(LLInteger,"start_param")], EventDeliveryObject, [],
      "raised when an object rezzes (from an agents inventory, an objects inventory, or as an attachment when an user logs on)"),
+    ("path_update", [(LLInteger,"type"), (LLList,"reserved")], EventDeliveryObject, [], 
+      "Triggered when a pathfinding event occurs"),
     ("remote_data", [(LLInteger,"event_type"),(LLKey,"channel"),(LLKey,"message_id"),(LLString,"sender"),(LLInteger,"idata"),(LLString,"sdata")],
      EventDeliveryScript, [],
      "raised when something XML-RPC related happens"),
