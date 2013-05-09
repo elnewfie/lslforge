@@ -29,6 +29,7 @@ import org.eclipse.jface.text.contentassist.IContextInformationPresenter;
 import org.eclipse.jface.text.contentassist.IContextInformationValidator;
 import org.eclipse.jface.text.rules.IWordDetector;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 /**
  * LSLForge Completion Processor.
@@ -216,34 +217,36 @@ public class LSLCompletionProcessor implements IContentAssistProcessor {
 		String prefix = c.o;
 		
 		//First, retrieve any proposals from the document outline
-		if(editor.getOutlinePage() instanceof LSLForgeOutlinePage) {
-			LSLForgeOutlinePage outlinePage = (LSLForgeOutlinePage)editor.getOutlinePage();
-			List<OutlineItem> items =  outlinePage.getOutline();
-			for(OutlineItem item: items) {
-				if(item.getName().startsWith(prefix)) {
-					String displayText;
-					if(item instanceof Function) {
-						displayText = ((Function)item).toPrototype();
-					} else {
-						displayText = item.getName();
-					}
-					
-					proposals.add(
-						new CompletionProposal(
-							item.getName(), 
-							documentOffset - prefix.length(),
-							prefix.length(),
-							item.getName().length(), 
-							item.getImage(),
-							item.getName(),
-							new ContextInformation(item.getName(), displayText),
-							displayText
-						)
-					);
-				}
-			}
+		IContentOutlinePage testOutlinePage = editor.getOutlinePage();
+		if(testOutlinePage != null) {
+    		if(testOutlinePage instanceof LSLForgeOutlinePage) {
+    			LSLForgeOutlinePage outlinePage = (LSLForgeOutlinePage)testOutlinePage;
+    			List<OutlineItem> items =  outlinePage.getOutline();
+    			for(OutlineItem item: items) {
+    				if(item.getName().startsWith(prefix)) {
+    					String displayText;
+    					if(item instanceof Function) {
+    						displayText = ((Function)item).toPrototype();
+    					} else {
+    						displayText = item.getName();
+    					}
+    					
+    					proposals.add(
+    						new CompletionProposal(
+    							item.getName(), 
+    							documentOffset - prefix.length(),
+    							prefix.length(),
+    							item.getName().length(), 
+    							item.getImage(),
+    							item.getName(),
+    							new ContextInformation(item.getName(), displayText),
+    							displayText
+    						)
+    					);
+    				}
+    			}
+    		}
 		}
-		
 		
 		possibleProposals = getPossibleProposals();
 		//String[] rules = fgProposals.getRules(prefix);

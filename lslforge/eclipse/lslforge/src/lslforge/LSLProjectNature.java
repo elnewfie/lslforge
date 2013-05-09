@@ -321,11 +321,11 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 	
 	private Summary summary;
 
-	private final CompilationServer cserver;
+	private static CompilationServer cserver = null;
 	public LSLProjectNature() {
 		Log.debug("creating project nature"); //$NON-NLS-1$
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(this);
-		cserver = new CompilationServer();
+		if(cserver == null) cserver = new CompilationServer();
 	}
 	
 	public CompilationServer getCompilationServer() {

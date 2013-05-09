@@ -2,22 +2,10 @@
 <feature
       id="lslforge_part_linux_x86"
       label="lslforge_part_linux_x86"
-      version="0.1.4">
-
-   <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
-   </description>
-
-   <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
-   </copyright>
-
-   <license url="http://www.example.com/license">
-      [Enter License Description here.]
-   </license>
+      version="0.1.5">
 
    <requires>
-      <import plugin="lslforge" version="0.1.4" match="greaterOrEqual"/>
+      <import plugin="lslforge" version="0.1.5" match="greaterOrEqual"/>
    </requires>
 
    <plugin

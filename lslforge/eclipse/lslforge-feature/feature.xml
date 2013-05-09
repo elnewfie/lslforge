@@ -2,64 +2,84 @@
 <feature
       id="lslforge"
       label="LSLforge"
-      version="0.1.4">
+      version="0.1.5">
    <install-handler library="" handler=""/>
 
-   <description>
-      The LSLForge Plugin.
-   </description>
-
    <copyright>
-      Except where otherwise indicated the LSLForge Plug-in was written by and is copyright to:
+      Except where otherwise indicated the LSLForge Plug-in was written
+by and is copyright to:
 Copyright 2007-2008, Robert Greayer. All rights reserved.
-This software is licensed under the terms of a &quot;BSD3&quot; style license, the text of which can be found in a file called &apos;LICENSE&apos;.
-The copyright for some portions of this software are held by others.  Where the copyright holder is different from the above, the copyright holder is clearly indicated within the source file with the differing copyright, or in an associated license file in cases in which source is not provided.
-The copyright notice specifies under what terms the contribution is provided.
-
+This software is licensed under the terms of a &quot;BSD3&quot; style license,
+the text of which can be found in a file called &apos;LICENSE&apos;.
+The copyright for some portions of this software are held by
+others.  Where the copyright holder is different from the above,
+the copyright holder is clearly indicated within the source file
+with the differing copyright, or in an associated license file
+in cases in which source is not provided.
+The copyright notice specifies under what terms the contribution
+is provided.
 --------------------------------------------------------------------
 A portion of this plugin constitutes a work that uses the
 HaXml library, which has the following copyright:
 --------------------------------------------------------------------
 The HaXml library and tools were written by and are copyright to
-    (c) copyright 1998-2006    Malcolm Wallace and Colin Runciman
-
+(c) copyright 1998-2006    Malcolm Wallace and Colin Runciman
 The library incorporates the module Text.ParserCombinators.HuttonMeijerWallace
-    (c) copyright 1996         Graham Hutton and Erik Meijer
-with modifications
-    (c) copyright 1998-2000    Malcolm Wallace
-
-The HaXml library is licensed under the terms of the GNU Lesser General Public Licence (LGPL), which can be found in the file called LICENCE-LGPL, with the following special exception:
+(c) copyright 1996         Graham Hutton and Erik Meijer with modifications
+(c) copyright 1998-2000    Malcolm Wallace
+The HaXml library is licensed under the terms of the GNU Lesser
+General Public Licence (LGPL), which can be found in the file
+called LICENCE-LGPL, with the following special exception:
 ----
-As a relaxation of clause 6 of the LGPL, the copyright holders of this library give permission to use, copy, link, modify, and distribute, binary-only object-code versions of an executable linked with the original unmodified Library, without requiring the supply of any mechanism to modify or replace the Library and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are complied with. 
+As a relaxation of clause 6 of the LGPL, the copyright holders
+of this library give permission to use, copy, link, modify, and
+distribute, binary-only object-code versions of an executable
+linked with the original unmodified Library, without requiring
+the supply of any mechanism to modify or replace the Library
+and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the
+other terms of clause 6 are complied with. 
 ----
-
-The HaXml tools Xtract, Validate, DtdToHaskell, and MkOneOf, are licensed under the terms of the GNU General Public Licence (GPL), which can be found in the file called LICENCE-GPL.
-
-This library and toolset is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Licences for more details. 
-If these licensing terms are not acceptable to you, please contact me for negotiation.  :-)
-    Malcolm.Wallace@cs.york.ac.uk
-
+The HaXml tools Xtract, Validate, DtdToHaskell, and MkOneOf,
+are licensed under the terms of the GNU General Public Licence
+(GPL), which can be found in the file called LICENCE-GPL.
+This library and toolset is distributed in the hope that it will
+be useful, but WITHOUT ANY WARRANTY; without even the implied
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU Licences for more details. 
+If these licensing terms are not acceptable to you, please contact
+me for negotiation.  :-)
+Malcolm.Wallace@cs.york.ac.uk
 --------------------------------------------------------------------
-A portion of this plugin constitutes a work that uses the polyparse library, which has the following copyright: 
+A portion of this plugin constitutes a work that uses the polyparse
+library, which has the following copyright: 
 --------------------------------------------------------------------
 The module Text.ParserCombinators.HuttonMeijer is
-    (c) copyright 1996         Graham Hutton and Erik Meijer
+(c) copyright 1996         Graham Hutton and Erik Meijer
 The module Text.ParserCombinators.HuttonMeijerWallace is
-    (c) copyright 1996         Graham Hutton and Erik Meijer
-  with modifications
-    (c) copyright 1998-2000    Malcolm Wallace
+(c) copyright 1996         Graham Hutton and Erik Meijer
+with modifications
+(c) copyright 1998-2000    Malcolm Wallace
 The modules Text.ParserCombinators.Poly* and Text.Parse are
-    (c) copyright 2006-2007    Malcolm Wallace
-
-These modules are licensed under the terms of the GNU Lesser General Public Licence (LGPL), which can be found in the file called LICENCE-LGPL, with the following special exception:
+(c) copyright 2006-2007    Malcolm Wallace
+These modules are licensed under the terms of the GNU Lesser
+General Public Licence (LGPL), which can be found in the file
+called LICENCE-LGPL, with the following special exception:
 ----
-As a relaxation of clause 6 of the LGPL, the copyright holders of this library give permission to use, copy, link, modify, and distribute, binary-only object-code versions of an executable linked with the original unmodified Library, without requiring the supply of any mechanism to modify or replace the Library and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are complied with.
+As a relaxation of clause 6 of the LGPL, the copyright holders
+of this library give permission to use, copy, link, modify, and
+distribute, binary-only object-code versions of an executable
+linked with the original unmodified Library, without requiring
+the supply of any mechanism to modify or replace the Library
+and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the
+other terms of clause 6 are complied with.
 ----
-
-This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Licence for more details.
-
-If these licensing terms are not acceptable to you, please contact me for negotiation.  :-)
-    Malcolm.Wallace@cs.york.ac.uk
+This library is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Licence for more details.
+If these licensing terms are not acceptable to you, please contact
+me for negotiation.  :-)
+Malcolm.Wallace@cs.york.ac.uk
    </copyright>
 
    <license>
