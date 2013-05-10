@@ -3,7 +3,6 @@ package lslforge.outline;
 import java.util.ArrayList;
 import java.util.List;
 import lslforge.LSLForgeElement;
-import lslforge.LSLForgePlugin;
 import lslforge.LSLProjectNature;
 import lslforge.cserver.CompilationServer.Result;
 import lslforge.editor.LSLForgeEditor;
@@ -172,8 +171,8 @@ public class OutlineBuilder
 				ErrInfo_ErrInfo err = (ErrInfo_ErrInfo)ei;
 				
 				IMarker marker = resource.createMarker(LSLProjectNature.LSLFORGE_PROBLEM);
-                marker.setAttribute(IMarker.MESSAGE, err.el2);
-                marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+                marker.setAttribute(IMarker.MESSAGE, err.el2.replace("\n", ""));  //$NON-NLS-1$//$NON-NLS-2$
+                marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_ERROR);
                 if (err.el1 instanceof Maybe_Just) {
                 	TextLocation_TextLocation errLoc = (TextLocation_TextLocation)((Maybe_Just<TextLocation>)err.el1).el1;
                     int lineOffset0 = errLoc.textLine0 - 1;
@@ -207,8 +206,6 @@ public class OutlineBuilder
 			globals = ((LModule_LModule) ((CompilationResponse_ModuleResponse) response).el1.el1).el1;
 		}
 
-		LSLFunction[] functions = LSLForgePlugin.getLLFunctions();
-		
 		// First, extract our global variables and functions
 		for (GlobDef g : globals) {
 			// Is it a variable?
@@ -227,7 +224,7 @@ public class OutlineBuilder
 				// Add it
 				items.add(newVar);
 
-				// Then is it a function?
+			// Then is it a function?
 			} else if (g instanceof GlobDef_GF) {
 				// Unravel this mess
 				GlobDef_GF gf = (GlobDef_GF) g;
@@ -411,18 +408,27 @@ public class OutlineBuilder
 	}
 
     private TextPosition getTextPosition(Maybe<SourceContext> m, IDocument d) {
-        try {
-            if (m instanceof Maybe_Just) {
-                Maybe_Just<SourceContext> j = (Maybe_Just<SourceContext>) m;
-                SourceContext_SourceContext sc = (SourceContext_SourceContext) j.el1;
-                TextLocation_TextLocation tl = (TextLocation_TextLocation) sc.srcTextLocation;
-                int start = d.getLineOffset(tl.textLine0 - 1);
-                int end = (tl.textLine1 == d.getNumberOfLines()) ? d.getLength() : d.getLineOffset(tl.textLine1);
-
-                return  new TextPosition(start, end);
+        if (m instanceof Maybe_Just) {
+            Maybe_Just<SourceContext> j = (Maybe_Just<SourceContext>) m;
+            SourceContext_SourceContext sc = (SourceContext_SourceContext) j.el1;
+            TextLocation_TextLocation tl = (TextLocation_TextLocation) sc.srcTextLocation;
+            int start;
+            int end;
+            try {
+            	start = d.getLineOffset(tl.textLine0 - 1);
+            } catch(BadLocationException e) {
+            	Log.error("Can't calculate text start position, line: " + tl.textLine0); //$NON-NLS-1$
+            	return null;
             }
-        } catch (BadLocationException e) {
-            Log.error("can't calculate text position", e); //$NON-NLS-1$
+            
+            try {
+            	end = (tl.textLine1 == d.getNumberOfLines()) ? d.getLength() : d.getLineOffset(tl.textLine1);
+            } catch(BadLocationException e) {
+            	Log.error("Can't calculate text end position, line: " + tl.textLine1); //$NON-NLS-1$
+            	return null;
+            }
+
+            return  new TextPosition(start, end);
         }
         
         return null;

@@ -144,7 +144,13 @@ public class DocumentOutline extends LabelProvider implements ITreeContentProvid
 			    	} else if(item instanceof lslforge.outline.items.State) {
 			    		//Add annotation for the state block
 			    		TextPosition textPos = item.getTextPosition();
-			    		editor.addProjection(textPos.start, textPos.end - textPos.start);
+			    		if(textPos != null) { 
+			    			editor.addProjection(textPos.start, textPos.end - textPos.start);
+			    		} else {
+			    			Log.warning("Could not determine location for marker"); //$NON-NLS-1$
+			    			editor.addProjection(0, 0);
+			    		}
+			    			
 			    		
 			    		//Add annotations for the event handlers
 			    		if(item.hasChildren()) {
