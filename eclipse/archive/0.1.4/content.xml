@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?><?metadataRepository version='1.1.0'?>
+<repository name="LSLForge Update Site - LSLForge&#13;" type="org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository" version="1">
+  <properties size="2">
+    <property name="p2.timestamp" value="1361930807674"/>
+    <property name="p2.compressed" value="true"/>
+  </properties>
+  <units size="16">
+    <unit id="lslforge_part_linux_x86_64.feature.group" version="0.1.4" singleton="false">
+      <update id="lslforge_part_linux_x86_64.feature.group" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="4">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_linux_x86_64"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86_64.feature.group" version="0.1.4"/>
+      </provides>
+      <requires size="3">
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge" range="0.1.4"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_linux_x86_64" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86_64.feature.jar" range="[0.1.4,0.1.4]">
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslforge_part_macosx_x86.feature.group" version="0.1.4" singleton="false">
+      <update id="lslforge_part_macosx_x86.feature.group" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="4">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_macosx_x86"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_macosx_x86.feature.group" version="0.1.4"/>
+      </provides>
+      <requires size="3">
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge" range="0.1.4"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_macosx_x86" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_macosx_x86.feature.jar" range="[0.1.4,0.1.4]">
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslforge_part_linux_x86.feature.group" version="0.1.4" singleton="false">
+      <update id="lslforge_part_linux_x86.feature.group" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="4">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_linux_x86"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86.feature.group" version="0.1.4"/>
+      </provides>
+      <requires size="3">
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge" range="0.1.4"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_linux_x86" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86.feature.jar" range="[0.1.4,0.1.4]">
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslforge.feature.group" version="0.1.4" singleton="false">
+      <update id="lslforge.feature.group" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="LSLforge"/>
+        <property name="org.eclipse.equinox.p2.description" value="The LSLForge Plugin."/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge.feature.group" version="0.1.4"/>
+      </provides>
+      <requires size="13">
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.core.runtime" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.jface.text" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.workbench.texteditor" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.editors" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.debug.ui" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.ide" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.help" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.update.core" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="com.ibm.icu" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="org.eclipse.ui.views" range="0.0.0"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge.feature.jar" range="[0.1.4,0.1.4]">
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+      <licenses size="1">
+        <license>
+          Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        </license>
+      </licenses>
+      <copyright>
+        Except where otherwise indicated the LSLForge Plug-in was written by and is copyright to:
+Copyright 2007-2008, Robert Greayer. All rights reserved.
+This software is licensed under the terms of a "BSD3" style license, the text of which can be found in a file called 'LICENSE'.
+The copyright for some portions of this software are held by others.  Where the copyright holder is different from the above, the copyright holder is clearly indicated within the source file with the differing copyright, or in an associated license file in cases in which source is not provided.
+The copyright notice specifies under what terms the contribution is provided.
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the
+HaXml library, which has the following copyright:
+--------------------------------------------------------------------
+The HaXml library and tools were written by and are copyright to
+    (c) copyright 1998-2006    Malcolm Wallace and Colin Runciman
+
+The library incorporates the module Text.ParserCombinators.HuttonMeijerWallace
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+
+The HaXml library is licensed under the terms of the GNU Lesser General Public Licence (LGPL), which can be found in the file called LICENCE-LGPL, with the following special exception:
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this library give permission to use, copy, link, modify, and distribute, binary-only object-code versions of an executable linked with the original unmodified Library, without requiring the supply of any mechanism to modify or replace the Library and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are complied with. 
+----
+
+The HaXml tools Xtract, Validate, DtdToHaskell, and MkOneOf, are licensed under the terms of the GNU General Public Licence (GPL), which can be found in the file called LICENCE-GPL.
+
+This library and toolset is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Licences for more details. 
+If these licensing terms are not acceptable to you, please contact me for negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the polyparse library, which has the following copyright: 
+--------------------------------------------------------------------
+The module Text.ParserCombinators.HuttonMeijer is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+The module Text.ParserCombinators.HuttonMeijerWallace is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+  with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+The modules Text.ParserCombinators.Poly* and Text.Parse are
+    (c) copyright 2006-2007    Malcolm Wallace
+
+These modules are licensed under the terms of the GNU Lesser General Public Licence (LGPL), which can be found in the file called LICENCE-LGPL, with the following special exception:
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this library give permission to use, copy, link, modify, and distribute, binary-only object-code versions of an executable linked with the original unmodified Library, without requiring the supply of any mechanism to modify or replace the Library and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are complied with.
+----
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Licence for more details.
+
+If these licensing terms are not acceptable to you, please contact me for negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+      </copyright>
+    </unit>
+    <unit id="lslforge.feature.jar" version="0.1.4">
+      <properties size="2">
+        <property name="org.eclipse.equinox.p2.name" value="LSLforge"/>
+        <property name="org.eclipse.equinox.p2.description" value="The LSLForge Plugin."/>
+      </properties>
+      <provides size="3">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge.feature.jar" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="feature" version="1.0.0"/>
+        <provided namespace="org.eclipse.update.feature" name="lslforge" version="0.1.4"/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size="1">
+        <artifact classifier="org.eclipse.update.feature" id="lslforge" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="1">
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size="1">
+        <license>
+          Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+        </license>
+      </licenses>
+      <copyright>
+        Except where otherwise indicated the LSLForge Plug-in was written by and is copyright to:
+Copyright 2007-2008, Robert Greayer. All rights reserved.
+This software is licensed under the terms of a "BSD3" style license, the text of which can be found in a file called 'LICENSE'.
+The copyright for some portions of this software are held by others.  Where the copyright holder is different from the above, the copyright holder is clearly indicated within the source file with the differing copyright, or in an associated license file in cases in which source is not provided.
+The copyright notice specifies under what terms the contribution is provided.
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the
+HaXml library, which has the following copyright:
+--------------------------------------------------------------------
+The HaXml library and tools were written by and are copyright to
+    (c) copyright 1998-2006    Malcolm Wallace and Colin Runciman
+
+The library incorporates the module Text.ParserCombinators.HuttonMeijerWallace
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+
+The HaXml library is licensed under the terms of the GNU Lesser General Public Licence (LGPL), which can be found in the file called LICENCE-LGPL, with the following special exception:
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this library give permission to use, copy, link, modify, and distribute, binary-only object-code versions of an executable linked with the original unmodified Library, without requiring the supply of any mechanism to modify or replace the Library and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are complied with. 
+----
+
+The HaXml tools Xtract, Validate, DtdToHaskell, and MkOneOf, are licensed under the terms of the GNU General Public Licence (GPL), which can be found in the file called LICENCE-GPL.
+
+This library and toolset is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Licences for more details. 
+If these licensing terms are not acceptable to you, please contact me for negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+
+--------------------------------------------------------------------
+A portion of this plugin constitutes a work that uses the polyparse library, which has the following copyright: 
+--------------------------------------------------------------------
+The module Text.ParserCombinators.HuttonMeijer is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+The module Text.ParserCombinators.HuttonMeijerWallace is
+    (c) copyright 1996         Graham Hutton and Erik Meijer
+  with modifications
+    (c) copyright 1998-2000    Malcolm Wallace
+The modules Text.ParserCombinators.Poly* and Text.Parse are
+    (c) copyright 2006-2007    Malcolm Wallace
+
+These modules are licensed under the terms of the GNU Lesser General Public Licence (LGPL), which can be found in the file called LICENCE-LGPL, with the following special exception:
+----
+As a relaxation of clause 6 of the LGPL, the copyright holders of this library give permission to use, copy, link, modify, and distribute, binary-only object-code versions of an executable linked with the original unmodified Library, without requiring the supply of any mechanism to modify or replace the Library and relink (clauses 6a, 6b, 6c, 6d, 6e), provided that all the other terms of clause 6 are complied with.
+----
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Licence for more details.
+
+If these licensing terms are not acceptable to you, please contact me for negotiation.  :-)
+    Malcolm.Wallace@cs.york.ac.uk
+      </copyright>
+    </unit>
+    <unit id="lslforge_linux_x86" version="0.1.4" singleton="false">
+      <update id="lslforge_linux_x86" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="1">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_linux_x86 Fragment"/>
+      </properties>
+      <provides size="4">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_linux_x86" version="0.1.4"/>
+        <provided namespace="osgi.bundle" name="lslforge_linux_x86" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+        <provided namespace="osgi.fragment" name="lslforge" version="0.1.4"/>
+      </provides>
+      <requires size="1">
+        <required namespace="osgi.bundle" name="lslforge" range="0.1.4"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslforge_linux_x86" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-SymbolicName: lslforge_linux_x86
+Bundle-Version: 0.1.4
+Fragment-Host: lslforge;bundle-version="0.1.4"
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id="lslforge_win32_x86" version="0.1.4" singleton="false">
+      <update id="lslforge_win32_x86" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="1">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_win32_x86 Fragment"/>
+      </properties>
+      <provides size="4">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_win32_x86" version="0.1.4"/>
+        <provided namespace="osgi.bundle" name="lslforge_win32_x86" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+        <provided namespace="osgi.fragment" name="lslforge" version="0.1.4"/>
+      </provides>
+      <requires size="1">
+        <required namespace="osgi.bundle" name="lslforge" range="0.1.4"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslforge_win32_x86" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-SymbolicName: lslforge_win32_x86
+Bundle-Version: 0.1.4
+Fragment-Host: lslforge;bundle-version="0.1.4"
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id="lslforge_part_linux_x86_64.feature.jar" version="0.1.4">
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_linux_x86_64"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+      </properties>
+      <provides size="3">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86_64.feature.jar" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="feature" version="1.0.0"/>
+        <provided namespace="org.eclipse.update.feature" name="lslforge_part_linux_x86_64" version="0.1.4"/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size="1">
+        <artifact classifier="org.eclipse.update.feature" id="lslforge_part_linux_x86_64" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="1">
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslforge_part_macosx_x86.feature.jar" version="0.1.4">
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_macosx_x86"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+      </properties>
+      <provides size="3">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_macosx_x86.feature.jar" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="feature" version="1.0.0"/>
+        <provided namespace="org.eclipse.update.feature" name="lslforge_part_macosx_x86" version="0.1.4"/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size="1">
+        <artifact classifier="org.eclipse.update.feature" id="lslforge_part_macosx_x86" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="1">
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslforge_linux_x86_64" version="0.1.4" singleton="false">
+      <update id="lslforge_linux_x86_64" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="1">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_linux_x86_64 Fragment"/>
+      </properties>
+      <provides size="4">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_linux_x86_64" version="0.1.4"/>
+        <provided namespace="osgi.bundle" name="lslforge_linux_x86_64" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+        <provided namespace="osgi.fragment" name="lslforge" version="0.1.4"/>
+      </provides>
+      <requires size="1">
+        <required namespace="osgi.bundle" name="lslforge" range="0.1.4"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslforge_linux_x86_64" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-SymbolicName: lslforge_linux_x86_64
+Bundle-Version: 0.1.4
+Fragment-Host: lslforge;bundle-version="0.1.4"
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id="lslforge_part_win32_x86.feature.jar" version="0.1.4">
+      <properties size="1">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_win32_x86"/>
+      </properties>
+      <provides size="3">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_win32_x86.feature.jar" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="feature" version="1.0.0"/>
+        <provided namespace="org.eclipse.update.feature" name="lslforge_part_win32_x86" version="0.1.4"/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size="1">
+        <artifact classifier="org.eclipse.update.feature" id="lslforge_part_win32_x86" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="1">
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id="LSLForge_0.1.4" version="1.0.0.0797c">
+      <properties size="2">
+        <property name="org.eclipse.equinox.p2.name" value="LSLForge 0.1.4"/>
+        <property name="org.eclipse.equinox.p2.type.category" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="LSLForge_0.1.4" version="1.0.0.0797c"/>
+      </provides>
+      <requires size="5">
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86_64.feature.group" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_macosx_x86.feature.group" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86.feature.group" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge.feature.group" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_win32_x86.feature.group" range="[0.1.4,0.1.4]"/>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+    </unit>
+    <unit id="lslforge_part_linux_x86.feature.jar" version="0.1.4">
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_linux_x86"/>
+        <property name="org.eclipse.equinox.p2.description" value="[Enter Feature Description here.]"/>
+        <property name="org.eclipse.equinox.p2.description.url" value="http://www.example.com/description"/>
+      </properties>
+      <provides size="3">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_linux_x86.feature.jar" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="feature" version="1.0.0"/>
+        <provided namespace="org.eclipse.update.feature" name="lslforge_part_linux_x86" version="0.1.4"/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size="1">
+        <artifact classifier="org.eclipse.update.feature" id="lslforge_part_linux_x86" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="1">
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size="1">
+        <license uri="http://www.example.com/license" url="http://www.example.com/license">
+          [Enter License Description here.]
+        </license>
+      </licenses>
+      <copyright uri="http://www.example.com/copyright" url="http://www.example.com/copyright">
+        [Enter Copyright Description here.]
+      </copyright>
+    </unit>
+    <unit id="lslforge" version="0.1.4">
+      <update id="lslforge" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="3">
+        <property name="org.eclipse.equinox.p2.name" value="LSLForge"/>
+        <property name="org.eclipse.equinox.p2.provider" value="LSLForge"/>
+        <property name="org.eclipse.equinox.p2.bundle.localization" value="plugin"/>
+      </properties>
+      <provides size="36">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge" version="0.1.4"/>
+        <provided namespace="osgi.bundle" name="lslforge" version="0.1.4"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.alias" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.annotations" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.basic" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.collections" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.enums" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.extended" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.javabean" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.converters.reflection" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.core" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.core.util" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.binary" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.copy" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.json" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.path" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.xml" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.io.xml.xppdom" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.mapper" version="0.0.0"/>
+        <provided namespace="java.package" name="com.thoughtworks.xstream.persistence" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.decorators" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.editor" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.editor.imported" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.editor.lsl" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.generated" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.language_metadata" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.launching" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.lsltest" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.testview" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.util" version="0.0.0"/>
+        <provided namespace="java.package" name="lslforge.wizards" version="0.0.0"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+      </provides>
+      <requires size="10">
+        <required namespace="osgi.bundle" name="org.eclipse.core.runtime" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.jface.text" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui.workbench.texteditor" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui.editors" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.debug.ui" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.ui.ide" range="0.0.0"/>
+        <required namespace="osgi.bundle" name="org.eclipse.help" range="0.0.0"/>
+        <required namespace="java.package" name="com.ibm.icu.text" range="3.6.1"/>
+        <required namespace="java.package" name="org.eclipse.ui.views.contentoutline" range="0.0.0"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslforge" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-SymbolicName: lslforge; singleton:=true
+Bundle-Version: 0.1.4
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id="lslforge_part_win32_x86.feature.group" version="0.1.4" singleton="false">
+      <update id="lslforge_part_win32_x86.feature.group" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="2">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_part_win32_x86"/>
+        <property name="org.eclipse.equinox.p2.type.group" value="true"/>
+      </properties>
+      <provides size="1">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_win32_x86.feature.group" version="0.1.4"/>
+      </provides>
+      <requires size="3">
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge" range="0.1.4"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_win32_x86" range="[0.1.4,0.1.4]"/>
+        <required namespace="org.eclipse.equinox.p2.iu" name="lslforge_part_win32_x86.feature.jar" range="[0.1.4,0.1.4]">
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id="null" version="0.0.0"/>
+    </unit>
+    <unit id="lslforge_macosx_x86" version="0.1.4" singleton="false">
+      <update id="lslforge_macosx_x86" range="[0.0.0,0.1.4)" severity="0"/>
+      <properties size="1">
+        <property name="org.eclipse.equinox.p2.name" value="lslforge_macosx_x86 Fragment"/>
+      </properties>
+      <provides size="4">
+        <provided namespace="org.eclipse.equinox.p2.iu" name="lslforge_macosx_x86" version="0.1.4"/>
+        <provided namespace="osgi.bundle" name="lslforge_macosx_x86" version="0.1.4"/>
+        <provided namespace="org.eclipse.equinox.p2.eclipse.type" name="bundle" version="1.0.0"/>
+        <provided namespace="osgi.fragment" name="lslforge" version="0.1.4"/>
+      </provides>
+      <requires size="1">
+        <required namespace="osgi.bundle" name="lslforge" range="0.1.4"/>
+      </requires>
+      <artifacts size="1">
+        <artifact classifier="osgi.bundle" id="lslforge_macosx_x86" version="0.1.4"/>
+      </artifacts>
+      <touchpoint id="org.eclipse.equinox.p2.osgi" version="1.0.0"/>
+      <touchpointData size="1">
+        <instructions size="2">
+          <instruction key="manifest">
+            Bundle-SymbolicName: lslforge_macosx_x86
+Bundle-Version: 0.1.4
+Fragment-Host: lslforge;bundle-version="0.1.4"
+          </instruction>
+          <instruction key="zipped">
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+  </units>
+</repository>
