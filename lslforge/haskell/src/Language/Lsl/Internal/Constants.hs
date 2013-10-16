@@ -348,6 +348,7 @@ allConstants = [
     Constant "INVENTORY_SOUND" llcInventorySound,
     Constant "INVENTORY_TEXTURE" llcInventoryTexture,
     Constant "JSON_ARRAY" (SVal "\xfdd2"),
+    Constant "JSON_DELETE" (SVal "\xfdd8"),
     Constant "JSON_FALSE" (SVal "\xfdd7"),
     Constant "JSON_INVALID" (SVal "\xfdd0"),
     Constant "JSON_NULL" (SVal "\xfdd5"),
