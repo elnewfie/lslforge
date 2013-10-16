@@ -39,7 +39,7 @@ public class ErrorDecorator implements ILightweightLabelDecorator {
 		if (!resource.exists()) return;
 		IProject project = resource.getProject();
 		if (project == null) {
-			Log.error(Messages.getString("ErrorDecorator.PROJECT_FOR") + resource.getName() + Messages.getString("ErrorDecorator.IS_NULL")); //$NON-NLS-1$ //$NON-NLS-2$
+			Log.error(Messages.getString("ErrorDecorator.PROJECT_FOR") + resource.getName() + Messages.getString("ErrorDecorator.IS_NULL"), new Throwable()); //$NON-NLS-1$ //$NON-NLS-2$
 			return;
 		}
 		try {

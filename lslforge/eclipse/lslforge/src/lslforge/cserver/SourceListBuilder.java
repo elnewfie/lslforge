@@ -60,7 +60,7 @@ public class SourceListBuilder implements IResourceVisitor {
 		LinkedList<Tuple2<String, String>>, 
 		LinkedList<Tuple2<String,String>>> compilationInfo() {
 		
-		Log.debug("Building source list");
+		Log.debug("Building source list"); //$NON-NLS-1$
 		
 		Tuple3<Boolean, 
 		LinkedList<Tuple2<String, String>>, 

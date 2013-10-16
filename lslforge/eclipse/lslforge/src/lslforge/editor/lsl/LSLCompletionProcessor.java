@@ -222,28 +222,30 @@ public class LSLCompletionProcessor implements IContentAssistProcessor {
     		if(testOutlinePage instanceof LSLForgeOutlinePage) {
     			LSLForgeOutlinePage outlinePage = (LSLForgeOutlinePage)testOutlinePage;
     			List<OutlineItem> items =  outlinePage.getOutline();
-    			for(OutlineItem item: items) {
-    				if(item.getName().startsWith(prefix)) {
-    					String displayText;
-    					if(item instanceof Function) {
-    						displayText = ((Function)item).toPrototype();
-    					} else {
-    						displayText = item.getName();
-    					}
-    					
-    					proposals.add(
-    						new CompletionProposal(
-    							item.getName(), 
-    							documentOffset - prefix.length(),
-    							prefix.length(),
-    							item.getName().length(), 
-    							item.getImage(),
-    							item.getName(),
-    							new ContextInformation(item.getName(), displayText),
-    							displayText
-    						)
-    					);
-    				}
+    			if(items != null) {
+        			for(OutlineItem item: items) {
+        				if(item.getName().startsWith(prefix)) {
+        					String displayText;
+        					if(item instanceof Function) {
+        						displayText = ((Function)item).toPrototype();
+        					} else {
+        						displayText = item.getName();
+        					}
+        					
+        					proposals.add(
+        						new CompletionProposal(
+        							item.getName(), 
+        							documentOffset - prefix.length(),
+        							prefix.length(),
+        							item.getName().length(), 
+        							item.getImage(),
+        							item.getName(),
+        							new ContextInformation(item.getName(), displayText),
+        							displayText
+        						)
+        					);
+        				}
+        			}
     			}
     		}
 		}
