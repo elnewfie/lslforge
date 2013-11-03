@@ -2,7 +2,8 @@
 <feature
       id="lslforge"
       label="LSLforge"
-      version="0.1.5">
+      version="0.1.6">
+      
    <install-handler library="" handler=""/>
 
    <copyright>
