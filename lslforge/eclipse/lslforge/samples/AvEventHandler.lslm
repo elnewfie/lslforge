@@ -50,7 +50,7 @@ list onMapDestination(string simName, vector position, list avInfo) {
 // (only ones generated in response to http requests initiated by the avatar the
 // a handler is attached to, however)
 list onHTTPResponse(string responseKey, integer httpStatus, string body, list avInfo) {
-    return []
+    return [];
 }
 
 // Leave this one in your event handler to receive a unique key for each http request
