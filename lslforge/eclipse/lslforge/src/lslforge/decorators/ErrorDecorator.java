@@ -11,6 +11,7 @@ import lslforge.util.Util;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
@@ -37,6 +38,7 @@ public class ErrorDecorator implements ILightweightLabelDecorator {
 		if (! (element instanceof IResource)) return;
 		IResource resource = (IResource) element;
 		if (!resource.exists()) return;
+		if(resource instanceof IWorkspaceRoot) return;		//Skip the workspace root (not in a project anyways)
 		IProject project = resource.getProject();
 		if (project == null) {
 			Log.error(Messages.getString("ErrorDecorator.PROJECT_FOR") + resource.getName() + Messages.getString("ErrorDecorator.IS_NULL"), new Throwable()); //$NON-NLS-1$ //$NON-NLS-2$
