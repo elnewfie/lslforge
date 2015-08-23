@@ -555,7 +555,7 @@ funcDescriptions = [
     ("llGetDate",([],"Gets the date as YYYY-MM-DD\n")),
     ("llGetDisplayName",(["id"],"Returns a string that is the non-unique display name of the avatar specified by id.\n")),
     ("llGetEnergy",([],"Returns how much energy is in the object as a percentage of maximum\n")),
-    ("llGetEnv",(["name"],"Returns a string with the requested data about the region.\n")),
+    ("llGetEnv",(["name"],"Returns a string with the requested data about the region. The name can be one of the following: \"agent_limit\", \"dynamic_pathfinding\", \"estate_id\", \"estate_name\", \"frame_number\", \"region_cpu_ratio\", \"region_idle\", \"region_product_name\", \"region_product_sku\", \"region_start_time\", \"sim_channel\", \"sim_version\", \"simulator_hostname\"\n")),
     ("llGetExperienceDetails",(["experience_id"],"Returns a list of details about the experience.\nThis list has 5 components: [string experience_name, key owner_id, key group_id, key experience_id, integer state, string state_message]\nkey experience_id - The ID of the experience to query. If NULL_KEY passed, script's experience will be returned or [] if no experience associated.\n")),
     ("llGetExperienceErrorMessage",(["error"],"Returns a text description of a particular Experience LSL error constant. Returns a string describing the error code passed or the string corresponding to error. Returns XP_ERROR_UNKNOWN_ERROR if the error is not a valid error code.\ninteger error - The error code constant to translate.\n")),
     ("llGetForce",([],"gets the force (if the script is physical)\n")),
