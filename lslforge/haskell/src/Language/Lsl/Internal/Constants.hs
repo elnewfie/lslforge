@@ -402,6 +402,7 @@ allConstants = [
     Constant "OBJECT_ATTACHED_POINT" (IVal 19),
     Constant "OBJECT_BODY_SHAPE_TYPE" (IVal 26),
     Constant "OBJECT_CHARACTER_TIME" (IVal 17),
+    Constant "OBJECT_CLICK_ACTION" (IVal 28),
     Constant "OBJECT_CREATOR" (IVal 8),
     Constant "OBJECT_DESC" (IVal 2),
     Constant "OBJECT_GROUP" (IVal 7),
