@@ -314,7 +314,7 @@ funcSigs = [
     ("llRemoveVehicleFlags",LLVoid,[LLInteger]),
     ("llRequestAgentData",LLKey,[LLKey,LLInteger]),
     ("llRequestDisplayName",LLKey,[LLKey]),
-    ("llRequestExperiencePermissions",LLKey,[LLString]),
+    ("llRequestExperiencePermissions",LLVoid,[LLKey,LLString]),
     ("llRequestInventoryData",LLKey,[LLString]),
     ("llRequestPermissions",LLVoid,[LLKey,LLInteger]),
     ("llRequestSecureURL",LLKey,[]),
