@@ -43,6 +43,9 @@ Eclipse Luna Release (4.4.0)
 GHC 6.10.1 (http://www.haskell.org/ghc/download_ghc_6_10_1) should be used and after installation, system "Path" variable should be updated to include Haskell \bin directory.
 
 For all below packages, downloaded to some temp folder, 3 steps should be done:
+
+> Note: Some of these actions may require administrative rights. Run your command prompt as administrator in case you see errors.
+
 ```
 runhaskell Setup.hs configure
 runhaskell Setup.hs build
@@ -76,7 +79,7 @@ Now we configure, build, install LSLForge itself from its inner "haskell" folder
 
 ### Post-compilation
 
-Exe-file will appear at some C:\Program Files (x86)\Haskell\bin (look at the message after install) **Permission system may prevent file(s) copying to the folder**. 
+Exe-file will appear at some ``C:\Program Files (x86)\Haskell\bin`` folder (look at the message after install). **Permission system may prevent file(s) copying to the folder**.
 
 Now we specify this *.exe in Eclipse, ``Preferences`` > ``LSLForge`` settings.
 
