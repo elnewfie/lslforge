@@ -409,6 +409,7 @@ allConstants = [
     Constant "OBJECT_HOVER_HEIGHT" (IVal 25),
     Constant "OBJECT_LAST_OWNER_ID" (IVal 27),
     Constant "OBJECT_NAME" (IVal 1),
+    Constant "OBJECT_OMEGA" (IVal 29),
     Constant "OBJECT_OWNER" (IVal 6),
     Constant "OBJECT_PATHFINDING_TYPE" (IVal 20),
     Constant "OBJECT_PHANTOM" (IVal 22),
@@ -830,6 +831,7 @@ allConstants = [
     Constant "XP_ERROR_RETRY_UPDATE" (IVal 15),
     Constant "XP_ERROR_MATURITY_EXCEEDED" (IVal 16),
     Constant "XP_ERROR_NOT_PERMITTED_LAND" (IVal 17),
+    -- Constant "XP_ERROR_REQUEST_PERM_TIMEOUT" (IVal 18), -- Not implemented yet
     Constant "ZERO_ROTATION" llcZeroRotation,
     Constant "ZERO_VECTOR" llcZeroVector
     ]
