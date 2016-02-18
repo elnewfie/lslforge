@@ -100,13 +100,13 @@ cPrimPointLight = 23;llcPrimPointLight :: RealFloat a => LSLValue a; llcPrimPoin
 cPrimPosition = 6;llcPrimPosition :: RealFloat a => LSLValue a; llcPrimPosition = IVal cPrimPosition
 cPrimRotation = 8;llcPrimRotation :: RealFloat a => LSLValue a; llcPrimRotation = IVal cPrimRotation
 cPrimSize = 7;llcPrimSize :: RealFloat a => LSLValue a; llcPrimSize = IVal cPrimSize
-cPrimTempOnRez = 4;llcPrimTempOnRez :: RealFloat a => LSLValue a; llcPrimTempOnRez = IVal cPrimTempOnRez 
+cPrimTempOnRez = 4;llcPrimTempOnRez :: RealFloat a => LSLValue a; llcPrimTempOnRez = IVal cPrimTempOnRez
 cPrimType = 9;llcPrimType :: RealFloat a => LSLValue a; llcPrimType = IVal cPrimType
 
 cParcelDetailsName = 0;llcParcelDetailsName :: RealFloat a => LSLValue a; llcParcelDetailsName = IVal cParcelDetailsName
 cParcelDetailsDesc = 1;llcParcelDetailsDesc :: RealFloat a => LSLValue a; llcParcelDetailsDesc = IVal cParcelDetailsDesc
 cParcelDetailsOwner = 2;llcParcelDetailsOwner :: RealFloat a => LSLValue a; llcParcelDetailsOwner = IVal cParcelDetailsOwner
-cParcelDetailsGroup = 3;llcParcelDetailsGroup :: RealFloat a => LSLValue a; llcParcelDetailsGroup = IVal cParcelDetailsGroup 
+cParcelDetailsGroup = 3;llcParcelDetailsGroup :: RealFloat a => LSLValue a; llcParcelDetailsGroup = IVal cParcelDetailsGroup
 cParcelDetailsArea = 4;llcParcelDetailsArea :: RealFloat a => LSLValue a; llcParcelDetailsArea = IVal cParcelDetailsArea
 
 cClickActionNone = 0;llcClickActionNone :: RealFloat a => LSLValue a; llcClickActionNone = IVal cClickActionNone
@@ -416,10 +416,12 @@ allConstants = [
     Constant "OBJECT_PHYSICS" (IVal 21),
     Constant "OBJECT_PHYSICS_COST" (IVal 16),
     Constant "OBJECT_POS" (IVal 3),
+    Constant "OBJECT_PRIM_COUNT" (IVal 30),
     Constant "OBJECT_PRIM_EQUIVALENCE" (IVal 13),
     Constant "OBJECT_RETURN_PARCEL" (IVal 1),
     Constant "OBJECT_RETURN_PARCEL_OWNER" (IVal 2),
     Constant "OBJECT_RETURN_REGION" (IVal 4),
+    Constant "OBJECT_REZZER_KEY" (IVal 32),
     Constant "OBJECT_ROOT" (IVal 18),
     Constant "OBJECT_ROT" (IVal 4),
     Constant "OBJECT_RUNNING_SCRIPT_COUNT" (IVal 9),
@@ -429,6 +431,7 @@ allConstants = [
     Constant "OBJECT_STREAMING_COST" (IVal 15),
     Constant "OBJECT_TEMP_ON_REZ" (IVal 23),
     Constant "OBJECT_TOTAL_SCRIPT_COUNT" (IVal 10),
+    Constant "OBJECT_TOTAL_INVENTORY_COUNT" (IVal 31),
     Constant "OBJECT_UNKNOWN_DETAIL" (IVal (-1)),
     Constant "OBJECT_VELOCITY" (IVal 5),
     Constant "OPT_AVATAR" (IVal 1),
@@ -494,7 +497,7 @@ allConstants = [
     Constant "PERMISSION_CHANGE_PERMISSIONS" (IVal 0x200),
     Constant "PERMISSION_CONTROL_CAMERA" llcPermissionControlCamera,
     Constant "PERMISSION_DEBIT" llcPermissionDebit,
-    Constant "PERMISSION_OVERRIDE_ANIMATIONS" (IVal 0x8000), 
+    Constant "PERMISSION_OVERRIDE_ANIMATIONS" (IVal 0x8000),
     Constant "PERMISSION_RELEASE_OWNERSHIP" (IVal 0x40),
     Constant "PERMISSION_REMAP_CONTROLS" (IVal 0x8),
     Constant "PERMISSION_RETURN_OBJECTS" (IVal 0x10000),
@@ -844,7 +847,7 @@ isConstant s =
         Nothing -> False
         _ -> True
 
-        
+
 -- non LSL (lslForge only) constants
 lslForgeAvatarKey = 0
 lslForgeAvatarPos = 1
