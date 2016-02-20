@@ -6,11 +6,11 @@ import Language.Lsl.Syntax(Expr(..),Func(..),FuncDec(..),Global(..),Handler(..),
                   SourceContext(..))
 import Debug.Trace
 tr s x = trace (s ++ show x) x
--- | Generate a string representing an LSL script from a timestamp (string) 
+-- | Generate a string representing an LSL script from a timestamp (string)
 -- and a compiled (i.e. validated, with referenced modules included) LSL script.
 renderCompiledScript :: String -> CompiledLSLScript -> String
 renderCompiledScript stamp (CompiledLSLScript comment globals funcs states) =
-   (renderString "// LSL script generated: " . renderString stamp . renderString "\n" .
+   (renderString "// " . renderString stamp . renderString " - LSLForge (0.1.7) generated\n" .
     renderString comment .
     renderGlobals globals . renderFuncs funcs . renderStates states . renderString "\n") ""
 
@@ -18,8 +18,8 @@ renderSequence r = (foldl' (.) blank) . (map r)
 
 renderGlobals = renderSequence renderGlobal
 
-renderGlobal (GDecl (Ctx sc var) val) = renderPreText sc . renderVar var . 
-    case val of 
+renderGlobal (GDecl (Ctx sc var) val) = renderPreText sc . renderVar var .
+    case val of
         Nothing -> renderString ";"
         Just expr -> renderString " = " . renderSimple expr . renderString ";"
 
@@ -42,30 +42,30 @@ renderSimple e = renderExpression e
 
 renderStates = renderSequence renderState
 
-renderState (Ctx ssc (State (Ctx sc "default") handlers)) = 
+renderState (Ctx ssc (State (Ctx sc "default") handlers)) =
     renderPreText ssc .
     renderString "default {\n" . renderHandlers handlers . renderString "}"
 renderState (Ctx ssc (State (Ctx _ name) handlers)) =
     renderPreText ssc .
     renderString "state " . renderString name . renderString " {\n" . renderHandlers handlers . renderString "}"
- 
+
 renderHandlers = renderSequence renderHandler
 
 renderHandler (Ctx _ (Handler (Ctx sc name) vars stmts)) = renderPreText1 (renderIndent 0) sc . renderHandler' name vars stmts
 
 renderHandler' name vars stmts =
-    renderString name . renderChar '(' . renderVarList (ctxItems vars) . renderString ") {\n" . 
+    renderString name . renderChar '(' . renderVarList (ctxItems vars) . renderString ") {\n" .
         renderStatements 1 stmts . renderIndent 0 . renderString "}\n"
-        
+
 renderChar = showChar
 renderVar (Var nm t) = (renderType t) . renderChar ' ' . (renderString nm)
-renderFuncDec (FuncDec name t vars) = 
+renderFuncDec (FuncDec name t vars) =
     let sp = if t == LLVoid then "" else " " in
-        renderType t . renderString sp . renderString (ctxItem name) . renderChar '(' . 
+        renderType t . renderString sp . renderString (ctxItem name) . renderChar '(' .
         renderVarList (ctxItems vars) . renderChar ')'
 
 renderVarList [] = blank
-renderVarList (v:vars) = 
+renderVarList (v:vars) =
     (renderVar v) .
         let render' [] = blank
             render' (v:vars) = renderChar ',' . renderVar v . render' vars in render' vars
@@ -73,16 +73,16 @@ renderVarList (v:vars) =
 renderFuncs = renderSequence renderCtxFunc
 
 renderCtxFunc (Ctx sc func) = renderPreText sc . renderFunc func
-renderFunc (Func dec stmts) = 
+renderFunc (Func dec stmts) =
     renderFuncDec dec . renderString "{\n" . renderStatements 0 stmts . renderString "}"
 
-renderIndent 0 = renderString "    "
-renderIndent n = renderString "    " . renderIndent (n - 1)
+renderIndent 0 = renderString "  "
+renderIndent n = renderString "  " . renderIndent (n - 1)
 
 renderCtxStatement hang n (Ctx _ s) = renderStatement hang n s
 
 renderStatements n = renderSequence (renderCtxStatement False n)
-    
+
 doHang True n = renderString " "
 doHang False n = renderIndent n
 
@@ -90,26 +90,26 @@ renderOptionalExpression Nothing = blank
 renderOptionalExpression (Just expr) = renderCtxExpr expr
 
 renderStatement hang n stmt = doHang hang n . renderStatement' n stmt
-renderStatement' n (Compound stmts) = 
+renderStatement' n (Compound stmts) =
         renderString "{\n" . renderStatements (n+1) stmts . renderIndent n . renderString "}\n"
-renderStatement' n (While expr stmt) = 
-    renderString "while (" . renderCtxExpr expr . renderChar ')' . 
+renderStatement' n (While expr stmt) =
+    renderString "while (" . renderCtxExpr expr . renderChar ')' .
     case stmt of
         (Ctx _ NullStmt) -> renderString ";\n"
         _ -> renderCtxStatement True n stmt
-renderStatement' n (DoWhile stmt expr) = 
-    renderString "do " . 
+renderStatement' n (DoWhile stmt expr) =
+    renderString "do " .
     (case stmt of
          (Ctx _ NullStmt) -> renderString ";\n"
          _ -> renderCtxStatement True n stmt) . doHang False n . renderString "while (" . renderCtxExpr expr . renderString ");\n"
 renderStatement' n (For mexpr1 mexpr2 mexpr3 stmt) =
     renderString "for (" . renderCtxExprs "" mexpr1 . renderString "; " . renderOptionalExpression mexpr2 .
-    renderString "; " . renderCtxExprs "" mexpr3 . renderString ")" . 
+    renderString "; " . renderCtxExprs "" mexpr3 . renderString ")" .
     case stmt of
         (Ctx _ NullStmt) -> renderString ";\n"
         _ -> renderCtxStatement True n stmt
 renderStatement' n (If expr stmt1 stmt2) =
-    renderString "if (" . renderCtxExpr expr . renderChar ')' . 
+    renderString "if (" . renderCtxExpr expr . renderChar ')' .
         (case stmt1 of
              (Ctx _ NullStmt) -> renderString ";\n"
              (Ctx _ (If expr (Ctx _ (Compound _)) _)) -> renderCtxStatement True n stmt1
@@ -117,12 +117,12 @@ renderStatement' n (If expr stmt1 stmt2) =
                  (Ctx _ NullStmt) -> renderCtxStatement True n stmt1
                  _ -> renderStatement True n (Compound [stmt1])
              _ -> renderCtxStatement True n stmt1) .
-        case stmt2 of 
+        case stmt2 of
             (Ctx _ NullStmt) -> blank
             _ -> renderIndent n . renderString "else " . (renderCtxStatement True n stmt2)
-renderStatement' n (Decl var val) = 
-    renderVar var . 
-        case val of 
+renderStatement' n (Decl var val) =
+    renderVar var .
+        case val of
             Nothing -> renderString ";\n"
             Just expr -> renderString " = " . renderCtxExpr expr . renderString ";\n"
 renderStatement' n (NullStmt) = blank . renderString "\n"
@@ -152,16 +152,16 @@ renderExpression (StringLit s) = renderString ('"':go s)
            go ('"':s) = '\\':'"':go s
            go (c:s) = c:go s
 renderExpression (KeyLit k) = shows k
-renderExpression (VecExpr x y z) = 
+renderExpression (VecExpr x y z) =
     renderChar '<' . renderCtxExpr x . renderChar ',' .
                      renderCtxExpr y . renderChar ',' .
                      renderCtxExpr z . renderChar '>'
-renderExpression (RotExpr x y z s) = 
+renderExpression (RotExpr x y z s) =
     renderChar '<' . renderCtxExpr x . renderChar ',' .
                      renderCtxExpr y . renderChar ',' .
                      renderCtxExpr z . renderChar ',' .
                      renderCtxExpr s . renderChar '>'
-renderExpression (ListExpr l) = 
+renderExpression (ListExpr l) =
     let r prefix [] = blank
         r prefix (i:is) = renderString prefix . renderCtxExpr i . r "," is
     in renderChar '[' . r "" l . renderChar ']'
@@ -206,7 +206,7 @@ renderInParens f = renderChar '(' . f . renderChar ')'
 
 renderBinExpr op expr1 expr2 = renderChar '(' . renderCtxExpr expr1 . renderChar ' ' .
                                renderString op . renderChar ' ' . renderCtxExpr expr2 . renderChar ')'
-renderAssignment va op expr = 
+renderAssignment va op expr =
     renderChar '(' . renderVarAccess va . renderChar ' ' . renderString op . renderChar ' ' . renderCtxExpr expr . renderChar ')'
 renderComponent All = blank
 renderComponent X = renderString ".x"
