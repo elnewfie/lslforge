@@ -7,13 +7,13 @@ Description:
         which works in cooperation with the LSLForge Eclipse plugin (the executable is not
         much use standalone).  This package is a derivate of LSL Plus by Robert Greayer.
 Cabal-Version:  >= 1.5
-Homepage:       http:/lslforge.googlecode.com/
+Homepage:       https://github.com/raysilent/lslforge (forked from https://github.com/elnewfie/lslforge)
 License:        BSD3
 License-file:   LICENSE
 Category:	    Language
-Copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2012
-Author:         Robert Greayer <robgreayer@yahoo.com>
-Maintainer:	    "Newfie Pendragon" <elnewfie@yahoo.com>
+Copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2016
+Author:         Robert Greayer <robgreayer@yahoo.com>, "Newfie Pendragon" <elnewfie@yahoo.com>
+Maintainer:	    "Ray Silent" <ray.silent@gmail.com>
 Stability:	    experimental
 Build-Type:     Simple
 Tested-With:	GHC ==6.10.4
