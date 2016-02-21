@@ -330,6 +330,7 @@ allConstants = [
     Constant "HORIZONTAL" (IVal 1),
     Constant "HTTP_BODY_MAXLENGTH" llcHTTPBodyMaxlength,
     Constant "HTTP_BODY_TRUNCATED" llcHTTPBodyTruncated,
+    Constant "HTTP_CUSTOM_HEADER" (IVal 5),
     Constant "HTTP_METHOD" llcHTTPMethod,
     Constant "HTTP_MIMETYPE" llcHTTPMimetype,
     Constant "HTTP_PRAGMA_NO_CACHE" (IVal 6),
