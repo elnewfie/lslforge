@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="LSLForge Update Site" url="http://lslforge.googlecode.com/git/eclipse">
+   <description name="LSLForge Update Site" url="https://raw.githubusercontent.com/raysilent/lslforge/0.1.7/eclipse">
       LSLForge Update Site
    </description>
    <feature url="features/lslforge_0.1.7.jar" id="lslforge" version="0.1.7">
