@@ -4,7 +4,7 @@
     <property name="p2.timestamp" value="1382923493025"/>
     <property name="p2.compressed" value="true"/>
   </properties>
-  <mappings size="3"><rule filter="(&amp; (classifier=osgi.bundle))" output="https://raw.githubusercontent.com/raysilent/lslforge/${version}/eclipse/${id}_plugin_${version}.jar"/><rule filter="(&amp; (classifier=binary))" output="https://raw.githubusercontent.com/raysilent/lslforge/${version}/eclipse/${id}_${version}"/><rule filter="(&amp; (classifier=org.eclipse.update.feature))" output="https://raw.githubusercontent.com/raysilent/lslforge/${version}/eclipse/${id}_feature_${version}.jar"/></mappings>
+  <mappings size="3"><rule filter="(&amp; (classifier=osgi.bundle))" output="https://raw.githubusercontent.com/raysilent/lslforge/0.1.7/eclipse/${id}_plugin_${version}.jar"/><rule filter="(&amp; (classifier=binary))" output="https://raw.githubusercontent.com/raysilent/lslforge/0.1.7/eclipse/${id}_${version}"/><rule filter="(&amp; (classifier=org.eclipse.update.feature))" output="https://raw.githubusercontent.com/raysilent/lslforge/0.1.7/eclipse/${id}_feature_${version}.jar"/></mappings>
   <artifacts size="10">
     <artifact classifier="osgi.bundle" id="lslforge_win32_x86" version="0.1.7">
       <properties size="2">
