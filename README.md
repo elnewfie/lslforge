@@ -1,6 +1,6 @@
 # LSLForge
 
-<img src="doc/logo100x100.jpg" align="right" width="100px" height="100px" />
+<img src="doc/logo100x100.jpg" align="right" width="100px" height="100px" margin="20px" padding="20px"/>
 
 LSLForge is a fork of the popular LSLPlus editing evironment, to provide Linden Scripting Language (LSL) support in Eclipse.
 
@@ -37,20 +37,25 @@ Install, Accept, Reboot
 
 Switch to LSLForge Perspective and create new LSLForge Project 
 
-### New Definitions
+> Unfortunately you'll get an old runtime file with this and if you want to have all updated definitions you'll have to proceed to the next section
+
+### New Definitions Patch
 
 Now you will find out that you need to recompile haskell piece in order to take advantage of all new constant and function definitions from this fork. Currently you'll have to do that manually as described below.
 
-## Native Library Compilation Example
+### Native Library Compilation Example
 
-### Tested Environment
+#### Tested Environment
 
-* Windows 8.1 64bit
+* Windows 
+    * 8.1 64bit
+    * 10 64bit
 * Eclipse:
     * Eclipse Luna Release (4.4.0)
     * Eclipse Mars.1 Release (4.5.1)
+    * Eclipse Mars.2 Release (4.5.2)
 
-### Compiling Haskell native LSLForge binary
+#### Compiling Haskell native LSLForge binary
 
 GHC 6.10.1 (http://www.haskell.org/ghc/download_ghc_6_10_1) should be used and after installation, system "Path" variable should be updated to include Haskell \bin directory.
 
@@ -89,11 +94,20 @@ https://hackage.haskell.org/package/template-haskell-2.3.0.0
 
 Now we configure, build, install LSLForge itself from its inner "haskell" folder in a similar way.
 
-### Post-compilation
+#### Post-compilation
 
-Exe-file will appear at ``C:\Program Files (x86)\Haskell\bin`` folder (look at the message after install). **Permission system may prevent file(s) copying to the folder**. Or it will reside close to source folder, if your "install" failed. You will be able to link to it anyway.
+If your "install" was successful, exe-file will appear at ``C:\Program Files (x86)\Haskell\bin`` folder (look at the message after install). **Permission system may prevent file(s) copying to the folder**. It may as well reside close to source folder under **build**, if your "install" failed. You will be able to link to it anyway.
 
-Now we specify this *.exe in Eclipse, ``Preferences`` > ``LSLForge`` settings.
+Now you only need to specify this *.exe in Eclipse, ``Preferences`` > ``LSLForge`` settings.
 
-Eclipse should be restarted
+**Eclipse should be restarted**
+
+## Known Issues
+
+* ``*.lslp`` files compilation issues although everything is correct. It may happen when a lot of ``$import`` keywords are used and at some point the compiler gets stuck. What may help is:
+
+    * Adding a fake ``*.lslm`` module along the project, it could be called ``Fake.lslm``. Opening it and adding a space, then removing it and hitting **Save** will force the project to be recompiled
+    * Forcing recompilation of a module that is referenced by ``*.lslp`` file by opening it, doing some fake change, and hitting **Save**
+
+
 
