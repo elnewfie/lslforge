@@ -8,6 +8,9 @@ LSLForge is a fork of the popular LSLPlus editing evironment, to provide Linden 
 
 This particular fork is to maintain LSL definitions for functions and constants. Original one is not maintained at the moment, so you have to do some extra steps in order to get it updated as described below.
 
+### News
+
+* 2016-10-20 LSLForge 0.1.7 (Windows only) test release. Other platforms will receive an old (0.1.6) runtime - read below to see how to compile it manually
 
 ## Description
 
@@ -37,11 +40,11 @@ Install, Accept, Reboot
 
 Switch to LSLForge Perspective and create new LSLForge Project 
 
-> Unfortunately you'll get an old runtime file with this and if you want to have all updated definitions you'll have to proceed to the next section
+> Unfortunately, **if you not running on Windows**, you'll get an old runtime file with this and if you want to have all updated definitions you'll have to proceed to the next section
 
 ### New Definitions Patch
 
-Now you will find out that you need to recompile haskell piece in order to take advantage of all new constant and function definitions from this fork. Currently you'll have to do that manually as described below.
+If not on Windows, you will find out that you need to recompile Haskell piece in order to take advantage of all new constant and function definitions from this fork. Currently you'll have to do that manually as described below.
 
 ### Native Library Compilation Example
 
@@ -51,9 +54,12 @@ Now you will find out that you need to recompile haskell piece in order to take 
     * 8.1 64bit
     * 10 64bit
 * Eclipse:
-    * Eclipse Luna Release (4.4.0)
-    * Eclipse Mars.1 Release (4.5.1)
-    * Eclipse Mars.2 Release (4.5.2)
+    * Eclipse Luna (4.4.0)
+    * Eclipse Mars.1 (4.5.1)
+    * Eclipse Mars.2 4.5.2)
+    * Eclipse Neon (4.6.0)
+
+> If you succeed with compilation for Linux or Mac please add an issue with step-by-step instructions
 
 #### Compiling Haskell native LSLForge binary
 
