@@ -24,7 +24,7 @@ The official group for LSLForge Editor tool is LSLForge Users [secondlife:///app
 
 To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Add a site for updating:
 
-``https://raw.githubusercontent.com/raysilent/lslforge/0.1.7/eclipse/``
+``https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/``
 
 Important! If you don't see any items for installing, try to uncheck "Group items by category"
 
