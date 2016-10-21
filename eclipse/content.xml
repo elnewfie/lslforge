@@ -331,13 +331,13 @@ me for negotiation.  :-)
 Malcolm.Wallace@cs.york.ac.uk
       </copyright>
     </unit>
-    <unit id="LSLForge_0.1.7" version="1.0.0.0797x">
+    <unit id="LSLForge_0.1.7" version="1.0.0.0797w">
       <properties size="2">
         <property name="org.eclipse.equinox.p2.name" value="LSLForge 0.1.7"/>
         <property name="org.eclipse.equinox.p2.type.category" value="true"/>
       </properties>
       <provides size="1">
-        <provided namespace="org.eclipse.equinox.p2.iu" name="LSLForge_0.1.7" version="1.0.0.0797x"/>
+        <provided namespace="org.eclipse.equinox.p2.iu" name="LSLForge_0.1.7" version="1.0.0.0797w"/>
       </provides>
       <requires size="5">
         <required namespace="org.eclipse.equinox.p2.iu" name="lslforge.feature.group" range="[0.1.7,0.1.7]"/>

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LSLForge
 Bundle-SymbolicName: lslforge; singleton:=true
-Bundle-Version: 0.1.7
+Bundle-Version: 0.1.6
 Bundle-ClassPath: xstream-1.4.7.jar,
  lslforge.jar,
  antlr-3.4-complete-no-antlrv2.jar
