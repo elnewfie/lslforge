@@ -10,7 +10,9 @@ This particular fork is to maintain LSL definitions for functions and constants.
 
 ### News
 
-* 2016-10-20 LSLForge 0.1.7 (Windows only) test release. Other platforms will receive an old (0.1.6) runtime - read below to see how to compile it manually
+* 2016-10-20 LSLForge **0.1.7** (Windows only) test release
+* 2016-10-22 LSLForge **0.1.8** (Windows only) test release
+    * Fixing XP_ERROR_REQUEST_PERM_TIMEOUT missing
 
 ## Description
 
@@ -56,7 +58,7 @@ If not on Windows, you will find out that you need to recompile Haskell piece in
 * Eclipse:
     * Eclipse Luna (4.4.0)
     * Eclipse Mars.1 (4.5.1)
-    * Eclipse Mars.2 4.5.2)
+    * Eclipse Mars.2 (4.5.2)
     * Eclipse Neon (4.6.0)
 
 > If you succeed with compilation for Linux or Mac please add an issue with step-by-step instructions

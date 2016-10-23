@@ -864,7 +864,7 @@ allConstants = [
     Constant "XP_ERROR_RETRY_UPDATE" (IVal 15),
     Constant "XP_ERROR_MATURITY_EXCEEDED" (IVal 16),
     Constant "XP_ERROR_NOT_PERMITTED_LAND" (IVal 17),
-    -- Constant "XP_ERROR_REQUEST_PERM_TIMEOUT" (IVal 18), -- Not implemented yet
+    Constant "XP_ERROR_REQUEST_PERM_TIMEOUT" (IVal 18),
     Constant "ZERO_ROTATION" llcZeroRotation,
     Constant "ZERO_VECTOR" llcZeroVector
     ]
