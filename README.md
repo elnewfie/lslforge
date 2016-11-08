@@ -15,6 +15,8 @@ This particular fork is to maintain LSL definitions for functions and constants.
 * 2016-10-20 LSLForge **0.1.7** (Windows only) test release
 * 2016-10-22 LSLForge **0.1.8** (Windows only) test release
     * Fixing XP_ERROR_REQUEST_PERM_TIMEOUT missing
+* 2016-11-08 LSLForge **0.1.9** (Windows, Linux, Mac) test release
+    * JSON_APPEND, CLICK_ACTION_ZOOM added
 
 ## Description
 
@@ -45,12 +47,6 @@ Uncheck all except 2 items:
 Install, Accept, Reboot
 
 Switch to LSLForge Perspective and create new LSLForge Project 
-
-> Unfortunately, **if you not running on Windows**, you'll get an old runtime file with this and if you want to have all updated definitions you'll have to proceed to the next section
-
-### New Definitions Patch
-
-If not on Windows, you will find out that you need to recompile Haskell piece in order to take advantage of all new constant and function definitions from this fork. Currently you'll have to do that manually as described below.
 
 ### Native Library Compilation Example
 
