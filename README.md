@@ -10,8 +10,6 @@ This particular fork is to maintain LSL definitions for functions and constants.
 
 ### News
 
-> **Only fresh installation** of the plugin seems working
-
 * 2016-10-20 LSLForge **0.1.7** (Windows only) test release
 * 2016-10-22 LSLForge **0.1.8** (Windows only) test release
     * Fixing XP_ERROR_REQUEST_PERM_TIMEOUT missing
@@ -30,8 +28,6 @@ The official group for LSLForge Editor tool is LSLForge Users [secondlife:///app
 ## Installing
 
 ### Eclipse Plugin
-
-> **Only fresh installation** of the plugin seems working
 
 To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Add a site for updating:
 
