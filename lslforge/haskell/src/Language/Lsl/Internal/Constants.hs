@@ -117,7 +117,8 @@ cClickActionPay = 3;llcClickActionPay :: RealFloat a => LSLValue a; llcClickActi
 cClickActionOpen = 4;llcClickActionOpen :: RealFloat a => LSLValue a; llcClickActionOpen = IVal cClickActionOpen
 cClickActionPlay = 5;llcClickActionPlay :: RealFloat a => LSLValue a; llcClickActionPlay = IVal cClickActionPlay
 cClickActionOpenMedia = 6;llcClickActionOpenMedia :: RealFloat a => LSLValue a; llcClickActionOpenMedia = IVal cClickActionOpenMedia
-cClickActions = [cClickActionTouch,cClickActionSit,cClickActionBuy,cClickActionPay,cClickActionOpen,cClickActionPlay,cClickActionOpenMedia]
+cClickActionZoom = 7;llcClickActionZoom :: RealFloat a => LSLValue a; llcClickActionZoom = IVal cClickActionZoom
+cClickActions = [cClickActionTouch,cClickActionSit,cClickActionBuy,cClickActionPay,cClickActionOpen,cClickActionPlay,cClickActionOpenMedia,cClickActionZoom]
 
 cDataBorn = 3;llcDataBorn :: RealFloat a => LSLValue a; llcDataBorn = IVal cDataBorn
 cDataName = 2;llcDataName :: RealFloat a => LSLValue a; llcDataName = IVal cDataName
@@ -294,6 +295,7 @@ allConstants = [
     Constant "CLICK_ACTION_PLAY" llcClickActionPlay,
     Constant "CLICK_ACTION_SIT" llcClickActionSit,
     Constant "CLICK_ACTION_TOUCH" llcClickActionTouch,
+    Constant "CLICK_ACTION_ZOOM" llcClickActionZoom,
     Constant "CONTENT_TYPE_ATOM" (IVal 0x04),
     Constant "CONTENT_TYPE_FORM" (IVal 0x07),
     Constant "CONTENT_TYPE_HTML" (IVal 0x01),
