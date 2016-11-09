@@ -2,8 +2,7 @@
 <feature
       id="lslforge"
       label="LSLforge"
-      version="0.1.6">
-
+      version="0.1.9">
    <install-handler library="" handler=""/>
 
    <copyright>
@@ -100,7 +99,6 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS&apos;&apos; AND ANY EXPRESS OR I
       <import plugin="org.eclipse.debug.ui"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.help"/>
-      <import plugin="org.eclipse.update.core"/>
       <import plugin="com.ibm.icu"/>
       <import plugin="org.eclipse.ui.views"/>
    </requires>
@@ -109,6 +107,6 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS&apos;&apos; AND ANY EXPRESS OR I
          id="lslforge"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.1.9"/>
 
 </feature>

@@ -1,4 +1,3 @@
-@echo off
 
 
 del eclipse\lslforge\src\lslforge\generated\*.java

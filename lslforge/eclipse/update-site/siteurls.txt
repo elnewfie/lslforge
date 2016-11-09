@@ -1,1 +1,1 @@
-update-sites/lslforge https://raw.githubusercontent.com/raysilent/lslforge/0.1.7/eclipse @LSLForge
+update-sites/lslforge https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/ @LSLForge

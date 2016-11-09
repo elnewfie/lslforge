@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/lslforge_/.1.3.jar" id="lslforge" version="0.1.4"/>
-   <feature url="features/lslforge-part-macosx-x86_0.1.4.jar" id="lslforge-part-macosx-x86" version="0.1.4"/>
-   <feature url="features/lslforge-part-win32-x86_0.1.4.jar" id="lslforge-part-win32-x86" version="0.1.4" os="win32" arch="x86"/>
-   <feature url="features/lslforge_part_linux_x86_0.1.4.jar" id="lslforge_part_linux_x86" version="0.1.4"/>
+   <feature url="features/lslforge_0.1.9.jar" id="lslforge" version="0.1.9"/>
+   <feature url="features/lslforge_part_linux_x86_0.1.9.jar" id="lslforge_part_linux_x86" version="0.1.9"/>
+   <feature url="features/lslforge_part_linux_x86_64_0.1.9.jar" id="lslforge_part_linux_x86_64" version="0.1.9"/>
+   <feature url="features/lslforge_part_macosx_x86_0.1.9.jar" id="lslforge_part_macosx_x86" version="0.1.9"/>
+   <feature url="features/lslforge_part_win32_x86_0.1.9.jar" id="lslforge_part_win32_x86" version="0.1.9"/>
 </site>
