@@ -10,7 +10,7 @@ tr s x = trace (s ++ show x) x
 -- and a compiled (i.e. validated, with referenced modules included) LSL script.
 renderCompiledScript :: String -> CompiledLSLScript -> String
 renderCompiledScript stamp (CompiledLSLScript comment globals funcs states) =
-   (renderString "// " . renderString stamp . renderString " - LSLForge (0.1.9) generated\n" .
+   (renderString "// " . renderString stamp . renderString " - LSLForge (0.1.9.1) generated\n" .
     renderString comment .
     renderGlobals globals . renderFuncs funcs . renderStates states . renderString "\n") ""
 
