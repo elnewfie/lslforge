@@ -428,8 +428,10 @@ deleteSubList source start end =
 
 subList source start end =
     let n = length source
-        s = convertIndex n start
-        e = convertIndex n end
+        (s, e) = (\ s' e' -> if s' >= 0 && e' >= 0 then (s', e')
+                        else if s' >= 0 && e' < 0 then (s', n)
+                        else if s' < 0 && e' >= 0 then (0, e')
+                        else (n, n)) (convertIndex n start) (convertIndex n end)
     in
         if s <= e then take (e - s + 1) $ drop s source
         else take (e+1) source ++ drop s source
