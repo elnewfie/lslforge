@@ -242,7 +242,7 @@ stringChar = do{ c <- stringLetter; return (Just c) }
          <|> (char '\\' >> return (Just '\\'))
          <?> "string character"
                 
-stringLetter = satisfy (\c -> (c /= '"') && (c /= '\\') && (c > '\026'))
+stringLetter = satisfy (\c -> (c /= '"') && (c /= '\\'))
 
 stringEscape = do
     char '\\'
