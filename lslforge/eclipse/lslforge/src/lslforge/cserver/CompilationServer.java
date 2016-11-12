@@ -18,7 +18,7 @@ import lslforge.generated.InitAll;
 import lslforge.util.Log;
 import lslforge.util.Util;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.XStreamException;
+import com.thoughtworks.xstream.core.BaseException;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class CompilationServer {
@@ -126,7 +126,7 @@ public class CompilationServer {
 							cmdInfo.getResult().put(response);
 						} catch (IOException e) {
 							cmdInfo.getResult().put(e);
-						} catch (XStreamException e) {
+						} catch (BaseException e) {
 							cmdInfo.getResult().put(e);
 						} catch (ClassCastException e) {
 							cmdInfo.getResult().put(e);
