@@ -8,13 +8,20 @@ LSLForge is a fork of the popular LSLPlus editing evironment, to provide Linden 
 
 This fork is to maintain LSL definitions for functions and constants, as well as maintaining Eclipse Plugin Update Site.
 
-### News
+### News (newest first)
 
-* 2016-10-20 LSLForge **0.1.7** (Windows only) test release
-* 2016-10-22 LSLForge **0.1.8** (Windows only) test release
-    * Fixing XP_ERROR_REQUEST_PERM_TIMEOUT missing
-* 2016-11-08 LSLForge **0.1.9** (Windows, Linux, Mac) test release
+* 2016-11-13 LSLForge **0.1.9.1** (Windows, Linux, Mac)
+    * OBJECT_GROUP_TAG, OBJECT_TEMP_ATTACHED added
+    * Bug fixes for (Thanks @PellSmit):
+        * #35 (negative out of range index)
+        * #6 (backslash in string)
+        * #26 (multiline string bug) 
+    * Bug fix for #37 (cannot Run -> Run as -> Launch in LSL Sim)
+* 2016-11-08 LSLForge **0.1.9** (Windows, Linux, Mac)
     * JSON_APPEND, CLICK_ACTION_ZOOM added
+* 2016-10-22 LSLForge **0.1.8** (Windows only)
+    * XP_ERROR_REQUEST_PERM_TIMEOUT missing added
+* 2016-10-20 LSLForge **0.1.7** (Windows only)
 
 ## Description
 
@@ -42,12 +49,23 @@ To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Cl
 
 ``https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/``
 
-> Important! If you don't see any items for installing, try to uncheck "Group items by category"
+This way you'll get the newest release.
 
-Uncheck all except 2 items:
+Alternatively you may try a specific version since ``0.1.8`` (including work in progress branches):
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.8/eclipse/``
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.1/eclipse/``
+
+For even older version, clone the whole repo and link your Eclipse to a particular folder under ``eclipse\archive``. 
+
+> If you don't see any items for installing, try to uncheck "Group items by category"
+
+> Run ``eclipse -clean`` to make it forget cached downloads
+
+Checkbox 2 items:
 
 * "LSLForge"
-* One of native parts according to your environment. 
+* One of the native parts according to your environment. 
 
 Install, accept and restart Eclipse
 
