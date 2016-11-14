@@ -10,13 +10,14 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
-* 2016-11-13 LSLForge **0.1.9.1** (Windows, Linux, Mac)
+* 2016-11-13 LSLForge **0.1.9.1** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
     * OBJECT_GROUP_TAG, OBJECT_TEMP_ATTACHED added
-    * Bug fixes for (Thanks @PellSmit):
-        * #35 (negative out of range index)
-        * #6 (backslash in string)
-        * #26 (multiline string bug) 
-    * Bug fix for #37 (cannot Run -> Run as -> Launch in LSL Sim)
+    * Bug fixes (Thanks [@PellSmit](https://github.com/PellSmit)):
+        * [#35](https://github.com/raysilent/lslforge/issues/35) (negative out of range index)
+        * [#6](https://github.com/raysilent/lslforge/issues/6) (backslash in string)
+        * [#26](https://github.com/raysilent/lslforge/issues/26) (multiline string bug) 
+    * Bug fix [#37](https://github.com/raysilent/lslforge/issues/37) (cannot Run -> Run as -> Launch in LSL Sim)
+    * Bug fix some null pointer exceptions during recompiled 
 * 2016-11-08 LSLForge **0.1.9** (Windows, Linux, Mac)
     * JSON_APPEND, CLICK_ACTION_ZOOM added
 * 2016-10-22 LSLForge **0.1.8** (Windows only)
@@ -31,7 +32,7 @@ Because it is an Eclipse plugin, when you use LSL Plus you can take advantage of
 
 ## Second Life® Group
 
-The official group for LSLForge Editor tool is LSLForge Users [secondlife:///app/group/381ff28c-1171-27ac-77f5-ded3471b6245/about]. General announcements, questions and answers.
+The official group for LSLForge Editor tool is [LSLForge Users](secondlife:///app/group/381ff28c-1171-27ac-77f5-ded3471b6245/about). General announcements, questions and answers.
 
 ## Installing
 
