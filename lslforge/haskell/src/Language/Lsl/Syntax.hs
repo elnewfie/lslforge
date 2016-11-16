@@ -72,7 +72,7 @@ import Control.Monad.Error.Class(Error(..))
 import qualified Control.Monad.State as S(State)
 import Control.Monad.State hiding(State)
 
-import Debug.Trace
+-- import Debug.Trace
 --trace1 s v = trace (s ++ show v) v
 
 data TextLocation = TextLocation { textLine0 :: Int, textColumn0 :: Int, textLine1 :: Int, textColumn1 :: Int, textName :: String }

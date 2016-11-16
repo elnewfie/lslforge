@@ -239,10 +239,10 @@ stringLiteral   = lexeme (
 stringChar :: CharParser st (Maybe Char)
 stringChar = do{ c <- stringLetter; return (Just c) }
          <|> try stringEscape
-         <|> (char '\\' >> return (Just '\\'))
+         <|> (char '\\' >> return Nothing)
          <?> "string character"
                 
-stringLetter = satisfy (\c -> (c /= '"') && (c /= '\\') && (c > '\026'))
+stringLetter = satisfy (\c -> (c /= '"') && (c /= '\\'))
 
 stringEscape = do
     char '\\'

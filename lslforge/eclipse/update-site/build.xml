@@ -1,7 +1,7 @@
 <project name="build" default="build" basedir=".">
 <property name="dist" location="dist"/>
 <property name="meta-dist" location="${dist}/${version}"/>
-<property name="baseUrl" value="http://localhost:8080/bar"/>
+<property name="baseUrl" value="https://github.com/raysilent/lslforge/raw/master/eclipse/"/>
 <property name="desc" value=""/>
 <target name="build">
     <fail unless="version">must specify a version</fail>

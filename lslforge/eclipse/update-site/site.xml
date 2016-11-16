@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="LSLForge Update Site" url="http://lslforge.googlecode.com/git/eclipse">
+   <description name="LSLForge Update Site" url="https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/">
       LSLForge Update Site
    </description>
-   <feature url="features/lslforge_0.1.6.jar" id="lslforge" version="0.1.6">
-      <category name="LSLForge_0.1.6"/>
+   <feature url="features/lslforge_0.1.9.1.jar" id="lslforge" version="0.1.9.1">
+      <category name="LSLForge_0.1.9.1"/>
    </feature>
-   <feature url="features/lslforge_part_linux_x86_0.1.6.jar" id="lslforge_part_linux_x86" version="0.1.6">
-      <category name="LSLForge_0.1.6"/>
+   <feature url="features/lslforge_part_linux_x86_0.1.9.1.jar" id="lslforge_part_linux_x86" version="0.1.9.1" os="linux">
+      <category name="LSLForge_0.1.9.1"/>
    </feature>
-   <feature url="features/lslforge_part_linux_x86_64_0.1.6.jar" id="lslforge_part_linux_x86_64" version="0.1.6">
-      <category name="LSLForge_0.1.6"/>
+   <feature url="features/lslforge_part_linux_x86_64_0.1.9.1.jar" id="lslforge_part_linux_x86_64" version="0.1.9.1" os="linux">
+      <category name="LSLForge_0.1.9.1"/>
    </feature>
-   <feature url="features/lslforge_part_macosx_x86_0.1.6.jar" id="lslforge_part_macosx_x86" version="0.1.6">
-      <category name="LSLForge_0.1.6"/>
+   <feature url="features/lslforge_part_macosx_x86_0.1.9.1.jar" id="lslforge_part_macosx_x86" version="0.1.9.1" os="macosx">
+      <category name="LSLForge_0.1.9.1"/>
    </feature>
-   <feature url="features/lslforge_part_win32_x86_0.1.6.jar" id="lslforge_part_win32_x86" version="0.1.6">
-      <category name="LSLForge_0.1.6"/>
+   <feature url="features/lslforge_part_win32_x86_0.1.9.1.jar" id="lslforge_part_win32_x86" version="0.1.9.1" os="win32">
+      <category name="LSLForge_0.1.9.1"/>
    </feature>
-   <category-def name="LSLForge_0.1.6" label="LSLForge 0.1.6"/>
+   <category-def name="LSLForge_0.1.9.1" label="LSLForge 0.1.9.1"/>
 </site>
