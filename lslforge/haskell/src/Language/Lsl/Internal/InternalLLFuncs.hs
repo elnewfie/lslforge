@@ -5,28 +5,28 @@
      'outside' the script in any way.
    * do not have any state.  Call them with the same arguments, and they will return the same
      result, each and every time.
-     
+
    Note that this notion of affecting the SL environment excludes cetain types of effects:
    * time usage.  All actions within a script take time, and this indirectly affects the
      SL environment.
    * energy cost.  SL has a notion of the 'energy' of an object that sometimes comes into
      play.  These functions may affect that energy, but that has no impact on the results
      of the functions themselves.
-   
+
    Note that a couple of functions that don't affect the SL environment don't fall into
    my category of 'internal' because they are not stateless.  Those functions are
    * llFrand: each time you call this function it returns a different number, even if
      you pass the exact same argument.  SL completely hides the seed and sequence generator
      from the script.
    * llRandomizeList.  Essentially the same issue as for llFrand.
-   
+
    To implement these functions, either the execution model for the script must hava some
    storage set aside for the state of the pseudo-random number generator, or the 'world
    state' must contain this state.  I've chosen to make this part of the 'world state'
    so the execution model doesn't know anything about the pseudo random number generator.
-   
+
    Not that anybody was wondering...
-   
+
    So this module implements the functions that are left, and my assumption is that these
    implementations would be used regardless of how the SL 'world' the scripts run in is
    modelled.  Thus, the operation of all other LSL predefined functions is specific to
@@ -125,6 +125,7 @@ import qualified Data.ByteString.Lazy as L
 import qualified Data.Digest.Pure.MD5 as MD5
 import qualified Data.ByteString.UTF8 as UTF8
 import Network.URI(escapeURIChar,unEscapeString)
+import Codec.Binary.UTF8.String(encodeString,decodeString)
 
 internalLLFuncNames :: [String]
 internalLLFuncNames = map fst (internalLLFuncs :: (Read a, RealFloat a) => [(String, a -> [LSLValue a] -> Maybe (EvalResult,LSLValue a))])
@@ -200,7 +201,7 @@ internalLLFuncs = [
     ("llVecNorm",llVecNorm),
     ("llXorBase64Strings",llXorBase64Strings),
     ("llXorBase64StringsCorrect", llXorBase64StringsCorrect)]
-    
+
 continueWith x = return (EvalIncomplete,x)
 
 -- String Functions
@@ -217,7 +218,7 @@ separate :: Eq a => [a] -> [[a]] -> [[a]] -> [a] -> Bool -> [[a]]
 separate [] _ _ accum keepNulls = if keepNulls || length accum > 0 then [reverse accum] else []
 separate l seps spacers accum keepNulls =
    case find ((flip isPrefixOf) l) seps of
-       Nothing ->  
+       Nothing ->
            case find ((flip isPrefixOf) l) spacers of
                Nothing -> let rest = tail l in separate rest seps spacers (head l:accum) keepNulls
                Just p -> let rest = drop (length p) l in
@@ -230,22 +231,22 @@ separate l seps spacers accum keepNulls =
                  else (reverse accum):(separate rest seps spacers [] keepNulls)
 
 
-llStringTrim _ [SVal string, trimType ] = 
+llStringTrim _ [SVal string, trimType ] =
    let trimEnd = reverse . dropWhile (==' ') . reverse
        trimBegin = dropWhile (==' ')
        trimBoth = trimBegin . trimEnd in
-   continueWith $ SVal $ (case trimType of 
+   continueWith $ SVal $ (case trimType of
        tt  | Just tt == findConstVal "STRING_TRIM_HEAD" -> trimBegin
            | Just tt == findConstVal "STRING_TRIM_TAIL" -> trimEnd
            | Just tt == findConstVal "STRING_TRIM" -> trimBoth
            | otherwise -> id) string
-           
+
 llParseString2List _ [SVal string, LVal separators, LVal spacers] =
     continueWith $ LVal $ map SVal $ separate string (map lslValString separators) (map lslValString spacers) [] False
 
 llParseStringKeepNulls _ [SVal string, LVal separators, LVal spacers] =
     continueWith $ LVal $ map SVal $ separate string (map lslValString separators) (map lslValString spacers) [] True
-    
+
 llToUpper _ [SVal string] = continueWith $ SVal $ map toUpper string
 llToLower _ [SVal string] = continueWith $ SVal $ map toLower string
 
@@ -254,23 +255,25 @@ llSubStringIndex _ [SVal source, SVal pattern] = continueWith $ IVal $
         Nothing -> (-1)
         Just i -> i
 
-unescapedChars = ['A'..'Z'] ++ ['0'..'9'] ++ ['a'..'z']  
+unescapedChars = ['A'..'Z'] ++ ['0'..'9'] ++ ['a'..'z']
 
 escapeURL "" n = ""
 escapeURL (c:cs) n =
     let s = escapeURIChar (`elem` unescapedChars) c
-        len = length s 
+        len = length s
     in if len > n then "" else s ++ escapeURL cs (n - len)
 maxResult = 254::Int
-      
+
 llEscapeURL _ [SVal string] =
-    continueWith $ SVal $ escapeURL string maxResult
-    
-llUnescapeURL _ [SVal string] = 
-    continueWith $ SVal $ take maxResult $ unEscapeString string
- 
+    continueWith $ SVal $ escapeURL (encodeString string) maxResult
+    --continueWith $ SVal $ escapeURL string maxResult
+
+llUnescapeURL _ [SVal string] =
+    continueWith $ SVal $ decodeString $ take maxResult $ unEscapeString string
+    --continueWith $ SVal $ take maxResult $ unEscapeString string
+
 llMD5String _ [SVal string, IVal nonce] =
-    continueWith $ SVal $ (show . MD5.md5 . L.pack . B.unpack . UTF8.fromString) (string ++ ":" ++ show nonce)   
+    continueWith $ SVal $ (show . MD5.md5 . L.pack . B.unpack . UTF8.fromString) (string ++ ":" ++ show nonce)
 
 llSHA1String _ [SVal string] = continueWith $ SVal (hashStoHex string)
 -- Math functions
@@ -293,7 +296,7 @@ llAbs _ [IVal i] = continueWith $ IVal (abs i)
 llCeil _ [FVal f] = continueWith $ IVal (ceiling f)
 llFloor _ [FVal f] = continueWith $ IVal (floor f)
 llRound _ [FVal f] = continueWith $ IVal (round f)
--- llRand is not an 'internal' function, in the sense that it 
+-- llRand is not an 'internal' function, in the sense that it
 -- is not stateless, like the other 'internal' functions.
 -- this is because of its seed, and current position in
 -- the sequence.
@@ -302,7 +305,7 @@ llPow _ [FVal base, FVal exp] = continueWith $ FVal (base ** exp)
 llModPow _ [IVal base, IVal exp, IVal modulus] = continueWith $ IVal (modpow base exp modulus)
 
 modpow a b c | b < 0 = 0
-             | otherwise = 
+             | otherwise =
                 let b' = (if b > 0xFFFF then 0xFFFF else b)
                     pow _ 0 = 1 `mod` c
                     pow x n = (let p' = pow x (n `div` 2) in ((if odd n then (x *) else id) (p' * p')) `mod` c)
@@ -321,7 +324,7 @@ statFuncs = map (\(Just (IVal op), f) -> (op,f)) [
     (findConstVal "LIST_STAT_SUM_SQUARES", sum . map (\x -> x * x )),
     (findConstVal "LIST_STAT_NUM_COUNT", fromInt . length),
     (findConstVal "LIST_STAT_GEOMETRIC_MEAN", listStatGeometricMean)]
-                   
+
 toF :: Num a => LSLValue a -> Maybe a
 toF (IVal i) = Just (fromInt i)
 toF (FVal f) = Just f
@@ -347,7 +350,7 @@ listStatMedian l =
         n = length l
     in if odd n then l' !! (n `div` 2) else ((l' !! (n `div` 2)) + (l' !! (n `div` 2 - 1))) / 2.0
 
-listStatStdDev l = 
+listStatStdDev l =
     let mean = listStatMean l in
         sqrt $ listStatMean $ map ((**2.0).(mean-)) l
 listStatSumSquares l = sum $ map (**2.0) l
@@ -368,7 +371,7 @@ llAxisAngle2Rot _ [vval@(VVal x y z), FVal r] = (continueWith . rot2RVal) (axisA
 llAxes2Rot _ [VVal xf yf zf, VVal xl yl zl, VVal xu yu zu] =
     let (x,y,z,s) = matrixToQuaternion ((xf,xl,xu),(yf,yl,yu),(zf,zl,zu)) in
         continueWith $ RVal x y z s
-        
+
 llRot2Fwd _ [RVal x y z s] =
     let ((x',_,_),(y',_,_),(z',_,_)) = quaternionToMatrix (x,y,z,s) in
         continueWith $ VVal x' y' z'
@@ -378,7 +381,7 @@ llRot2Left _ [RVal x y z s] =
 llRot2Up _ [RVal x y z s] =
     let ((_,_,x'),(_,_,y'),(_,_,z')) = quaternionToMatrix (x,y,z,s) in
         continueWith $ VVal x' y' z'
-   
+
 llRot2Euler _ [RVal x y z s] =
     let (x',y',z') = quaternionToRotations P123 False (x,y,z,s)
     in continueWith $ VVal x' y' z'
@@ -391,21 +394,21 @@ llRotBetween n [v0@(VVal x1 y1 z1),v1@(VVal x2 y2 z2)] = (continueWith . rot2RVa
 
 llAngleBetween _ [RVal aX aY aZ aS,RVal bX bY bZ bS] =
     continueWith $ FVal $ 2 * acos ((aX * bX + aY * bY + aZ * bZ + aS * bS)
-                  / sqrt ((aX^2 + aY^2 + aZ^2 + aS^2) * 
+                  / sqrt ((aX^2 + aY^2 + aZ^2 + aS^2) *
                            (bX^2 + bY^2 + bZ^2 + bS^2)))
-                           
-llVecMag _ [v@(VVal x y z)] = 
+
+llVecMag _ [v@(VVal x y z)] =
     continueWith $ FVal $ mag3d (vVal2Vec v)
 
 llVecDist _ [v1@(VVal x1 y1 z1),v2@(VVal x2 y2 z2)] =
     continueWith $ FVal $ dist3d (vVal2Vec v1) (vVal2Vec v2)
 
-llVecNorm _ [v@(VVal x y z)] = 
+llVecNorm _ [v@(VVal x y z)] =
     let mag2 = mag3d2 (vVal2Vec v) in
         continueWith $ if mag2 == 0.0 then VVal 0.0 0.0 0.0
                        else let mag = sqrt mag2 in
                            VVal (x/mag) (y/mag) (z/mag)
-                           
+
 -- List Functions
 
 --llGetListLength	 Gets the number of elements in a list
@@ -413,24 +416,26 @@ llGetListLength _ [LVal list] = continueWith $ IVal (length list)
 llList2List _ [LVal source, IVal start, IVal end] = continueWith $ LVal (subList source start end)
 llDeleteSubList _ [LVal source, IVal start, IVal end] = continueWith $ LVal (deleteSubList source start end)
 
-llDumpList2String _ [LVal list, SVal sep] = 
+llDumpList2String _ [LVal list, SVal sep] =
     continueWith $ SVal $ concat $ intersperse sep (map lslValString list)
-   
-deleteSubList source start end = 
+
+deleteSubList source start end =
     let n = length source
         s = convertIndex n start
         e = convertIndex n end
     in if s <= e then take s source ++ drop (e + 1) source
        else drop (e + 1) $ take s source
-       
+
 subList source start end =
     let n = length source
-        s = convertIndex n start
-        e = convertIndex n end 
+        (s, e) = (\ s' e' -> if s' >= 0 && e' >= 0 then (s', e')
+                        else if s' >= 0 && e' < 0 then (s', n)
+                        else if s' < 0 && e' >= 0 then (0, e')
+                        else (n, n)) (convertIndex n start) (convertIndex n end)
     in
         if s <= e then take (e - s + 1) $ drop s source
-        else take (e+1) source ++ drop s source    
-        
+        else take (e+1) source ++ drop s source
+
 convertIndex length index = if index < 0 then length + index else index
 
 
@@ -473,7 +478,7 @@ llListReplaceList _ [LVal dst, LVal src, IVal start, IVal end] =
         s = convertIndex n start
         e = convertIndex n end
         (x,y) = cut s (e+1) dst in continueWith $ LVal $ x ++ src ++ y
-        
+
 -- llList2ListStrided	Extracts a subset of a strided list
 -- TODO: assumes this works like llList2List, but first extracting every nth elem
 llList2ListStrided _ [LVal src, IVal start, IVal end, IVal stride] =
@@ -485,7 +490,7 @@ llList2ListStrided _ [LVal src, IVal start, IVal end, IVal stride] =
 
 strideList l stride =
     if length l <= stride || stride <= 1 then [l] else (take stride l):(strideList (drop stride l) stride)
-    
+
 llListSort _ [LVal list, IVal stride, IVal ascending] =
   let Just (IVal true) = findConstVal "TRUE" -- this will crash if true isn't defined...
       -- according to the documentation for this function
@@ -494,7 +499,7 @@ llListSort _ [LVal list, IVal stride, IVal ascending] =
       direction = if ascending == true then id else reverse
   in continueWith $ LVal $
       concat (direction $ sort $ strideList list stride)
-      
+
 
 typeCodes :: RealFloat a => [(LSLType, LSLValue a)]
 typeCodes = map (\ (t,Just v) -> (t,v)) [
@@ -505,7 +510,7 @@ typeCodes = map (\ (t,Just v) -> (t,v)) [
     (LLVector, findConstVal "TYPE_VECTOR"),
     (LLRot, findConstVal "TYPE_ROTATION")]
 
-invalidType :: RealFloat a => LSLValue a    
+invalidType :: RealFloat a => LSLValue a
 invalidType = let Just v = findConstVal "TYPE_INVALID" in v
 
 -- TODO: might this function work with negative indices? assuming no.
@@ -516,7 +521,7 @@ llGetListEntryType _ [LVal l, IVal index] =
 
 elemAtM' i = if i >= 0 then elemAtM i else elemAtM ((-1) - i) . reverse
 
-llList2Float _ [LVal l, IVal index] = 
+llList2Float _ [LVal l, IVal index] =
     continueWith $ FVal $
         case elemAtM' index l of
             Just (SVal s) -> parseFloat s
@@ -533,7 +538,7 @@ llList2Integer _ [LVal l, IVal index] =
             _ -> 0
 
 llList2Key _ [LVal l, IVal index] =
-    continueWith $ 
+    continueWith $
         case elemAtM' index l of
             Just v -> let (SVal v') = toSVal v in KVal $ LSLKey v'
             _ -> let (Just (SVal v)) = findConstVal "NULL_KEY" in KVal $ LSLKey v
@@ -547,13 +552,13 @@ llList2String _ [LVal l, IVal index] =
         case elemAtM' index l of
             Nothing -> SVal ""
             Just v -> toSVal v
-            
+
 llList2Vector _ [LVal l, IVal index] =
     continueWith $ case elemAtM' index l of
             Just v@(VVal _ _ _) -> v
             _ -> let (Just v) = findConstVal "ZERO_VECTOR" in v
-            
-            
+
+
 base64chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 
 llIntegerToBase64 _ [IVal i] =
@@ -569,7 +574,7 @@ charToBits :: Char -> Int
 charToBits c = case elemIndex c base64chars of
     Nothing -> 0
     Just i -> i
-    
+
 llBase64ToInteger _ [SVal s] =
      let n = length s
          s' = if n >= 8 then s else (s ++ (replicate (6 - n) 'A'))
@@ -577,7 +582,7 @@ llBase64ToInteger _ [SVal s] =
              Nothing -> 0
              Just i -> i
      in continueWith $ IVal $ foldl' (.|.) 0 $ zipWith (shiftL) (map charToBits (take 6 s')) [26,20..]
-   
+
 slPrintable :: String
 slPrintable = map toEnum (10:[32..127])
 
@@ -588,24 +593,24 @@ decodeB64 :: String -> String
 decodeB64 [] = []
 decodeB64 (x:y:'=':'=':[]) =
     let (c1,c2,_) = decodeQuartet(charToBits x,charToBits y,0,0) in [c1]
-decodeB64 (x:y:z:'=':[]) = 
+decodeB64 (x:y:z:'=':[]) =
     let (c1,c2,_) = decodeQuartet(charToBits x,charToBits y,charToBits z,0) in [c1,c2]
 decodeB64 (w:x:y:z:rest) =
     let (c1,c2,c3) = decodeQuartet(charToBits w,charToBits x,charToBits y,charToBits z) in
         (c1:c2:c3:(decodeB64 rest))
--- some invalid ones        
-decodeB64 (x:[]) = 
+-- some invalid ones
+decodeB64 (x:[]) =
     let (c1,_,_) = decodeQuartet(charToBits x,0,0,0) in [c1]
-decodeB64 (x:y:[]) = 
+decodeB64 (x:y:[]) =
     let (c1,_,_) = decodeQuartet(charToBits x,charToBits y,0,0) in [c1]
-decodeB64 (x:y:z:[]) = 
+decodeB64 (x:y:z:[]) =
     let (c1,c2,_) = decodeQuartet(charToBits x,charToBits y,charToBits z,0) in [c1]
- 
-decodeQuartet :: (Int,Int,Int,Int) -> (Char,Char,Char)   
-decodeQuartet (w,x,y,z) = 
+
+decodeQuartet :: (Int,Int,Int,Int) -> (Char,Char,Char)
+decodeQuartet (w,x,y,z) =
     let c1 = (w `shiftL` 2) .|. (x `shiftR` 4)
         c2 = ((x `shiftL` 4) .|. (y `shiftR` 2)) .&. 255
-        c3 = ((y `shiftL` 6) .|. z) .&. 255 
+        c3 = ((y `shiftL` 6) .|. z) .&. 255
     in (toEnum c1,toEnum c2, toEnum c3)
 
 
@@ -634,7 +639,7 @@ llXorBase64StringsCorrect _ [SVal s1, SVal s2] =
     in continueWith $ SVal $ encodeB64 (map toEnum s3)
 llBase64ToString _ [SVal s] = continueWith $ SVal $ map mkPrintable $ decodeB64 s
 
-llStringToBase64 _ [SVal s] = 
+llStringToBase64 _ [SVal s] =
     let s' = (encodeB64 s) in
         continueWith $ SVal s'
 
@@ -644,7 +649,7 @@ encodeB64 [x,y] = encode2 (x,y)
 encodeB64 (x:y:z:rest) = encode3 (x,y,z) ++ (encodeB64 rest)
 
 encode3 :: (Char,Char,Char) -> [Char]
-encode3 (c1,c2,c3) = 
+encode3 (c1,c2,c3) =
     let b1 = ((fromEnum c1) `shiftR` 2) .&. 63
         b2 = (((fromEnum c1) `shiftL` 4) .|. ((fromEnum c2) `shiftR` 4)) .&. 63
         b3 = (((fromEnum c2) `shiftL` 2) .|. ((fromEnum c3) `shiftR` 6)) .&. 63

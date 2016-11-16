@@ -1,36 +1,36 @@
 Name:           LSLForge
-version:        0.1.6
+version:        0.1.9.1
 Synopsis:	    An execution and testing framework for the Linden Scripting Language (LSL)
-Description:	
+Description:
 	Provides a framework for executing Linden Scripting Language scripts offline,
 	i.e. outside a Second Life&#xAE; simulator.  The product is the LslForge executable,
         which works in cooperation with the LSLForge Eclipse plugin (the executable is not
         much use standalone).  This package is a derivate of LSL Plus by Robert Greayer.
 Cabal-Version:  >= 1.5
-Homepage:       http:/lslforge.googlecode.com/
+Homepage:       https://github.com/raysilent/lslforge (forked from https://github.com/elnewfie/lslforge)
 License:        BSD3
 License-file:   LICENSE
 Category:	    Language
-Copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2012
-Author:         Robert Greayer <robgreayer@yahoo.com>
-Maintainer:	    "Newfie Pendragon" <elnewfie@yahoo.com>
+Copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2016
+Author:         Robert Greayer <robgreayer@yahoo.com>, "Newfie Pendragon" <elnewfie@yahoo.com>
+Maintainer:	    "Ray Silent" <ray.silent@gmail.com>
 Stability:	    experimental
 Build-Type:     Simple
 Tested-With:	GHC ==6.10.4
 Extra-source-files: NOTICE
 
 Executable LSLForge
-  Build-Depends:  base >= 4.0 && < 5, haskell98, 
-     filepath >= 1.1.0.0 && < 1.2, parsec >= 2.1.0.0 && < 3, 
+  Build-Depends:  base >= 4.0 && < 5, haskell98,
+     filepath >= 1.1.0.0 && < 1.2, parsec >= 2.1.0.0 && < 3,
      HaXml >= 1.19 && < 1.20, directory > 1 && < 1.1, array >= 0.2 && < 0.3,
-     monads-fd > 0.0 && < 0.1, transformers >= 0.1 && < 0.2, 
+     monads-fd > 0.0 && < 0.1, transformers >= 0.1 && < 0.2,
      network >= 2.1 && < 2.3, random >= 1.0, containers >= 0.1 && < 0.3,
-     old-time, utf8-string >= 0.3 && < 0.4, pureMD5 >= 0.2 && < 3, 
-     bytestring >= 0.9 && < 0.10, template-haskell >= 2.3.0.0 && < 2.4, 
+     time, old-locale, old-time, utf8-string >= 0.3 && < 0.4, pureMD5 >= 0.2 && < 3,
+     bytestring >= 0.9 && < 0.10, template-haskell >= 2.3.0.0 && < 2.4,
      syb >= 0.1.0.0 && < 0.2.0.0, fclabels > 0.4 && < 0.5
   Main-Is:        LslForge.hs
   Hs-Source-Dirs: src
-  Other-modules: 
+  Other-modules:
     Data.Generics.Extras.Schemes
     Data.Record.LabelExtras
     Language.Lsl.Internal.AccessGenerator

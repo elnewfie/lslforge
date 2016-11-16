@@ -52,7 +52,7 @@ public class HTMLTextPresenter implements DefaultInformationControl.IInformation
         return new HTML2TextReader(new StringReader(hoverInfo), presentation);
     }
 
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
 	protected void adaptTextPresentation(TextPresentation presentation, int offset, int insertLength) {
 
         int yoursStart= offset;

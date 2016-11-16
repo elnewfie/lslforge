@@ -100,13 +100,13 @@ cPrimPointLight = 23;llcPrimPointLight :: RealFloat a => LSLValue a; llcPrimPoin
 cPrimPosition = 6;llcPrimPosition :: RealFloat a => LSLValue a; llcPrimPosition = IVal cPrimPosition
 cPrimRotation = 8;llcPrimRotation :: RealFloat a => LSLValue a; llcPrimRotation = IVal cPrimRotation
 cPrimSize = 7;llcPrimSize :: RealFloat a => LSLValue a; llcPrimSize = IVal cPrimSize
-cPrimTempOnRez = 4;llcPrimTempOnRez :: RealFloat a => LSLValue a; llcPrimTempOnRez = IVal cPrimTempOnRez 
+cPrimTempOnRez = 4;llcPrimTempOnRez :: RealFloat a => LSLValue a; llcPrimTempOnRez = IVal cPrimTempOnRez
 cPrimType = 9;llcPrimType :: RealFloat a => LSLValue a; llcPrimType = IVal cPrimType
 
 cParcelDetailsName = 0;llcParcelDetailsName :: RealFloat a => LSLValue a; llcParcelDetailsName = IVal cParcelDetailsName
 cParcelDetailsDesc = 1;llcParcelDetailsDesc :: RealFloat a => LSLValue a; llcParcelDetailsDesc = IVal cParcelDetailsDesc
 cParcelDetailsOwner = 2;llcParcelDetailsOwner :: RealFloat a => LSLValue a; llcParcelDetailsOwner = IVal cParcelDetailsOwner
-cParcelDetailsGroup = 3;llcParcelDetailsGroup :: RealFloat a => LSLValue a; llcParcelDetailsGroup = IVal cParcelDetailsGroup 
+cParcelDetailsGroup = 3;llcParcelDetailsGroup :: RealFloat a => LSLValue a; llcParcelDetailsGroup = IVal cParcelDetailsGroup
 cParcelDetailsArea = 4;llcParcelDetailsArea :: RealFloat a => LSLValue a; llcParcelDetailsArea = IVal cParcelDetailsArea
 
 cClickActionNone = 0;llcClickActionNone :: RealFloat a => LSLValue a; llcClickActionNone = IVal cClickActionNone
@@ -117,7 +117,8 @@ cClickActionPay = 3;llcClickActionPay :: RealFloat a => LSLValue a; llcClickActi
 cClickActionOpen = 4;llcClickActionOpen :: RealFloat a => LSLValue a; llcClickActionOpen = IVal cClickActionOpen
 cClickActionPlay = 5;llcClickActionPlay :: RealFloat a => LSLValue a; llcClickActionPlay = IVal cClickActionPlay
 cClickActionOpenMedia = 6;llcClickActionOpenMedia :: RealFloat a => LSLValue a; llcClickActionOpenMedia = IVal cClickActionOpenMedia
-cClickActions = [cClickActionTouch,cClickActionSit,cClickActionBuy,cClickActionPay,cClickActionOpen,cClickActionPlay,cClickActionOpenMedia]
+cClickActionZoom = 7;llcClickActionZoom :: RealFloat a => LSLValue a; llcClickActionZoom = IVal cClickActionZoom
+cClickActions = [cClickActionTouch,cClickActionSit,cClickActionBuy,cClickActionPay,cClickActionOpen,cClickActionPlay,cClickActionOpenMedia,cClickActionZoom]
 
 cDataBorn = 3;llcDataBorn :: RealFloat a => LSLValue a; llcDataBorn = IVal cDataBorn
 cDataName = 2;llcDataName :: RealFloat a => LSLValue a; llcDataName = IVal cDataName
@@ -166,6 +167,12 @@ allConstants = [
     Constant "AGENT_BY_LEGACY_NAME" llcAgent,
     Constant "AGENT_BY_USERNAME" (IVal 0x10),
     Constant "AGENT_CROUCHING" (IVal 0x400),
+    Constant "ATTACH_FACE_JAW" (IVal 47),
+    Constant "ATTACH_FACE_LEAR" (IVal 48),
+    Constant "ATTACH_FACE_LEYE" (IVal 50),
+    Constant "ATTACH_FACE_REAR" (IVal 49),
+    Constant "ATTACH_FACE_REYE" (IVal 51),
+    Constant "ATTACH_FACE_TOUNGE" (IVal 52),
     Constant "AGENT_FLYING" (IVal 0x1),
     Constant "AGENT_IN_AIR" (IVal 0x100),
     Constant "AGENT_LIST_PARCEL" (IVal 0x1),
@@ -184,7 +191,10 @@ allConstants = [
     Constant "ATTACH_BELLY" (IVal 28),
     Constant "ATTACH_CHEST" (IVal 1),
     Constant "ATTACH_CHIN" (IVal 12),
+    Constant "ATTACH_GROIN" (IVal 53),
     Constant "ATTACH_HEAD" (IVal 2),
+    Constant "ATTACH_HIND_LFOOT" (IVal 54),
+    Constant "ATTACH_HIND_RFOOT" (IVal 55),
     Constant "ATTACH_HUD_BOTTOM" (IVal 37),
     Constant "ATTACH_HUD_BOTTOM_LEFT" (IVal 36),
     Constant "ATTACH_HUD_BOTTOM_RIGHT" (IVal 38),
@@ -198,6 +208,7 @@ allConstants = [
     Constant "ATTACH_LEYE" (IVal 15),
     Constant "ATTACH_LFOOT" (IVal 7),
     Constant "ATTACH_LHAND" (IVal 5),
+    Constant "ATTACH_LHAND_RING1" (IVal 41),
     Constant "ATTACH_LHIP" (IVal 25),
     Constant "ATTACH_LLARM" (IVal 21),
     Constant "ATTACH_LLLEG" (IVal 27),
@@ -205,6 +216,7 @@ allConstants = [
     Constant "ATTACH_LSHOULDER" (IVal 3),
     Constant "ATTACH_LUARM" (IVal 20),
     Constant "ATTACH_LULEG" (IVal 26),
+    Constant "ATTACH_LWING" (IVal 45),
     Constant "ATTACH_MOUTH" (IVal 11),
     Constant "ATTACH_NECK" (IVal 39),
     Constant "ATTACH_NOSE" (IVal 17),
@@ -213,6 +225,7 @@ allConstants = [
     Constant "ATTACH_REYE" (IVal 16),
     Constant "ATTACH_RFOOT" (IVal 8),
     Constant "ATTACH_RHAND" (IVal 6),
+    Constant "ATTACH_RHAND_RING1" (IVal 42),
     Constant "ATTACH_RHIP" (IVal 22),
     Constant "ATTACH_RIGHT_PEC" (IVal 30),
     Constant "ATTACH_RLARM" (IVal 19),
@@ -221,6 +234,9 @@ allConstants = [
     Constant "ATTACH_RSHOULDER" (IVal 4),
     Constant "ATTACH_RUARM" (IVal 18),
     Constant "ATTACH_RULEG" (IVal 23),
+    Constant "ATTACH_RWING" (IVal 46),
+    Constant "ATTACH_TAIL_BASE" (IVal 43),
+    Constant "ATTACH_TAIL_TIP" (IVal 44),
     Constant "AVOID_CHARACTERS" (IVal 1),
     Constant "AVOID_DYNAMIC_OBSTACLES" (IVal 2),
     Constant "AVOID_NONE" (IVal 0),
@@ -279,6 +295,7 @@ allConstants = [
     Constant "CLICK_ACTION_PLAY" llcClickActionPlay,
     Constant "CLICK_ACTION_SIT" llcClickActionSit,
     Constant "CLICK_ACTION_TOUCH" llcClickActionTouch,
+    Constant "CLICK_ACTION_ZOOM" llcClickActionZoom,
     Constant "CONTENT_TYPE_ATOM" (IVal 0x04),
     Constant "CONTENT_TYPE_FORM" (IVal 0x07),
     Constant "CONTENT_TYPE_HTML" (IVal 0x01),
@@ -330,6 +347,7 @@ allConstants = [
     Constant "HORIZONTAL" (IVal 1),
     Constant "HTTP_BODY_MAXLENGTH" llcHTTPBodyMaxlength,
     Constant "HTTP_BODY_TRUNCATED" llcHTTPBodyTruncated,
+    Constant "HTTP_CUSTOM_HEADER" (IVal 5),
     Constant "HTTP_METHOD" llcHTTPMethod,
     Constant "HTTP_MIMETYPE" llcHTTPMimetype,
     Constant "HTTP_PRAGMA_NO_CACHE" (IVal 6),
@@ -347,6 +365,7 @@ allConstants = [
     Constant "INVENTORY_SCRIPT" llcInventoryScript,
     Constant "INVENTORY_SOUND" llcInventorySound,
     Constant "INVENTORY_TEXTURE" llcInventoryTexture,
+    Constant "JSON_APPEND" (IVal (-1)),
     Constant "JSON_ARRAY" (SVal "\xfdd2"),
     Constant "JSON_DELETE" (SVal "\xfdd8"),
     Constant "JSON_FALSE" (SVal "\xfdd7"),
@@ -358,6 +377,7 @@ allConstants = [
     Constant "JSON_TRUE" (SVal "\xfdd6"),
     Constant "KFM_CMD_PAUSE" (IVal 2),
     Constant "KFM_CMD_PLAY" (IVal 0),
+    -- Constant "KFM_CMD_SET_MODE" -- Not implemented yet
     Constant "KFM_CMD_STOP" (IVal 1),
     Constant "KFM_COMMAND" (IVal 0),
     Constant "KFM_DATA" (IVal 2),
@@ -400,21 +420,29 @@ allConstants = [
     Constant "MASK_OWNER" llcMaskOwner,
     Constant "NULL_KEY" (SVal "00000000-0000-0000-0000-000000000000"),
     Constant "OBJECT_ATTACHED_POINT" (IVal 19),
+    Constant "OBJECT_BODY_SHAPE_TYPE" (IVal 26),
     Constant "OBJECT_CHARACTER_TIME" (IVal 17),
+    Constant "OBJECT_CLICK_ACTION" (IVal 28),
     Constant "OBJECT_CREATOR" (IVal 8),
     Constant "OBJECT_DESC" (IVal 2),
     Constant "OBJECT_GROUP" (IVal 7),
+    Constant "OBJECT_GROUP_TAG" (IVal 33),
+    Constant "OBJECT_HOVER_HEIGHT" (IVal 25),
+    Constant "OBJECT_LAST_OWNER_ID" (IVal 27),
     Constant "OBJECT_NAME" (IVal 1),
+    Constant "OBJECT_OMEGA" (IVal 29),
     Constant "OBJECT_OWNER" (IVal 6),
     Constant "OBJECT_PATHFINDING_TYPE" (IVal 20),
     Constant "OBJECT_PHANTOM" (IVal 22),
     Constant "OBJECT_PHYSICS" (IVal 21),
     Constant "OBJECT_PHYSICS_COST" (IVal 16),
     Constant "OBJECT_POS" (IVal 3),
+    Constant "OBJECT_PRIM_COUNT" (IVal 30),
     Constant "OBJECT_PRIM_EQUIVALENCE" (IVal 13),
     Constant "OBJECT_RETURN_PARCEL" (IVal 1),
     Constant "OBJECT_RETURN_PARCEL_OWNER" (IVal 2),
     Constant "OBJECT_RETURN_REGION" (IVal 4),
+    Constant "OBJECT_REZZER_KEY" (IVal 32),
     Constant "OBJECT_ROOT" (IVal 18),
     Constant "OBJECT_ROT" (IVal 4),
     Constant "OBJECT_RUNNING_SCRIPT_COUNT" (IVal 9),
@@ -422,8 +450,10 @@ allConstants = [
     Constant "OBJECT_SCRIPT_TIME" (IVal 12),
     Constant "OBJECT_SERVER_COST" (IVal 14),
     Constant "OBJECT_STREAMING_COST" (IVal 15),
+    Constant "OBJECT_TEMP_ATTACHED" (IVal 34),
     Constant "OBJECT_TEMP_ON_REZ" (IVal 23),
     Constant "OBJECT_TOTAL_SCRIPT_COUNT" (IVal 10),
+    Constant "OBJECT_TOTAL_INVENTORY_COUNT" (IVal 31),
     Constant "OBJECT_UNKNOWN_DETAIL" (IVal (-1)),
     Constant "OBJECT_VELOCITY" (IVal 5),
     Constant "OPT_AVATAR" (IVal 1),
@@ -477,6 +507,9 @@ allConstants = [
     Constant "PARCEL_MEDIA_COMMAND_TYPE" (IVal 10),
     Constant "PARCEL_MEDIA_COMMAND_UNLOAD" (IVal 8),
     Constant "PARCEL_MEDIA_COMMAND_URL" (IVal 5),
+    Constant "PASS_ALWAYS" (IVal 1),
+    Constant "PASS_IF_NOT_HANDLED" (IVal 0),
+    Constant "PASS_NEVER" (IVal 2),
     Constant "PASSIVE" llcPassive,
     Constant "PATROL_PAUSE_AT_WAYPOINTS" (IVal 0),
     Constant "PAYMENT_INFO_ON_FILE" (IVal 1),
@@ -489,7 +522,7 @@ allConstants = [
     Constant "PERMISSION_CHANGE_PERMISSIONS" (IVal 0x200),
     Constant "PERMISSION_CONTROL_CAMERA" llcPermissionControlCamera,
     Constant "PERMISSION_DEBIT" llcPermissionDebit,
-    Constant "PERMISSION_OVERRIDE_ANIMATIONS" (IVal 0x8000), 
+    Constant "PERMISSION_OVERRIDE_ANIMATIONS" (IVal 0x8000),
     Constant "PERMISSION_RELEASE_OWNERSHIP" (IVal 0x40),
     Constant "PERMISSION_REMAP_CONTROLS" (IVal 0x8),
     Constant "PERMISSION_RETURN_OBJECTS" (IVal 0x10000),
@@ -506,6 +539,7 @@ allConstants = [
     Constant "PI" (FVal 3.14159265),
     Constant "PING_PONG" (IVal 0x8),
     Constant "PI_BY_TWO" (FVal 1.57079632),
+    Constant "PRIM_ALLOW_UNSIT" (IVal 39),
     Constant "PRIM_ALPHA_MODE" (IVal 38),
     Constant "PRIM_ALPHA_MODE_NONE" (IVal 0),
     Constant "PRIM_ALPHA_MODE_BLEND" (IVal 1),
@@ -585,6 +619,7 @@ allConstants = [
     Constant "PRIM_POS_LOCAL" (IVal 33),
     Constant "PRIM_ROTATION" llcPrimRotation,
     Constant "PRIM_ROT_LOCAL" (IVal 29),
+    Constant "PRIM_SCRIPTED_SIT_ONLY" (IVal 40),
     Constant "PRIM_SCULPT_FLAG_INVERT" (IVal 64),
     Constant "PRIM_SCULPT_FLAG_MIRROR" (IVal 128),
     Constant "PRIM_SCULPT_TYPE_CYLINDER" (IVal 4),
@@ -596,6 +631,7 @@ allConstants = [
     Constant "PRIM_SHINY_LOW" (IVal 1),
     Constant "PRIM_SHINY_MEDIUM" (IVal 2),
     Constant "PRIM_SHINY_NONE" (IVal 0),
+    Constant "PRIM_SIT_TARGET" (IVal 41),
     Constant "PRIM_SIZE" llcPrimSize,
     Constant "PRIM_SLICE" (IVal 35),
     Constant "PRIM_SPECULAR" (IVal 36),
@@ -719,6 +755,13 @@ allConstants = [
     Constant "SCALE" (IVal 0x40),
     Constant "SCRIPTED" llcScripted,
     Constant "SIM_STAT_PCT_CHARS_STEPPED" (IVal 0),
+    Constant "SIT_NOT_EXPERIENCE" (IVal (-1)),
+    Constant "SIT_NO_EXPERIENCE_PERMISSION" (IVal (-2)),
+    Constant "SIT_NO_SIT_TARGET" (IVal (-3)),
+    Constant "SIT_INVALID_AGENT" (IVal (-4)),
+    Constant "SIT_INVALID_LINK" (IVal (-5)),
+    Constant "SIT_NO_ACCESS" (IVal (-6)),
+    Constant "SIT_INVALID_OBJECT" (IVal (-7)),
     Constant "SMOOTH" (IVal 0x10),
     Constant "SQRT2" (FVal 1.414213538),
     Constant "STATUS_BLOCK_GRAB" (IVal 0x40),
@@ -825,6 +868,8 @@ allConstants = [
     Constant "XP_ERROR_KEY_NOT_FOUND" (IVal 14),
     Constant "XP_ERROR_RETRY_UPDATE" (IVal 15),
     Constant "XP_ERROR_MATURITY_EXCEEDED" (IVal 16),
+    Constant "XP_ERROR_NOT_PERMITTED_LAND" (IVal 17),
+    Constant "XP_ERROR_REQUEST_PERM_TIMEOUT" (IVal 18),
     Constant "ZERO_ROTATION" llcZeroRotation,
     Constant "ZERO_VECTOR" llcZeroVector
     ]
@@ -837,7 +882,7 @@ isConstant s =
         Nothing -> False
         _ -> True
 
-        
+
 -- non LSL (lslForge only) constants
 lslForgeAvatarKey = 0
 lslForgeAvatarPos = 1

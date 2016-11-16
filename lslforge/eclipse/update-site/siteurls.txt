@@ -1,2 +1,1 @@
-update-sites/lslforge http://lslforge.googlecode.com/git/eclipse @LSLForge
-update-sites/slchat http://lslforge.slchat.org/ @SLChat Test Site
+update-sites/lslforge https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/ @LSLForge

@@ -299,20 +299,25 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
 
     public void clearProjections() {
         ProjectionAnnotationModel pm = getProjectionModel();
+        if (pm==null) return;
         pm.removeAllAnnotations();
     }
     public void addProjection(int start, int length) {
         ProjectionAnnotationModel pm = getProjectionModel();
-        
+        if (pm==null) return;
         pm.addAnnotation(new ProjectionAnnotation(), new Position(start, length));
     }
 
     private ProjectionAnnotationModel getProjectionModel() {
-        return ((ProjectionViewer)getSourceViewer()).getProjectionAnnotationModel();
+    	ISourceViewer sourceViewer = getSourceViewer();
+    	if (sourceViewer == null) return null;
+        return ((ProjectionViewer)sourceViewer).getProjectionAnnotationModel();
     }
     
     public void annotateErrs(List<ErrInfo> errs) {
-         IAnnotationModel am = getSourceViewer().getAnnotationModel(); 
+    	ISourceViewer sourceViewer = getSourceViewer();
+    	if (sourceViewer == null) return;
+         IAnnotationModel am = sourceViewer.getAnnotationModel(); 
             
 
         Iterator<?> ai = am.getAnnotationIterator();
@@ -350,7 +355,9 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     }
 
     public void configurationChanged() {
-        this.getSourceViewer().invalidateTextPresentation();
+    	ISourceViewer sourceViewer = this.getSourceViewer();
+    	if (sourceViewer == null) return;
+    	sourceViewer.invalidateTextPresentation();
     }
     
     public void updateOutline() {
