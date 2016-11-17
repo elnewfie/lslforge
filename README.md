@@ -1,5 +1,7 @@
 # LSLForge
 
+An LSL Script Editor/compiler for Second Life's Scripting Language.
+
 <img src="doc/logo100x100.jpg" align="right" width="100px" height="100px" margin="20px" padding="20px"/>
 
 LSLForge is a fork of the popular LSLPlus editing evironment, to provide Linden Scripting Language (LSL) support in Eclipse.
@@ -48,11 +50,11 @@ Any of the Eclipse installations were found working:
 
 To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Click ``Add...``, give it a name and enter the link for location:
 
-``https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/``
+``https://raw.githubusercontent.com/elnewfie/lslforge/master/eclipse/``
 
 This way you'll get the newest release.
 
-Alternatively you may try a specific version since ``0.1.8`` (including work in progress branches):
+Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.8/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.1/eclipse/``
@@ -135,4 +137,3 @@ If your "install" was successful, exe-file will appear at ``C:\Program Files (x8
 Now you only need to specify this *.exe in Eclipse, ``Preferences`` > ``LSLForge`` settings.
 
 **Eclipse should be restarted**
-
