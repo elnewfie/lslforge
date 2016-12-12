@@ -2,10 +2,10 @@
 <feature
       id="lslforge_part_linux_x86_64"
       label="lslforge_part_linux_x86_64"
-      version="0.1.9.1">
+      version="0.1.9.2">
 
    <requires>
-      <import plugin="lslforge" version="0.1.9.1" match="greaterOrEqual"/>
+      <import plugin="lslforge" version="0.1.9.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
