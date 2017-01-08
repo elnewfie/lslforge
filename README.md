@@ -64,7 +64,6 @@ Alternatively you may switch to a development fork and try a specific version si
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.8/eclipse/``
 
-
 For even older version, clone the whole repo and link your Eclipse to a particular folder under ``eclipse\archive``. 
 
 > If you don't see any items for installing, try to uncheck "Group items by category"
