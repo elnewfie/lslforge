@@ -12,6 +12,9 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
+* 2017-01-07 LSLForge **0.1.9.2** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
+    * OBJECT_ATTACHED_SLOTS_AVAILABLE
+    * llGetEnv("region_object_bonus") (in comments)
 * 2016-11-13 LSLForge **0.1.9.1** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
     * OBJECT_GROUP_TAG, OBJECT_TEMP_ATTACHED added
     * Bug fixes (Thanks [@PellSmit](https://github.com/PellSmit)):
@@ -55,9 +58,11 @@ To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Cl
 This way you'll get the newest release.
 
 Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.8/eclipse/``
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
+
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.2/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.1/eclipse/``
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.8/eclipse/``
 
 For even older version, clone the whole repo and link your Eclipse to a particular folder under ``eclipse\archive``. 
 

@@ -420,6 +420,7 @@ allConstants = [
     Constant "MASK_OWNER" llcMaskOwner,
     Constant "NULL_KEY" (SVal "00000000-0000-0000-0000-000000000000"),
     Constant "OBJECT_ATTACHED_POINT" (IVal 19),
+    Constant "OBJECT_ATTACHED_SLOTS_AVAILABLE" (IVal 35),
     Constant "OBJECT_BODY_SHAPE_TYPE" (IVal 26),
     Constant "OBJECT_CHARACTER_TIME" (IVal 17),
     Constant "OBJECT_CLICK_ACTION" (IVal 28),
