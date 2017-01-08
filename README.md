@@ -12,7 +12,7 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
-* 2016-12 LSLForge **0.1.9.2** (**Windows**, ...)
+* 2017-01-07 LSLForge **0.1.9.2** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
     * OBJECT_ATTACHED_SLOTS_AVAILABLE
     * llGetEnv("region_object_bonus") (in comments)
 * 2016-11-13 LSLForge **0.1.9.1** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
