@@ -16,28 +16,28 @@ Author:         Robert Greayer <robgreayer@yahoo.com>, "Newfie Pendragon" <elnew
 Maintainer:	    "Ray Silent" <ray.silent@gmail.com>
 Stability:	    experimental
 Build-Type:     Simple
-Tested-With:	GHC ==6.10.4
+Tested-With:	GHC ==6.12.3
 Extra-source-files: NOTICE
 
 Executable LSLForge
   Build-Depends: base >= 4.0 && < 5
                , filepath >= 1.1.0.0 && < 1.2
-               , parsec >= 2.1.0.0 && < 3
+               , parsec >= 2.1.0.0 && < 3.2
                , HaXml >= 1.19 && < 1.20
                , directory > 1 && < 1.1
-               , array >= 0.2 && < 0.3
+               , array >= 0.2 && < 0.4
                , monads-fd > 0.0 && < 0.1
                , transformers >= 0.1 && < 0.2
-               , network >= 2.1 && < 2.3
+               , network >= 2.1 && < 2.6
                , random >= 1.0
-               , containers >= 0.1 && < 0.3
+               , containers >= 0.1 && < 0.4
                , time
                , old-locale
                , old-time
                , utf8-string >= 0.3 && < 0.4
                , pureMD5 >= 0.2 && < 3
                , bytestring >= 0.9 && < 0.10
-               , template-haskell >= 2.3.0.0 && < 2.4
+               , template-haskell >= 2.4.0.0 && < 2.5
                , syb >= 0.1.0.0 && < 0.2.0.0
                , fclabels > 0.4 && < 0.5
   Main-Is:        LslForge.hs
