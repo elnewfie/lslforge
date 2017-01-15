@@ -113,7 +113,7 @@ deriveJavaRepTups l = mapM deriveJavaRepTup l >>= return . concat
 deriveJavaRepTup n = do
     let ns = show n
     vs <- mapM newName (replicate n "v")
-    let ctx =  mapM (appT javaRepCon . varT) vs
+    let ctx =  mapM (javaRepPred . varT) vs
     let typ = appT javaRepCon $ foldl appT (tupleT n) (map varT vs)
     let representativeD = 
             valD (varP 'representative) (normalB $ tupE (replicate n (varE 'representative))) []
@@ -183,8 +183,11 @@ deriveJavaRep nm = if nm == ''[] then return [] else
             sequence [instanceD ctx typ [representativeD,xmlSerializeD,dec1, 
                           subElemDescriptorD,elemDescriptorD,contentFinderD],
                       valD (varP (mkName $ "jrep'" ++ (nameBase tnm))) (normalB representationE) []]
-            where ctx = mapM (appT javaRepCon . varT) vs
-                  typ = appT javaRepCon $ foldl appT (conT tnm) (map varT vs)
+            where tyVarName (PlainTV n) = n
+                  tyVarName (KindedTV n _) = error ("unexpected higher kinded type variable: " ++ show n)
+                  names = map tyVarName vs
+                  ctx = mapM (javaRepPred . varT) names
+                  typ = appT javaRepCon $ foldl appT (conT tnm) (map varT names)
                   representativeV = varE 'representative
                   mkRepresentative [] = [e|undefined|]
                   mkRepresentative (c:_) =  getCInfo c >>= 
@@ -195,7 +198,7 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                      pkgVarName <- newName "pkg"
                      let pkgE = varE pkgVarName
                      let pkgP = varP pkgVarName
-                     let tparms = zipWith (\ v i -> (v, "E" ++ show i)) vs [1..]
+                     let tparms = zipWith (\ v i -> (v, "E" ++ show i)) names [1..]
                      let gparms = if null tparms then "" else "<" ++ intercalate "," (map snd tparms) ++ ">"
                      let baseclassBody = 
                              "import com.thoughtworks.xstream.XStream;\n" ++
@@ -407,7 +410,7 @@ deSyn targs t@(ConT nm) = reify nm >>= \ info -> case info of
      TyConI (TySynD _ params t1) -> return (foldl AppT (subst t1) targs')
          where targs' = drop (length params) targs
                substs = zip params targs
-               subst t@(VarT nm) = maybe t id (lookup nm substs)
+               subst t@(VarT nm) = maybe t id (lookup (PlainTV nm) substs)
                subst (AppT x y)  = (AppT (subst x) (subst y))
                subst t           = t
      other -> fail ("can't handle " ++ show (ppr other))
@@ -417,3 +420,5 @@ deSyn targs (AppT x y) = do
 deSyn targs t@(VarT nm) = return $ foldl AppT t targs
 
 javaRepCon = conT ''JavaRep
+
+javaRepPred = classP ''JavaRep . (:[])
