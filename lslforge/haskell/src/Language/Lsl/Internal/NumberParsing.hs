@@ -57,6 +57,7 @@ int = do char '0'
          (hexInt <|> decimalInt <|> return 0)
    <|> decimalInt
    
+intAndTail :: Parser (Int, String)
 intAndTail =
     do sign <- option 1 $ 
            choice [char '-' >> return (-1), char '+' >> return 1]
