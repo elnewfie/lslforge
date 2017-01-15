@@ -21,7 +21,6 @@ Extra-source-files: NOTICE
 
 Executable LSLForge
   Build-Depends: base >= 4.0 && < 5
-               , haskell98
                , filepath >= 1.1.0.0 && < 1.2
                , parsec >= 2.1.0.0 && < 3
                , HaXml >= 1.19 && < 1.20

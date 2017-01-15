@@ -5,7 +5,7 @@ module Language.Lsl.Internal.ExpressionHandler(validateExpression,evaluateExpres
 import Control.Applicative
 import Control.Monad.Error
 import Data.Bits
-import IO
+import System.IO
 
 import Language.Lsl.Internal.Constants
 import Language.Lsl.Internal.DOMProcessing(req,tag,text,xmlAccept)

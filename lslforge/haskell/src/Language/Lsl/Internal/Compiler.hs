@@ -13,7 +13,6 @@ module Language.Lsl.Internal.Compiler(
 import Control.Monad(when)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.UTF8 as UTF8
-import IO(Handle,hGetContents,stdin)
 import Language.Lsl.Internal.DOMProcessing(tag,xmlAccept)
 import Language.Lsl.Internal.DOMSourceDescriptor(sources)
 import Language.Lsl.Internal.Load(loadModules,loadScripts)
@@ -25,6 +24,7 @@ import Language.Lsl.Syntax(AugmentedLibrary(..),CompiledLSLScript(..),Ctx(..),
 import Language.Lsl.Internal.Type(lslTypeString)
 import System.Directory(doesFileExist,removeFile)
 import System.FilePath(replaceExtension)
+import System.IO(Handle,hGetContents,stdin)
 import Data.Time(getZonedTime,formatTime)
 import System.Locale(defaultTimeLocale)
 import Language.Lsl.Internal.Optimize(optimizeScript,OptimizerOption(..))

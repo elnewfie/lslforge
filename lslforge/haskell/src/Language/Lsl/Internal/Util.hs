@@ -51,8 +51,8 @@ import qualified Data.IntMap as IntMap
 
 import Language.Lsl.Internal.Math
 
-import IO(hFlush,stdout)
 import Network.URI(escapeURIString,isUnescapedInURI,unEscapeString)
+import System.IO(hFlush,stdout)
 
 -- some random operators
 (<||>) a b = a `catchError` const b
