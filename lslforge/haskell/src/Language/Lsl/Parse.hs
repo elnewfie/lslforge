@@ -41,14 +41,6 @@ import Text.ParserCombinators.ParsecExtras.Language(javaStyle, emptyDef)
 import Text.ParserCombinators.Parsec.Error
 import Text.ParserCombinators.Parsec.Pos
 
-instance Applicative (GenParser s a) where
-    pure = return
-    (<*>) = ap
-
-instance Alternative (GenParser s a) where
-    empty = mzero
-    (<|>) = mplus
-     
 data ParseState = ParseState {
     atStart :: !Bool,
     initialComment :: !String,
