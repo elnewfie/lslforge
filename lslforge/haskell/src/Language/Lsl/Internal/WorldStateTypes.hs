@@ -15,7 +15,7 @@ import Control.Monad.Error(ErrorT(..),MonadError(..))
 import Data.Map(Map)
 import qualified Data.IntMap as IM
 import qualified Data.Map as M
-import Data.Record.Label hiding (get,set,getM,setM,(=:))
+import Data.Record.Label hiding (getM,setM,(=:))
 import Data.Record.LabelExtras
 import qualified Data.Set as S
 
