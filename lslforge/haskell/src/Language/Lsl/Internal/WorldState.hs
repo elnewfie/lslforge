@@ -85,10 +85,10 @@ import Control.Applicative
 import Control.Monad(MonadPlus(..))
 import Control.Monad.State(StateT(..))
 import Control.Monad.Error(ErrorT(..),MonadError(..))
+import Data.LabelExtras
 import Data.List(elemIndex)
 import Data.Maybe(fromMaybe)
 import qualified Data.Map as M
-import Data.Record.LabelExtras
 
 import Language.Lsl.Internal.Evaluation(Event(..))
 import Language.Lsl.Internal.Exec(hasActiveHandler)

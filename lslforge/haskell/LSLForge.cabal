@@ -39,12 +39,12 @@ Executable LSLForge
                , bytestring >= 0.9 && < 0.10
                , template-haskell >= 2.4.0.0 && < 2.5
                , syb >= 0.1.0.0 && < 0.2.0.0
-               , fclabels == 0.11.2
+               , fclabels == 1.1.7.1
   Main-Is:        LslForge.hs
   Hs-Source-Dirs: src
   Other-modules:
     Data.Generics.Extras.Schemes
-    Data.Record.LabelExtras
+    Data.LabelExtras
     Language.Lsl.Internal.AccessGenerator
     Language.Lsl.Internal.Animation
     Language.Lsl.Internal.AvEvents

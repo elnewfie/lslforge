@@ -36,12 +36,12 @@ import Control.Monad.Error(MonadError(..))
 import Data.List(find,foldl',isSuffixOf,elemIndex)
 import Data.Bits((.&.),(.|.),bit,clearBit,complement,setBit,shiftL,testBit)
 import Data.Int()
+import Data.LabelExtras
 import Data.Map(Map)
 import Data.Maybe(fromMaybe,isNothing)
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.IntMap as IM
-import Data.Record.LabelExtras
 
 import Language.Lsl.Internal.Animation(builtInAnimations)
 import Language.Lsl.Internal.AvEvents(AvatarInputEvent(..))

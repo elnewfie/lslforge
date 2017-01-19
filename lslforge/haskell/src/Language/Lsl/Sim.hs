@@ -37,10 +37,10 @@ import Control.Monad.Error(MonadError(..))
 import Data.List(elemIndex,find,foldl',nub)
 import Data.Bits((.&.),(.|.),complement,xor,testBit)
 import Data.Int()
+import Data.LabelExtras
 import Data.Map(Map)
 import Data.Maybe(fromMaybe,isJust,isNothing)
 import qualified Data.Map as M
-import Data.Record.LabelExtras
 import qualified Data.Set as S
 import qualified Data.IntMap as IM
 
