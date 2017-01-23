@@ -15,7 +15,7 @@ import Language.Lsl.Internal.Pragmas
 import Language.Lsl.QQ(lsl,lslm)
 import Text.Here
 
-import System
+import System.Environment
 import System.FilePath
 
 import Test.HUnit hiding (State)

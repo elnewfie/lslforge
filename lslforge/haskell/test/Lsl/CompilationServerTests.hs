@@ -7,7 +7,7 @@ import Language.Lsl.Internal.DOMCombinators
 import Language.Lsl.Internal.SerializationGenerator
 import Language.Lsl.Internal.CompilationServer
 import Language.Lsl.Syntax
-import System
+import System.Environment
 import System.FilePath
 
 import Test.HUnit hiding (State,Label)

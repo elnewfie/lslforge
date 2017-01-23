@@ -21,7 +21,6 @@ import Language.Lsl.WorldDef
 
 import Language.Lsl.Internal.Optimize
 
-import System
 import System.FilePath
 
 import Test.HUnit hiding (State,Label)
