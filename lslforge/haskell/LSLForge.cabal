@@ -1,26 +1,26 @@
-Name:           LSLForge
+name:           LSLForge
 version:        0.1.9.2
-Synopsis:	    An execution and testing framework for the Linden Scripting Language (LSL)
-Description:
+synopsis:	    An execution and testing framework for the Linden Scripting Language (LSL)
+description:
 	Provides a framework for executing Linden Scripting Language scripts offline,
 	i.e. outside a Second Life&#xAE; simulator.  The product is the LslForge executable,
         which works in cooperation with the LSLForge Eclipse plugin (the executable is not
         much use standalone).  This package is a derivate of LSL Plus by Robert Greayer.
-Cabal-Version:  >= 1.5
-Homepage:       https://github.com/raysilent/lslforge (forked from https://github.com/elnewfie/lslforge)
-License:        BSD3
-License-file:   LICENSE
-Category:	    Language
-Copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2016
-Author:         Robert Greayer <robgreayer@yahoo.com>, "Newfie Pendragon" <elnewfie@yahoo.com>
-Maintainer:	    "Ray Silent" <ray.silent@gmail.com>
-Stability:	    experimental
-Build-Type:     Simple
-Tested-With:	GHC ==6.12.3
-Extra-source-files: NOTICE
+cabal-version:  >= 1.5
+homepage:       https://github.com/raysilent/lslforge (forked from https://github.com/elnewfie/lslforge)
+license:        BSD3
+license-file:   LICENSE
+category:	    Language
+copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2016
+author:         Robert Greayer <robgreayer@yahoo.com>, "Newfie Pendragon" <elnewfie@yahoo.com>
+maintainer:	    "Ray Silent" <ray.silent@gmail.com>
+stability:	    experimental
+build-type:     Simple
+tested-with:	GHC ==6.12.3
+extra-source-files: NOTICE
 
-Executable LSLForge
-  Build-Depends: base >= 4.0 && < 5
+executable LSLForge
+  build-depends: base >= 4.0 && < 5
                , filepath >= 1.1.0.0 && < 1.2
                , parsec >= 2.1.0.0 && < 3.2
                , HaXml >= 1.19 && < 1.20
@@ -40,9 +40,9 @@ Executable LSLForge
                , template-haskell >= 2.4.0.0 && < 2.5
                , syb >= 0.1.0.0 && < 0.2.0.0
                , fclabels == 1.1.7.1
-  Main-Is:        LslForge.hs
-  Hs-Source-Dirs: src
-  Other-modules:
+  main-is:        LslForge.hs
+  hs-source-dirs: src
+  other-modules:
     Data.Generics.Extras.Schemes
     Data.LabelExtras
     Language.Lsl.Internal.AccessGenerator
@@ -100,4 +100,4 @@ Executable LSLForge
     Text.Here
     Text.ParserCombinators.ParsecExtras.Language
     Text.ParserCombinators.ParsecExtras.Token
-  Ghc-Options: -fwarn-unused-imports
+  ghc-options: -fwarn-unused-imports
