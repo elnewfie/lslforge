@@ -101,3 +101,10 @@ executable LSLForge
     Text.ParserCombinators.ParsecExtras.Language
     Text.ParserCombinators.ParsecExtras.Token
   ghc-options: -fwarn-unused-imports
+
+test-suite spec
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      src,test
+  main-is:             Main.hs
+  build-depends:       base
+                     , HUnit
