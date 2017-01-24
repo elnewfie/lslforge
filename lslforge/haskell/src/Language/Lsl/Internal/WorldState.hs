@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances, NoMonomorphismRestriction,
+{-# LANGUAGE FlexibleInstances, TypeOperators,
     GeneralizedNewtypeDeriving, MultiParamTypeClasses, TypeSynonymInstances,
     TemplateHaskell #-}
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
@@ -84,7 +84,8 @@ import Control.Category
 import Control.Applicative
 import Control.Monad(MonadPlus(..))
 import Control.Monad.State(StateT(..))
-import Control.Monad.Error(ErrorT(..),MonadError(..))
+import Control.Monad.Error(Error,ErrorT(..),MonadError(..),strMsg)
+import Data.Label
 import Data.LabelExtras
 import Data.List(elemIndex)
 import Data.Maybe(fromMaybe)
@@ -96,8 +97,8 @@ import Language.Lsl.Internal.Key(mkKey,LSLKey(..),nullKey)
 import Language.Lsl.Internal.Log(LogMessage(..),LogLevel(..))
 import Language.Lsl.Internal.Type(LSLValue(..),vec2VVal)
 import Language.Lsl.Internal.Util(lookupByIndex)
-import Language.Lsl.WorldDef(InventoryItem(..),InventoryItemIdentification(..),
-    Region(..),Parcel(..),isInvNotecardItem,isInvLandmarkItem,
+import Language.Lsl.WorldDef(Attachment,InventoryItem(..),InventoryItemIdentification(..),
+    Region(..),Parcel(..),Prim,isInvNotecardItem,isInvLandmarkItem,
     isInvClothingItem,isInvBodyPartItem,isInvGestureItem,isInvSoundItem,
     isInvAnimationItem,isInvTextureItem,isInvScriptItem,isInvObjectItem,
     sortByInvName,findByInvName)
@@ -105,7 +106,8 @@ import Language.Lsl.Internal.WorldStateTypes
 
 import System.Random(Random(..))
 
-primAttachment' = rjoinV "not attached" primAttachment
+primAttachment' :: (MonadError e m, Error e) => m Prim :-> m Attachment
+primAttachment' = rjoinV (strMsg "not attached") primAttachment
 
 -- extracting/updating the world state ----------------------------------------                   
 wav k = lm k.worldAvatars
