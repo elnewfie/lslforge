@@ -1143,6 +1143,7 @@ compileModule m@(LModule globs freevars) = do
         _ -> return $ Left errs
 
 -- this function isn't partiuclarly efficient!
+moduleDependencies :: [(String,LModule)] -> [String] -> String -> Validity [String]
 moduleDependencies lib chain m =
     let f (GI s _ _) = Just (ctxItem s)
         f _          = Nothing
