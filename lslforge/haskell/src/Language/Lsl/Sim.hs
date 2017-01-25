@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, NoMonomorphismRestriction #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Sim(
     SimStatus(..), 
@@ -1164,6 +1164,9 @@ mkEventDefList = map (\ e -> (simInputEventName e, e))
 rawLslEventDescriptors :: Monad m => [SimInputEventDefinition m]
 rawLslEventDescriptors = map lslEventDescriptorToSimInputDef lslEventDescriptors
 
+lslEventDescriptorToSimInputDef :: Monad m
+                                => (String, [(LSLType, String)], EventDelivery, [EventAdditionalData], String)
+                                -> SimInputEventDefinition m
 lslEventDescriptorToSimInputDef (name, params, delivery, additionalData, description) =
     SimInputEventDefinition {
         simInputEventName = name,
