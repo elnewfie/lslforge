@@ -393,15 +393,21 @@ hasList = foldl (\ x y -> x || hasList' y) False
                                    | otherwise =  hasList' x || hasList' y
           hasList' _ = False
 
+-- create a Java representation from a type
 repT :: [(Name,String)] -> Int -> Type -> String
 repT dict _ (ConT nm)  = deriveName nm
 repT dict _ (VarT nm)  = maybe "?" id (lookup nm dict)
 repT dict mult (AppT (ConT nm) y) | nm == ''[] && y == (ConT ''Char) = "String"
                                   -- | nm == ''Maybe = repT dict mult y
                                   | otherwise = (deriveName nm) ++ "<" ++ repT dict 0 y ++ (if mult /= 0 then "," else ">")
-repT dict mult (AppT ListT y) =  "LinkedList" ++ "<" ++ repT dict 0 y ++ ">" ++ (if mult == 0 then ">" else ",")
+repT dict mult (AppT ListT y)
+    | y == (ConT ''Char) = "String"
+    | otherwise          = "LinkedList" ++ "<" ++ repT dict 0 y ++ ">" ++ (if mult == 0 then ">" else ",")
+repT dict mult (TupleT x) = "Tuple" ++ show x
 repT dict mult (AppT x y) = repT dict (mult + 1) x ++ repT dict 0 y ++ if mult == 0 then ">" else ","
+repT _ _ t = error ("can't repT: " ++ show t)
 
+-- template haskell from a type and it's args
 deSyn :: [Type] -> Type -> Q Type
 deSyn targs t@(ConT nm) = reify nm >>= \ info -> case info of
      PrimTyConI _ _ _ ->  return (foldl AppT t targs)
@@ -413,11 +419,14 @@ deSyn targs t@(ConT nm) = reify nm >>= \ info -> case info of
                subst t@(VarT nm) = maybe t id (lookup (PlainTV nm) substs)
                subst (AppT x y)  = (AppT (subst x) (subst y))
                subst t           = t
-     other -> fail ("can't handle " ++ show (ppr other))
+     other -> error ("can't deSyn for ConT: " ++ show (ppr other))
 deSyn targs (AppT x y) = do
     arg <- deSyn [] y
     deSyn (arg:targs) x
 deSyn targs t@(VarT nm) = return $ foldl AppT t targs
+deSyn targs t@(TupleT nm) = return (foldl AppT t targs)
+deSyn targs ListT = return (foldl AppT ListT targs)
+deSyn _ t = error ("can't deSyn: " ++ show t)
 
 javaRepCon = conT ''JavaRep
 
