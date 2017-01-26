@@ -16,7 +16,7 @@ author:         Robert Greayer <robgreayer@yahoo.com>, "Newfie Pendragon" <elnew
 maintainer:	    "Ray Silent" <ray.silent@gmail.com>
 stability:	    experimental
 build-type:     Simple
-tested-with:	GHC ==6.12.3
+tested-with:	  GHC == 7.0.4
 extra-source-files: NOTICE
 
 executable LSLForge
