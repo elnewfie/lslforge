@@ -38,7 +38,7 @@ executable LSLForge
                , pureMD5 >= 0.2 && < 0.3
                , bytestring >= 0.9 && < 0.10
                , template-haskell >= 2.4.0.0 && < 2.6
-               , syb >= 0.1.0.0 && < 0.3.0.0
+               , syb >= 0.1.0.0 && < 0.3
                , fclabels == 1.1.7.1
   main-is:        LslForge.hs
   hs-source-dirs: src
