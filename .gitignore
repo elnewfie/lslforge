@@ -8,7 +8,6 @@
 .metadata
 
 #Update site build output
-lslforge/haskell/dist/*
 lslforge/eclipse/update-site/dist/*
 lslforge/eclipse/update-site/plugins/*
 lslforge/eclipse/update-site/features/*
