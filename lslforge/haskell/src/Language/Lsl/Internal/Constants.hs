@@ -2,9 +2,9 @@
 module Language.Lsl.Internal.Constants where
 
 import Data.Bits((.|.),shiftL)
+import Data.Foldable(find)
 import Language.Lsl.Internal.Key(LSLKey(..))
-import Language.Lsl.Internal.Type(LSLValue(..),typeOfLSLValue)
-import Language.Lsl.Internal.Util(findM)
+import Language.Lsl.Internal.Type(LSLType,LSLValue(..),typeOfLSLValue)
 
 data Constant a = Constant { constName :: String, constVal :: LSLValue a }
     deriving (Show)
@@ -875,9 +875,16 @@ allConstants = [
     Constant "ZERO_VECTOR" llcZeroVector
     ]
 
-findConstant s = findM (\ c -> s == constName c) allConstants
+findConstant :: RealFloat a => String -> Maybe (Constant a)
+findConstant s = find (\ c -> s == constName c) allConstants
+
+findConstVal :: RealFloat a => String -> Maybe (LSLValue a)
 findConstVal s = fmap constVal $ findConstant s
+
+findConstType :: String -> Maybe LSLType
 findConstType s = fmap typeOfLSLValue $ findConstVal s
+
+isConstant :: String -> Bool
 isConstant s =
     case findConstant s of
         Nothing -> False

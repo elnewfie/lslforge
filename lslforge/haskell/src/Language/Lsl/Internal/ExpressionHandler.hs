@@ -21,7 +21,8 @@ emit s = E.emit s []
 
 validPrimitiveCtxExpr (Ctx _ expr) = validPrimitiveExpr expr
 
-validPrimitiveExpr (Get (Ctx _ name,All)) = findConstType name
+validPrimitiveExpr :: Expr -> Either String LSLType
+validPrimitiveExpr (Get (Ctx _ name,All)) = maybe (fail "not found!") Right $ findConstType name
 validPrimitiveExpr (Neg expr) = 
     do t <- validPrimitiveCtxExpr expr
        when (t `notElem` [LLFloat,LLInteger,LLVector,LLRot]) $ fail "operator only valid for integer, float, vector, and rotation expressions"
