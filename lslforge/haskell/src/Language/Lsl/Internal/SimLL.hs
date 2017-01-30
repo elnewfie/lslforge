@@ -96,7 +96,7 @@ doPredef name info@(ScriptInfo oid pid sid pkey event) args =
    (maybe doDefault runIt . tryPredefs name) =<< getM predefs
     where runIt (t,f) = runErrFunc info name (defaultValue t) args f
           doDefault = do
-               (_,rettype,argtypes) <- findM (\ (x,y,z) -> x == name) funcSigs
+               (_,rettype,argtypes) <- either fail return $ findM (\ (x,y,z) -> x == name) funcSigs
                logAMessage LogDebug (unLslKey pkey ++ ":" ++ sid) 
                    ("unimplemented predefined function called: " ++ 
                    renderCall name args)
@@ -246,7 +246,7 @@ llRequestAgentData info@(ScriptInfo _ _ sn pk _) [KVal ak, IVal d] =
 
 llRequestSimulatorData (ScriptInfo _ _ sn pk _) [SVal simName, IVal d] = do
     regions <- getM worldRegions
-    let findRegion = findM ((==simName) . regionName . snd) (M.toList regions)
+    let findRegion = either fail return $ findM ((==simName) . regionName . snd) (M.toList regions)
     let simErr = throwError ("unknown simulator " ++ simName)
     val <- case d of
         d | d == cDataSimStatus -> (findRegion >> return "up") <||> 

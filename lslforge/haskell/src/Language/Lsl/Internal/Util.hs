@@ -102,11 +102,11 @@ lookupM x l =
        Just y -> return y
 
 -- monadified find
-findM :: Monad m => (a -> Bool) -> [a] -> m a
+findM :: (a -> Bool) -> [a] -> Either String a
 findM p l =
     case find p l of
-        Nothing -> fail "not found!"
-        Just v -> return v
+        Nothing -> throwError "not found!"
+        Just v  -> return v
        
 -- filter a list while mapping
 filtMap :: (a -> Maybe b) -> [a] -> [b]
