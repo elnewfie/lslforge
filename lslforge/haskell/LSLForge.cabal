@@ -107,4 +107,4 @@ test-suite spec
   hs-source-dirs:      src,test
   main-is:             Main.hs
   build-depends:       base
-                     , HUnit
+                     , HUnit < 1.6

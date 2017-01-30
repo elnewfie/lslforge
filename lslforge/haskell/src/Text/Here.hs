@@ -29,4 +29,4 @@ hereExp s = dataToExpQ (const Nothing) (filt s)
 
 -- | A quasi-quoter for a string...
 here :: QuasiQuoter
-here = QuasiQuoter hereExp herePat
+here = QuasiQuoter { quoteExp = hereExp, quotePat = herePat }
