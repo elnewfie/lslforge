@@ -14,7 +14,8 @@ main = do
     [ Lsl.SimTests.tests
     , Lsl.OptTests.optTests
     , Lsl.CompilerTests.allTests
-    , Lsl.CompilationServerTests.testInit
+    , Lsl.CompilationServerTests.testDeserializeCommand
+    , Lsl.CompilationServerTests.testDeserializeComand2
     ]
   if es > 0 || fs > 0
     then exitFailure
