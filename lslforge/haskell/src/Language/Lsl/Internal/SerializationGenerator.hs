@@ -192,7 +192,8 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                   mkRepresentative [] = [e|undefined|]
                   mkRepresentative (c:_) =  getCInfo c >>= 
                       \ (cnm,fts) -> foldl appE (conE cnm) (replicate (length fts) representativeV)
-                  representativeD = firstDec [d|representative = $(mkRepresentative cs)|]
+                  representativeD = funD (mkName "representative")
+                                    [clause [] (normalB [e| $(mkRepresentative cs) |]) []]
                   nameE = stringE (nameBase tnm)
                   representationE = do
                      pkgVarName <- newName "pkg"
