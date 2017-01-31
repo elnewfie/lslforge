@@ -128,9 +128,10 @@ import Network.URI(escapeURIChar,unEscapeString)
 import Codec.Binary.UTF8.String(encodeString,decodeString)
 
 internalLLFuncNames :: [String]
-internalLLFuncNames = map fst (internalLLFuncs :: (Read a, RealFloat a) => [(String, a -> [LSLValue a] -> Maybe (EvalResult,LSLValue a))])
+internalLLFuncNames = map fst (internalLLFuncs :: (Read a, RealFloat a, Show a) => [(String, a -> [LSLValue a] -> Maybe (EvalResult,LSLValue a))])
 
-internalLLFuncs :: (Read a, RealFloat a, Monad m) => [(String, b -> [LSLValue a] -> m (EvalResult,LSLValue a))]
+internalLLFuncs :: (Read a, RealFloat a, Show a, Monad m)
+                => [(String, b -> [LSLValue a] -> m (EvalResult,LSLValue a))]
 internalLLFuncs = [
     ("llAbs",llAbs),
     ("llAcos",llAcos),

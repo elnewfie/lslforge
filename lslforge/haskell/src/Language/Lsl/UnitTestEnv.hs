@@ -82,7 +82,7 @@ logMsg s = do
     tick <- getTick
     modifyMsgLog ((tick,s):)
 
-doPredef :: (Read a, RealFloat a) => String -> b -> [LSLValue a] -> 
+doPredef :: (Read a, RealFloat a, Show a) => String -> b -> [LSLValue a] ->
     ErrorT String (State (SimpleWorld a)) (EvalResult,LSLValue a)
 doPredef n i a = do
     logMsg $ "call: "  ++ renderCall n a
@@ -231,7 +231,7 @@ hasFunc lib (moduleName,functionName) =
           world = SimpleWorld { maxTick = 10000, tick = 0, msgLog = [], wScripts = [], wLibrary = lib, 
                                 expectations = FuncCallExpectations Nice [], breakpointManager = emptyBreakpointManager }
 
-simSFunc :: (Read a, RealFloat a) => (CompiledLSLScript,[String]) ->
+simSFunc :: (Read a, RealFloat a, Show a) => (CompiledLSLScript,[String]) ->
     [(String,LSLValue a)] -> [LSLValue a] -> 
     Either String (LSLValue a,[(String,LSLValue a)])
 simSFunc (script,path) globs args =
@@ -258,7 +258,7 @@ simSFunc (script,path) globs args =
 
 -- simFunc' lib (moduleName,functionName) globs args =
 --     let ep = ModuleFunc moduleName functionName
-simFunc :: (Read a, RealFloat a) => [(String,Validity LModule)] -> 
+simFunc :: (Read a, RealFloat a, Show a) => [(String,Validity LModule)] ->
     (String,String) -> [(String,LSLValue a)] -> [LSLValue a] -> 
     Either String (LSLValue a,[(String,LSLValue a)])
 simFunc lib (moduleName,functionName) globs args = 

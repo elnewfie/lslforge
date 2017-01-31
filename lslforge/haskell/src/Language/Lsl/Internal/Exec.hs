@@ -634,7 +634,7 @@ setupSimple path globbindings args = do
 
 incontext s f = either throwError return f
 
-evalScript :: (RealFloat a, Read a, Monad w) => Int -> [Event a] -> Eval a w [Event a]
+evalScript :: (RealFloat a, Read a, Show a, Monad w) => Int -> [Event a] -> Eval a w [Event a]
 evalScript maxTick queue = do
     executionState <- getExecutionState
     case executionState of
@@ -693,7 +693,7 @@ evalScript maxTick queue = do
                 else return queue
         Halted -> return queue
 
-eval :: (RealFloat a, Read a, Monad w) => Int -> Eval a w EvalResult
+eval :: (RealFloat a, Read a, Show a, Monad w) => Int -> Eval a w EvalResult
 eval maxTick =  do 
        t <- (+1) <$> getTick
        setTick t
@@ -705,7 +705,7 @@ eval maxTick =  do
                    x -> return x
            else return EvalIncomplete
 
-eval' :: (RealFloat a, Read a, Monad w) => Eval a w EvalResult
+eval' :: (RealFloat a, Read a, Show a, Monad w) => Eval a w EvalResult
 eval' =
     let continue = return EvalIncomplete 
         popAndCheck :: Monad w => Eval a w EvalResult
