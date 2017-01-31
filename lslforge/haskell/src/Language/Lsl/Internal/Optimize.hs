@@ -7,7 +7,7 @@ import qualified Control.Monad.State as State(State)
 
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
 import Data.Generics
-import Data.Generics.Extras.Schemes(everythingTwice,everythingButTwice,downup,downupSkipping,everywhereButM,everythingBut)
+import Data.Generics.Extras.Schemes(everythingTwice,everythingButTwice,downup,downupSkipping,everywhereButM,everythingBut')
 import Data.List(foldl',nub,lookup)
 import Data.Graph
 import qualified Data.Set as Set
@@ -78,19 +78,19 @@ varNameInList :: Var -> [String]
 varNameInList = (:[]) . varName
 
 varsDefinedByHandler :: Handler -> [String]
-varsDefinedByHandler = everythingBut stopCondition (++) [] ([] `mkQ` varNameInList)
+varsDefinedByHandler = everythingBut' stopCondition (++) [] ([] `mkQ` varNameInList)
 
 varsDefinedByFunc :: Ctx Func -> [String]
-varsDefinedByFunc = everythingBut stopCondition (++) [] ([] `mkQ` varNameInList)
+varsDefinedByFunc = everythingBut' stopCondition (++) [] ([] `mkQ` varNameInList)
 
 labels (Label nm) = [nm]
 labels _ = []
 
 labelsDefinedByFunc :: Ctx Func -> [String]
-labelsDefinedByFunc = everythingBut stopCondition (++) [] ([] `mkQ` labels)
+labelsDefinedByFunc = everythingBut' stopCondition (++) [] ([] `mkQ` labels)
 
 labelsDefinedByHandler :: Handler -> [String]
-labelsDefinedByHandler = everythingBut stopCondition (++) [] ([] `mkQ` labels)
+labelsDefinedByHandler = everythingBut' stopCondition (++) [] ([] `mkQ` labels)
 
 namesDefinedByHandler :: Handler -> [String]
 namesDefinedByHandler handler = labelsDefinedByHandler handler ++ varsDefinedByHandler handler
@@ -103,10 +103,10 @@ exprCallsFuncDirectly (Call (ctxName) _) = [ctxItem ctxName]
 exprCallsFuncDirectly _ = []
 
 funcCallsFuncs :: Ctx Func -> [String]
-funcCallsFuncs = everythingBut stopCondition (++) [] ([] `mkQ` exprCallsFuncDirectly)
+funcCallsFuncs = everythingBut' stopCondition (++) [] ([] `mkQ` exprCallsFuncDirectly)
        
 handlerCallsFuncs :: Ctx Handler -> [String]
-handlerCallsFuncs = everythingBut stopCondition (++) [] ([] `mkQ` exprCallsFuncDirectly)
+handlerCallsFuncs = everythingBut' stopCondition (++) [] ([] `mkQ` exprCallsFuncDirectly)
 
 fname (Ctx _ (Func (FuncDec (Ctx _ name) _ _) _)) = name
 

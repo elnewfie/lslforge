@@ -4,7 +4,7 @@ module Data.Generics.Extras.Schemes (
     downupSkipping,
     everythingTwice,
     everythingButTwice,
-    everythingBut,
+    everythingBut',
     everywhereButM
  ) where
 
@@ -43,6 +43,6 @@ everywhereButM p f x | p x = return x
                      | otherwise = do x' <- gmapM (everywhereButM p f) x
                                       f x'
 
-everythingBut :: GenericQ Bool -> (r -> r -> r) -> r -> GenericQ r -> GenericQ r
-everythingBut p k def f x | p x = def
-                          | otherwise = foldl k (f x) (gmapQ (everythingBut p k def f) x)
+everythingBut' :: GenericQ Bool -> (r -> r -> r) -> r -> GenericQ r -> GenericQ r
+everythingBut' p k def f x | p x = def
+                           | otherwise = foldl k (f x) (gmapQ (everythingBut' p k def f) x)

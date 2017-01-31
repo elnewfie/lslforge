@@ -467,7 +467,7 @@ compileLSLScript' :: Library -> LSLScript -> Validity CompiledLSLScript
 compileLSLScript' library script = evalState (compileLSLScript script) (emptyValidationState { vsLib = library })
 
 collectLabels :: Data a => a -> [(String,Maybe SourceContext)]
-collectLabels = everythingBut (False `mkQ` string `extQ` sctx) (++) [] ([] `mkQ` lab)
+collectLabels = everythingBut' (False `mkQ` string `extQ` sctx) (++) [] ([] `mkQ` lab)
     where string :: String -> Bool
           string = const True
           sctx :: SourceContext -> Bool

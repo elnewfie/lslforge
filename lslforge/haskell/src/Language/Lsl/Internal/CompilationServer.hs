@@ -68,7 +68,7 @@ sourcePosToTextLocation pos = (TextLocation line col line col name)
           name = sourceName pos
 
 gsummary :: Data a => a -> [Either GlobalSummary EPSummary]
-gsummary = everythingBut (False `mkQ` string `extQ` srcContext) (++) [] ([] `mkQ` fsum `extQ` gsum)
+gsummary = everythingBut' (False `mkQ` string `extQ` srcContext) (++) [] ([] `mkQ` fsum `extQ` gsum)
     where gsum (GDecl (Ctx _ (Var n t)) _) = [Left $ GlobalSummary n t]
           fsum (FuncDec fnm t parms) = [Right $ EPSummary EPFunc (ctxItem fnm) t (map ((\ (Var n t) -> (n,t)) . ctxItem) parms)]
           string :: String -> Bool
