@@ -28,6 +28,7 @@ module Data.LabelExtras(
     ) where
 
 import Prelude hiding(id,(.),lookup)
+import Control.Applicative
 import Control.Category
 import Control.Monad
 import Control.Monad.Identity
@@ -40,37 +41,44 @@ import qualified Data.IntMap as IM
 import Data.Label
 import Language.Haskell.TH
 
-liftML :: Monad m => a :-> b -> m a :-> m b
-liftML l = lens (liftM $ get l) (liftM2 $ set l)
+liftML :: (Applicative m, Monad m) => a :-> b -> m a :-> m b
+liftML l = lens getter (modifier . const) where
+    getter = fmap (get l)
+    setter = liftA2 (set l)
+    modifier = isoL getter setter where
+        isoL g s m f = s (m (g f)) f
 
 -- | a lens for a Map element
-lm :: (MonadError e m, Error e, Show k, Ord k) => k -> m (Map k v) :-> m v
-lm k = lens getter setter where
+lm :: (Applicative m, MonadError e m, Error e, Show k, Ord k) => k -> m (Map k v) :-> m v
+lm k = lens getter (modifier . const) where
     getter mm = mm >>= (maybe (throwError $ err k)  return) . lookup k
-    setter mv mm = mv >>= \ v -> insert k v `liftM` mm
+    modifier f mm = do
+        v <- f $ getter mm
+        insert k v <$> mm
     err k = strMsg $ "key " ++ show k ++ " not found"
 
-lmi :: (MonadError e m, Error e) => Int -> m (IM.IntMap v) :-> m v
-lmi i = lens getter setter where
+lmi :: (Applicative m, MonadError e m, Error e) => Int -> m (IM.IntMap v) :-> m v
+lmi i = lens getter (modifier . const) where
     getter mm = mm >>= (maybe (throwError $ err i)  return) . IM.lookup i
-    setter mv mm = mv >>= \ v -> IM.insert i v `liftM` mm
+    modifier f mm = do
+        v <- f $ getter mm
+        IM.insert i v <$> mm
     err i = strMsg $ "key " ++ show i ++ " not found"
 
-lli :: (MonadError e m, Error e) => Int -> m [v] :-> m v
-lli i = lens getter setter where
+lli :: (Applicative m, MonadError e m, Error e) => Int -> m [v] :-> m v
+lli i = lens getter (modifier . const) where
     getter ml = ml >>= (maybe (throwError $ err i)  return) . safeIndex i
-    setter mv ml = do
-        v <- mv
-        l <- ml
-        maybe (throwError $ err i) return $ replace i l v
+    modifier f ml = do
+        v <- f $ getter ml
+        ml >>= \l -> maybe (throwError $ err i) return $ replace i l v
     err i = strMsg $ "index " ++ show i ++ " not found"
-    
+
 safeIndex i l | i >= 0 && i < length l = Just (l !! i)
               | otherwise = Nothing
-replace i l v 
+replace i l v
     | i >= 0 && i < length l = let (xs,y:ys) = splitAt i l in Just (xs ++ (v:ys))
     | otherwise = Nothing
-    
+
 getM :: MonadState s m => m s :-> m b -> m b
 getM l = get l SM.get
 
@@ -85,7 +93,7 @@ modM l f = do
     v <- getM l
     l =: f v
     return v
-    
+
 infixr 7 =:
 (=:) :: MonadState s m => m s :-> m b -> b -> m ()
 (=:) = setM
@@ -100,7 +108,7 @@ mkLabelsPlus names = do
 
 mkLabelsAlt :: [Name] -> Q [Dec]
 mkLabelsAlt names = do
-    decs <- filter isFuncDec `fmap` mkLabels names
+    decs <- filter isFuncDec <$> mkLabels names
     decs2 <- mapM liftDec decs
     return (map change decs ++ decs2)
     where liftDec (FunD nm _) = funD (mkName (nameBase nm))
@@ -108,35 +116,35 @@ mkLabelsAlt names = do
           change (FunD nm x) = FunD (mkName (nameBase nm ++ "U")) x
           isFuncDec (FunD _ _) = True
           isFuncDec _          = False
-          
+
 lfstU :: (a,b) :-> a
-lfstU = lens fst (\ x (_,y) -> (x,y))
+lfstU = lens fst ((\f (x,y) -> (f x,y)) . const)
 
 lsndU :: (a,b) :-> b
-lsndU = lens snd (\ y (x,_) -> (x,y))
+lsndU = lens snd ((\f (x,y) -> (x,f y)) . const)
 
 lfst3U :: (a,b,c) :-> a
-lfst3U = lens (\ (x,_,_) -> x) (\ x (_,y,z) -> (x,y,z))
+lfst3U = lens (\(x,_,_) -> x) ((\f (x,y,z) -> (f x,y,z)) . const)
 
 lsnd3U :: (a,b,c) :-> b
-lsnd3U = lens (\ (_,y,_) -> y) (\ y (x,_,z) -> (x,y,z))
+lsnd3U = lens (\(_,y,_) -> y) ((\f (x,y,z) -> (x,f y,z)) . const)
 
 l3rd3U :: (a,b,c) :-> c
-l3rd3U = lens (\ (_,_,z) -> z) (\ z (x,y,_) -> (x,y,z))
+l3rd3U = lens (\(_,_,z) -> z) ((\f (x,y,z) -> (x,y,f z)) . const)
 
-lfst :: Monad m => m (a,b) :-> m a
+lfst :: (Applicative m, Monad m) => m (a,b) :-> m a
 lfst = liftML $ lfstU
 
-lsnd :: Monad m => m (a,b) :-> m b
+lsnd :: (Applicative m, Monad m) => m (a,b) :-> m b
 lsnd = liftML $ lsndU
 
-lfst3 :: Monad m => m (a,b,c) :-> m a
+lfst3 :: (Applicative m, Monad m) => m (a,b,c) :-> m a
 lfst3 = liftML $ lfst3U
 
-lsnd3 :: Monad m => m (a,b,c) :-> m b
+lsnd3 :: (Applicative m, Monad m) => m (a,b,c) :-> m b
 lsnd3 = liftML $ lsnd3U
 
-l3rd3 :: Monad m => m (a,b,c) :-> m c
+l3rd3 :: (Applicative m, Monad m) => m (a,b,c) :-> m c
 l3rd3 = liftML $ l3rd3U
 
 getI :: Identity a :-> Identity b -> a -> b
@@ -155,37 +163,42 @@ data (:*) a b = a :* b
 infixr 6 .*
 
 (.*) :: Monad m => m a :-> m b -> m a :-> m c -> m a :-> m (b :* c)
-(.*) l1 l2 = lens getter setter where
+(.*) l1 l2 = lens getter (modifier . const) where
     getter ma = (:*) `liftM` get l1 ma `ap` get l2 ma
-    setter mv a = mv >>= \ (b:*c) -> set l1 (return b) . set l2 (return c) $ a
-    
+    modifier f ma = f (getter ma) >>=
+                    \(b:*c) -> set l1 (return b) . set l2 (return c) $ ma
+
 -- so we can say v .: foo.bar.baz
 (.:) = flip getI
 
-(.?) :: (MonadError e m, Error e) => m b :-> m c -> m a :-> m b -> m a :-> m (Maybe c)
-(.?) l1 l2 = lens getter setter where
+(.?) :: (Applicative m, MonadError e m, Error e)
+     => m b :-> m c -> m a :-> m b -> m a :-> m (Maybe c)
+(.?) l1 l2 = lens getter (modifier . const) where
     getter ma = do
         b <- get l2 ma
         (Just `liftM` get l1 (return b)) `catchError` const (return Nothing)
-    setter mmc ma = do
+    modifier g ma = do
         b <- get l2 ma
-        mc <- mmc
+        mc <- g (Just <$> (get l1 . get l2 $ ma))
         maybe ma (f b) mc
         where f b c = do
                   b <- (Just `liftM` (set l1 (return c) (return b)))
-                      `catchError` const (return Nothing)
+                       `catchError` const (return Nothing)
                   maybe ma (flip (set l2) ma . return) b
-    
+
 infixr 8 .?
 infixr 8 .:
 
-rjoinV :: (MonadError e m, Error e) => e -> m a :-> m (Maybe b) -> m a :-> m b
-rjoinV e l = lens getter setter where
+rjoinV :: (Applicative m, MonadError e m, Error e)
+       => e -> m a :-> m (Maybe b) -> m a :-> m b
+rjoinV e l = lens getter (modifier . const) where
     getter ma = do
         maybeb <- get l ma
         maybe (throwError e) return maybeb
-    setter mb ma = do
-        b <- Just `liftM` mb
-        set l (return b) ma
-        
+    modifier f ma = do
+        let b = Just <$> f (getter ma)
+        set l b ma
+
+rjoin :: (Applicative m, MonadError e m, Error e)
+      => m a :-> m (Maybe b) -> m a :-> m b
 rjoin = rjoinV (strMsg "failed")
