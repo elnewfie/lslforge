@@ -92,7 +92,7 @@ infixr 7 =:
 
 mkLabelsPlus :: [Name] -> Q [Dec]
 mkLabelsPlus names = do
-    decs <- mkLabelsNoTypes names
+    decs <- mkLabels names
     decs2 <- mapM liftDec decs
     return (decs ++ decs2)
     where liftDec (FunD nm _) = funD (mkName (nameBase nm ++ "M"))
@@ -100,7 +100,7 @@ mkLabelsPlus names = do
 
 mkLabelsAlt :: [Name] -> Q [Dec]
 mkLabelsAlt names = do
-    decs <- filter isFuncDec `fmap` mkLabelsNoTypes names
+    decs <- filter isFuncDec `fmap` mkLabels names
     decs2 <- mapM liftDec decs
     return (map change decs ++ decs2)
     where liftDec (FunD nm _) = funD (mkName (nameBase nm))
