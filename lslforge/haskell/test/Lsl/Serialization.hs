@@ -54,7 +54,7 @@ repsf = $(collectReps [''Sample2,''Poly])
 -- $(deriveAllJavaRepsFor "reps" "lslforge.generated" [t|LSLScript|])
 
 -- xstreamBindings :: [String] -> String
--- xstreamBindings ss = [$here|
+-- xstreamBindings ss = [here|
 -- package lslforge.generated;
 
 -- import com.thoughtworks.xstream.XStream;
@@ -64,7 +64,7 @@ repsf = $(collectReps [''Sample2,''Poly])
 --     
 --     static {
 --         xstream = new XStream(new DomDriver());
--- |] ++ concatMap xstreamBinding ss ++ [$here|
+-- |] ++ concatMap xstreamBinding ss ++ [here|
 --     }
 --     
 --     public static LSLScript deserialize(String s) {

@@ -61,7 +61,7 @@ v1 lib cs os = do
                  where exec s = simStatusLog $ fst $ simStep (Left (simpleWorld,[("script",Right s)],lib)) (SimContinue [] [])
                        filtLog log = [ m | LogMessage { logMessageLevel = l, logMessageText = m } <- log, l /= LogTrace]
             
-t1 = tscript [] [$lsl|
+t1 = tscript [] [lsl|
     integer x;
     // pragma inline
     integer foo(integer x) {
@@ -78,7 +78,7 @@ t1 = tscript [] [$lsl|
     |] v0
 
     
-t2 = tscript [] [$lsl|
+t2 = tscript [] [lsl|
     integer x;
     // pragma inline
     integer bar(integer i) {
@@ -95,7 +95,7 @@ t2 = tscript [] [$lsl|
         }
     }|] v0
     
-pragmaScript3 = [$lsl|
+pragmaScript3 = [lsl|
     integer x;
     // pragma inline
     float sqrtR(float val) {
@@ -128,7 +128,7 @@ pragmaScript3 = [$lsl|
     
 t3 = tscript [] pragmaScript3 v0
 
-t4 = tscript [] [$lsl|
+t4 = tscript [] [lsl|
     // pragma inline
     say(float f) {
         x = 81.0;
@@ -142,7 +142,7 @@ t4 = tscript [] [$lsl|
         }
     }|] v0
     
-t5 = tscript [] [$lsl|
+t5 = tscript [] [lsl|
     //pragma inline
     foo() {
         llOwnerSay("hello");
@@ -159,7 +159,7 @@ t5 = tscript [] [$lsl|
         }
     }|] v0
     
-m0 = [$lslm|
+m0 = [lslm|
    $module ()
    
    // pragma inline
@@ -173,7 +173,7 @@ m0 = [$lslm|
    }
    |]
    
-t6 = tscript [("m0",m0)] [$lsl|
+t6 = tscript [("m0",m0)] [lsl|
     $import m0 ();
     
     default {
@@ -183,7 +183,7 @@ t6 = tscript [("m0",m0)] [$lsl|
     }|] v0
     
     
-t7 = tscript [] [$lsl|
+t7 = tscript [] [lsl|
     integer x = 7;
     
     impure() {
@@ -210,7 +210,7 @@ t7 = tscript [] [$lsl|
     }|] v0
     
     
-t8noinlining = tscript [] [$lsl|
+t8noinlining = tscript [] [lsl|
     // pragma inline
     foo(string s) {
         llOwnerSay(s);
@@ -242,7 +242,7 @@ t8noinlining = tscript [] [$lsl|
     }
     |] v0
     
-t9 = tscript [] [$lsl|
+t9 = tscript [] [lsl|
         // pragma inline
         float foo(vector v) {
             impure();
@@ -260,7 +260,7 @@ t9 = tscript [] [$lsl|
         }
     |] v0
     
-t10 = tscript [] [$lsl|
+t10 = tscript [] [lsl|
         integer fib(integer n) {
             integer prev1 = 1;
             integer prev2 = 1;
@@ -285,7 +285,7 @@ t10 = tscript [] [$lsl|
         }
     |] v0
     
-t11 = tscript [] [$lsl|
+t11 = tscript [] [lsl|
         // pragma inline
         integer sqr(integer i) {
             return i * i;
@@ -303,7 +303,7 @@ t11 = tscript [] [$lsl|
         }
     |] v0
     
-t12 = tscript [] [$lsl|
+t12 = tscript [] [lsl|
     float x = PI;
     // pragma inline
     float foo(integer i) {
@@ -328,7 +328,7 @@ t12 = tscript [] [$lsl|
     |] v0
     
     
-t13 = tscript [] [$lsl|
+t13 = tscript [] [lsl|
     float x = 0;
     
     // pragma inline
@@ -354,7 +354,7 @@ t13 = tscript [] [$lsl|
     }
     |] v0
     
-t14 = tscript [] [$lsl|
+t14 = tscript [] [lsl|
     float x = 0;
     
     // pragma inline
@@ -383,7 +383,7 @@ t14 = tscript [] [$lsl|
     }
     |] v0
 
-t15 = tscript [] [$lsl|
+t15 = tscript [] [lsl|
     float x = 4.5;
     float foo(float x) {
         integer i;
@@ -405,7 +405,7 @@ t15 = tscript [] [$lsl|
     }
     |] v0
     
-t16 = tscript [] [$lsl|
+t16 = tscript [] [lsl|
     rotation x = <4.5,4.5,7.2,7.2>;
     float foo(float x) {
         integer i;
@@ -427,7 +427,7 @@ t16 = tscript [] [$lsl|
     }
     |] v0
  
-t17 = tscript [] [$lsl|
+t17 = tscript [] [lsl|
     rotation x = <4.5,4.5,7.2,7.2>;
     float foo(float x) {
         integer i;
@@ -450,7 +450,7 @@ t17 = tscript [] [$lsl|
     }
     |] v0
 
-t18 = tscript [] [$lsl|
+t18 = tscript [] [lsl|
     // pragma inline
     func1( string l )
     {
@@ -467,7 +467,7 @@ t18 = tscript [] [$lsl|
     }
     |] v0
    
-t19 = tscript [] [$lsl|
+t19 = tscript [] [lsl|
     integer MINIMUM = 30;
     integer current = MINIMUM;
     default
@@ -479,7 +479,7 @@ t19 = tscript [] [$lsl|
     }
     |] v0
     
-t20 = tscript [] [$lsl|
+t20 = tscript [] [lsl|
         // pragma inline
         f1( vector v )
         {
@@ -504,7 +504,7 @@ t20 = tscript [] [$lsl|
         }
     |] v0
 
-t21 = tscript [] [$lsl|
+t21 = tscript [] [lsl|
     default {
         state_entry() {
             while (1);
@@ -514,7 +514,7 @@ t21 = tscript [] [$lsl|
     }
     |] v0
     
-t22 = tscript [] [$lsl|
+t22 = tscript [] [lsl|
 // from http://wiki.secondlife.com/w/index.php?title=LSL_Library_Call_Test_1&oldid=67582
 
 integer gTests = 0;
@@ -724,7 +724,7 @@ default
 }
 |] v0
 
-t23 = tscript [] [$lsl|
+t23 = tscript [] [lsl|
     // pragma inline
     float do_stuff( float input )
     {
@@ -751,7 +751,7 @@ t23 = tscript [] [$lsl|
     }
 |] v0
 
-t24 = tscript [] [$lsl|
+t24 = tscript [] [lsl|
    integer BASIC = FALSE;
    
    foo() {
@@ -779,7 +779,7 @@ t24 = tscript [] [$lsl|
    |] v0
 
    
-t25 = tscript [] [$lsl|
+t25 = tscript [] [lsl|
     //pragma inline
     string get() {
     	if (llGetStartParameter()) return "a";
@@ -802,7 +802,7 @@ t25 = tscript [] [$lsl|
     }
     |] v0
    
-t26 = tscript [] [$lsl|
+t26 = tscript [] [lsl|
     //pragma inline
     do_stuff()
     {
@@ -821,7 +821,7 @@ t26 = tscript [] [$lsl|
         }
     }|] v0
     
-t27 = tscript [] [$lsl|
+t27 = tscript [] [lsl|
     // pragma inline
     list parse(string src) {
         return llCSV2List(src);
@@ -840,13 +840,13 @@ t27 = tscript [] [$lsl|
     }
     |] v0
 
-m28 = [$lslm|
+m28 = [lslm|
     $module ()
     
     string unused = "unused";
     |]
     
-s28 = [$lsl|
+s28 = [lsl|
     $import unused ();
     
     default {
@@ -858,7 +858,7 @@ s28 = [$lsl|
     
 t28 = tscript [("unused",m28)] s28 v0
 
-t29 = tscript [] [$lsl|
+t29 = tscript [] [lsl|
     default {
         state_entry() {
             llOwnerSay((string)llFrand(100.0));
@@ -871,7 +871,7 @@ t29 = tscript [] [$lsl|
     }
     |] v0
     
-t30 = tscript [] [$lsl|
+t30 = tscript [] [lsl|
     // pragma inline
     call(list lst) {
         llOwnerSay(llList2CSV(lst));
@@ -887,7 +887,7 @@ t30 = tscript [] [$lsl|
     }
     |] v0
 
-t31 = tscript [] [$lsl|
+t31 = tscript [] [lsl|
    default {
     state_entry()
     {
@@ -897,7 +897,7 @@ t31 = tscript [] [$lsl|
     }
 }|] v0
 
-t32 = tscript [] [$lsl|
+t32 = tscript [] [lsl|
     default {
         state_entry() {
             llOwnerSay((string) llAxisAngle2Rot(<1,3,3>,12));

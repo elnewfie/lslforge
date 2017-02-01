@@ -227,7 +227,7 @@ importTests = TestLabel "Module System Tests" $ TestList [
     importTest3,
     importTest4]
 
-labelScript = [$here|
+labelScript = [here|
 default {
     state_entry() {
         if (llGetStartParameter()) {
@@ -257,7 +257,7 @@ default {
 
 labelTest = invalidScriptStr "Label Test" labelScript
 
-retconv = [$here|
+retconv = [here|
     float foo() {
        integer i = 0;
        return i;
@@ -269,7 +269,7 @@ retconv = [$here|
         }
     }|]
     
-casts = [$here|
+casts = [here|
     default {
         state_entry() {
             list l = (list) 1;
@@ -280,7 +280,7 @@ casts = [$here|
         }
     }|]
     
-floatWierdness = [$here|
+floatWierdness = [here|
     default {
         state_entry() {
             float f = 1.0;
@@ -288,7 +288,7 @@ floatWierdness = [$here|
         }
     }|]
     
-moreFloatWierdness = [$here|
+moreFloatWierdness = [here|
     default {
         state_entry() {
             float f = .0;
@@ -309,7 +309,7 @@ allTests = TestLabel "All Tests" $ TestList [
     validScriptStr "eq-not" eqNotScript ]
 
     
-eqNotScript = [$here|
+eqNotScript = [here|
     default {
         state_entry() {
             integer x = 0;

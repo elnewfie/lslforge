@@ -49,7 +49,7 @@ testCheckScript = TestLabel "testCheckScript" $ TestCase $ do
     checkV s :: IO (LSLScript,[ErrInfo])
     return ()
         
-sample = [$here|
+sample = [here|
     default {
         state_entry() {
         }
@@ -62,14 +62,14 @@ testDeserializeCommand = TestLabel "testDeserializeCommand" $ TestCase $ do
         Right (Just (CheckScript (CodeElement name text))) -> assertEqual "---" "foo.lslp" name
         Right Nothing -> assertFailure "didn't find element!"
 
-command1 = [$here|<CompilationCommand__CheckScript>
+command1 = [here|<CompilationCommand__CheckScript>
   <el1 class="CodeElement_CodeElement">
     <codeElementName>foo.lslp</codeElementName>
     <codeElementText>sample</codeElementText>
   </el1>
 </CompilationCommand__CheckScript>|]
 
-command2 = [$here|<CompilationCommand__Init>
+command2 = [here|<CompilationCommand__Init>
   <el1>
     <el1 class="boolean">true</el1>
     <el2 class="linked-list"/>

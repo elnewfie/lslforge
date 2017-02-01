@@ -5,7 +5,7 @@ import Language.Lsl.Syntax
 import Language.Lsl.QQ(lslm)
 import Language.Lsl.Internal.Constants(lslForgeAvatarKey,lslForgeAvatarPos,lslForgeAvatarRot,lslForgeAvatarName)
 
-avEventGenAST = [$lslm|$module
+avEventGenAST = [lslm|$module
         integer LSLFORGE_AVATAR_KEY = $integer:lslForgeAvatarKey;
         integer LSLFORGE_AVATAR_POS = $integer:lslForgeAvatarPos;
         integer LSLFORGE_AVATAR_ROT = $integer:lslForgeAvatarRot;
