@@ -9,6 +9,7 @@ module Language.Lsl.Internal.DOMProcessing(
 --     Posn,
     xmlParse,
     MonadXMLAccept(..),
+    unqualifiedQName,
     getContent,setContent,
     getAttrs,setAttrs,
     getTag,
@@ -30,7 +31,7 @@ import Control.Monad.State(MonadState(..),State(..),evalState,StateT(..),
 import Control.Monad.Trans
 import Language.Lsl.Internal.Util(readM)
 import Text.XML.HaXml(Attribute,AttValue(..),Document(..),Element(..),
-    Content(..),Reference(..),xmlParse)
+    Content(..),QName(..),Reference(..),xmlParse)
 import Text.XML.HaXml.Posn(Posn(..))
 
 class (MonadError String m, Applicative m) => MonadXMLAccept m where
@@ -44,6 +45,10 @@ class (MonadError String m, Applicative m) => MonadXMLAccept m where
             `catchError` 
             ( \ e -> setContext c0 >> throwError e)
    
+unqualifiedQName :: QName -> String
+unqualifiedQName (N n) = n
+unqualifiedQName (QN _ n) = n
+
 setContent :: MonadXMLAccept m => [Content Posn] -> m ()
 setContent c = getContext >>= \ (Elem nm attr _) -> setContext (Elem nm attr c)
 
@@ -54,7 +59,7 @@ getContent :: MonadXMLAccept m => m [Content Posn]
 getContent = getContext >>= \ (Elem _ _ c) -> return c
 
 getTag :: MonadXMLAccept m => m String
-getTag = getContext >>= \ (Elem tag _ _) -> return tag
+getTag = getContext >>= \ (Elem tag _ _) -> return (unqualifiedQName tag)
 
 getAttrs :: MonadXMLAccept m => m [Attribute]
 getAttrs = getContext >>= \ (Elem _ attrs _) -> return attrs
@@ -68,7 +73,7 @@ runAcc nf f acceptor = do
         \ s -> getTag >>= \ t -> throwError ("in element " ++ t ++ ": " ++ s)
     where find bs [] = nf
           find bs (ce@(CElem e@(Elem nm attrs ec) i):cs) = 
-              (try nm e i >>= maybe (find (ce:bs) cs) (\ v -> setContent (reverse bs ++ cs) >> f v))
+              (try (unqualifiedQName nm) e i >>= maybe (find (ce:bs) cs) (\ v -> setContent (reverse bs ++ cs) >> f v))
           find bs (ce:cs) = find (ce:bs) cs
           try nm e i = withContext e acceptor `catchError` \ s ->
               throwError ("in element " ++ nm ++ " in " ++ show i ++ ": " ++ s)
@@ -87,7 +92,7 @@ tagit s acc = do
 clattr :: MonadXMLAccept m => String -> CAcceptor m ()
 clattr c = do
     attrs <- getAttrs
-    unless (("class",AttValue [Left c]) `elem` attrs) $
+    unless ((N "class",AttValue [Left c]) `elem` attrs) $
         throwError ("attribute class=\"" ++ c ++ "\" not matched")
         
 clsit :: MonadXMLAccept m => String -> CAcceptor m a 
@@ -146,7 +151,7 @@ elist :: MonadXMLAccept m => CAcceptor m (Maybe a) -> CAcceptor m [a]
 elist acc = foldM f [] =<< getContent where
     f l (CElem e@(Elem nm _ _) i) = --withContext e acc >>= return . (l ++) . (:[])
         withContext e acc >>= 
-            maybe (throwError ("unexpected element " ++ nm ++ " in list in " ++ show i))
+            maybe (throwError ("unexpected element " ++ show nm ++ " in list in " ++ show i))
             (return . (l ++) . (:[]))
     f l (CMisc _ i) = err i
     f l (CRef _ i) = err i

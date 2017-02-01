@@ -21,13 +21,13 @@ type AttributeTester a = Posn -> Attribute -> Either String (Maybe a)
 type AttributesTester a = Posn -> [Attribute] -> Either String (Maybe a)
 
 el :: String -> (b -> a) -> ContentAcceptor b -> ElementTester a
-el tag f cf p (Elem name _ cs) | tag /= name = Right Nothing
+el tag f cf p (Elem name _ cs) | tag /= unqualifiedQName name = Right Nothing
                                | otherwise = case cf cs of
                                         Left s -> Left ("at " ++ show p ++ ": " ++ s)
                                         Right v -> Right (Just (f v))
 
 elWith :: String -> (a -> b -> c) -> AttributeAcceptor (Maybe a) -> ContentAcceptor b -> ElementTester c
-elWith tag f af cf p (Elem name attrs cs) | tag /= name = Right Nothing
+elWith tag f af cf p (Elem name attrs cs) | tag /= unqualifiedQName name = Right Nothing
                                           | otherwise = do
                                                    av <- af p attrs 
                                                    case av of
@@ -85,7 +85,7 @@ refToString (RefEntity s) = refEntityString s
 refToString (RefChar i) = [toEnum i]
 
 attrIs :: String -> String -> AttributeTester ()
-attrIs k v _ (nm,attv) | v == attContent attv  && k == nm = return (Just ())
+attrIs k v _ (nm,attv) | v == attContent attv  && k == unqualifiedQName nm = return (Just ())
                        | otherwise = return Nothing
                                   
 hasAttr :: AttributeTester a -> AttributeFinder (Maybe a)
@@ -132,7 +132,7 @@ refEntityString _ = "?"
 simpleContent :: ContentAcceptor String
 simpleContent cs = mapM processContentItem cs >>= return . concat
     where
-        processContentItem (CElem (Elem name _ _) _) = Left ("unexpected content element (" ++ name ++ ")")
+        processContentItem (CElem (Elem name _ _) _) = Left ("unexpected content element (" ++ show name ++ ")")
         processContentItem (CString _ s _) = Right s
         processContentItem (CRef (RefEntity s) _) = Right $ refEntityString s
         processContentItem (CRef (RefChar i) _) = Right $ [toEnum i]
