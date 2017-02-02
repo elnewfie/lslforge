@@ -184,7 +184,7 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                           subElemDescriptorD,elemDescriptorD,contentFinderD],
                       valD (varP (mkName $ "jrep'" ++ (nameBase tnm))) (normalB representationE) []]
             where tyVarName (PlainTV n) = n
-                  tyVarName (KindedTV n _) = error ("unexpected higher kinded type variable: " ++ show n)
+                  tyVarName (KindedTV n _) = n
                   names = map tyVarName vs
                   ctx = mapM (javaRepPred . varT) names
                   typ = appT javaRepCon $ foldl appT (conT tnm) (map varT names)
