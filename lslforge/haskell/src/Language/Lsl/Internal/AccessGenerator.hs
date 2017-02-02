@@ -13,8 +13,8 @@ genAccessorsForType nm = do
         TyConI d -> generateAccessorsForDec d
         _ -> fail $ "can't generate accessors for specified name: " ++ show nm
 
-generateAccessorsForDec (DataD _ _ _ [con] _) = generateAccessorsForCon con
-generateAccessorsForDec (DataD _ _ _ _ _) = fail "can't generate accessors for data type with multiple constructors"
+generateAccessorsForDec (DataD _ _ _ _ [con] _) = generateAccessorsForCon con
+generateAccessorsForDec (DataD _ _ _ _ _ _) = fail "can't generate accessors for data type with multiple constructors"
 generateAccessorsForDec _ = fail "can only generate accessors for 'data' types (not even newtypes)"
 
 generateAccessorsForCon (RecC _ vs) = generateAccessorsForSelectors vs
@@ -36,8 +36,8 @@ genMAccessorsForType nm = do
         TyConI d -> generateMAccessorsForDec d
         _ -> fail $ "can't generate accessors for specified name: " ++ show nm
 
-generateMAccessorsForDec (DataD _ _ _ [con] _) = generateMAccessorsForCon con
-generateMAccessorsForDec (DataD _ _ _ _ _) = fail "can't generate accessors for data type with multiple constructors"
+generateMAccessorsForDec (DataD _ _ _ _ [con] _) = generateMAccessorsForCon con
+generateMAccessorsForDec (DataD _ _ _ _ _ _) = fail "can't generate accessors for data type with multiple constructors"
 generateMAccessorsForDec _ = fail "can only generate accessors for 'data' types (not even newtypes)"
 
 generateMAccessorsForCon (RecC _ vs) = generateMAccessorsForSelectors vs
@@ -63,4 +63,3 @@ generateMAccessorForSelector (nm,_,_) =
                         -- get >>= \ s -> put (s { nm = nm0 })
                         (AppE (AppE (VarE nmBind) (VarE nmGet)) (LamE [VarP nm1] (AppE (VarE nmPut) (RecUpdE (VarE nm1) [(nm,VarE nm0)]))))
                     ) []])]
-             

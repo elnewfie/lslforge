@@ -178,7 +178,7 @@ deriveJavaRep nm = if nm == ''[] then return [] else
             TyConI d -> deriveInstance d
             _ -> fail $ ("can't generate serializer for specified name: " ++ show nm)
     where
-        deriveInstance (DataD _ tnm vs cs _) = do
+        deriveInstance (DataD _ tnm vs _ cs _) = do
             checkAllFields cs 
             sequence [instanceD ctx typ [representativeD,xmlSerializeD,dec1, 
                           subElemDescriptorD,elemDescriptorD,contentFinderD],
@@ -328,10 +328,10 @@ collectReps names = do
               Just _ -> return m
               Nothing -> reify n >>= \ info -> case info of
                   PrimTyConI _ _ _ -> return (M.insert n Nothing m)
-                  TyConI (DataD _ nm _ cs _) -> case nameBase nm of
+                  TyConI (DataD _ nm _ _ cs _) -> case nameBase nm of
                        '(':rest -> return (M.insert nm (Just $ "Tuple" ++ show (length rest)) m)
                        _ -> foldM collectCReps (M.insert nm (Just $ nameBase nm) m) cs
-                  TyConI (NewtypeD _ nm _ c _) -> collectCReps (M.insert nm (Just $ nameBase nm) m) c
+                  TyConI (NewtypeD _ nm _ _ c _) -> collectCReps (M.insert nm (Just $ nameBase nm) m) c
                   TyConI (TySynD _ _ t1) -> decomposeType (M.insert n Nothing m) t1
           decomposeType m (VarT _) = return m
           decomposeType m (TupleT n) = return m
@@ -412,8 +412,8 @@ repT _ _ t = error ("can't repT: " ++ show t)
 deSyn :: [Type] -> Type -> Q Type
 deSyn targs t@(ConT nm) = reify nm >>= \ info -> case info of
      PrimTyConI _ _ _ ->  return (foldl AppT t targs)
-     TyConI (DataD _ _ _ _ _) -> return (foldl AppT t targs)
-     TyConI (NewtypeD _ _ _ _ _) -> return (foldl AppT t targs)
+     TyConI (DataD _ _ _ _ _ _) -> return (foldl AppT t targs)
+     TyConI (NewtypeD _ _ _ _ _ _) -> return (foldl AppT t targs)
      TyConI (TySynD _ params t1) -> return (foldl AppT (subst t1) targs')
          where targs' = drop (length params) targs
                substs = zip params targs
