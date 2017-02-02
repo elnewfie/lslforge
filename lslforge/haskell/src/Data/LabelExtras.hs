@@ -18,7 +18,6 @@ module Data.LabelExtras(
     (.:),
     rjoin,
     rjoinV,
-    mkLabelsPlus,
     mkLabelsAlt,
     lfst,
     lsnd,
@@ -42,7 +41,7 @@ import Data.Label
 import Language.Haskell.TH
 
 liftML :: (Applicative m, Monad m) => a :-> b -> m a :-> m b
-liftML l = lens getter (modifier . const) where
+liftML l = lens getter modifier where
     getter = fmap (get l)
     setter = liftA2 (set l)
     modifier = isoL getter setter where
@@ -50,7 +49,7 @@ liftML l = lens getter (modifier . const) where
 
 -- | a lens for a Map element
 lm :: (Applicative m, MonadError e m, Error e, Show k, Ord k) => k -> m (Map k v) :-> m v
-lm k = lens getter (modifier . const) where
+lm k = lens getter modifier where
     getter mm = mm >>= (maybe (throwError $ err k)  return) . lookup k
     modifier f mm = do
         v <- f $ getter mm
@@ -58,7 +57,7 @@ lm k = lens getter (modifier . const) where
     err k = strMsg $ "key " ++ show k ++ " not found"
 
 lmi :: (Applicative m, MonadError e m, Error e) => Int -> m (IM.IntMap v) :-> m v
-lmi i = lens getter (modifier . const) where
+lmi i = lens getter modifier where
     getter mm = mm >>= (maybe (throwError $ err i)  return) . IM.lookup i
     modifier f mm = do
         v <- f $ getter mm
@@ -66,7 +65,7 @@ lmi i = lens getter (modifier . const) where
     err i = strMsg $ "key " ++ show i ++ " not found"
 
 lli :: (Applicative m, MonadError e m, Error e) => Int -> m [v] :-> m v
-lli i = lens getter (modifier . const) where
+lli i = lens getter modifier where
     getter ml = ml >>= (maybe (throwError $ err i)  return) . safeIndex i
     modifier f ml = do
         v <- f $ getter ml
@@ -98,14 +97,6 @@ infixr 7 =:
 (=:) :: MonadState s m => m s :-> m b -> b -> m ()
 (=:) = setM
 
-mkLabelsPlus :: [Name] -> Q [Dec]
-mkLabelsPlus names = do
-    decs <- mkLabels names
-    decs2 <- mapM liftDec decs
-    return (decs ++ decs2)
-    where liftDec (FunD nm _) = funD (mkName (nameBase nm ++ "M"))
-              [clause [] (normalB $ (appE (varE 'liftML) (varE nm))) []]
-
 mkLabelsAlt :: [Name] -> Q [Dec]
 mkLabelsAlt names = do
     decs <- filter isFuncDec <$> mkLabels names
@@ -118,19 +109,19 @@ mkLabelsAlt names = do
           isFuncDec _          = False
 
 lfstU :: (a,b) :-> a
-lfstU = lens fst ((\f (x,y) -> (f x,y)) . const)
+lfstU = lens fst (\f (x,y) -> (f x,y))
 
 lsndU :: (a,b) :-> b
-lsndU = lens snd ((\f (x,y) -> (x,f y)) . const)
+lsndU = lens snd (\f (x,y) -> (x,f y))
 
 lfst3U :: (a,b,c) :-> a
-lfst3U = lens (\(x,_,_) -> x) ((\f (x,y,z) -> (f x,y,z)) . const)
+lfst3U = lens (\(x,_,_) -> x) (\f (x,y,z) -> (f x,y,z))
 
 lsnd3U :: (a,b,c) :-> b
-lsnd3U = lens (\(_,y,_) -> y) ((\f (x,y,z) -> (x,f y,z)) . const)
+lsnd3U = lens (\(_,y,_) -> y) (\f (x,y,z) -> (x,f y,z))
 
 l3rd3U :: (a,b,c) :-> c
-l3rd3U = lens (\(_,_,z) -> z) ((\f (x,y,z) -> (x,y,f z)) . const)
+l3rd3U = lens (\(_,_,z) -> z) (\f (x,y,z) -> (x,y,f z))
 
 lfst :: (Applicative m, Monad m) => m (a,b) :-> m a
 lfst = liftML $ lfstU
@@ -163,7 +154,7 @@ data (:*) a b = a :* b
 infixr 6 .*
 
 (.*) :: Monad m => m a :-> m b -> m a :-> m c -> m a :-> m (b :* c)
-(.*) l1 l2 = lens getter (modifier . const) where
+(.*) l1 l2 = lens getter modifier where
     getter ma = (:*) `liftM` get l1 ma `ap` get l2 ma
     modifier f ma = f (getter ma) >>=
                     \(b:*c) -> set l1 (return b) . set l2 (return c) $ ma
@@ -173,7 +164,7 @@ infixr 6 .*
 
 (.?) :: (Applicative m, MonadError e m, Error e)
      => m b :-> m c -> m a :-> m b -> m a :-> m (Maybe c)
-(.?) l1 l2 = lens getter (modifier . const) where
+(.?) l1 l2 = lens getter modifier where
     getter ma = do
         b <- get l2 ma
         (Just `liftM` get l1 (return b)) `catchError` const (return Nothing)
@@ -191,7 +182,7 @@ infixr 8 .:
 
 rjoinV :: (Applicative m, MonadError e m, Error e)
        => e -> m a :-> m (Maybe b) -> m a :-> m b
-rjoinV e l = lens getter (modifier . const) where
+rjoinV e l = lens getter modifier where
     getter ma = do
         maybeb <- get l ma
         maybe (throwError e) return maybeb
