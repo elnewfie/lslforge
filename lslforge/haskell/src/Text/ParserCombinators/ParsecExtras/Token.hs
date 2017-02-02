@@ -1,4 +1,4 @@
-{-# LANGUAGE PolymorphicComponents, ExistentialQuantification #-}
+{-# LANGUAGE PolymorphicComponents, ExistentialQuantification, FlexibleContexts #-}
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Text.ParserCombinators.ParsecExtras.Token

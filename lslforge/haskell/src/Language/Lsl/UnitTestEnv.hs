@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module Language.Lsl.UnitTestEnv(
     simStep,
     simFunc,

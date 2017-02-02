@@ -1,4 +1,5 @@
-{-# OPTIONS_GHC -fwarn-incomplete-patterns -XStandaloneDeriving -XNoMonomorphismRestriction -fwarn-unused-binds #-}
+{-# OPTIONS_GHC -fwarn-incomplete-patterns -fwarn-unused-binds #-}
+{-# LANGUAGE FlexibleContexts, StandaloneDeriving, NoMonomorphismRestriction #-}
 module Language.Lsl.Internal.Optimize(optimizeScript,OptimizerOption(..)) where
 
 import Control.Monad.State hiding (State)

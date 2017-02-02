@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances,
+             FlexibleContexts,
              NoMonomorphismRestriction,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,

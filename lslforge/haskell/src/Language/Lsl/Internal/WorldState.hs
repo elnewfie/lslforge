@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances, TypeOperators,
+{-# LANGUAGE FlexibleInstances, FlexibleContexts, TypeOperators,
     GeneralizedNewtypeDeriving, MultiParamTypeClasses, TypeSynonymInstances,
     TemplateHaskell #-}
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}

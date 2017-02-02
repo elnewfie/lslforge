@@ -1,4 +1,4 @@
-{-# OPTIONS_GHC -fwarn-unused-binds -XNoMonomorphismRestriction #-}
+{-# OPTIONS_GHC -fwarn-unused-binds -XNoMonomorphismRestriction -XFlexibleContexts #-}
 module Language.Lsl.Internal.Util (
     mlookup,
     ilookup,
