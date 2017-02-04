@@ -1,6 +1,4 @@
-{-# OPTIONS_GHC -XTemplateHaskell -XFlexibleInstances -XTypeSynonymInstances
-                -XScopedTypeVariables -XOverlappingInstances
-  #-}
+{-# LANGUAGE TemplateHaskell, FlexibleInstances, TypeSynonymInstances, ScopedTypeVariables #-}
 module Language.Lsl.Internal.SerializationGenerator where
 
 import Language.Haskell.TH
@@ -89,7 +87,7 @@ instance JavaRep String where
     elemDescriptor = el "string" id simpleContent
     contentFinder tag = mustHaveElem $ subElemDescriptor tag
     
-instance JavaRep a => JavaRep [a] where
+instance {-# OVERLAPPABLE #-} JavaRep a => JavaRep [a] where
     representative = [ (representative :: a) ]
     xmlSerialize t l = 
         emit (maybe (xmlDefaultTag (representative :: [a])) id t) (maybe [] (const [("class","linked-list")]) t) 
