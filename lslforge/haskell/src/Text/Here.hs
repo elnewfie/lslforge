@@ -4,13 +4,13 @@
 -- Module      :  Text.Here
 -- Copyright   :  (c) Rob Greayer 2009
 -- License     :  BSD-style (see the file LICENSE)
--- 
+--
 -- Maintainer  :  robgreayer@yahoo.com
 -- Stability   :  provisional
 -- Portability :  non-portable (uses existentially template haskell)
 --
 -- An implementation of 'here' documents, using quasiquotation.
--- 
+--
 -----------------------------------------------------------------------------
 module Text.Here(here) where
 

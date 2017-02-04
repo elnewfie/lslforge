@@ -6,22 +6,22 @@ module Language.Lsl.UnitTest(
         Binding,
         expectedReturns,
         removeExpectation) where
-    
+
 import Control.Monad(liftM2)
 import Data.List(maximumBy)
 import Language.Lsl.Internal.Type(LSLValue(..))
 import Language.Lsl.Internal.Exec(Binding(..))
 import Language.Lsl.Internal.Util(removeLookup)
-   
+
 data FuncCallExpectations a = FuncCallExpectations {
     expectationMode :: ExpectationMode,
     callList :: [((String, [Maybe (LSLValue a)]),LSLValue a)] } deriving (Show)
-    
+
 data ExpectationMode = Nice | Normal | Exhaust | Strict deriving (Show,Eq)
 
 data EntryPoint = ModuleFunc String String | ScriptFunc String String | ScriptHandler String String String
     deriving (Show)
-    
+
 data LSLUnitTest = LSLUnitTest {
         unitTestName :: String,
         entryPoint :: EntryPoint,

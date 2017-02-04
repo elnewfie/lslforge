@@ -12,13 +12,13 @@ import Language.Lsl.Internal.Type(LSLType(..), convertValues,LSLValue)
 funcMeta :: [(String,LSLType,[(String,LSLType)],String)]
 funcMeta =
     let dummyNames = zipWith (++) (repeat "arg") (map show [1..])
-        sig2Meta (name,rt,args) = 
+        sig2Meta (name,rt,args) =
             let (argNames,description) = case lookup name funcDescriptions of
                     Nothing -> (dummyNames,"no description")
                     Just (names,desc) -> (names ++ dummyNames,desc)
             in (name, rt,zip argNames args,description)
     in map sig2Meta funcSigs
-        
+
 findSig name = find (\ (fname,_,_) -> name == fname) funcSigs
 
 convertArgs :: RealFrac a => String -> [LSLValue a] -> [LSLValue a]

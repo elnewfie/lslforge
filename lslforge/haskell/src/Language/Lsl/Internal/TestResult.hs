@@ -8,7 +8,7 @@ data TestResult = ErrorResult String String [(Int,String)] |
                   Timeout String [(Int,String)] |
                   SuccessResult String [(Int,String)]
     deriving Show
-    
+
 okResult = 0
 failureResult = 1
 errorResult = 2

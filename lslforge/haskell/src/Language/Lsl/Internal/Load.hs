@@ -34,7 +34,7 @@ loadModules files =
 --        --return (validated ++ (map (\ (n,err) -> (n,Left err)) bad))
 
 loadScript ::  Library -> (t,String) -> IO (t,Validity CompiledLSLScript)
-loadScript lib sinfo = 
+loadScript lib sinfo =
      parseFile parseScript sinfo
      >>= \ r -> case r of
          (t,Left e) -> return (t,Left $ CodeErrs [e])
@@ -44,9 +44,9 @@ loadScripts library = mapM (loadScript library)
 -- loadScripts library files =
 --     do parseResults <- parseFiles parseScript files
 --        let (bad,ok) = splitResults parseResults
---        return $ (map (\ (n,script) -> (n,compileLSLScript' library script)) ok) ++ 
+--        return $ (map (\ (n,script) -> (n,compileLSLScript' library script)) ok) ++
 --            (map (\ (n,err) -> (n,Left [err])) bad)
-           
+
 splitResults [] = ([],[])
 splitResults ((name,Left err):xs) =
     let (lefts,rights) = splitResults xs in

@@ -41,10 +41,10 @@ class (MonadError String m, Applicative m) => MonadXMLAccept m where
     withContext c a = do
         c0 <- getContext
         setContext c
-        (a >>= \ v -> setContext c0 >> return v) 
-            `catchError` 
+        (a >>= \ v -> setContext c0 >> return v)
+            `catchError`
             ( \ e -> setContext c0 >> throwError e)
-   
+
 unqualifiedQName :: QName -> String
 unqualifiedQName (N n) = n
 unqualifiedQName (QN _ n) = n
@@ -67,12 +67,12 @@ getAttrs = getContext >>= \ (Elem _ attrs _) -> return attrs
 type CAcceptor m t = m t
 
 runAcc :: MonadXMLAccept m => m b -> (a -> m b) -> CAcceptor m (Maybe a) -> m b
-runAcc nf f acceptor = do 
+runAcc nf f acceptor = do
     content <- getContent
     find [] content `catchError`
         \ s -> getTag >>= \ t -> throwError ("in element " ++ t ++ ": " ++ s)
     where find bs [] = nf
-          find bs (ce@(CElem e@(Elem nm attrs ec) i):cs) = 
+          find bs (ce@(CElem e@(Elem nm attrs ec) i):cs) =
               (try (unqualifiedQName nm) e i >>= maybe (find (ce:bs) cs) (\ v -> setContent (reverse bs ++ cs) >> f v))
           find bs (ce:cs) = find (ce:bs) cs
           try nm e i = withContext e acceptor `catchError` \ s ->
@@ -83,7 +83,7 @@ tag t = do
     tagMatches <- (==) <$> pure t <*> getTag
     unless tagMatches $ throwError ("tag " ++ t ++ " not matched")
 
-tagit :: MonadXMLAccept m => String -> CAcceptor m a 
+tagit :: MonadXMLAccept m => String -> CAcceptor m a
     -> CAcceptor m (Maybe a)
 tagit s acc = do
     found <- (tag s >> return True) `catchError` const (return False)
@@ -94,17 +94,17 @@ clattr c = do
     attrs <- getAttrs
     unless ((N "class",AttValue [Left c]) `elem` attrs) $
         throwError ("attribute class=\"" ++ c ++ "\" not matched")
-        
-clsit :: MonadXMLAccept m => String -> CAcceptor m a 
+
+clsit :: MonadXMLAccept m => String -> CAcceptor m a
     -> CAcceptor m (Maybe a)
-clsit s acc = 
+clsit s acc =
     (clattr s >> Just <$> acc) `catchError` const (return Nothing)
 
 -- req : this element is a required child, with the specified tag
-req t acceptor = runAcc (throwError ("element not found: " ++ t)) return 
+req t acceptor = runAcc (throwError ("element not found: " ++ t)) return
     (tagit t acceptor)
 
-opt t acceptor = runAcc (return Nothing) (return . Just) 
+opt t acceptor = runAcc (return Nothing) (return . Just)
     (tagit t acceptor)
 def t def acceptor = runAcc (return def) return (tagit t acceptor)
 
@@ -123,7 +123,7 @@ bool = text >>= \ s -> case s of
     "True" -> return True
     "False" -> return False
     s -> throwError ("unacceptable bool value: " ++ s)
-    
+
 textItem :: MonadXMLAccept m => Content Posn -> m String
 textItem (CElem _ i) = throwError ("unexpected element in " ++ show i)
 textItem (CString _ s _) = return s
@@ -150,37 +150,37 @@ choicet = choice . map (uncurry tagit)
 elist :: MonadXMLAccept m => CAcceptor m (Maybe a) -> CAcceptor m [a]
 elist acc = foldM f [] =<< getContent where
     f l (CElem e@(Elem nm _ _) i) = --withContext e acc >>= return . (l ++) . (:[])
-        withContext e acc >>= 
+        withContext e acc >>=
             maybe (throwError ("unexpected element " ++ show nm ++ " in list in " ++ show i))
             (return . (l ++) . (:[]))
     f l (CMisc _ i) = err i
     f l (CRef _ i) = err i
     f l (CString _ _ i) = return l
     err i = throwError ("in " ++ show i ++ " unexpected non-element content")
-          
+
 liste s = (elist . tagit s)
 
 newtype AcceptT m a = AcceptT { unAcceptT :: ErrorT String (StateT (Element Posn) m) a }
    deriving (Monad)
-   
+
 instance MonadTrans AcceptT where
     lift v = AcceptT { unAcceptT = lift $ lift v }
-    
+
 instance Monad m => MonadState (Element Posn) (AcceptT m) where
     get = AcceptT { unAcceptT = get }
     put v = AcceptT { unAcceptT = put v }
-    
+
 instance Monad m => MonadError String (AcceptT m) where
     throwError e = AcceptT { unAcceptT = throwError e }
     catchError v f = AcceptT { unAcceptT = catchError (unAcceptT v) (unAcceptT . f) }
-    
+
 instance Monad m => Functor (AcceptT m) where
     fmap = liftM
-    
+
 instance Monad m => Applicative (AcceptT m) where
     pure = return
     (<*>) = ap
-    
+
 instance Monad m => MonadXMLAccept (AcceptT m) where
     getContext = get
     setContext = put
@@ -195,14 +195,14 @@ newtype XMLAccept a = XMLAccept { unXMLAccept :: ErrorT String (State (Element P
 instance MonadState (Element Posn) XMLAccept where
    get = XMLAccept { unXMLAccept = get }
    put v = XMLAccept { unXMLAccept = put v }
-   
+
 instance MonadError String XMLAccept where
     throwError e = XMLAccept { unXMLAccept = throwError e }
     catchError v f = XMLAccept { unXMLAccept = catchError (unXMLAccept v) (unXMLAccept . f) }
 
 instance Functor XMLAccept where
     fmap = liftM
-    
+
 instance Applicative XMLAccept where
    pure  = return
    (<*>) = ap
@@ -210,7 +210,7 @@ instance Applicative XMLAccept where
 instance MonadXMLAccept XMLAccept where
    getContext = get
    setContext = put
-   
+
 runXMLAccept = (evalState . runErrorT . unXMLAccept)
 xmlAccept c s = runXMLAccept c root where
     (Document _ _ root _) = xmlParse "input" s

@@ -10,10 +10,10 @@ data AvatarOutputEvent =
     | AvatarShout { avatarChatChannel :: Int, avatarChatMessage :: String }
     | AvatarPay { avatarPayPrimKey :: LSLKey, avatarPayAmount :: Int }
     | AvatarControl { avatarNewControlBits :: Int }
-    | AvatarFaceTouch { avatarTouchPrimKey :: LSLKey, 
+    | AvatarFaceTouch { avatarTouchPrimKey :: LSLKey,
                         avatarTouchDuration :: Float,
-                        avatarTouchFace :: Int, 
-                        avatarTouchST :: (Float,Float) } 
+                        avatarTouchFace :: Int,
+                        avatarTouchST :: (Float,Float) }
     | AvatarHTTPRequest { avatarHTTPRequestURL :: String,
                           avatarHTTPRequestMethod :: String,
                           avatarHTTPRequestBody :: String,
@@ -24,11 +24,11 @@ data AvatarOutputEvent =
 data AvatarInputEvent =
       AvatarOwnerSay { avatarOwnerSayPrimKey :: LSLKey, avatarOwnerSayMsg :: String }
     | AvatarHearsChat { avatarHearsChatFromName :: String, avatarHearsChatFromKey :: LSLKey, avatarHearsChatMsg :: String }
-    | AvatarDialog { avatarDialogMessage :: String, avatarDialogButtons :: [String], 
+    | AvatarDialog { avatarDialogMessage :: String, avatarDialogButtons :: [String],
                           avatarDialogChannel :: Int, avatarDialogSourceObject :: LSLKey }
     | AvatarLoadURL { avatarLoadURLMessage :: String, avatarLoadURLAddress :: String }
     | AvatarMapDestination { avatarMapDestination :: String, avatarMapDestinationPosition :: (Float,Float,Float) }
-    | AvatarHTTPResponse { avatarHTTPResponseKey :: LSLKey, avatarHTTPResponseStatus :: Int, 
+    | AvatarHTTPResponse { avatarHTTPResponseKey :: LSLKey, avatarHTTPResponseStatus :: Int,
         avatarHTTPResponseBody :: String }
     | AvatarHTTPRequestKey { avatarHTTPResponseKey :: LSLKey }
     | AvatarHTTPBadRequest

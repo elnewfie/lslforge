@@ -22,10 +22,10 @@ class JavaRep a where
     subElemDescriptor :: String -> ElementTester a
     elemDescriptor :: ElementTester a
     contentFinder :: String -> ContentFinder a
-        
+
 instance JavaRep Int where
     representative = (0 :: Int)
-    xmlSerialize t i = emit (maybe "int" id t) [] [shows i]   
+    xmlSerialize t i = emit (maybe "int" id t) [] [shows i]
     xmlDefaultTag _ = "int"
     subElemDescriptor tag = el tag id readableContent
     elemDescriptor = el "int" id readableContent
@@ -33,7 +33,7 @@ instance JavaRep Int where
 
 instance JavaRep Int32 where
     representative = (0 :: Int32)
-    xmlSerialize t i = emit (maybe "int" id t) [] [shows i]   
+    xmlSerialize t i = emit (maybe "int" id t) [] [shows i]
     xmlDefaultTag _ = "int"
     subElemDescriptor tag = el tag id readableContent
     elemDescriptor = el "int" id readableContent
@@ -41,23 +41,23 @@ instance JavaRep Int32 where
 
 instance JavaRep Int64 where
     representative = (0 :: Int64)
-    xmlSerialize t i = emit (maybe "long" id t) [] [shows i]   
+    xmlSerialize t i = emit (maybe "long" id t) [] [shows i]
     xmlDefaultTag _ = "long"
     subElemDescriptor tag = el tag id readableContent
     elemDescriptor = el "int" id readableContent
     contentFinder tag = mustHaveElem $ subElemDescriptor tag
-    
+
 instance JavaRep Float where
     representative = (0 :: Float)
-    xmlSerialize t i = emit (maybe "float" id t) [] [shows i]   
+    xmlSerialize t i = emit (maybe "float" id t) [] [shows i]
     xmlDefaultTag _ = "float"
     subElemDescriptor tag = el tag id readableContent
     elemDescriptor = el "float" id readableContent
     contentFinder tag = mustHaveElem $ subElemDescriptor tag
-    
+
 instance JavaRep Double where
     representative = (0 :: Double)
-    xmlSerialize t i = emit (maybe "double" id t) [] [shows i]   
+    xmlSerialize t i = emit (maybe "double" id t) [] [shows i]
     xmlDefaultTag _ = "double"
     subElemDescriptor tag = el tag id readableContent
     elemDescriptor = el "double" id readableContent
@@ -70,15 +70,15 @@ instance JavaRep Char where
     subElemDescriptor tag = el tag id readableContent
     elemDescriptor = el "char" id readableContent
     contentFinder tag = mustHaveElem $ subElemDescriptor tag
-        
+
 instance JavaRep Bool where
     representative = True
-    xmlSerialize t b = emit (maybe "boolean" id t) [] [shows b]   
+    xmlSerialize t b = emit (maybe "boolean" id t) [] [shows b]
     xmlDefaultTag _ = "boolean"
     subElemDescriptor tag = el tag id boolContent
     elemDescriptor = el "boolean" id boolContent
     contentFinder tag = mustHaveElem $ subElemDescriptor tag
-    
+
 instance JavaRep String where
     representative = ""
     xmlSerialize t s = emit (maybe "string" id t) (maybe [] (const [("class","string")]) t) [(showString . xmlEscape) s]
@@ -86,17 +86,17 @@ instance JavaRep String where
     subElemDescriptor tag = el tag id simpleContent
     elemDescriptor = el "string" id simpleContent
     contentFinder tag = mustHaveElem $ subElemDescriptor tag
-    
+
 instance {-# OVERLAPPABLE #-} JavaRep a => JavaRep [a] where
     representative = [ (representative :: a) ]
-    xmlSerialize t l = 
-        emit (maybe (xmlDefaultTag (representative :: [a])) id t) (maybe [] (const [("class","linked-list")]) t) 
+    xmlSerialize t l =
+        emit (maybe (xmlDefaultTag (representative :: [a])) id t) (maybe [] (const [("class","linked-list")]) t)
             (map (\ v -> xmlSerialize Nothing v) l)
     xmlDefaultTag _ = "linked-list"
     subElemDescriptor tag = el tag id (many $ elemDescriptor)
     elemDescriptor = el (xmlDefaultTag (representative :: [a])) id (many $ elemDescriptor)
     contentFinder tag = mustHaveElem $ subElemDescriptor tag
-    
+
 -- instance JavaRep a => JavaRep (Maybe a) where
 --     representative = Just (representative :: a)
 --     xmlSerialize t Nothing = id
@@ -113,7 +113,7 @@ deriveJavaRepTup n = do
     vs <- mapM newName (replicate n "v")
     let ctx =  mapM (javaRepPred . varT) vs
     let typ = appT javaRepCon $ foldl appT (tupleT n) (map varT vs)
-    let representativeD = 
+    let representativeD =
             valD (varP 'representative) (normalB $ tupE (replicate n (varE 'representative))) []
     let nameE = stringE ("Tuple" ++ show n)
     let repGenE = do
@@ -122,7 +122,7 @@ deriveJavaRepTup n = do
             let pkgP = varP pkgVarName
             let tparms = intercalate "," (zipWith (\ x y -> x ++ show y) (replicate n "E") [1..n])
             let fields = concatMap (\ i -> "    public E" ++ show i ++ " el" ++ show i ++ ";\n") [1..n]
-            let clsE = [| "package " ++ $pkgE ++ 
+            let clsE = [| "package " ++ $pkgE ++
                     $(stringE ( concat [
                     ";\nimport com.thoughtworks.xstream.XStream;\n",
                     "public class Tuple", ns, "<", tparms, "> {\n", fields,
@@ -153,7 +153,7 @@ deriveJavaRepTup n = do
             let tagNmE = varE tagNm
             let tags = map (("el" ++) . show) [1..n]
             let terms = zip tags vs
-            let elE = [| el $tagNmE id $ 
+            let elE = [| el $tagNmE id $
                                 comprises $(fields vs terms) |]
             funD 'subElemDescriptor [clause [varP tagNm] (normalB elE) []]
     let elemDescriptorD = do
@@ -164,9 +164,9 @@ deriveJavaRepTup n = do
             funD 'elemDescriptor [clause [] (normalB elE) []]
     let contentFinderD = do
             tagNm <- newName "tag"
-            funD 'contentFinder  
+            funD 'contentFinder
                 [clause [(varP tagNm)] (normalB [| mustHaveElem (subElemDescriptor $(varE tagNm)) |]) [] ]
-    sequence [instanceD ctx typ [representativeD,xmlSerD,funD 'xmlDefaultTag [clause [wildP] (normalB nameE) []], 
+    sequence [instanceD ctx typ [representativeD,xmlSerD,funD 'xmlDefaultTag [clause [wildP] (normalB nameE) []],
                        subElemDescriptorD, elemDescriptorD, contentFinderD],
               valD (varP $ mkName ("jrep'" ++ "Tuple" ++ show n)) (normalB repGenE) []]
 
@@ -177,8 +177,8 @@ deriveJavaRep nm = if nm == ''[] then return [] else
             _ -> fail $ ("can't generate serializer for specified name: " ++ show nm)
     where
         deriveInstance (DataD _ tnm vs _ cs _) = do
-            checkAllFields cs 
-            sequence [instanceD ctx typ [representativeD,xmlSerializeD,dec1, 
+            checkAllFields cs
+            sequence [instanceD ctx typ [representativeD,xmlSerializeD,dec1,
                           subElemDescriptorD,elemDescriptorD,contentFinderD],
                       valD (varP (mkName $ "jrep'" ++ (nameBase tnm))) (normalB representationE) []]
             where tyVarName (PlainTV n) = n
@@ -188,7 +188,7 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                   typ = appT javaRepCon $ foldl appT (conT tnm) (map varT names)
                   representativeV = varE 'representative
                   mkRepresentative [] = [e|undefined|]
-                  mkRepresentative (c:_) =  getCInfo c >>= 
+                  mkRepresentative (c:_) =  getCInfo c >>=
                       \ (cnm,fts) -> foldl appE (conE cnm) (replicate (length fts) representativeV)
                   representativeD = funD (mkName "representative")
                                     [clause [] (normalB [e| $(mkRepresentative cs) |]) []]
@@ -199,28 +199,28 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                      let pkgP = varP pkgVarName
                      let tparms = zipWith (\ v i -> (v, "E" ++ show i)) names [1..]
                      let gparms = if null tparms then "" else "<" ++ intercalate "," (map snd tparms) ++ ">"
-                     let baseclassBody = 
+                     let baseclassBody =
                              "import com.thoughtworks.xstream.XStream;\n" ++
                              "public class " ++ (nameBase tnm ++ gparms) ++ "{\n" ++
                              "    public static void init(XStream xstream) {\n" ++
                              "        xstream.alias(\"" ++ (nameBase tnm) ++ "\"," ++
                                                            (nameBase tnm) ++ ".class); //$NON-NLS-1$\n    }\n}\n"
                      let baseclass = [|"package " ++ $pkgE ++ ";\n"  ++ $(stringE baseclassBody)|]
-                     let mkSubClassExpr c = do 
+                     let mkSubClassExpr c = do
                              (cnm,fts) <- getCInfo c
                              let cname = (nameBase tnm) ++ "_" ++ (nameBase cnm)
                              let basenm = (nameBase tnm)
                              fts' <- forM fts $ (\ (nm,t) -> (deSyn [] t) >>= return . (,) nm)
                              let importList = hasList (map snd fts')
-                             let fields = 
-                                     flip concatMap fts' (\ (nm,t) -> 
-                                         "    public " ++ (repT tparms 0 t) ++ 
-                                         " " ++ nameBase nm ++ ";\n") 
+                             let fields =
+                                     flip concatMap fts' (\ (nm,t) ->
+                                         "    public " ++ (repT tparms 0 t) ++
+                                         " " ++ nameBase nm ++ ";\n")
                              let classStr = "import com.thoughtworks.xstream.XStream;\n" ++
-                                            (if importList 
-                                                 then "import java.util.LinkedList;\n" 
+                                            (if importList
+                                                 then "import java.util.LinkedList;\n"
                                                  else "") ++
-                                            "public class " ++ cname ++ gparms ++ 
+                                            "public class " ++ cname ++ gparms ++
                                             " extends " ++  basenm ++ gparms ++ "{\n" ++
                                             fields ++
                                             "    public static void init(XStream xstream) {\n" ++
@@ -261,7 +261,7 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                   subElemDescriptorD = do
                           tagNm <- newName "tag"
                           let choices = listE (map (mkChoice tagNm) cs)
-                          funD 'subElemDescriptor 
+                          funD 'subElemDescriptor
                                [clause [(varP tagNm)] (normalB [| choice $choices |]) []]
                       where mkChoice tagNm c = do
                                 (cnm,fts) <- getCInfo c
@@ -279,11 +279,11 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                                 [| el $cnmE id $(contentE cnm vis) |]
                   contentFinderD = do
                           tagNm <- newName "tag"
-                          funD 'contentFinder 
-                              [clause [(varP tagNm)] 
+                          funD 'contentFinder
+                              [clause [(varP tagNm)]
                                      (normalB [| mustHaveElem (subElemDescriptor $(varE tagNm)) |]) []]
         deriveInstance dec = fail ("can't derive instance for: " ++ show (ppr dec) ++ " (" ++ show dec ++ ")")
-                      
+
 getCInfo c =  case c of
     RecC cnm fvs -> return (cnm, map (\ (f,_,t) -> (f,t)) fvs)
     NormalC cnm vs -> return (cnm, zipWith (\ i (_,t) -> (mkName $ "el" ++ show i, t)) [1..(length vs)] vs)
@@ -291,7 +291,7 @@ getCInfo c =  case c of
 
 checkField (_,t) | appliesVar t = fail ("can't generate serializer for type with type variables of kind other than '*'")
                  | otherwise    = return ()
-checkFields = mapM checkField                
+checkFields = mapM checkField
 
 checkAllFields = mapM (\ c -> getCInfo c >>= \ (_,fts) -> checkFields fts)
 
@@ -299,7 +299,7 @@ appliesVar :: Type -> Bool
 appliesVar = everything (||) (False `mkQ` chkApp)
     where chkApp :: Type -> Bool
           chkApp (AppT (VarT _) _) = True
-          chkApp t = False 
+          chkApp t = False
 
 cName :: Type -> [Name]
 cName (ConT nm) = [nm]
@@ -308,7 +308,7 @@ cName _ = []
 deriveRep nm = case nameBase nm of
 --    '(':cs -> deriveJavaRepTups [(length cs)]
     _ -> deriveJavaRep nm
-    
+
 predef nm = nm `elem` [''Char,''Int,''Float,''Double,''String,''[],''Bool {-,''Maybe -}]
 
 subst args t@(VarT nm) = maybe t id (lookup nm args)
@@ -358,8 +358,8 @@ saveReps pkg codeInfo = do
                 concatMap (\ (nm,_) -> "        " ++ nm ++ ".init(xstream);\n") codeInfo ++
             "    }\n" ++
             "}\n"
-    
-    
+
+
 
 concatNM = '(++)
 concatV = varE concatNM
@@ -376,7 +376,7 @@ specialNames = [(''[],"LinkedList"),
                 (''Char,"Character"),
                 (''Int32,"Integer"),
                 (''Int64,"Long")]
-                
+
 deriveName nm = case lookup nm specialNames of
     Nothing -> nameBase nm
     Just s -> s

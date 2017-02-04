@@ -39,22 +39,22 @@ fs  = array (0,79) $ zip [0..] $ concatMap (replicate 20) [ \ x y z -> (x .&. y)
                                                             \ x y z -> (x .&. y) .|. (x .&. z) .|. (y .&. z),
                                                             \ x y z -> x `xor` y `xor` z ]
 
-processMessageBlock i words = 
+processMessageBlock i words =
     let foo' n i [] = i
-        foo' n i (w:ws) = 
+        foo' n i (w:ws) =
             let i' = (Digest ((eA i `rotateL` 5)  + ((fs ! n) (eB i) (eC i) (eD i)) + eE i + w + (ks ! n)) (eA i) (eB i `rotateL` 30) (eC i) (eD i))
             in foo' (n + 1) i' ws
     in foo' 0 i (compute80Ws words)
-    
+
 compute80Ws :: [Word32] -> [Word32]
-compute80Ws xs = 
+compute80Ws xs =
     let foo i (q:qs) rs
             | i < 16 = q : foo (i + 1) qs (q:rs)
-            | otherwise = 
+            | otherwise =
                 let v = (rs !! 2 `xor` rs !! 7 `xor` rs !! 13`xor` rs !! 15) `rotateL` 1
                 in v : foo (i + 1) qs (v:rs)
     in take 80 $ foo 0 (xs ++ repeat 0) []
-    
+
 ss :: Digest
 ss = Digest 0x67452301 0xefcdab89 0x98badcfe 0x10325476 0xc3d2e1f0
 
@@ -71,9 +71,9 @@ bytesToWord :: [Word8] -> Word32
 bytesToWord = go 0
    where go acc [] = acc
          go acc (b:bs) = go ((acc `shiftL` 8) .|. fromIntegral b) bs
-   
+
 chunk _ [] = []
 chunk n l = take n l : chunk n (drop n l)
-  
+
 blocks512 :: [Word8] -> [[Word32]]
 blocks512 = (map (map bytesToWord . chunk 4)) . chunk 64 . padMessage

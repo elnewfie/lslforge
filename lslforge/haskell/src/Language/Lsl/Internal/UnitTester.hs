@@ -19,9 +19,9 @@ import Language.Lsl.Internal.XmlCreate(emit)
 execElement = tag "test-descriptor" >> (,) <$> req "source_files" sources <*> req "tests" tests
 
 testExecutionDescriptionFromXML' input = xmlAccept execElement input
-    
+
 main2 :: IO ()
-main2 = 
+main2 =
     do  input <- getLine
         case testExecutionDescriptionFromXML'  (unescape input) of
             Left s -> error s
@@ -40,11 +40,11 @@ execCommandFromXML' xml = either error id $ xmlAccept command xml
 command = choice cmds >>= maybe
     (getTag >>= \ t -> throwError ("unrecognized command: " ++ t))
     return
-    
+
 cmds = [cmd "exec-continue" ExecContinue, cmd "exec-step" ExecStep,
     cmd "exec-step-over" ExecStepOver, cmd "exec-step-out" ExecStepOut]
 cmd s f = tagit s $ f <$> def "breakpoints" [] bps
-    
+
 emitTestEvent (TestComplete testResult) = emit "test-complete" [] [emitTestResult testResult]
 emitTestEvent (AllComplete) = emit "all-complete" [] []
 emitTestEvent (TestSuspended info) = emit "test-suspended" [] [emitExecutionInfo info]

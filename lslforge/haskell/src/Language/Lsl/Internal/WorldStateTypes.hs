@@ -37,7 +37,7 @@ type WorldEvent = (Int,WorldEventType) -- time, event
 
 type WorldEventQueue = [WorldEvent]
 
-data WorldEventType = 
+data WorldEventType =
           CreatePrim { wePrimName :: String, wePrimKey :: LSLKey }
         | AddScript (String,String) LSLKey Bool -- script, prim key, activate
         | ResetScript String String -- prim key, script name
@@ -45,17 +45,17 @@ data WorldEventType =
         | WorldSimEvent {
             worldSimEventName :: String,
             worldSimEventArgs :: [SimEventArg] }
-        | DeferredScriptEvent { 
+        | DeferredScriptEvent {
             deferredScriptEvent :: Event Float,
             deferredScriptEventTarget :: DeferredScriptEventTarget }
-        | Chat { 
+        | Chat {
             chatChannel :: Int,
             chatterName :: String,
             chatterKey :: LSLKey,
             chatMessage :: String,
             chatLocation :: ((Int,Int),(Float,Float,Float)),
             chatRange :: Maybe Float }
-        | TimerEvent { 
+        | TimerEvent {
             timerEventInterval :: Float,
             timerAddress :: (LSLKey,String) }
         | PermissionRequestEvent {
@@ -63,7 +63,7 @@ data WorldEventType =
             permissionRequestScript :: String,
             permissionRequestAgent :: LSLKey,
             permissionRequestMask :: Int }
-        | SensorEvent { 
+        | SensorEvent {
             sensorAddress :: (LSLKey,String),
             sensorSenseName :: String,
             sensorSenseKey :: LSLKey,
@@ -112,7 +112,7 @@ data WorldEventType =
         | DetachCompleteEvent {
             detachObject :: LSLKey,
             detachAvatar :: LSLKey }
-        | GiveAvatarInventoryEvent { 
+        | GiveAvatarInventoryEvent {
             giveAvatarInventoryKey :: LSLKey,
             giveAvatarInventoryFolder :: String, -- null if none
             giveAvatarInventoryItems :: [InventoryItem] }
@@ -128,7 +128,7 @@ data XMLRequestSourceType = XMLRequestInternal { xmlRequestTag :: String }
                           | XMLRequestExternal { xmlRequestTag :: String }
     deriving (Show)
 
-data DeferredScriptEventTarget = 
+data DeferredScriptEventTarget =
       -- pushes to a specific script in a prim
       DeferredScriptEventScriptTarget (LSLKey,String)
       -- pushes to all scripts in prim
@@ -136,22 +136,22 @@ data DeferredScriptEventTarget =
       -- pushes to all scripts in all prims in object
     | DeferredScriptEventObjectTarget LSLKey
     deriving (Show)
-    
+
 
 data Touch = Touch {
-    touchAvatarKey :: LSLKey, 
-    touchPrimKey :: LSLKey, 
-    touchFace :: Int, 
-    touchST :: (Float,Float), 
-    touchStartTick :: Int, 
+    touchAvatarKey :: LSLKey,
+    touchPrimKey :: LSLKey,
+    touchFace :: Int,
+    touchST :: (Float,Float),
+    touchStartTick :: Int,
     touchEndTick :: Int  }
     deriving (Show)
-    
+
 data SimEvent = SimEvent { simEventName :: String, simEventArgs :: [SimEventArg], simEventDelay :: Int }
     deriving (Show)
 data SimEventArg = SimEventArg { simEventArgName :: String, simEventArgValue :: String }
     deriving (Show)
-    
+
 data Listener = Listener {
     listenerPrimKey :: LSLKey,
     listenerScriptName :: String,
@@ -160,10 +160,10 @@ data Listener = Listener {
     listenerKey :: LSLKey,
     listenerMsg :: String }
     deriving (Show)
-    
+
 type Predef m = ScriptInfo Float -> [LSLValue Float] -> WorldE m (EvalResult,LSLValue Float)
-data PredefFunc m = PredefFunc { predefFuncName :: String, 
-                                 predefFuncResultType :: LSLType, 
+data PredefFunc m = PredefFunc { predefFuncName :: String,
+                                 predefFuncResultType :: LSLType,
                                  predef :: Predef m }
      deriving (Show)
 
@@ -178,14 +178,14 @@ newtype WorldE m a = WorldE { unWorldE :: ErrorT String ((StateT (World m) m)) a
 instance Monad m => MonadState (World m) (WorldE m) where
    get = WorldE { unWorldE = get }
    put v = WorldE { unWorldE = put v }
-   
+
 instance Monad m => MonadError String (WorldE m) where
     throwError e = WorldE { unWorldE = throwError e }
     catchError v f = WorldE { unWorldE = catchError (unWorldE v) (unWorldE . f) }
 
 instance Monad m => Functor (WorldE m) where
     fmap = liftM
-    
+
 instance Monad m => Applicative (WorldE m) where
    pure  = return
    (<*>) = ap
@@ -193,7 +193,7 @@ instance Monad m => Applicative (WorldE m) where
 instance Monad m => Alternative (WorldE m) where
    empty = mzero
    (<|>) = mplus
-   
+
 data PendingHTTPResponse = PendingHTTPResponse {
         phrRequesterKey :: LSLKey,
         phrResponderScript :: ScriptId,
@@ -204,7 +204,7 @@ data PendingHTTPResponse = PendingHTTPResponse {
         phrUserAgent :: String,
         phrExpire :: Int
     } deriving (Show)
-    
+
 -- a data type that defines the state of the 'world'
 data World m = World {
         _sliceSize :: !Int,
@@ -215,7 +215,7 @@ data World m = World {
         _nextListenerId :: !Int,
         _wobjects :: !(Map LSLKey LSLObject),
         _wprims :: !(Map LSLKey Prim),
-        _worldScripts :: !(Map (LSLKey,String) Script), 
+        _worldScripts :: !(Map (LSLKey,String) Script),
         _inventory :: ![(String,LSLObject)],
         _tick :: !Int,
         _msglog :: ![LogMessage],
@@ -249,4 +249,3 @@ data World m = World {
 $(mkLabelsAlt [''World,''LSLObject,''ObjectDynamics,''Prim, ''PrimType,
     ''Avatar,''Script,''Attachment,''PrimFace,''Flexibility,''LightInfo,
     ''TextureInfo])
-

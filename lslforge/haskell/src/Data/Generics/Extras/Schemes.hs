@@ -33,7 +33,7 @@ downupSkipping skip down up x | skip x = return x
                               | otherwise = do x' <- down x
                                                x'' <- gmapM (downupSkipping skip down up) x'
                                                up x''
-                                               
+
 -- | Monadic variation on everywhere
 everywhereButM :: Monad m => GenericQ Bool -> GenericM m -> GenericM m
 

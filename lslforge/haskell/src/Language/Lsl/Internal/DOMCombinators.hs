@@ -29,7 +29,7 @@ el tag f cf p (Elem name _ cs) | tag /= unqualifiedQName name = Right Nothing
 elWith :: String -> (a -> b -> c) -> AttributeAcceptor (Maybe a) -> ContentAcceptor b -> ElementTester c
 elWith tag f af cf p (Elem name attrs cs) | tag /= unqualifiedQName name = Right Nothing
                                           | otherwise = do
-                                                   av <- af p attrs 
+                                                   av <- af p attrs
                                                    case av of
                                                        Nothing -> Right Nothing
                                                        Just av -> do
@@ -40,17 +40,17 @@ liftElemTester :: (Posn -> (Element Posn) -> Either String (Maybe a)) -> (Conten
 liftElemTester ef (CElem e pos) = case ef pos e of
     Left s -> Left ("at " ++ show pos ++ ": " ++ s)
     Right v -> Right v
-    
+
 canHaveElem :: ElementTester a -> ContentFinder (Maybe a)
-canHaveElem ef = get >>= \ cs -> 
+canHaveElem ef = get >>= \ cs ->
         mapM (\ c -> (lift . liftElemTester ef) c >>= return . (,) c) [ e | e@(CElem _ _) <- cs ]
         >>= (\ vs -> case span (isNothing . snd) vs of
     (bs,[]) -> put (map fst bs) >> return Nothing
     (bs,c:cs) -> put (map fst (bs ++ cs)) >> return (snd c))
-   
+
 mustHaveElem :: ElementTester a -> ContentFinder a
-mustHaveElem ef = get >>= \ cs -> 
-        mapM (\ c -> (lift . liftElemTester ef) c >>= return . (,) c) [ e | e@(CElem _ _) <- cs ] 
+mustHaveElem ef = get >>= \ cs ->
+        mapM (\ c -> (lift . liftElemTester ef) c >>= return . (,) c) [ e | e@(CElem _ _) <- cs ]
         >>= (\ vs -> case span (isNothing . snd) vs of
     (bs,[]) -> throwError ("element not found")
     (bs,c:cs) -> put (map fst (bs ++ cs)) >> return (fromJust $ snd c))
@@ -87,7 +87,7 @@ refToString (RefChar i) = [toEnum i]
 attrIs :: String -> String -> AttributeTester ()
 attrIs k v _ (nm,attv) | v == attContent attv  && k == unqualifiedQName nm = return (Just ())
                        | otherwise = return Nothing
-                                  
+
 hasAttr :: AttributeTester a -> AttributeFinder (Maybe a)
 hasAttr at = get >>= \ (pos,attrs) -> mapM (lift . at pos) attrs >>= return . zip attrs >>= (\ ps -> case span (isNothing . snd) ps of
     (bs,[]) -> return Nothing
@@ -118,7 +118,7 @@ boolContent cs = simpleContent cs >>= (\ v -> case v of
     "true" -> Right True
     "false" -> Right False
     s -> Left ("unrecognized bool " ++ s))
-    
+
 readableContent :: Read a => ContentAcceptor a
 readableContent cs = simpleContent cs >>= readM
 
@@ -160,7 +160,7 @@ baz = comprises $ do
     r <- mustHave "r" readableContent
     return (Baz q r)
 
-fooE = el "BarFoo" id bar 
+fooE = el "BarFoo" id bar
    <|> el "BazFoo" id baz
 
 fooAs :: String -> ElementTester Foo
@@ -172,5 +172,5 @@ data Zzz = Zzz { content :: [Foo], bleah :: Foo } deriving Show
 zzzE = el "Zzz" id $ comprises (mustHave "content" (many fooE) >>= \ cs -> mustHaveElem (fooAs "bleah") >>= \ b -> return $ Zzz cs b)
 
 parse :: ElementAcceptor a -> String -> Either String a
-parse eaf s = eaf noPos el 
+parse eaf s = eaf noPos el
     where Document _ _ el _ = xmlParse "" s

@@ -16,7 +16,7 @@ nextKey' (c:cs) =
     case elemIndex c keyCharSet of
          Nothing -> c:(nextKey' cs)
          Just i -> if i == length keyCharSet then '0' : (nextKey' cs) else (keyCharSet !! (i+1)):cs
-         
+
 nextKey (LSLKey k) = LSLKey $ nextKey' k
 
 mkKey :: Integer -> LSLKey

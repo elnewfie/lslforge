@@ -21,8 +21,8 @@ aqp (AQFloat v) = Just $ TH.conP 'FloatLit [TH.varP $ TH.mkName v]
 aqp _ = Nothing
 
 lslModulePat :: String -> TH.Q TH.Pat
-lslModulePat s = 
-    case parseModuleFromStringAQ s of 
+lslModulePat s =
+    case parseModuleFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l
@@ -31,8 +31,8 @@ lslModulePat s =
                    showErrorMessages "or" "unknown" "expecting" "unexpected" "end of input" msgs
         Right x -> dataToPatQ (const Nothing `extQ` aqp) x
 lslModuleExp :: String -> TH.Q TH.Exp
-lslModuleExp s = 
-    case parseModuleFromStringAQ s of 
+lslModuleExp s =
+    case parseModuleFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l
@@ -46,8 +46,8 @@ lslm :: QuasiQuoter
 lslm = QuasiQuoter { quoteExp = lslModuleExp, quotePat = lslModulePat }
 
 lslScriptPat :: String -> TH.Q TH.Pat
-lslScriptPat s = 
-    case parseScriptFromStringAQ s of 
+lslScriptPat s =
+    case parseScriptFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l
@@ -56,8 +56,8 @@ lslScriptPat s =
                    showErrorMessages "or" "unknown" "expecting" "unexpected" "end of input" msgs
         Right x -> dataToPatQ (const Nothing `extQ` aqp) x
 lslScriptExp :: String -> TH.Q TH.Exp
-lslScriptExp s = 
-    case parseScriptFromStringAQ s of 
+lslScriptExp s =
+    case parseScriptFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l

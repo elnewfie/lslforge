@@ -41,7 +41,7 @@ module Language.Lsl.Internal.Type(
     rot2RVal,
     liftV1,
     liftV2) where
-    
+
 import Control.Applicative
 import Control.Monad.Error(MonadError)
 import Data.Data(Data,Typeable)
@@ -59,7 +59,7 @@ data LSLType = LLList | LLInteger | LLVector | LLFloat | LLString | LLRot | LLKe
 
 -- A value.  Values correspond to the built in types (LSLType) that LSL
 -- supports.  A value is an item that can be pushed onto the value stack.
-data LSLValue a = IVal Int | FVal a | SVal String | VVal a a a 
+data LSLValue a = IVal Int | FVal a | SVal String | VVal a a a
                | RVal a a a a | LVal [LSLValue a] | KVal LSLKey
                | VoidVal deriving (Show,Eq,Ord)
 
@@ -77,11 +77,11 @@ defaultValue LLVoid = VoidVal
 lslValueComponent X (VVal x y z) = FVal x
 lslValueComponent X (RVal x y z s) = FVal x
 lslValueComponent Y (VVal x y z) = FVal y
-lslValueComponent Y (RVal x y z s) = FVal y 
+lslValueComponent Y (RVal x y z s) = FVal y
 lslValueComponent Z (VVal x y z) = FVal z
 lslValueComponent Z (RVal x y z s) = FVal z
 lslValueComponent S (RVal x y z s) = FVal s
-lslValueComponent All val = val 
+lslValueComponent All val = val
 lslValueComponent c v = error ("illegal component " ++ (show c) ++ " of " ++ (show v))
 replaceLslValueComponent X (VVal x y z) (FVal f) = VVal f y z
 replaceLslValueComponent X (RVal x y z s) (FVal f) = RVal f y z s
@@ -166,7 +166,7 @@ isRVal _ = False
 isKVal (KVal _) = True
 isKVal _ = False
 
-parseInt s = 
+parseInt s =
    case readInt s of
        [] -> 0
        (i,_):_ -> i
@@ -174,27 +174,27 @@ parseFloat s =
    case readFloat s of
        [] -> 0.0
        (f,_):_ -> f
-       
+
 parseVector s =
     case [(VVal x y z,t) | ("<",t0) <- lex s,
-	                       (x,t1) <- readFloat t0,
-	                       (",",t2) <- lex t1,
-	 					   (y,t3) <- readFloat t2,
-						   (",",t4) <- lex t3,
-		                   (z,t5) <- readFloat t4,
-		                   (">",t) <- lex t5] of
+                             (x,t1) <- readFloat t0,
+                           (",",t2) <- lex t1,
+                             (y,t3) <- readFloat t2,
+                           (",",t4) <- lex t3,
+                             (z,t5) <- readFloat t4,
+                            (">",t) <- lex t5] of
         [] -> VVal 0.0 0.0 0.0
         (v,_):_ -> v
 parseRotation s =
     case [(RVal x y z w,t) | ("<",t0) <- lex s,
-	                       (x,t1) <- readFloat t0,
-	                       (",",t2) <- lex t1,
-	 					   (y,t3) <- readFloat t2,
-						   (",",t4) <- lex t3,
-		                   (z,t5) <- readFloat t4,
-						   (",",t6) <- lex t5,
-		                   (w,t7) <- readFloat t6,
-		                   (">",t) <- lex t7] of
+                               (x,t1) <- readFloat t0,
+                             (",",t2) <- lex t1,
+                               (y,t3) <- readFloat t2,
+                             (",",t4) <- lex t3,
+                               (z,t5) <- readFloat t4,
+                             (",",t6) <- lex t5,
+                               (w,t7) <- readFloat t6,
+                              (">",t) <- lex t7] of
         [] -> RVal 0.0 0.0 0.0 0.0
         (v,_):_ -> v
 
@@ -202,7 +202,7 @@ readFloat s =
     case readHexFloat s of
         [] -> reads s
         v -> v
-        
+
 toSVal :: RealFloat a => LSLValue a -> LSLValue a
 toSVal (SVal s) = SVal s
 toSVal (FVal f) = SVal (printf "%.6f" (realToFrac f :: Double))
@@ -211,7 +211,7 @@ toSVal (KVal k) = SVal $ unLslKey k
 toSVal (VVal x y z) = SVal $ concat ["<",comp2Str x,",",comp2Str y,",",comp2Str z,">"]
 toSVal (RVal x y z s) = SVal $ concat ["<",comp2Str x,",",comp2Str y,",",comp2Str z,",",comp2Str s,">"]
 toSVal VoidVal = SVal "" -- perhaps should be error
-toSVal (LVal l) = 
+toSVal (LVal l) =
     SVal $ concatMap toS l
     where toS v = let (SVal s) = toSVal v in s
 
@@ -227,10 +227,10 @@ lslValueE = choicet [
     ("rotation",RVal <$> req "x" val <*> req "y" val <*> req "z" val
         <*> req "s" val),
     ("list", LVal <$> elist lslValueE)]
- 
+
 -- vector and rotation operations
 vecMulScalar (VVal x y z) f = (VVal (x*f) (y*f) (z*f))
-rotMul (RVal x1 y1 z1 s1) (RVal x2 y2 z2 s2) = 
+rotMul (RVal x1 y1 z1 s1) (RVal x2 y2 z2 s2) =
     let (x,y,z,s) = (x1,y1,z1,s1) `quaternionMultiply` (x2,y2,z2,s2)
     in RVal x y z s
 rot2Mat (RVal x y z s) = quaternionToMatrix (x,y,z,s)
@@ -241,7 +241,7 @@ invRot (RVal x y z s) = (RVal (-x) (-y) (-z) s)
 
 vcross (VVal x1 y1 z1) (VVal x2 y2 z2) =
     let (x,y,z) = (x1,y1,z1) `cross` (x2,y2,z2) in VVal x y z
-    
+
 toFloat (FVal f) = f
 toFloat (IVal i) = fromInt i
 

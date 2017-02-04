@@ -27,7 +27,7 @@ data Poly a = Poly1 { x :: String }
 
 type Sample1 = Sample
 
-data Sample2 = Sample2 Sample1            
+data Sample2 = Sample2 Sample1
 -- x = $(deriveJavaRep ''Example >>= stringE . show . ppr)
 $(deriveJavaRepTups [2..9])
 
@@ -37,7 +37,7 @@ $(deriveJavaRep ''Sample)
 $(deriveJavaRep ''Sample2)
 
 example1 = Example1 "hello" 25
-example4 = Example4 (1,"yes") 
+example4 = Example4 (1,"yes")
 sample1 = Sample [1]
 
 m :: Int
@@ -61,12 +61,12 @@ repsf = $(collectReps [''Sample2,''Poly])
 -- import com.thoughtworks.xstream.DomDriver;
 -- public class Serializer {
 --     public static XStream xstream;
---     
+--
 --     static {
 --         xstream = new XStream(new DomDriver());
 -- |] ++ concatMap xstreamBinding ss ++ [here|
 --     }
---     
+--
 --     public static LSLScript deserialize(String s) {
 --         return (LSLScript) xstream.fromXML(s);
 --     }

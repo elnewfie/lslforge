@@ -7,7 +7,7 @@ module Language.Lsl.Internal.Util (
     elemAt,
     ctx,
     readM,
-    filtMap, 
+    filtMap,
     filtMapM,
     lookupByIndex,
     lookupM,
@@ -66,16 +66,16 @@ rotL f x y z = f z x y
 flip3 f x y z = f z y x
 
 -- lifting lookups for Map (if key is instance of Show) and IntMap
-mlookup k m = required ("key " ++ show k ++ " not found") (Map.lookup k m) 
+mlookup k m = required ("key " ++ show k ++ " not found") (Map.lookup k m)
 ilookup i m = required ("key " ++ show i ++ " not found") (IntMap.lookup i m)
 elemAt i x = required ("index " ++ show i ++ " out of range") (safeIndex x i)
 
 safeIndex :: [a] -> Int -> Maybe a
 safeIndex xs i = foldl mplus Nothing [ Just v | (j,v) <- zip [0..] xs, j == i]
-                   
+
 throwStrError :: (Error e, MonadError e m) => String -> m a
 throwStrError = throwError . strMsg
-    
+
 required msg = maybe (throwError msg) return
 
 tuplify [] = []
@@ -93,7 +93,7 @@ ctx _ (Right v) = return v
 whenJust :: (Monad m) => (Maybe a) -> (a -> m ()) -> m ()
 whenJust Nothing _ = return ()
 whenJust (Just v) action = action v
-                           
+
 -- monadified lookup
 lookupM :: (Monad m, Eq a, Show a) => a -> [(a,b)] -> m b
 lookupM x l =
@@ -107,7 +107,7 @@ findM p l =
     case find p l of
         Nothing -> throwError "not found!"
         Just v  -> return v
-       
+
 -- filter a list while mapping
 filtMap :: (a -> Maybe b) -> [a] -> [b]
 filtMap _ [] = []
@@ -122,7 +122,7 @@ filtMapM f (x:xs) =
         case r of
             Nothing -> filtMapM f xs
             Just y -> liftM (y:) (filtMapM f xs)
-            
+
 lookupByIndex :: Monad m => Int -> [a] -> m a
 lookupByIndex i l = lookupM i $ zip [0..] l
 
@@ -131,9 +131,9 @@ removeLookup k l = let (xs,ys) = break ((k==).fst) l in
     case ys of
        (_:zs) -> xs ++ zs
        _ -> l
-       
+
 indexOf :: Eq a => [a] -> [a] -> Maybe Int
-indexOf sub list = elemIndex True $ map (isPrefixOf sub) (tails list) 
+indexOf sub list = elemIndex True $ map (isPrefixOf sub) (tails list)
 
 fromInt :: Num a => Int -> a
 fromInt = fromInteger . toInteger
@@ -159,7 +159,7 @@ processLines term f =
            putStr "\n"
            processLines term f
     where escape = escapeURIString isUnescapedInURI
-          
+
 processLinesS state term f =
     do s <- getLine
        --hPutStrLn stderr s
@@ -178,8 +178,8 @@ processLinesSIO state term f =
            hFlush stdout
            processLinesSIO newState term f
     where escape = escapeURIString isUnescapedInURI
-    
-    
+
+
 processLinesSIOB state term f = B.getContents >>= go state . B.lines
   where bterm = B.pack term
         go state (s:ss) = when (bterm /= s) $ do
@@ -204,10 +204,10 @@ fac n = n * fac (n - 1)
 -- permutations are numbered such that if you gave each element in the original ordering
 -- a number (e.g., for a 3 element list [0,1,2]), and then generated all the permutations,
 -- and then treated each permutation as a base N number, (e.g. 012, or 12 base 3), and
--- then sorted the permutation, the number of the permutation equals its index in the 
+-- then sorted the permutation, the number of the permutation equals its index in the
 -- list of sorted permutations... simple!
 generatePermutation [] _ = []
-generatePermutation l  i = 
+generatePermutation l  i =
     let n :: Integer
         n = toInteger (length l) in
         if i < fac n then

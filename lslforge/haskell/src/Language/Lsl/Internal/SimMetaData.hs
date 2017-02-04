@@ -13,13 +13,13 @@ buildSimMetaData =
     emit "sim-meta-data" [] [
         emitList "eventDescriptors" emitEventDescriptor (M.toList (eventDescriptors :: M.Map String (SimInputEventDefinition Identity)))
     ] ""
-    
+
 emitEventDescriptor (_,def) =
     emit "event-def" [] [emitSimple "name" [] (simInputEventName def),
                          emitSimple "description" [] (simInputEventDescription def),
                          emitList "params" emitParam (simInputEventParameters def)]
 
-emitParam p = 
+emitParam p =
     emit "param" [] [emitSimple "name" [] (simParamName p),
                      emitSimple "description" [] (simParamDescription p),
                      emitParamType (simParamType p)]
