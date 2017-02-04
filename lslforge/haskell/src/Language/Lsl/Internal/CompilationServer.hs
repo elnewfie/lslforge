@@ -1,14 +1,10 @@
 {-# OPTIONS_GHC -XFlexibleContexts -XNoMonomorphismRestriction -XTemplateHaskell #-}
 module Language.Lsl.Internal.CompilationServer where
 
---import Control.Monad
---import Control.Monad.Instances
 import Control.Monad.Error
 
---import Data.Data
 import Data.Either
 import Data.Generics
-import Data.Generics.Extras.Schemes
 import qualified Data.Map as M
 
 import Language.Lsl.Internal.Compiler
@@ -20,8 +16,7 @@ import Language.Lsl.Internal.Util
 import qualified Language.Lsl.Internal.XmlCreate as E
 import Language.Lsl.Internal.SerializationGenerator
 import Language.Lsl.Internal.DOMCombinators
-import Language.Lsl.Internal.SerializationInstances(
-    jrep'Maybe,jrep'Either,jrep'Tuple2,jrep'Tuple3)
+import Language.Lsl.Internal.SerializationInstances(jrep'Maybe,jrep'Either)
 import System.Directory
 import System.FilePath(replaceExtension)
 

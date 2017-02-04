@@ -2,7 +2,6 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.UnitTester(main2) where
 
-import Control.Applicative
 import Control.Monad.Error(MonadError(..))
 import Language.Lsl.Internal.BreakpointsDeserialize(bps)
 import Language.Lsl.Internal.Compiler(compile)

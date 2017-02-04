@@ -2,9 +2,7 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.SystemTester where
 
-import Control.Applicative
 import Control.Monad.Error(MonadError(..))
-import System.IO
 import Language.Lsl.Internal.BreakpointsDeserialize(bps)
 import Language.Lsl.Internal.Compiler(compile)
 import Language.Lsl.Internal.DOMProcessing(req,tagit,def,getTag,

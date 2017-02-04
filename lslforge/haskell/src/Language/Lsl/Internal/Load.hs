@@ -4,10 +4,8 @@ module Language.Lsl.Internal.Load(
     loadModules) where
 
 import Control.Exception(SomeException(..),tryJust)
-import Control.Monad.Error(liftIO)
-import Control.Monad.Trans(MonadIO(..))
 import Language.Lsl.Internal.BuiltInModules(avEventGen)
-import Language.Lsl.Syntax(SourceContext(..),compileLSLScript',compileLibrary,
+import Language.Lsl.Syntax(compileLSLScript',compileLibrary,
     Library,CompiledLSLScript,Validity,CodeErrs(..))
 import Language.Lsl.Parse(parseModule, parseScript)
 

@@ -2,7 +2,6 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.DOMUnitTestDescriptor(tests) where
 
-import Control.Applicative
 import Control.Monad.Error(MonadError(..))
 import Data.List(isSuffixOf)
 import Language.Lsl.Internal.DOMProcessing(liste,req,text,opt,choicec,choicet,

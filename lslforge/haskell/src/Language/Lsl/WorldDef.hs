@@ -64,7 +64,6 @@ module Language.Lsl.WorldDef(
     worldXMLAccept
     ) where
 
-import Control.Applicative
 import Control.Monad(when,foldM)
 import Control.Monad.Error(MonadError(..))
 import Control.Monad.State(evalState)

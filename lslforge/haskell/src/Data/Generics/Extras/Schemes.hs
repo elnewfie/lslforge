@@ -11,7 +11,6 @@ module Data.Generics.Extras.Schemes (
 
 import Data.Data
 import Data.Generics.Aliases
-import Control.Monad
 
 everythingButTwice :: GenericQ Bool -> (r -> r -> r) -> r -> GenericQ r -> GenericQ r -> GenericQ r
 everythingButTwice q k def f g x | q x = def

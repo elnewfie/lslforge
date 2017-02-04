@@ -81,7 +81,6 @@ module Language.Lsl.Internal.WorldState(
 
 import Prelude hiding(id,(.))
 import Control.Category
-import Control.Applicative
 import Control.Monad(MonadPlus(..))
 import Control.Monad.State(StateT(..))
 import Control.Monad.Error(Error,ErrorT(..),MonadError(..),strMsg)

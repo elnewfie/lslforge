@@ -42,17 +42,15 @@ module Language.Lsl.Internal.Type(
     liftV1,
     liftV2) where
 
-import Control.Applicative
-import Control.Monad.Error(MonadError)
 import Data.Data(Data,Typeable)
 import Data.List(intersperse)
 import Language.Lsl.Internal.NumberParsing(readInt,readHexFloat)
 import Language.Lsl.Internal.Key(nullKey,LSLKey(..))
-import Language.Lsl.Internal.Util(lookupM,readM,cross,quaternionMultiply,quaternionToMatrix,fromInt)
+import Language.Lsl.Internal.Util(cross,quaternionMultiply,quaternionToMatrix,fromInt)
 import Language.Lsl.Internal.DOMProcessing(req,choicet,text,elist,val)
      --(Element(..),ElemAcceptor(..),findValue,elementsOnly,simple,attrString,acceptList)
 
-import Text.Printf(printf,PrintfArg(..))
+import Text.Printf(printf)
 
 data LSLType = LLList | LLInteger | LLVector | LLFloat | LLString | LLRot | LLKey | LLVoid
     deriving (Eq, Show, Typeable, Data)

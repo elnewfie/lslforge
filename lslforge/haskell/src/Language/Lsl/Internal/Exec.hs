@@ -28,7 +28,10 @@ module Language.Lsl.Internal.Exec(
     hardReset,
     hasActiveHandler) where
 
---import Debug.Trace
+import Control.Monad(foldM_,when,mplus,msum,zipWithM,ap,liftM)
+import Control.Monad.State(MonadState(..),lift,StateT(..))
+import Control.Monad.Error(MonadError(..),ErrorT(..))
+import Control.Monad.Trans
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
 import Data.List(intersperse,find,tails)
 import Data.Data
@@ -55,14 +58,6 @@ import Language.Lsl.Internal.Evaluation(EvalResult(..),Event(..),
     ScriptInfo(..))
 import Language.Lsl.Internal.Constants(findConstVal,llcZeroRotation,
     llcZeroVector)
-
-import Control.Applicative
-import Control.Monad(foldM_,when,mplus,msum,zipWithM,ap,liftM)
-import Control.Monad.State(MonadState(..),lift,StateT(..))
-import Control.Monad.Error(MonadError(..),ErrorT(..))
-import Control.Monad.Trans
-
---import Debug.Trace(trace)
 
 -- initialize a script for execution
 initLSLScript :: RealFloat a => CompiledLSLScript -> ScriptImage a

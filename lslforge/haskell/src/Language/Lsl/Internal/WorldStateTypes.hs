@@ -14,8 +14,7 @@ import Control.Monad.State(MonadState(..),StateT(..))
 import Control.Monad.Error(ErrorT(..),MonadError(..))
 import Data.Map(Map)
 import qualified Data.IntMap as IM
-import qualified Data.Map as M
-import Data.Label hiding (get,set)
+-- import Data.Label hiding (get,set)
 import Data.LabelExtras
 import qualified Data.Set as S
 
@@ -23,12 +22,12 @@ import qualified Language.Lsl.Internal.AvEvents as AvEvent
 import Language.Lsl.Internal.Breakpoint(BreakpointManager(..))
 import Language.Lsl.Internal.Evaluation(Event(..),ScriptInfo(..),EvalResult(..))
 import Language.Lsl.Internal.Key(LSLKey(..))
-import Language.Lsl.Internal.Log(LogMessage(..),LogLevel(..))
+import Language.Lsl.Internal.Log(LogMessage(..))
 import Language.Lsl.Syntax(Validity,LModule(..),CompiledLSLScript(..))
 import Language.Lsl.Internal.Type(LSLValue(..),LSLType(..))
 import Language.Lsl.WorldDef(Prim(..),PrimFace(..),InventoryItem(..),
-    InventoryItemIdentification(..),LSLObject(..),Script(..),Avatar(..),
-    Region(..),ObjectDynamics(..),Parcel(..),WebHandling(..),PrimType(..),
+    LSLObject(..),Script(..),Avatar(..),
+    Region(..),ObjectDynamics(..),WebHandling(..),PrimType(..),
     Attachment(..),Flexibility(..),LightInfo(..),TextureInfo(..),ScriptId)
 
 import System.Random(StdGen(..))

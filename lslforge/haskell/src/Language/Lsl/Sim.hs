@@ -69,12 +69,11 @@ import Language.Lsl.UnitTestEnv(simFunc,hasFunc)
 import Language.Lsl.Internal.SimLL
 import Language.Lsl.Internal.Util(add3d,angleBetween,diff3d,dist3d2,mag3d,
     mlookup,neg3d,norm3d,quaternionToMatrix,rot3d,scale3d,(<||>),filtMapM)
-import Language.Lsl.WorldDef(Attachment(..),Avatar(..),
-    AvatarControlListener(..),InventoryInfo(..),InventoryItem(..),
-    InventoryItemData(..),InventoryItemIdentification(..),LSLObject(..),
-    ObjectDynamics(..),Prim(..),PositionTarget(..),RotationTarget(..),
-    Script(..),WebHandling(..),defaultDynamics,emptyPrim,inventoryItemName,
-    mkScript,isInvObjectItem,isInvScriptItem,primPhysicsBit,
+import Language.Lsl.WorldDef(AvatarControlListener(..),InventoryInfo(..),
+    InventoryItem(..),InventoryItemData(..),InventoryItemIdentification(..),
+    LSLObject(..), ObjectDynamics(..),Prim(..),PositionTarget(..),
+    RotationTarget(..),WebHandling(..),defaultDynamics,emptyPrim,
+    inventoryItemName,mkScript,isInvObjectItem,isInvScriptItem,primPhysicsBit,
     scriptInventoryItem,worldFromFullWorldDef,ItemPermissions(..))
 import Language.Lsl.Internal.WorldState
 

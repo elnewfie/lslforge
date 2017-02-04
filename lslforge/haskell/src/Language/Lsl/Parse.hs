@@ -24,7 +24,7 @@ module Language.Lsl.Parse(
     ) where
 
 import Control.Applicative hiding (many) -- use parsec's many (s.b. equivalent)
-import Control.Monad(ap,mplus,mzero)
+import Control.Monad(mzero)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.UTF8 as UTF8
 import Data.Char(digitToInt)

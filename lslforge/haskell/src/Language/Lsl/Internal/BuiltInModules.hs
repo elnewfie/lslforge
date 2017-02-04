@@ -1,7 +1,6 @@
 {-# OPTIONS_GHC -XQuasiQuotes #-}
 module Language.Lsl.Internal.BuiltInModules(avEventGen) where
 
-import Language.Lsl.Syntax
 import Language.Lsl.QQ(lslm)
 import Language.Lsl.Internal.Constants(lslForgeAvatarKey,lslForgeAvatarPos,lslForgeAvatarRot,lslForgeAvatarName)
 

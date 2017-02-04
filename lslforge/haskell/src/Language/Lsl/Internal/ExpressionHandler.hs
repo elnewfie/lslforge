@@ -2,7 +2,6 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.ExpressionHandler(validateExpression,evaluateExpression) where
 
-import Control.Applicative
 import Control.Monad.Error
 import Data.Bits
 import System.IO

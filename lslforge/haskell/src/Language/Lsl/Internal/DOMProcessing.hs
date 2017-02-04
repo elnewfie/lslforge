@@ -22,8 +22,6 @@ module Language.Lsl.Internal.DOMProcessing(
     xmlAcceptT
     ) where
 
-import Data.Maybe
-import Control.Applicative
 import Control.Monad(liftM,unless,foldM,ap)
 import Control.Monad.Error(MonadError(..),ErrorT(..))
 import Control.Monad.State(MonadState(..),State(..),evalState,StateT(..),

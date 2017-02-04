@@ -32,7 +32,6 @@ import Control.Category
 import Control.Monad
 import Control.Monad.Identity
 import Control.Monad.Error
-import Control.Monad.Error.Class
 import qualified Control.Monad.State as SM
 import Control.Monad.State(MonadState)
 import Data.Map hiding(filter,map)

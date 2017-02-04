@@ -4,16 +4,12 @@ module Language.Lsl.Internal.SerializationGenerator where
 import Language.Haskell.TH
 import Control.Monad
 import Data.Maybe
-import qualified Control.Monad.State as State
 import qualified Data.Map as M
 import Language.Lsl.Internal.XmlCreate
 import Language.Lsl.Internal.DOMCombinators
 import Data.Generics
 import Data.Int
 import Data.List
-import Debug.Trace
-import Text.XML.HaXml.Parse hiding (fst3,snd3,thd3)
-import Text.XML.HaXml.Posn
 
 class JavaRep a where
     representative :: a

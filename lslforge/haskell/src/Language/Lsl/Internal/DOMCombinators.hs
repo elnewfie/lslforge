@@ -9,7 +9,6 @@ import Language.Lsl.Internal.DOMProcessing
 import Text.XML.HaXml(Attribute,AttValue(..),Document(..),Element(..),Content(..),Reference(..),xmlParse,info)
 import Text.XML.HaXml.Posn(Posn(..),noPos)
 import Language.Lsl.Internal.Util(readM)
-import Debug.Trace
 
 type ContentAcceptor a = [Content Posn] -> Either String a
 type ContentFinder a = StateT [Content Posn] (Either String) a

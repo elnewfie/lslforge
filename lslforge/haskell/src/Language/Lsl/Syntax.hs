@@ -61,13 +61,12 @@ import Language.Lsl.Internal.FuncSigs(funcSigs)
 import Language.Lsl.Internal.AccessGenerator(genAccessorsForType,genMAccessorsForType)
 import Language.Lsl.Internal.Pragmas(Pragma(..))
 import Data.Generics
-import Data.Generics.Extras.Schemes
 import Data.Data(Data,Typeable)
-import Data.List(find,sort,sortBy,nub,foldl',nubBy,deleteFirstsBy)
+import Data.List(find,sort,sortBy,nub,nubBy,deleteFirstsBy)
 import qualified Data.Map as M
 import Data.Maybe(isJust,isNothing)
 import Language.Lsl.Internal.Util(ctx,findM,lookupM,filtMap,throwStrError)
-import Control.Monad(when,foldM,MonadPlus(..))
+import Control.Monad(when,MonadPlus(..))
 import Control.Monad.Error(MonadError(..))
 import Control.Monad.Error.Class(Error(..))
 import qualified Control.Monad.State as S(State)

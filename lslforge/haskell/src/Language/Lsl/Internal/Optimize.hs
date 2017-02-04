@@ -8,16 +8,12 @@ import qualified Control.Monad.State as State(State)
 
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
 import Data.Generics
-import Data.Generics.Extras.Schemes(everythingTwice,everythingButTwice,downup,downupSkipping,everywhereButM)
+import Data.Generics.Extras.Schemes(everythingTwice,everythingButTwice,downupSkipping,everywhereButM)
 import Data.List(foldl',nub,lookup)
 import Data.Graph
 import qualified Data.Set as Set
 import qualified Data.Map as M
 
-import Debug.Trace
-
-import Language.Lsl.Parse
-import Language.Lsl.Render
 import Language.Lsl.Internal.Constants(allConstants,Constant(..),findConstVal)
 import Language.Lsl.Internal.FuncSigs(funcSigs,convertArgs)
 import Language.Lsl.Internal.InternalLLFuncs(internalLLFuncs,internalLLFuncNames)

@@ -3,7 +3,7 @@ module Language.Lsl.Internal.SHA1(hashStoI,hashStoHex) where
 import Text.Printf
 import Codec.Binary.UTF8.String
 import Data.Array(Array,array,(!))
-import Data.Bits(Bits,(.|.),(.&.),xor,rotateL,shiftR,shiftL,complement)
+import Data.Bits((.|.),(.&.),xor,rotateL,shiftR,shiftL,complement)
 import Data.List(foldl')
 import Data.Word(Word8,Word32)
 
