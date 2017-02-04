@@ -20,7 +20,7 @@ import Test.HUnit hiding (State,Label)
 import Lsl.SimTests
 
 
-showResults = True
+showResults = False
 
 tscript l s v = TestCase $
         case compileLSLScript' lib s of
@@ -30,8 +30,7 @@ tscript l s v = TestCase $
 
 v0 lib cs os = do
     let rs = renderCompiledScript "" os
-    putStr "\n"
-    putStr rs
+    when showResults $ putStr ("\n" ++ rs)
     case parseScriptFromString rs of
         Left e -> assertFailure (show e)
         Right cs' -> case compileLSLScript' [] cs' of
@@ -48,8 +47,7 @@ v0 lib cs os = do
 
 v1 lib cs os = do
     let rs = renderCompiledScript "" os
-    putStrLn ""
-    putStr rs
+    when showResults $ putStr ("\n" ++ rs)
     case parseScriptFromString rs of
         Left e -> assertFailure (show e)
         Right cs' -> case compileLSLScript' [] cs' of
@@ -57,7 +55,7 @@ v1 lib cs os = do
              Right _ -> do
                      let result2 = exec os
                      let oslog = filtLog result2
-                     print oslog
+                     when showResults $ print oslog
                  where exec s = simStatusLog $ fst $ simStep (Left (simpleWorld,[("script",Right s)],lib)) (SimContinue [] [])
                        filtLog log = [ m | LogMessage { logMessageLevel = l, logMessageText = m } <- log, l /= LogTrace]
             
