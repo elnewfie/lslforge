@@ -107,7 +107,7 @@ deriveJavaRepTups l = mapM deriveJavaRepTup l >>= return . concat
 deriveJavaRepTup n = do
     let ns = show n
     vs <- mapM newName (replicate n "v")
-    let ctx =  mapM (javaRepPred . varT) vs
+    let ctx =  mapM (appT javaRepCon . varT) vs
     let typ = appT javaRepCon $ foldl appT (tupleT n) (map varT vs)
     let representativeD =
             valD (varP 'representative) (normalB $ tupE (replicate n (varE 'representative))) []
@@ -180,7 +180,7 @@ deriveJavaRep nm = if nm == ''[] then return [] else
             where tyVarName (PlainTV n) = n
                   tyVarName (KindedTV n _) = n
                   names = map tyVarName vs
-                  ctx = mapM (javaRepPred . varT) names
+                  ctx = mapM (appT javaRepCon . varT) names
                   typ = appT javaRepCon $ foldl appT (conT tnm) (map varT names)
                   representativeV = varE 'representative
                   mkRepresentative [] = [e|undefined|]
@@ -424,5 +424,3 @@ deSyn targs ListT = return (foldl AppT ListT targs)
 deSyn _ t = error ("can't deSyn: " ++ show t)
 
 javaRepCon = conT ''JavaRep
-
-javaRepPred = classP ''JavaRep . (:[])
