@@ -10,8 +10,9 @@ import Data.Either
 import Data.Generics
 import Data.Generics.Extras.Schemes
 import qualified Data.Map as M
+
 import Language.Lsl.Internal.Compiler
-import Language.Lsl.Internal.Load(loadScript)
+import Language.Lsl.Internal.Load (loadScript)
 import Language.Lsl.Internal.Pragmas
 import Language.Lsl.Syntax
 import Language.Lsl.Parse
@@ -68,14 +69,14 @@ sourcePosToTextLocation pos = (TextLocation line col line col name)
           name = sourceName pos
 
 gsummary :: Data a => a -> [Either GlobalSummary EPSummary]
-gsummary = everythingBut' (False `mkQ` string `extQ` srcContext) (++) [] ([] `mkQ` fsum `extQ` gsum)
-    where gsum (GDecl (Ctx _ (Var n t)) _) = [Left $ GlobalSummary n t]
-          fsum (FuncDec fnm t parms) = [Right $ EPSummary EPFunc (ctxItem fnm) t (map ((\ (Var n t) -> (n,t)) . ctxItem) parms)]
-          string :: String -> Bool
-          string _ = True
-          srcContext :: SourceContext -> Bool
-          srcContext _ = True
-          
+gsummary =
+    everythingBut (++) (lslQ `extQ` fsum `extQ` gsum)
+  where
+    gsum (GDecl (Ctx _ (Var n t)) _) =
+      ([Left $ GlobalSummary n t], False)
+    fsum (FuncDec fnm t parms) =
+      ([Right $ EPSummary EPFunc (ctxItem fnm) t (map ((\ (Var n t) -> (n,t)) . ctxItem) parms)], False)
+
 ssummary :: [Ctx State] -> [EPSummary] 
 ssummary = concatMap go
     where go (Ctx _ (State nm hs)) = map (hsum (ctxItem nm)) hs 

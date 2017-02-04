@@ -8,7 +8,7 @@ import qualified Control.Monad.State as State(State)
 
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
 import Data.Generics
-import Data.Generics.Extras.Schemes(everythingTwice,everythingButTwice,downup,downupSkipping,everywhereButM,everythingBut')
+import Data.Generics.Extras.Schemes(everythingTwice,everythingButTwice,downup,downupSkipping,everywhereButM)
 import Data.List(foldl',nub,lookup)
 import Data.Graph
 import qualified Data.Set as Set
@@ -25,7 +25,7 @@ import Language.Lsl.Internal.Key(LSLKey(..))
 import Language.Lsl.Internal.OptimizerOptions(OptimizerOption(..))
 import Language.Lsl.Syntax(CompiledLSLScript(..),Expr(..),Statement(..),Var(..),
                            Func(..),FuncDec(..),State(..),Ctx(..),Handler(..),
-                           Global(..),Component(..),SourceContext(..))
+                           Global(..),Component(..),SourceContext(..),lslQ)
 import Language.Lsl.Internal.Type(LSLType(..),toSVal)
 import Language.Lsl.Internal.Pragmas(Pragma(..))
 import Language.Lsl.Internal.Type(LSLValue(..))
@@ -75,23 +75,23 @@ reachableFuncs ss fs = [ f | f <- fs, fname f `elem` allReachableFnames]
           allReachableIndices = nub $ concatMap (reachable graph) [ i | Just i <- map ( \ (k,_,_) -> k2v k) ses]
           allReachableFnames = [fn | (FK fn,_,_) <- map ( \ i -> v2n i) allReachableIndices]
 
-varNameInList :: Var -> [String]
-varNameInList = (:[]) . varName
+varNameInList :: Var -> ([String], Bool)
+varNameInList x = ([varName x], False)
 
 varsDefinedByHandler :: Handler -> [String]
-varsDefinedByHandler = everythingBut' stopCondition (++) [] ([] `mkQ` varNameInList)
+varsDefinedByHandler = everythingBut (++) (lslQ `extQ` varNameInList)
 
 varsDefinedByFunc :: Ctx Func -> [String]
-varsDefinedByFunc = everythingBut' stopCondition (++) [] ([] `mkQ` varNameInList)
+varsDefinedByFunc = everythingBut (++) (lslQ `extQ` varNameInList)
 
-labels (Label nm) = [nm]
-labels _ = []
+labels (Label nm) = ([nm], False)
+labels _ = ([], False)
 
 labelsDefinedByFunc :: Ctx Func -> [String]
-labelsDefinedByFunc = everythingBut' stopCondition (++) [] ([] `mkQ` labels)
+labelsDefinedByFunc = everythingBut (++) (lslQ `extQ` labels)
 
 labelsDefinedByHandler :: Handler -> [String]
-labelsDefinedByHandler = everythingBut' stopCondition (++) [] ([] `mkQ` labels)
+labelsDefinedByHandler = everythingBut (++) (lslQ `extQ` labels)
 
 namesDefinedByHandler :: Handler -> [String]
 namesDefinedByHandler handler = labelsDefinedByHandler handler ++ varsDefinedByHandler handler
@@ -99,15 +99,15 @@ namesDefinedByHandler handler = labelsDefinedByHandler handler ++ varsDefinedByH
 namesDefinedByFunc :: Ctx Func -> [String]
 namesDefinedByFunc func = labelsDefinedByFunc func ++ varsDefinedByFunc func
 
-exprCallsFuncDirectly :: Expr -> [String]
-exprCallsFuncDirectly (Call (ctxName) _) = [ctxItem ctxName]
-exprCallsFuncDirectly _ = []
+exprCallsFuncDirectly :: Expr -> ([String], Bool)
+exprCallsFuncDirectly (Call (ctxName) _) = ([ctxItem ctxName], False)
+exprCallsFuncDirectly _ = ([], False)
 
 funcCallsFuncs :: Ctx Func -> [String]
-funcCallsFuncs = everythingBut' stopCondition (++) [] ([] `mkQ` exprCallsFuncDirectly)
-       
+funcCallsFuncs = everythingBut (++) (lslQ `extQ` exprCallsFuncDirectly)
+
 handlerCallsFuncs :: Ctx Handler -> [String]
-handlerCallsFuncs = everythingBut' stopCondition (++) [] ([] `mkQ` exprCallsFuncDirectly)
+handlerCallsFuncs = everythingBut (++) (lslQ `extQ` exprCallsFuncDirectly)
 
 fname (Ctx _ (Func (FuncDec (Ctx _ name) _ _) _)) = name
 
@@ -1049,12 +1049,3 @@ simplify script pureFuncs gcs v =
           string _ = True
           srcContext :: SourceContext -> Bool
           srcContext _ = True
-          
-string :: String -> Bool
-string _ = True
-
-srcContext :: SourceContext -> Bool
-srcContext _ = True
-
-stopCondition :: Data a => a -> Bool
-stopCondition = (False `mkQ` string `extQ` srcContext)

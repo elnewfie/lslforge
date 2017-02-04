@@ -51,7 +51,8 @@ module Language.Lsl.Syntax (
     VState,
     emptyValidationState,
     rewriteCtxExpr,
-    rmCtx) where
+    rmCtx,
+    lslQ) where
 
 import Language.Lsl.Internal.Type(Component(..),LSLType(..),lslTypeString)
 import Language.Lsl.Internal.Constants(isConstant,findConstType)
@@ -466,15 +467,13 @@ safeHead (x:_) = Just x
 compileLSLScript' :: Library -> LSLScript -> Validity CompiledLSLScript
 compileLSLScript' library script = evalState (compileLSLScript script) (emptyValidationState { vsLib = library })
 
-collectLabels :: Data a => a -> [(String,Maybe SourceContext)]
-collectLabels = everythingBut' (False `mkQ` string `extQ` sctx) (++) [] ([] `mkQ` lab)
-    where string :: String -> Bool
-          string = const True
-          sctx :: SourceContext -> Bool
-          sctx = const True
-          lab :: Ctx Statement -> [(String,Maybe SourceContext)]
-          lab (Ctx ctx (Label s)) = [(s,ctx)]
-          lab _ = []
+collectLabels :: Data a => a -> [(String, Maybe SourceContext)]
+collectLabels =
+    everythingBut (++) (lslQ `extQ` lab)
+  where
+    lab :: Ctx Statement -> ([(String, Maybe SourceContext)], Bool)
+    lab (Ctx ctx (Label s)) = ([(s, ctx)], False)
+    lab _ = ([], False)
 
 warnLabelsMany :: Data a => [a] -> [CodeErr]
 warnLabelsMany = concatMap warnLabels
@@ -1277,3 +1276,11 @@ rewriteMExpression bindings = fmap (rewriteCtxExpr bindings)
 
 scalar = (`elem` [LLFloat,LLInteger])
 structure = (`elem` [LLRot,LLVector])
+
+-- | Base generics query for traversing lsl
+lslQ :: Typeable a => a -> ([r], Bool)
+lslQ = ([], False) `mkQ` string `extQ` sctx
+  where
+    sctx   = stop :: SourceContext -> ([r], Bool)
+    string = stop :: String -> ([r], Bool)
+    stop   = const ([], True)
