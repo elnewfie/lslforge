@@ -32,7 +32,7 @@ import Text.XML.HaXml(Attribute,AttValue(..),Document(..),Element(..),
     Content(..),QName(..),Reference(..),xmlParse)
 import Text.XML.HaXml.Posn(Posn(..))
 
-class (MonadError String m, Applicative m) => MonadXMLAccept m where
+class MonadError String m => MonadXMLAccept m where
     getContext :: m (Element Posn)
     setContext :: Element Posn -> m ()
     withContext :: Element Posn -> m a -> m a

@@ -27,7 +27,7 @@ module Data.LabelExtras(
     ) where
 
 import Prelude hiding(id,(.),lookup)
-import Control.Applicative
+import Control.Applicative(liftA2)
 import Control.Category
 import Control.Monad
 import Control.Monad.Identity
@@ -39,7 +39,7 @@ import qualified Data.IntMap as IM
 import Data.Label
 import Language.Haskell.TH
 
-liftML :: (Applicative m, Monad m) => a :-> b -> m a :-> m b
+liftML :: Monad m => a :-> b -> m a :-> m b
 liftML l = lens getter modifier where
     getter = fmap (get l)
     setter = liftA2 (set l)
@@ -47,7 +47,7 @@ liftML l = lens getter modifier where
         isoL g s m f = s (m (g f)) f
 
 -- | a lens for a Map element
-lm :: (Applicative m, MonadError e m, Error e, Show k, Ord k) => k -> m (Map k v) :-> m v
+lm :: (MonadError e m, Error e, Show k, Ord k) => k -> m (Map k v) :-> m v
 lm k = lens getter modifier where
     getter mm = mm >>= (maybe (throwError $ err k)  return) . lookup k
     modifier f mm = do
@@ -55,7 +55,7 @@ lm k = lens getter modifier where
         insert k v <$> mm
     err k = strMsg $ "key " ++ show k ++ " not found"
 
-lmi :: (Applicative m, MonadError e m, Error e) => Int -> m (IM.IntMap v) :-> m v
+lmi :: (MonadError e m, Error e) => Int -> m (IM.IntMap v) :-> m v
 lmi i = lens getter modifier where
     getter mm = mm >>= (maybe (throwError $ err i)  return) . IM.lookup i
     modifier f mm = do
@@ -63,7 +63,7 @@ lmi i = lens getter modifier where
         IM.insert i v <$> mm
     err i = strMsg $ "key " ++ show i ++ " not found"
 
-lli :: (Applicative m, MonadError e m, Error e) => Int -> m [v] :-> m v
+lli :: (MonadError e m, Error e) => Int -> m [v] :-> m v
 lli i = lens getter modifier where
     getter ml = ml >>= (maybe (throwError $ err i)  return) . safeIndex i
     modifier f ml = do
@@ -122,19 +122,19 @@ lsnd3U = lens (\(_,y,_) -> y) (\f (x,y,z) -> (x,f y,z))
 l3rd3U :: (a,b,c) :-> c
 l3rd3U = lens (\(_,_,z) -> z) (\f (x,y,z) -> (x,y,f z))
 
-lfst :: (Applicative m, Monad m) => m (a,b) :-> m a
+lfst :: Monad m => m (a,b) :-> m a
 lfst = liftML $ lfstU
 
-lsnd :: (Applicative m, Monad m) => m (a,b) :-> m b
+lsnd :: Monad m => m (a,b) :-> m b
 lsnd = liftML $ lsndU
 
-lfst3 :: (Applicative m, Monad m) => m (a,b,c) :-> m a
+lfst3 :: Monad m => m (a,b,c) :-> m a
 lfst3 = liftML $ lfst3U
 
-lsnd3 :: (Applicative m, Monad m) => m (a,b,c) :-> m b
+lsnd3 :: Monad m => m (a,b,c) :-> m b
 lsnd3 = liftML $ lsnd3U
 
-l3rd3 :: (Applicative m, Monad m) => m (a,b,c) :-> m c
+l3rd3 :: Monad m => m (a,b,c) :-> m c
 l3rd3 = liftML $ l3rd3U
 
 getI :: Identity a :-> Identity b -> a -> b
@@ -161,7 +161,7 @@ infixr 6 .*
 -- so we can say v .: foo.bar.baz
 (.:) = flip getI
 
-(.?) :: (Applicative m, MonadError e m, Error e)
+(.?) :: (MonadError e m, Error e)
      => m b :-> m c -> m a :-> m b -> m a :-> m (Maybe c)
 (.?) l1 l2 = lens getter modifier where
     getter ma = do
@@ -179,7 +179,7 @@ infixr 6 .*
 infixr 8 .?
 infixr 8 .:
 
-rjoinV :: (Applicative m, MonadError e m, Error e)
+rjoinV :: (MonadError e m, Error e)
        => e -> m a :-> m (Maybe b) -> m a :-> m b
 rjoinV e l = lens getter modifier where
     getter ma = do
@@ -189,6 +189,6 @@ rjoinV e l = lens getter modifier where
         let b = Just <$> f (getter ma)
         set l b ma
 
-rjoin :: (Applicative m, MonadError e m, Error e)
+rjoin :: (MonadError e m, Error e)
       => m a :-> m (Maybe b) -> m a :-> m b
 rjoin = rjoinV (strMsg "failed")

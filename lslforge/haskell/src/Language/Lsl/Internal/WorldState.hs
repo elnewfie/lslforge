@@ -105,7 +105,7 @@ import Language.Lsl.Internal.WorldStateTypes
 
 import System.Random(Random(..))
 
-primAttachment' :: (Applicative m, MonadError e m, Error e) => m Prim :-> m Attachment
+primAttachment' :: (MonadError e m, Error e) => m Prim :-> m Attachment
 primAttachment' = rjoinV (strMsg "not attached") primAttachment
 
 -- extracting/updating the world state ----------------------------------------
