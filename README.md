@@ -61,6 +61,7 @@ This way you'll get the newest release.
 
 Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
 
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.3/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.2/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.1/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
