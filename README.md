@@ -90,6 +90,34 @@ Switch to **LSLForge Perspective** and create a new LSLForge Project
     * Adding a fake ``*.lslm`` module along the project, it could be called ``Fake.lslm``. Opening it and adding a space, then removing it and hitting **Save** will force the project to be recompiled
     * Forcing recompilation of a module that is referenced by ``*.lslp`` file by opening it, doing some fake change, and hitting **Save**
 
+## Tips & Tricks
+
+### Importing Modules
+
+This demonstrates:
+* How to use folders when importing modules (dot notation)
+* How to import a module with a paramater
+
+**`Modules/Debug.lslm`** :
+```
+$module (integer DEBUG)
+bug(string place, string message) {
+  if (!DEBUG) return;
+  llOwnerSay("["+llGetScriptName()+"."+place+"]: "+message);
+}
+```
+
+**`Script.lslp`** :
+```
+integer DEBUG=TRUE; // has to be a variable
+$import Modules.Debug.lslm(DEBUG=DEBUG) de;
+
+do() {
+  debug("", "This is a call of 'bug' function from 'de' module");
+}
+
+```
+
 ## Native Library Compilation Example
 
 ### Example Environment
