@@ -101,9 +101,9 @@ This demonstrates:
 **`Modules/Debug.lslm`** :
 ```
 $module (integer DEBUG)
+// pragma inline
 bug(string place, string message) {
-  if (!DEBUG) return;
-  llOwnerSay("["+llGetScriptName()+"."+place+"]: "+message);
+  if (DEBUG) llOwnerSay("["+llGetScriptName()+"."+place+"]: "+message);
 }
 ```
 
@@ -113,10 +113,17 @@ integer DEBUG=TRUE; // has to be a variable
 $import Modules.Debug.lslm(DEBUG=DEBUG) de;
 
 do() {
-  debug("", "This is a call of 'bug' function from 'de' module");
+  debug("do()", "This is a call of 'bug' function from 'de' module");
 }
 
 ```
+
+### Referencing Modules From Other Projects
+
+Imagine you move ``Modules`` folder to a separate project called ``ModulesProject`` to use it from different other projects.
+In the main project that uses ``ModulesProject``, place a checkmark along its name under ``Project settings > Project References``. 
+
+``ModulesProject`` directory tree becomes part of the project's tree. It will still be imported as ``$import Modules.Debug.lslm`` without any additions.
 
 ## Native Library Compilation Example
 
