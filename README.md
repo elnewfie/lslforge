@@ -94,10 +94,12 @@ Switch to **LSLForge Perspective** and create a new LSLForge Project
 ### Importing Modules
 
 This demonstrates:
+
 * How to use folders when importing modules (dot notation)
 * How to import a module with a paramater
 
 **`Modules/Debug.lslm`** :
+
 ```
 $module (integer DEBUG)
 // pragma inline
@@ -107,6 +109,7 @@ bug(string place, string message) {
 ```
 
 **`Script.lslp`** :
+
 ```
 integer DEBUG=TRUE; // has to be a variable
 $import Modules.Debug.lslm(DEBUG=DEBUG) de;
