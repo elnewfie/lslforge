@@ -2,7 +2,7 @@
 <feature
       id="lslforge"
       label="LSLforge"
-      version="0.1.9.2">
+      version="0.1.9.3">
    <install-handler library="" handler=""/>
 
    <copyright>
@@ -107,6 +107,6 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS&apos;&apos; AND ANY EXPRESS OR I
          id="lslforge"
          download-size="0"
          install-size="0"
-         version="0.1.9.2"/>
+         version="0.1.9.3"/>
 
 </feature>
