@@ -43,7 +43,11 @@ lslModuleExp s =
 
 -- | A quasi-quoter for an LSL (Plus) module.
 lslm :: QuasiQuoter
-lslm = QuasiQuoter { quoteExp = lslModuleExp, quotePat = lslModulePat }
+lslm = QuasiQuoter { quoteExp  = lslModuleExp
+                   , quotePat  = lslModulePat
+                   , quoteType = error "No quoteType implementation for lslm"
+                   , quoteDec  = error "No quoteDec implementation for lslm"
+                   }
 
 lslScriptPat :: String -> TH.Q TH.Pat
 lslScriptPat s =
@@ -68,4 +72,8 @@ lslScriptExp s =
 
 -- | A quasi-quoter for an LSL script.
 lsl :: QuasiQuoter
-lsl = QuasiQuoter { quoteExp = lslScriptExp, quotePat = lslScriptPat }
+lsl = QuasiQuoter { quoteExp  = lslScriptExp
+                  , quotePat  = lslScriptPat
+                  , quoteType = error "No quoteType implementation for lsl"
+                  , quoteDec  = error "No quoteDec implementation for lsl"
+                  }
