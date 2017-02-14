@@ -32,7 +32,7 @@ import Control.Category
 import Control.Applicative
 import Control.Monad(
     MonadPlus(..),foldM,forM_,forM,liftM,liftM2,unless,when,filterM)
-import Control.Monad.Error(MonadError(..))
+import Control.Monad.Except(MonadError(..))
 import Data.List(find,foldl',isSuffixOf,elemIndex)
 import Data.Bits((.&.),(.|.),bit,clearBit,complement,setBit,shiftL,testBit)
 import Data.Int()

@@ -67,7 +67,7 @@ import qualified Data.Map as M
 import Data.Maybe(isJust,isNothing)
 import Language.Lsl.Internal.Util(ctx,findM,lookupM,filtMap,throwStrError)
 import Control.Monad(when,MonadPlus(..))
-import Control.Monad.Error(MonadError(..))
+import Control.Monad.Except(MonadError(..))
 import Control.Monad.Error.Class(Error(..))
 import qualified Control.Monad.State as S(State)
 import Control.Monad.State hiding(State)

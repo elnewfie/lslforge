@@ -2,7 +2,7 @@
 module Language.Lsl.Internal.DOMCombinators where
 
 import Control.Monad.State
-import Control.Monad.Error
+import Control.Monad.Except
 
 import Data.Maybe
 import Language.Lsl.Internal.DOMProcessing

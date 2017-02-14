@@ -65,7 +65,7 @@ module Language.Lsl.WorldDef(
     ) where
 
 import Control.Monad(when,foldM)
-import Control.Monad.Error(MonadError(..))
+import Control.Monad.Except(MonadError(..))
 import Control.Monad.State(evalState)
 import Control.Monad.Writer(tell,lift,runWriterT)
 

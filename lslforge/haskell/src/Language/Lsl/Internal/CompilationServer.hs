@@ -1,7 +1,7 @@
 {-# OPTIONS_GHC -XFlexibleContexts -XNoMonomorphismRestriction -XTemplateHaskell #-}
 module Language.Lsl.Internal.CompilationServer where
 
-import Control.Monad.Error
+import Control.Monad.Except
 
 import Data.Either
 import Data.Generics

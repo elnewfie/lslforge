@@ -39,7 +39,7 @@ module Language.Lsl.Internal.Util (
     ) where
 
 import Control.Monad(liftM,when,MonadPlus(..))
-import Control.Monad.Error(MonadError(..))
+import Control.Monad.Except(MonadError(..))
 import Control.Monad.Error.Class(Error(..))
 import Data.Char
 import Data.List(find,elemIndex,isPrefixOf,tails)
