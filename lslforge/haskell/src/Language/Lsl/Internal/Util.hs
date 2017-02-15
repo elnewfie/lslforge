@@ -2,7 +2,6 @@
 module Language.Lsl.Internal.Util (
     mlookup,
     ilookup,
-    throwStrError,
     safeIndex,
     elemAt,
     ctx,
@@ -40,7 +39,6 @@ module Language.Lsl.Internal.Util (
 
 import Control.Monad(liftM,when,MonadPlus(..))
 import Control.Monad.Except(MonadError(..))
-import Control.Monad.Error.Class(Error(..))
 import Data.Char
 import Data.List(find,elemIndex,isPrefixOf,tails)
 import qualified Data.ByteString.Lazy.Char8 as B
@@ -72,9 +70,6 @@ elemAt i x = required ("index " ++ show i ++ " out of range") (safeIndex x i)
 
 safeIndex :: [a] -> Int -> Maybe a
 safeIndex xs i = foldl mplus Nothing [ Just v | (j,v) <- zip [0..] xs, j == i]
-
-throwStrError :: (Error e, MonadError e m) => String -> m a
-throwStrError = throwError . strMsg
 
 required msg = maybe (throwError msg) return
 

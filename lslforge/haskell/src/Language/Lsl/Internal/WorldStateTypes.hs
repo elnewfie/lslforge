@@ -10,8 +10,8 @@ module Language.Lsl.Internal.WorldStateTypes where
 
 import Control.Applicative
 import Control.Monad(liftM,ap,MonadPlus(..))
+import Control.Monad.Except(ExceptT(..),MonadError(..))
 import Control.Monad.State(MonadState(..),StateT(..))
-import Control.Monad.Error(ErrorT(..),MonadError(..))
 import Data.Map(Map)
 import qualified Data.IntMap as IM
 -- import Data.Label hiding (get,set)
@@ -171,7 +171,7 @@ instance Monad m => Show (Predef m) where
 
 -- an ErrorT/StateT/m Monad stack for the World.  The type is parameterized by
 -- the innermost monad...
-newtype WorldE m a = WorldE { unWorldE :: ErrorT String ((StateT (World m) m)) a }
+newtype WorldE m a = WorldE { unWorldE :: ExceptT String ((StateT (World m) m)) a }
     deriving (Monad,MonadPlus)
 
 instance Monad m => MonadState (World m) (WorldE m) where

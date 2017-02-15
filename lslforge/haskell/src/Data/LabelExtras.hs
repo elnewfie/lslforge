@@ -1,4 +1,5 @@
 {-# LANGUAGE TemplateHaskell, TypeOperators, NoMonomorphismRestriction #-}
+{-# LANGUAGE  FlexibleContexts #-}
 module Data.LabelExtras(
     lm,
     lmi,
@@ -30,8 +31,8 @@ import Prelude hiding(id,(.),lookup)
 import Control.Applicative(liftA2)
 import Control.Category
 import Control.Monad
+import Control.Monad.Except
 import Control.Monad.Identity
-import Control.Monad.Error
 import qualified Control.Monad.State as SM
 import Control.Monad.State(MonadState)
 import Data.Map hiding(filter,map)
@@ -47,29 +48,29 @@ liftML l = lens getter modifier where
         isoL g s m f = s (m (g f)) f
 
 -- | a lens for a Map element
-lm :: (MonadError e m, Error e, Show k, Ord k) => k -> m (Map k v) :-> m v
+lm :: (MonadError String m, Show k, Ord k) => k -> m (Map k v) :-> m v
 lm k = lens getter modifier where
     getter mm = mm >>= (maybe (throwError $ err k)  return) . lookup k
     modifier f mm = do
         v <- f $ getter mm
         insert k v <$> mm
-    err k = strMsg $ "key " ++ show k ++ " not found"
+    err k = "key " ++ show k ++ " not found"
 
-lmi :: (MonadError e m, Error e) => Int -> m (IM.IntMap v) :-> m v
+lmi :: MonadError String m => Int -> m (IM.IntMap v) :-> m v
 lmi i = lens getter modifier where
     getter mm = mm >>= (maybe (throwError $ err i)  return) . IM.lookup i
     modifier f mm = do
         v <- f $ getter mm
         IM.insert i v <$> mm
-    err i = strMsg $ "key " ++ show i ++ " not found"
+    err i = "key " ++ show i ++ " not found"
 
-lli :: (MonadError e m, Error e) => Int -> m [v] :-> m v
+lli :: MonadError String m => Int -> m [v] :-> m v
 lli i = lens getter modifier where
     getter ml = ml >>= (maybe (throwError $ err i)  return) . safeIndex i
     modifier f ml = do
         v <- f $ getter ml
         ml >>= \l -> maybe (throwError $ err i) return $ replace i l v
-    err i = strMsg $ "index " ++ show i ++ " not found"
+    err i = "index " ++ show i ++ " not found"
 
 safeIndex i l | i >= 0 && i < length l = Just (l !! i)
               | otherwise = Nothing
@@ -161,7 +162,7 @@ infixr 6 .*
 -- so we can say v .: foo.bar.baz
 (.:) = flip getI
 
-(.?) :: (MonadError e m, Error e)
+(.?) :: MonadError e m
      => m b :-> m c -> m a :-> m b -> m a :-> m (Maybe c)
 (.?) l1 l2 = lens getter modifier where
     getter ma = do
@@ -179,8 +180,8 @@ infixr 6 .*
 infixr 8 .?
 infixr 8 .:
 
-rjoinV :: (MonadError e m, Error e)
-       => e -> m a :-> m (Maybe b) -> m a :-> m b
+rjoinV :: MonadError String m
+       => String -> m a :-> m (Maybe b) -> m a :-> m b
 rjoinV e l = lens getter modifier where
     getter ma = do
         maybeb <- get l ma
@@ -189,6 +190,6 @@ rjoinV e l = lens getter modifier where
         let b = Just <$> f (getter ma)
         set l b ma
 
-rjoin :: (MonadError e m, Error e)
+rjoin :: MonadError String m
       => m a :-> m (Maybe b) -> m a :-> m b
-rjoin = rjoinV (strMsg "failed")
+rjoin = rjoinV "failed"

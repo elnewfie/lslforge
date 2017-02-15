@@ -13,9 +13,9 @@ module Language.Lsl.UnitTestEnv(
     TestResult) where
 
 import Control.Monad(liftM2)
+import Control.Monad.Except(ExceptT(..),runExceptT)
 import Control.Monad.State(MonadState(..),State(..),evalState,
     runState)
-import Control.Monad.Error(ErrorT(..))
 import Data.List(find,intersperse)
 import Data.Maybe(isJust)
 import Language.Lsl.Internal.Breakpoint(
@@ -51,7 +51,7 @@ data SimpleWorld a = SimpleWorld {
         breakpointManager :: BreakpointManager
     }
 
-type SimpleWorldM a = ErrorT String (State (SimpleWorld a))
+type SimpleWorldM a = ExceptT String (State (SimpleWorld a))
 getTick :: SimpleWorldM a Int
 getTick = get >>= return . tick
 getMaxTick :: SimpleWorldM a Int
@@ -84,7 +84,7 @@ logMsg s = do
     modifyMsgLog ((tick,s):)
 
 doPredef :: (Read a, RealFloat a, Show a) => String -> b -> [LSLValue a] ->
-    ErrorT String (State (SimpleWorld a)) (EvalResult,LSLValue a)
+    ExceptT String (State (SimpleWorld a)) (EvalResult,LSLValue a)
 doPredef n i a = do
     logMsg $ "call: "  ++ renderCall n a
     case lookup n internalLLFuncs of
@@ -217,7 +217,7 @@ hasFunc1 lib (mn,fn) parms =
                         if parms == map (varType . ctxItem) ps
                             then Right True
                             else Left ("function " ++ fn ++ " has incorrect parameters")
-    where converted = evalState (runErrorT (convertEntryPoint (ModuleFunc mn fn))) world
+    where converted = evalState (runExceptT (convertEntryPoint (ModuleFunc mn fn))) world
           world = SimpleWorld { maxTick = 10000, tick = 0, msgLog = [], wScripts = [], wLibrary = lib,
                                 expectations = FuncCallExpectations Nice [], breakpointManager = emptyBreakpointManager }
 
@@ -227,7 +227,7 @@ hasFunc lib (moduleName,functionName) =
            Left s -> Left ("no such module: " ++ moduleName)
            Right (Left s) -> Left ("no such module: " ++ moduleName)
            Right (Right (script,path)) -> Right $ isJust (findFunc functionName $ map ctxItem $ scriptFuncs script)
-    where converted = evalState (runErrorT (convertEntryPoint ep)) world
+    where converted = evalState (runExceptT (convertEntryPoint ep)) world
           ep = ModuleFunc moduleName functionName
           world = SimpleWorld { maxTick = 10000, tick = 0, msgLog = [], wScripts = [], wLibrary = lib,
                                 expectations = FuncCallExpectations Nice [], breakpointManager = emptyBreakpointManager }
@@ -239,7 +239,7 @@ simSFunc (script,path) globs args =
    let world = SimpleWorld { maxTick = 10000, tick = 0, msgLog = [], wScripts = [], wLibrary = [],
                              expectations = FuncCallExpectations Nice [], breakpointManager = emptyBreakpointManager }
        exec = initStateSimple script doPredef logMsg getTick setTick checkBp
-       init = runState (runErrorT (
+       init = runState (runExceptT (
            do result <- runEval (setupSimple path globs args) exec
               case result of
                  (Left s, _) -> fail s
@@ -247,7 +247,7 @@ simSFunc (script,path) globs args =
     in case init of
         (Left s, world') -> Left s
         (Right exec,world') ->
-            case (runState $ runErrorT $ (runEval $ evalSimple 10000) exec) world of
+            case (runState $ runExceptT $ (runEval $ evalSimple 10000) exec) world of
                 (Left s,_) -> Left s
                 (Right r, _) ->
                     case r of
@@ -267,7 +267,7 @@ simFunc lib (moduleName,functionName) globs args =
        Left s -> Left s
        Right (script,path) -> simSFunc (script,path) globs args
 
-simSome exec world = runState (runErrorT (
+simSome exec world = runState (runExceptT (
     do maxTick <- getMaxTick
        (runEval $ evalSimple maxTick) exec)) world
 
@@ -282,7 +282,7 @@ simStep scripts lib (unitTest:tests, Nothing) command =
         globs = initialGlobs unitTest
         args = arguments unitTest
         name = unitTestName unitTest
-        init = runState (runErrorT (
+        init = runState (runExceptT (
             do converted <- convertEntryPoint ep
                case converted of
                    Left s -> fail s

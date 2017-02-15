@@ -82,8 +82,8 @@ module Language.Lsl.Internal.WorldState(
 import Prelude hiding(id,(.))
 import Control.Category
 import Control.Monad(MonadPlus(..))
+import Control.Monad.Except(MonadError(..),runExceptT)
 import Control.Monad.State(StateT(..))
-import Control.Monad.Error(Error,ErrorT(..),MonadError(..),strMsg)
 import Data.Label
 import Data.LabelExtras
 import Data.List(elemIndex)
@@ -105,8 +105,8 @@ import Language.Lsl.Internal.WorldStateTypes
 
 import System.Random(Random(..))
 
-primAttachment' :: (MonadError e m, Error e) => m Prim :-> m Attachment
-primAttachment' = rjoinV (strMsg "not attached") primAttachment
+primAttachment' :: MonadError String m => m Prim :-> m Attachment
+primAttachment' = rjoinV "not attached" primAttachment
 
 -- extracting/updating the world state ----------------------------------------
 wav k = lm k.worldAvatars
@@ -214,7 +214,7 @@ putHTTPResponseEvent pk sn key status metadata body =
 
 
 evalWorldE :: Monad m => WorldE m v -> StateT (World m) m (Either String v)
-evalWorldE = runErrorT . unWorldE
+evalWorldE = runExceptT . unWorldE
 
 fromWorldE def val = val `catchError` const (return def)
 

@@ -29,8 +29,8 @@ module Language.Lsl.Internal.Exec(
     hasActiveHandler) where
 
 import Control.Monad(foldM_,when,mplus,msum,zipWithM,ap,liftM)
+import Control.Monad.Except(MonadError(..),ExceptT(..),runExceptT)
 import Control.Monad.State(MonadState(..),lift,StateT(..))
-import Control.Monad.Error(MonadError(..),ErrorT(..))
 import Control.Monad.Trans
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
 import Data.List(intersperse,find,tails)
@@ -88,7 +88,7 @@ initStateSimple script perfAction log qtick utick chkBp =
                 checkBreakpoint = chkBp,
                 nextEvent = undefined }
 
-runEval = (runStateT . runErrorT . unEval)
+runEval = (runStateT . runExceptT . unEval)
 
 executeLsl img oid pid sid pkey perf log qtick utick chkBp queue maxTick =
      do let state = (EvalState { scriptImage = img,
@@ -124,7 +124,7 @@ data EvalState m a = EvalState {
      nextEvent :: String -> String -> m (Maybe (Event a))  }
 
 --type Eval m a = ErrorT String (StateT (EvalState m a) m)
-newtype Eval a m b = Eval { unEval :: ErrorT String (StateT (EvalState m a) m) b }
+newtype Eval a m b = Eval { unEval :: ExceptT String (StateT (EvalState m a) m) b }
     deriving (Monad)
 
 instance Monad m => MonadState (EvalState m a) (Eval a m) where

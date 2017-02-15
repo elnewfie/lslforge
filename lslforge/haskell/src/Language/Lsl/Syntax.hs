@@ -65,10 +65,10 @@ import Data.Data(Data,Typeable)
 import Data.List(find,sort,sortBy,nub,nubBy,deleteFirstsBy)
 import qualified Data.Map as M
 import Data.Maybe(isJust,isNothing)
-import Language.Lsl.Internal.Util(ctx,findM,lookupM,filtMap,throwStrError)
+import Language.Lsl.Internal.Util(ctx,findM,lookupM,filtMap)
 import Control.Monad(when,MonadPlus(..))
 import Control.Monad.Except(MonadError(..))
-import Control.Monad.Error.Class(Error(..))
+-- import Control.Monad.Error.Class(Error(..))
 import qualified Control.Monad.State as S(State)
 import Control.Monad.State hiding(State)
 
@@ -257,11 +257,11 @@ msgFromCodeErr = snd
 -- | An error monad for representing validation errors with respect to LSL code.
 type Validity a = Either CodeErrs a
 
-instance Error CodeErrs where
-    noMsg = CodeErrs [(Nothing,"")]
-    strMsg s = CodeErrs [(Nothing,s)]
-
 --------------------
+
+throwStrError :: String -> Validity a
+throwStrError s = throwError $ CodeErrs [(Nothing,s)]
+
 matchTypes LLFloat LLInteger = True
 matchTypes dest src = dest == src || (all (`elem` [LLKey,LLString]) [dest,src])
 
@@ -562,7 +562,7 @@ compileGlob (GI (Ctx ctx name) bindings prefix) =
                 Right (LModule globs freevars) -> do
                    vars <- get'vsGVs
                    case validBindings vars freevars bindings of
-                       Left err -> vsmAddErr (ctx, err)
+                       Left (CodeErrs ((_,err):_)) -> vsmAddErr (ctx, err)
                        Right () -> do
                            let (vars',funcDecs') = evalState (preprocessGlobDefs "" globs) (emptyValidationState { vsLib = library })
                            let renames = bindings ++ (map (\ x -> (x,prefix ++ x)) ((map varName vars') ++ (funcNames funcDecs')))
@@ -597,7 +597,7 @@ rewriteGlob' prefix0 renames vars (GI (Ctx ctx mName) bindings prefix) =
            Left (CodeErrs errs) -> vsmAddErrs $ CodeErrs (map (\ (_,err) -> (ctx, err)) errs)
            Right (LModule globs freevars) -> do
                case validBindings vars freevars bindings of
-                  Left err -> vsmAddErr (ctx, err)
+                  Left (CodeErrs ((_,err):_)) -> vsmAddErr (ctx, err)
                   Right _ -> do
                       bindings' <- mapM rewriteBinding bindings
                       let imp = (mName,sort bindings', prefix0 ++ prefix)

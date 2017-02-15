@@ -23,7 +23,7 @@ module Language.Lsl.Internal.DOMProcessing(
     ) where
 
 import Control.Monad(liftM,unless,foldM,ap)
-import Control.Monad.Error(MonadError(..),ErrorT(..))
+import Control.Monad.Except(MonadError(..),ExceptT(..),runExceptT)
 import Control.Monad.State(MonadState(..),State(..),evalState,StateT(..),
     evalStateT)
 import Control.Monad.Trans
@@ -158,7 +158,7 @@ elist acc = foldM f [] =<< getContent where
 
 liste s = (elist . tagit s)
 
-newtype AcceptT m a = AcceptT { unAcceptT :: ErrorT String (StateT (Element Posn) m) a }
+newtype AcceptT m a = AcceptT { unAcceptT :: ExceptT String (StateT (Element Posn) m) a }
    deriving (Monad)
 
 instance MonadTrans AcceptT where
@@ -183,11 +183,11 @@ instance Monad m => MonadXMLAccept (AcceptT m) where
     getContext = get
     setContext = put
 
-runAcceptT = (evalStateT . runErrorT . unAcceptT)
+runAcceptT = (evalStateT . runExceptT . unAcceptT)
 xmlAcceptT c s = runAcceptT c root where
     (Document _ _ root _) = xmlParse "input" s
 
-newtype XMLAccept a = XMLAccept { unXMLAccept :: ErrorT String (State (Element Posn)) a }
+newtype XMLAccept a = XMLAccept { unXMLAccept :: ExceptT String (State (Element Posn)) a }
     deriving (Monad)
 
 instance MonadState (Element Posn) XMLAccept where
@@ -209,6 +209,6 @@ instance MonadXMLAccept XMLAccept where
    getContext = get
    setContext = put
 
-runXMLAccept = (evalState . runErrorT . unXMLAccept)
+runXMLAccept = (evalState . runExceptT . unXMLAccept)
 xmlAccept c s = runXMLAccept c root where
     (Document _ _ root _) = xmlParse "input" s

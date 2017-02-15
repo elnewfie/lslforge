@@ -5,7 +5,6 @@ import Data.Bits
 import Data.List
 import Data.Maybe
 
-import Control.Monad.Error
 import Control.Monad.Identity
 import Debug.Trace
 import Language.Lsl.Internal.BuiltInModules(avEventGen)
