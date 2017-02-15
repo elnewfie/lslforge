@@ -116,6 +116,8 @@ nullCtx :: a -> Ctx a
 nullCtx = Ctx Nothing
 nullCtxStmt = nullCtx NullStmt
 
+sminsert :: String -> a -> [M.Map String a] -> [M.Map String a]
+sminsert _ _ [] = []
 sminsert k v (m:ms) = M.insert k v m : ms
 
 unionall = foldl' M.union M.empty
