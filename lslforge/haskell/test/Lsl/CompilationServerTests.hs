@@ -24,30 +24,30 @@ checkV s = case parse elemDescriptor s of
          assertEqual "deserialize/serialize mismatch" s (xmlSerialize Nothing v "")
          return v
 
--- testInit = TestLabel "testInit" $ TestCase $ do
---     dir <- basedir
---     (_,s) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
---     checkV s :: IO [CompilationStatus]
---     return ()
+testInit = TestLabel "testInit" $ TestCase $ do
+    dir <- basedir
+    (_,s) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
+    checkV s :: IO [CompilationStatus]
+    return ()
 
--- testUpdateScript = TestLabel "testUpdateScript" $ TestCase $ do
---     dir <- basedir
---     (st,cs) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
---     v <- checkV cs :: IO [CompilationStatus]
---     (_,cs') <- handleCommand st (UpdateScript ("simple.lslp",dir </> "scripts" </> "simple-alt.lslp"))
---     v' <- checkV cs'
---     case find (\ (CompilationStatus s _) -> s == "simple.lslp") v' of
---         Nothing -> assertFailure "compiled script not found!"
---         Just (CompilationStatus _ (Left s)) -> assertFailure "script should have compiled!"
---         Just (CompilationStatus _ (Right ([],[EPSummary EPHandler nm _ _]))) -> assertEqual "wrong handler name!" nm "default.state_exit"
+testUpdateScript = TestLabel "testUpdateScript" $ TestCase $ do
+    dir <- basedir
+    (st,cs) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
+    v <- checkV cs :: IO [CompilationStatus]
+    (_,cs') <- handleCommand st (UpdateScript ("simple.lslp",dir </> "scripts" </> "simple-alt.lslp"))
+    v' <- checkV cs' :: IO [CompilationStatus]
+    case find (\ (CompilationStatus s _) -> s == "simple.lslp") v' of
+        Nothing -> assertFailure "compiled script not found!"
+        Just (CompilationStatus _ (Left s)) -> assertFailure "script should have compiled!"
+        Just (CompilationStatus _ (Right ([],[EPSummary EPHandler nm _ _]))) -> assertEqual "wrong handler name!" nm "default.state_exit"
 
--- testCheckScript = TestLabel "testCheckScript" $ TestCase $ do
---     dir <- basedir
---     (st,cs) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
---     v <- checkV cs :: IO [CompilationStatus]
---     (st,s) <- handleCommand st (CheckScript (CodeElement "foo" sample))
---     checkV s :: IO (LSLScript,[ErrInfo])
---     return ()
+testCheckScript = TestLabel "testCheckScript" $ TestCase $ do
+    dir <- basedir
+    (st,cs) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
+    v <- checkV cs :: IO [CompilationStatus]
+    (st,s) <- handleCommand st (CheckScript (CodeElement "foo" sample))
+    checkV s :: IO (LSLScript,[ErrInfo])
+    return ()
 
 sample = [here|
     default {
