@@ -8,7 +8,7 @@ import qualified Control.Monad.State as State(State)
 
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
 import Data.Generics
-import Data.Generics.Extras.Schemes(everythingTwice,everythingButTwice,downupSkipping,everywhereButM)
+import Data.Generics.Extras.Schemes(everythingButTwice,downupSkipping,everywhereButM)
 import Data.List(foldl',nub,lookup)
 import Data.Graph
 import qualified Data.Set as Set
@@ -280,11 +280,6 @@ inlineProc (Ctx c (Func fd ss)) args = do
             stmts <- inlineStmts endLabel (map ctxItem ss) >>= return . map nullCtx >>= return . withoutFinalJumpTo endLabel
             return (if jumpsTo endLabel stmts == 0 then [] else [nullCtx $ Label endLabel], parmVars ++ stmts)
     where ps = funcParms fd
-
-nullify :: Data a => a -> a
-nullify = everywhere (mkT doNullify)
-    where doNullify :: Maybe SourceContext -> Maybe SourceContext
-          doNullify _ = Nothing
 
 mkParmVars :: [Ctx Statement] -> [(Ctx Var,Ctx Expr)] -> OState [Ctx Statement]
 mkParmVars ss ves = mapM (mkParmVar ss) ves >>= return . concat
@@ -745,27 +740,27 @@ arentConstantsM l = everythingButTwice (False `mkQ` string) (liftM2 (++)) (retur
           string :: String -> Bool
           string _ = True
 
-isConstant :: Data a => String -> [a] -> Bool
-isConstant s xs = not $ evalState (isntConstantM s xs) []
+-- isConstant :: Data a => String -> [a] -> Bool
+-- isConstant s xs = not $ evalState (isntConstantM s xs) []
 
-isntConstantM :: (Data a) => String -> [a] -> NamesState Bool
-isntConstantM s = everythingTwice (liftM2 (||)) (return False `mkQ` cvt (funcDecIn sfs) False `extQ`
-                                                 cvt (stmtIn sfs) False `extQ` modified `extQ` cvt (handlerDecIn sfs) False)
-                                                (return False `mkQ` cvt (funcDecOut sfs) False `extQ`
-                                                 cvt (handlerDecOut sfs) False `extQ` cvt (stmtOut sfs) False)
-    where sfs = nameStateScopeFuncs
-          checkNm nm = (sfVars sfs) >>= return . ((nm == s) &&) . (notElem nm)
-          modified (Set (Ctx _ nm,_) _)   = checkNm nm
-          modified (IncBy (Ctx _ nm,_) _) = checkNm nm
-          modified (DecBy (Ctx _ nm,_) _) = checkNm nm
-          modified (MulBy (Ctx _ nm,_) _) = checkNm nm
-          modified (DivBy (Ctx _ nm,_) _) = checkNm nm
-          modified (ModBy (Ctx _ nm,_) _) = checkNm nm
-          modified (PreDec (Ctx _ nm,_))  = checkNm nm
-          modified (PreInc (Ctx _ nm,_))  = checkNm nm
-          modified (PostDec (Ctx _ nm,_)) = checkNm nm
-          modified (PostInc (Ctx _ nm,_)) = checkNm nm
-          modified _ = return False
+-- isntConstantM :: (Data a) => String -> [a] -> NamesState Bool
+-- isntConstantM s = everythingTwice (liftM2 (||)) (return False `mkQ` cvt (funcDecIn sfs) False `extQ`
+--                                                  cvt (stmtIn sfs) False `extQ` modified `extQ` cvt (handlerDecIn sfs) False)
+--                                                 (return False `mkQ` cvt (funcDecOut sfs) False `extQ`
+--                                                  cvt (handlerDecOut sfs) False `extQ` cvt (stmtOut sfs) False)
+--     where sfs = nameStateScopeFuncs
+--           checkNm nm = (sfVars sfs) >>= return . ((nm == s) &&) . (notElem nm)
+--           modified (Set (Ctx _ nm,_) _)   = checkNm nm
+--           modified (IncBy (Ctx _ nm,_) _) = checkNm nm
+--           modified (DecBy (Ctx _ nm,_) _) = checkNm nm
+--           modified (MulBy (Ctx _ nm,_) _) = checkNm nm
+--           modified (DivBy (Ctx _ nm,_) _) = checkNm nm
+--           modified (ModBy (Ctx _ nm,_) _) = checkNm nm
+--           modified (PreDec (Ctx _ nm,_))  = checkNm nm
+--           modified (PreInc (Ctx _ nm,_))  = checkNm nm
+--           modified (PostDec (Ctx _ nm,_)) = checkNm nm
+--           modified (PostInc (Ctx _ nm,_)) = checkNm nm
+--           modified _ = return False
 
 areUsedIn :: Data a => [String] -> a -> [String]
 areUsedIn l v =
