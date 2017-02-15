@@ -29,4 +29,8 @@ hereExp s = dataToExpQ (const Nothing) (filt s)
 
 -- | A quasi-quoter for a string...
 here :: QuasiQuoter
-here = QuasiQuoter { quoteExp = hereExp, quotePat = herePat }
+here = QuasiQuoter { quoteExp  = hereExp
+                   , quotePat  = herePat
+                   , quoteType = error "No quoteType implementation for here"
+                   , quoteDec  = error "No quoteDec implementation for here"
+                   }
