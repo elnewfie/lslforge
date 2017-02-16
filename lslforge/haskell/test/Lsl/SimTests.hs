@@ -1242,7 +1242,7 @@ wallclockTest = mkTest "Wallclock Test" $ ((chatRun [[lsl|
         state_entry() {
            llSay(0,"time is " + (string)llGetWallclock());
         }
-    }|]] ["time is 3208"]) { tLib = library })
+    }|]] ["time is 64000"]) { tLib = library })
 
 stringTest1 = mkTest "String Test 1" $ ((chatRun [[lsl|
     default {

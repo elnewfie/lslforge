@@ -41,6 +41,8 @@ import Data.Maybe(fromMaybe,isNothing)
 import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.IntMap as IM
+import Data.Time
+import Data.Time.Clock.POSIX
 
 import Language.Lsl.Internal.Animation(builtInAnimations)
 import Language.Lsl.Internal.AvEvents(AvatarInputEvent(..))
@@ -74,10 +76,6 @@ import Language.Lsl.WorldDef(Attachment(..),AvatarControlListener(..),
     isInvTextureItem,primPhantomBit,primPhysicsBit,ItemPermissions(..),
     mkScript)
 import Language.Lsl.Internal.WorldState
-
-import System.Time(ClockTime(..),CalendarTime(..),TimeDiff(..),addToClockTime,
-    toUTCTime)
-import Text.Printf(PrintfType(..),printf)
 
 -- just for fun
 (<<=) = (=<<)
@@ -1808,35 +1806,37 @@ llGetLinkNumber (ScriptInfo oid pid _ pk _) [] =
 
 llGetUnixTime (ScriptInfo _ _ _ _ _) [] = getUnixTime >>= continueI
 
-llGetTimestamp (ScriptInfo _ _ _ _ _) [] = do
-    cal <- toUTCTime <$> getTimeOfDay
-    continueS $ printf "%04d-%02d-%02dT%02d:%02d:%02.6f"
-         (ctYear cal) (1 + fromEnum (ctMonth cal)) (ctDay cal) (ctHour cal) (ctMin cal)
-         (fromIntegral (ctSec cal) / (10.0^12 * fromIntegral (ctPicosec cal)) :: Float)
+-- UTC timestamp
+llGetTimestamp (ScriptInfo _ _ _ _ _) [] =
+    getUTCTimeOfDay >>=
+    continueS . formatTime defaultTimeLocale "%04d-%02d-%02dT%02d:%02d:%02.6f"
 
+-- UTC date
 llGetDate (ScriptInfo _ _ _ _ _) [] = getUTCDate >>= continueS
-llGetGMTclock (ScriptInfo _ _ _ _ _) [] = do
-    cal <- toUTCTime <$> getTimeOfDay
-    continueI $ (24 * ctHour cal) + (60 * ctMin cal) + ctSec cal
 
-llGetWallclock (ScriptInfo _ _ _ _ _) [] = do
-    cal <- toUTCTime <$> (getLocalTimeOfDay (-8))
-    continueI $ (24 * ctHour cal) + (60 * ctMin cal) + ctSec cal
+-- seconds since midnight GMT / UTC
+llGetGMTclock (ScriptInfo _ _ _ _ _) [] =
+    getUTCTimeOfDay >>=
+    continueI . floor . utctDayTime
+
+-- seconds since midnight Pacific
+llGetWallclock (ScriptInfo _ _ _ _ _) [] =
+    getUTCTimeOfDay >>=
+    continueI . floor . timeOfDayToTime . localTimeOfDay . utcToLocalTime llabTZ
+  where
+    llabTZ = hoursToTimeZone (-8)
 
 llGetTimeOfDay (ScriptInfo _ _ _ _ _) [] =
-    (continueF . ticksToDuration . flip mod (durationToTicks 4.0)) =<< getM tick
+    continueF . ticksToDuration . flip mod (durationToTicks 4.0) =<< getM tick
 
-getUnixTime :: (Monad m) => WorldE m Int
+getUnixTime :: Monad m => WorldE m Int
 getUnixTime = fromIntegral <$> (liftM2 (+) (getM worldZeroTime) (liftM (floor . ticksToDuration) $ getM tick))
-getTimeOfDay :: (Monad m) => WorldE m ClockTime
-getTimeOfDay = (flip TOD 0 . fromIntegral) <$> getUnixTime
 
-getLocalTimeOfDay offset =  (addToClockTime (TimeDiff 0 0 0 offset 0 0 0)) <$> getTimeOfDay
+getUTCTimeOfDay :: Monad m => WorldE m UTCTime
+getUTCTimeOfDay = posixSecondsToUTCTime . fromIntegral <$> getUnixTime
 
-getUTCDate :: (Monad a, PrintfType (Int -> Int -> Int -> b)) => WorldE a b
-getUTCDate = do
-    cal <- toUTCTime <$> getTimeOfDay
-    return $ printf "%04d-%02d-%02d" (ctYear cal) (1 + fromEnum (ctMonth cal)) (ctDay cal)
+getUTCDate :: Monad a => WorldE a String
+getUTCDate = formatTime defaultTimeLocale "%04d-%02d-%02d" <$> getUTCTimeOfDay
 
 llGetRegionFPS _ _ = continueF 45.0
 llGetRegionTimeDilation _ _ = continueF 1.0
