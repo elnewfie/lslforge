@@ -17,7 +17,7 @@ install:
   - ps: Invoke-WebRequest "https://github.com/commercialhaskell/stack/releases/download/v1.3.2/stack-1.3.2-windows-x86_64.zip" -OutFile stack.zip
   - ps: Invoke-WebRequest "https://github.com/fpco/minghc/blob/master/bin/7z.exe?raw=true" -OutFile 7z.exe
   - ps: Invoke-WebRequest "https://github.com/fpco/minghc/blob/master/bin/7z.dll?raw=true" -OutFile 7z.dll
-  - 7z x stack.zip
+  - 7z x stack.zip stack.*
   - move stack.exe.exe stack.exe
 
 test_script:
