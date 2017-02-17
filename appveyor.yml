@@ -18,7 +18,6 @@ install:
   - ps: Invoke-WebRequest "https://github.com/fpco/minghc/blob/master/bin/7z.exe?raw=true" -OutFile 7z.exe
   - ps: Invoke-WebRequest "https://github.com/fpco/minghc/blob/master/bin/7z.dll?raw=true" -OutFile 7z.dll
   - 7z x stack.zip stack.*
-  - move stack.exe.exe stack.exe
 
 test_script:
   # The ugly echo "" hack is to avoid complaints about 0 being an invalid file
