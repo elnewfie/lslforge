@@ -13,7 +13,7 @@ before_cache:
 
 env:
   global:
-    LSLFORGE_TEST_DATA=$HOME/lslforge/lslforge/testing/data
+    LSLFORGE_TEST_DATA=$TRAVIS_BUILD_DIR/lslforge/testing/data
 
 matrix:
   include:
