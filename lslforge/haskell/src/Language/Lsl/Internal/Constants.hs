@@ -172,7 +172,7 @@ allConstants = [
     Constant "ATTACH_FACE_LEYE" (IVal 50),
     Constant "ATTACH_FACE_REAR" (IVal 49),
     Constant "ATTACH_FACE_REYE" (IVal 51),
-    Constant "ATTACH_FACE_TOUNGE" (IVal 52),
+    Constant "ATTACH_FACE_TONGUE" (IVal 52),
     Constant "AGENT_FLYING" (IVal 0x1),
     Constant "AGENT_IN_AIR" (IVal 0x100),
     Constant "AGENT_LIST_PARCEL" (IVal 0x1),

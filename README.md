@@ -12,6 +12,8 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
+* 2017-02-10 LSLForge **0.1.9.3** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
+    * ATTACH_FACE_TONGUE misspelled
 * 2017-01-07 LSLForge **0.1.9.2** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
     * OBJECT_ATTACHED_SLOTS_AVAILABLE
     * llGetEnv("region_object_bonus") (in comments)
@@ -59,6 +61,7 @@ This way you'll get the newest release.
 
 Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
 
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.3/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.2/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.1/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
@@ -85,6 +88,44 @@ Switch to **LSLForge Perspective** and create a new LSLForge Project
 
     * Adding a fake ``*.lslm`` module along the project, it could be called ``Fake.lslm``. Opening it and adding a space, then removing it and hitting **Save** will force the project to be recompiled
     * Forcing recompilation of a module that is referenced by ``*.lslp`` file by opening it, doing some fake change, and hitting **Save**
+
+## Tips & Tricks
+
+### Importing Modules
+
+This demonstrates:
+
+* How to use folders when importing modules (dot notation)
+* How to import a module with a paramater
+
+**`Modules/Debug.lslm`** :
+
+```
+$module (integer DEBUG)
+// pragma inline
+bug(string place, string message) {
+  if (DEBUG) llOwnerSay("["+llGetScriptName()+"."+place+"]: "+message);
+}
+```
+
+**`Script.lslp`** :
+
+```
+integer DEBUG=TRUE; // has to be a variable
+$import Modules.Debug.lslm(DEBUG=DEBUG) de;
+
+do() {
+  debug("do()", "This is a call of 'bug' function from 'de' module");
+}
+
+```
+
+### Referencing Modules From Other Projects
+
+Imagine you move ``Modules`` folder to a separate project called ``ModulesProject`` to use it from different other projects.
+In the main project that uses ``ModulesProject``, place a checkmark along its name under ``Project settings > Project References``. 
+
+``ModulesProject`` directory tree becomes part of the project's tree. It will still be imported as ``$import Modules.Debug.lslm`` without any additions.
 
 ## Native Library Compilation Example
 

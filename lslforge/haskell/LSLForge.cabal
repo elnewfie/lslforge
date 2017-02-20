@@ -1,11 +1,11 @@
 name:           LSLForge
-version:        0.1.9.2
-synopsis:	    An execution and testing framework for the Linden Scripting Language (LSL)
+version:        0.1.9.3
+synopsis:       An execution and testing framework for the Linden Scripting Language (LSL)
 description:
-	Provides a framework for executing Linden Scripting Language scripts offline,
-	i.e. outside a Second Life&#xAE; simulator.  The product is the LslForge executable,
-        which works in cooperation with the LSLForge Eclipse plugin (the executable is not
-        much use standalone).  This package is a derivate of LSL Plus by Robert Greayer.
+  Provides a framework for executing Linden Scripting Language scripts offline,
+  i.e. outside a Second Life&#xAE; simulator.  The product is the LslForge executable,
+  which works in cooperation with the LSLForge Eclipse plugin (the executable is not
+  much use standalone).  This package is a derivate of LSL Plus by Robert Greayer.
 cabal-version:  >= 1.5
 homepage:       https://github.com/raysilent/lslforge (forked from https://github.com/elnewfie/lslforge)
 license:        BSD3
