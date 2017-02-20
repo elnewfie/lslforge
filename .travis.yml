@@ -1,4 +1,4 @@
-# This file has been generated -- see https://github.com/hvr/multi-ghc-travis
+# This file adapted from a generated one -- see https://github.com/hvr/multi-ghc-travis
 language: c
 sudo: false
 
@@ -10,6 +10,10 @@ cache:
 before_cache:
   - rm -fv $HOME/.cabal/packages/hackage.haskell.org/build-reports.log
   - rm -fv $HOME/.cabal/packages/hackage.haskell.org/00-index.tar
+
+env:
+  global:
+    LSLFORGE_TEST_DATA=$HOME/lslforge/lslforge/testing/data
 
 matrix:
   include:
@@ -64,6 +68,6 @@ script:
  - if [ -f configure.ac ]; then autoreconf -i; fi
  - cabal configure --enable-tests -v2  # -v2 provides useful information for debugging
  - cabal build   # this builds all libraries and executables (including tests/benchmarks)
- - LSLFORGE_TEST_DATA=../testing/data cabal test # test LSLForge
+ - cabal test # test LSLForge
 
 # EOF
