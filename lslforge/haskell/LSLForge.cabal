@@ -1,0 +1,171 @@
+name:           LSLForge
+version:        0.1.9.3
+synopsis:       An execution and testing framework for the Linden Scripting Language (LSL)
+description:
+  Provides a framework for executing Linden Scripting Language scripts offline,
+  i.e. outside a Second Life&#xAE; simulator.  The product is the LslForge executable,
+  which works in cooperation with the LSLForge Eclipse plugin (the executable is not
+  much use standalone).  This package is a derivate of LSL Plus by Robert Greayer.
+cabal-version:  >= 1.5
+homepage:       https://github.com/raysilent/lslforge (forked from https://github.com/elnewfie/lslforge)
+license:        BSD3
+license-file:   LICENSE
+category:	      Language
+copyright:	    Copyright (c) Robert Greayer 2008-2010, Others 2011-2016
+author:         Robert Greayer <robgreayer@yahoo.com>, "Newfie Pendragon" <elnewfie@yahoo.com>
+maintainer:	    "Ray Silent" <ray.silent@gmail.com>
+stability:	    experimental
+build-type:     Simple
+tested-with:	  GHC == 8.0.2
+extra-source-files: NOTICE
+
+executable LSLForge
+  build-depends: base >= 4.0 && < 5
+               , filepath >= 1.1.0.0 && < 1.5
+               , parsec >= 2.1.0.0 && < 3.2
+               , HaXml >= 1.22 && < 1.26
+               , directory > 1 && < 1.4
+               , array >= 0.2 && < 0.6
+               , mtl >= 2.0.1.0 && < 2.3
+               , network >= 2.1 && < 2.7
+               , network-uri >= 2.5 && < 2.7
+               , random >= 1.0
+               , containers >= 0.1 && < 0.6
+               , time >= 1.5.0.1 && < 1.8
+               , utf8-string >= 0.3 && < 1.1
+               , binary >= 0.2.4 && < 0.9
+               , pureMD5 >= 0.2 && < 2.2
+               , bytestring >= 0.9 && < 0.11
+               , template-haskell >= 2.4.0.0 && < 2.12
+               , syb >= 0.1.0.0 && < 0.7
+               , fclabels >= 2.0 && < 2.1
+  main-is:        LslForge.hs
+  hs-source-dirs: src
+  other-modules:
+    Data.Generics.Extras.Schemes
+    Data.LabelExtras
+    Language.Lsl.Internal.AccessGenerator
+    Language.Lsl.Internal.Animation
+    Language.Lsl.Internal.AvEvents
+    Language.Lsl.Internal.Breakpoint
+    Language.Lsl.Internal.BreakpointsDeserialize
+    Language.Lsl.Internal.BuiltInModules
+    Language.Lsl.Internal.CodeHelper
+    Language.Lsl.Internal.CompilationServer
+    Language.Lsl.Internal.Compiler
+    Language.Lsl.Internal.Constants
+    Language.Lsl.Internal.DOMCombinators
+    Language.Lsl.Internal.DOMProcessing
+    Language.Lsl.Internal.DOMSourceDescriptor
+    Language.Lsl.Internal.DOMUnitTestDescriptor
+    Language.Lsl.Internal.Evaluation
+    Language.Lsl.Internal.EventSigs
+    Language.Lsl.Internal.Exec
+    Language.Lsl.Internal.ExecInfo
+    Language.Lsl.Internal.ExpressionHandler
+    Language.Lsl.Internal.FuncSigs
+    Language.Lsl.Internal.InternalLLFuncs
+    Language.Lsl.Internal.Key
+    Language.Lsl.Internal.Load
+    Language.Lsl.Internal.Log
+    Language.Lsl.Internal.Math
+    Language.Lsl.Internal.MetaData
+    Language.Lsl.Internal.NumberParsing
+    Language.Lsl.Internal.Optimize
+    Language.Lsl.Internal.OptimizerOptions
+    Language.Lsl.Internal.Physics
+    Language.Lsl.Internal.Pragmas
+    Language.Lsl.Internal.SerializationGenerator
+    Language.Lsl.Internal.SerializationInstances
+    Language.Lsl.Internal.SHA1
+    Language.Lsl.Internal.SimLL
+    Language.Lsl.Internal.SimMetaData
+    Language.Lsl.Internal.SystemTester
+    Language.Lsl.Internal.TestResult
+    Language.Lsl.Internal.Type
+    Language.Lsl.Internal.UnitTester
+    Language.Lsl.Internal.Util
+    Language.Lsl.Internal.WorldState
+    Language.Lsl.Internal.WorldStateTypes
+    Language.Lsl.Internal.XmlCreate
+    Language.Lsl.Parse
+    Language.Lsl.QQ
+    Language.Lsl.Render
+    Language.Lsl.Sim
+    Language.Lsl.Syntax
+    Language.Lsl.UnitTest
+    Language.Lsl.UnitTestEnv
+    Language.Lsl.WorldDef
+    Text.Here
+    Text.ParserCombinators.ParsecExtras.Language
+    Text.ParserCombinators.ParsecExtras.Token
+  ghc-options: -fwarn-unused-imports
+
+test-suite spec
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      src,test
+  main-is:             Main.hs
+  build-depends:       base
+                     , HUnit < 1.6
+  other-modules:
+    Data.Generics.Extras.Schemes
+    Data.LabelExtras
+    Language.Lsl.Internal.AccessGenerator
+    Language.Lsl.Internal.Animation
+    Language.Lsl.Internal.AvEvents
+    Language.Lsl.Internal.Breakpoint
+    Language.Lsl.Internal.BreakpointsDeserialize
+    Language.Lsl.Internal.BuiltInModules
+    Language.Lsl.Internal.CodeHelper
+    Language.Lsl.Internal.CompilationServer
+    Language.Lsl.Internal.Compiler
+    Language.Lsl.Internal.Constants
+    Language.Lsl.Internal.DOMCombinators
+    Language.Lsl.Internal.DOMProcessing
+    Language.Lsl.Internal.DOMSourceDescriptor
+    Language.Lsl.Internal.DOMUnitTestDescriptor
+    Language.Lsl.Internal.Evaluation
+    Language.Lsl.Internal.EventSigs
+    Language.Lsl.Internal.Exec
+    Language.Lsl.Internal.ExecInfo
+    Language.Lsl.Internal.ExpressionHandler
+    Language.Lsl.Internal.FuncSigs
+    Language.Lsl.Internal.InternalLLFuncs
+    Language.Lsl.Internal.Key
+    Language.Lsl.Internal.Load
+    Language.Lsl.Internal.Log
+    Language.Lsl.Internal.Math
+    Language.Lsl.Internal.MetaData
+    Language.Lsl.Internal.NumberParsing
+    Language.Lsl.Internal.Optimize
+    Language.Lsl.Internal.OptimizerOptions
+    Language.Lsl.Internal.Physics
+    Language.Lsl.Internal.Pragmas
+    Language.Lsl.Internal.SerializationGenerator
+    Language.Lsl.Internal.SerializationInstances
+    Language.Lsl.Internal.SHA1
+    Language.Lsl.Internal.SimLL
+    Language.Lsl.Internal.SimMetaData
+    Language.Lsl.Internal.SystemTester
+    Language.Lsl.Internal.TestResult
+    Language.Lsl.Internal.Type
+    Language.Lsl.Internal.UnitTester
+    Language.Lsl.Internal.Util
+    Language.Lsl.Internal.WorldState
+    Language.Lsl.Internal.WorldStateTypes
+    Language.Lsl.Internal.XmlCreate
+    Language.Lsl.Parse
+    Language.Lsl.QQ
+    Language.Lsl.Render
+    Language.Lsl.Sim
+    Language.Lsl.Syntax
+    Language.Lsl.UnitTest
+    Language.Lsl.UnitTestEnv
+    Language.Lsl.WorldDef
+    Lsl.CompilationServerTests
+    Lsl.CompilerTests
+    Lsl.OptTests
+    Lsl.SimTests
+    Text.Here
+    Text.ParserCombinators.ParsecExtras.Language
+    Text.ParserCombinators.ParsecExtras.Token

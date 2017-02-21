@@ -15,7 +15,7 @@ import Language.Lsl.Internal.Pragmas
 import Language.Lsl.QQ(lsl,lslm)
 import Text.Here
 
-import System
+import System.Environment
 import System.FilePath
 
 import Test.HUnit hiding (State)
@@ -27,13 +27,13 @@ assertValid msg (Right _) = return ()
 assertValid msg (Left (CodeErrs ((err,msg1):_))) = assertFailure (msg ++ " -- " ++ msg1 ++ " (" ++ show err ++ ")")
 
 assertInvalid msg (Right _) = assertFailure msg
-assertInvalid msg (Left (CodeErrs ((_,s):_))) = 
+assertInvalid msg (Left (CodeErrs ((_,s):_))) =
     if isInfixOf "file does not exist" s then assertFailure "file does not exist!" else return ()
 
 prePrep = do
     (lib,scripts) <- compile (False,[],[])
     return $ length lib
-    
+
 prepSingleScript s = do
     dir <- basedir
     let path = dir </> "scripts" </> s
@@ -58,25 +58,25 @@ checkScriptStr' :: String -> Validity CompiledLSLScript
 checkScriptStr' s = do
     parsedScript <- liftValidity $ parseScriptFromString s
     S.evalState (compileLSLScript parsedScript) emptyValidationState
-    
+
 checkScriptStr :: String -> Validity CompiledLSLScript
 checkScriptStr s = do
     parsedScript <- liftValidity $ parseScriptFromString s
     compileLSLScript' [] parsedScript
     --return ()
- 
+
 
 compileLibraryFromStrings modules = do
     parsedModules :: [(String, LModule)] <- liftValidity $ mapM ( \ (id,txt) -> parseModuleFromString txt >>= return . ((,) id)) modules
     return $ compileLibrary parsedModules
-    
+
 compileScript modules script = do
     auglib <- compileLibraryFromStrings modules
     compileScriptWithLibrary auglib script
 compileScriptWithLibrary auglib script = do
     parsedScript <- liftValidity $ parseScriptFromString script
     compileLSLScript' (libFromAugLib auglib) parsedScript
-    
+
 validScriptWithModules name modules script = TestLabel name $ TestCase $ do
     let result = compileScript modules script
     assertValid ("invalid!") result
@@ -92,7 +92,7 @@ invalidScriptWithModules name modules script = TestLabel name $ TestCase $ do
      assertAllValidLibrary lib'
      let result = compileScriptWithLibrary lib' script
      assertInvalid ("script should not have compiled") result
-     
+
 assertAllValidLibrary lib = mapM_ (\ (name,m) -> assertValid ("module " ++ name ++ " is invalid") m) lib
 
 validScriptStr name s = TestLabel name $ TestCase $ do
@@ -102,7 +102,7 @@ validScriptStr name s = TestLabel name $ TestCase $ do
     let s' = (renderCompiledScript "" compiled)
     let result' = checkScriptStr s'
     assertValid ("rendered compiled script is invalid!\n" ++ s' ++ "\n") result'
-    
+
 validScriptStr' name s = TestLabel name $ TestCase $ do
     let result = checkScriptStr s
     assertValid (name ++ " is invalid!") result
@@ -110,11 +110,11 @@ validScriptStr' name s = TestLabel name $ TestCase $ do
     let s' = (renderCompiledScript "" compiled)
     let result' = checkScriptStr' s'
     assertValid ("rendered compiled script is invalid!\n" ++ s' ++ "\n") result'
-    
+
 invalidScriptStr name s = TestLabel name $ TestCase $ do
     let result = checkScriptStr s
     assertInvalid (name ++ " should not have compiled!") result
-     
+
 validScript s = TestLabel s $ TestCase $ do
     script <- prepSingleScript s
     assertValid (s ++ " is invalid!") script
@@ -171,8 +171,8 @@ tests = TestList [validScriptStr "shouldWork" shouldWork,
                   validScriptStr "minusTest16" "default {state_entry() { integer x=-1; x/=-1;}}",
                   validScriptStr "minusTest17" "default {state_entry() { integer x=-1; x*=-1;}}"
                   ]
-    
-                  
+
+
 chkPredef s = "default {\nstate_entry() {\n" ++ s ++ ";\n}\n}\n"
 
 chkOwnerSay = chkPredef "llOwnerSay(\"Hello World\")"
@@ -209,16 +209,16 @@ modScript1 = "integer dbg = FALSE; $import debug(DEBUG=dbg); $import mod1(DEBUG=
 
 importTest1 = validScriptWithModules "importTest1" [("debug",mod0),("mod1",mod1)] modScript1
 
-importTest2 = validScriptWithModules "importTest2" [("debug",mod0),("mod1",mod1)] 
+importTest2 = validScriptWithModules "importTest2" [("debug",mod0),("mod1",mod1)]
     "integer dbg = FALSE; $import mod1(DEBUG=dbg); $import debug(DEBUG=dbg);  default { state_entry() { debug(\" hello \"); }}"
-    
+
 mod2 = "$module () integer deb; $import debug(DEBUG=deb);"
 
-importTest3 = invalidScriptWithModules "importTest3" [("debug",mod0),("mod1",mod1),("mod2",mod2)] 
+importTest3 = invalidScriptWithModules "importTest3" [("debug",mod0),("mod1",mod1),("mod2",mod2)]
     "integer dbg = FALSE; $import mod1 (DEBUG=dbg); $import mod2 () ; default { state_entry() { debug(\"hello \"); }}"
 
 mod3 = "$module (integer bar) $import mod1(DEBUG=bar); doit() { debug(\" hello \"); }"
-importTest4 = validScriptWithModules "importTest4" [("debug",mod0),("mod1",mod1),("mod3",mod3)] 
+importTest4 = validScriptWithModules "importTest4" [("debug",mod0),("mod1",mod1),("mod3",mod3)]
     "integer dbg = FALSE; $import mod1 (DEBUG=dbg); $import mod3 (bar=dbg); $import debug(DEBUG=dbg); default { state_entry() { debug(\"hello \"); }}"
 importTests = TestLabel "Module System Tests" $ TestList [
     importTest0,
@@ -227,7 +227,7 @@ importTests = TestLabel "Module System Tests" $ TestList [
     importTest3,
     importTest4]
 
-labelScript = [$here|
+labelScript = [here|
 default {
     state_entry() {
         if (llGetStartParameter()) {
@@ -257,19 +257,19 @@ default {
 
 labelTest = invalidScriptStr "Label Test" labelScript
 
-retconv = [$here|
+retconv = [here|
     float foo() {
        integer i = 0;
        return i;
-    } 
-    
+    }
+
     default {
         state_entry() {
             llOwnerSay((string)foo());
         }
     }|]
-    
-casts = [$here|
+
+casts = [here|
     default {
         state_entry() {
             list l = (list) 1;
@@ -279,25 +279,25 @@ casts = [$here|
             l = (list) ZERO_ROTATION;
         }
     }|]
-    
-floatWierdness = [$here|
+
+floatWierdness = [here|
     default {
         state_entry() {
             float f = 1.0;
             llOwnerSay((string)(f*.2));
         }
     }|]
-    
-moreFloatWierdness = [$here|
+
+moreFloatWierdness = [here|
     default {
         state_entry() {
             float f = .0;
             vector v = <.0,.0,0.>;
-            
+
       //      llOwnerSay((string)v);
         }
     }|]
-    
+
 allTests = TestLabel "All Tests" $ TestList [
     tests,
     importTests,
@@ -308,8 +308,8 @@ allTests = TestLabel "All Tests" $ TestList [
     validScriptStr "more float wierdness" moreFloatWierdness,
     validScriptStr "eq-not" eqNotScript ]
 
-    
-eqNotScript = [$here|
+
+eqNotScript = [here|
     default {
         state_entry() {
             integer x = 0;

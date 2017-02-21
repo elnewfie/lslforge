@@ -4,7 +4,6 @@ module Data.Generics.Extras.Schemes (
     downupSkipping,
     everythingTwice,
     everythingButTwice,
-    everythingBut,
     everywhereButM
  ) where
 
@@ -12,7 +11,6 @@ module Data.Generics.Extras.Schemes (
 
 import Data.Data
 import Data.Generics.Aliases
-import Control.Monad
 
 everythingButTwice :: GenericQ Bool -> (r -> r -> r) -> r -> GenericQ r -> GenericQ r -> GenericQ r
 everythingButTwice q k def f g x | q x = def
@@ -34,7 +32,7 @@ downupSkipping skip down up x | skip x = return x
                               | otherwise = do x' <- down x
                                                x'' <- gmapM (downupSkipping skip down up) x'
                                                up x''
-                                               
+
 -- | Monadic variation on everywhere
 everywhereButM :: Monad m => GenericQ Bool -> GenericM m -> GenericM m
 
@@ -42,7 +40,3 @@ everywhereButM :: Monad m => GenericQ Bool -> GenericM m -> GenericM m
 everywhereButM p f x | p x = return x
                      | otherwise = do x' <- gmapM (everywhereButM p f) x
                                       f x'
-
-everythingBut :: GenericQ Bool -> (r -> r -> r) -> r -> GenericQ r -> GenericQ r
-everythingBut p k def f x | p x = def
-                          | otherwise = foldl k (f x) (gmapQ (everythingBut p k def f) x)

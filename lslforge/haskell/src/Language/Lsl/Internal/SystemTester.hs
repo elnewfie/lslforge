@@ -2,9 +2,7 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.SystemTester where
 
-import Control.Applicative
-import Control.Monad.Error(MonadError(..))
-import IO
+import Control.Monad.Except(MonadError(..))
 import Language.Lsl.Internal.BreakpointsDeserialize(bps)
 import Language.Lsl.Internal.Compiler(compile)
 import Language.Lsl.Internal.DOMProcessing(req,tagit,def,getTag,
@@ -21,36 +19,36 @@ import Language.Lsl.WorldDef(world,worldXMLAccept)
 import Language.Lsl.Internal.XmlCreate(emit,emitList,emitSimple)
 
 commandFromXML xml = either error id $ xmlAccept command xml
-    
+
 command = choice cmds >>= maybe
     (getTag >>= \ t -> throwError ("unrecognized command: " ++ t))
     return
-    
+
 cmds = [cmd "sim-continue" SimContinue, cmd "sim-step" SimStep,
     cmd "sim-step-over" SimStepOver, cmd "sim-step-out" SimStepOut]
-    
-cmd s f = tagit s $ f <$> def "breakpoints" [] bps 
+
+cmd s f = tagit s $ f <$> def "breakpoints" [] bps
     <*> def "events" [] (liste "event" event)
-    
-event = SimEvent <$> req "name" text <*> def "args" [] (liste "arg" arg) 
+
+event = SimEvent <$> req "name" text <*> def "args" [] (liste "arg" arg)
     <*> req "delay" val
 
 arg = SimEventArg <$> req "name" text <*> req "value" text
 
-outputToXML (SimInfo _ log state) = 
+outputToXML (SimInfo _ log state) =
     (emit "sim-info" [] [emitLog log,emitState state]) ""
 outputToXML (SimEnded _ log state) =
     (emit "sim-ended" [] [emitLog log,emitState state]) ""
-outputToXML (SimSuspended _ suspendInfo log state) = 
+outputToXML (SimSuspended _ suspendInfo log state) =
     (emit "sim-suspended" [] [emitExecutionInfo suspendInfo,
                               emitLog log,
                               emitState state]) ""
-                                                                               
+
 emitLog log =
     emit "messages" [] $ map emitMessage (log)
 
 emitMessage logMessage =
-    emit "message" [] [ 
+    emit "message" [] [
         emitSimple "time" [] (show $ logMessageTime logMessage),
         emitSimple "level" [] (logLevelToName $ logMessageLevel logMessage),
         emitSimple "source" [] (logMessageSource logMessage),
@@ -65,11 +63,11 @@ emitPrims prims = emitList "prims" emitPrim prims
 emitAvatars avatars = emitList "avatars" emitAvatar avatars
 emitScripts scripts = emitList "scripts" emitScript scripts
 
-emitPrim (LSLKey key,name) = 
+emitPrim (LSLKey key,name) =
     emit "prim" [] [emitSimple "key" [] key, emitSimple "name" [] name]
-emitAvatar (LSLKey key,name) = 
+emitAvatar (LSLKey key,name) =
     emit "avatar" [] [emitSimple "key" [] key, emitSimple "name" [] name]
-emitScript (LSLKey pk,sname) = 
+emitScript (LSLKey pk,sname) =
     emit "script" [] [emitSimple "primKey" [] pk, emitSimple "scriptName" [] sname]
 
 testSystem :: IO ()

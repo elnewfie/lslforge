@@ -7,7 +7,7 @@ import Language.Lsl.Internal.DOMCombinators
 import Language.Lsl.Internal.SerializationGenerator
 import Language.Lsl.Internal.CompilationServer
 import Language.Lsl.Syntax
-import System
+import System.Environment
 import System.FilePath
 
 import Test.HUnit hiding (State,Label)
@@ -23,24 +23,24 @@ checkV s = case parse elemDescriptor s of
      Right (Just v) -> do
          assertEqual "deserialize/serialize mismatch" s (xmlSerialize Nothing v "")
          return v
-         
+
 testInit = TestLabel "testInit" $ TestCase $ do
     dir <- basedir
     (_,s) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
     checkV s :: IO [CompilationStatus]
     return ()
-            
+
 testUpdateScript = TestLabel "testUpdateScript" $ TestCase $ do
     dir <- basedir
     (st,cs) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
     v <- checkV cs :: IO [CompilationStatus]
     (_,cs') <- handleCommand st (UpdateScript ("simple.lslp",dir </> "scripts" </> "simple-alt.lslp"))
-    v' <- checkV cs'
+    v' <- checkV cs' :: IO [CompilationStatus]
     case find (\ (CompilationStatus s _) -> s == "simple.lslp") v' of
         Nothing -> assertFailure "compiled script not found!"
         Just (CompilationStatus _ (Left s)) -> assertFailure "script should have compiled!"
         Just (CompilationStatus _ (Right ([],[EPSummary EPHandler nm _ _]))) -> assertEqual "wrong handler name!" nm "default.state_exit"
-        
+
 testCheckScript = TestLabel "testCheckScript" $ TestCase $ do
     dir <- basedir
     (st,cs) <- handleCommand emptyCState (Init (False,[],[("simple.lslp",dir </> "scripts" </> "simple.lslp")]))
@@ -48,13 +48,13 @@ testCheckScript = TestLabel "testCheckScript" $ TestCase $ do
     (st,s) <- handleCommand st (CheckScript (CodeElement "foo" sample))
     checkV s :: IO (LSLScript,[ErrInfo])
     return ()
-        
-sample = [$here|
+
+sample = [here|
     default {
         state_entry() {
         }
     }|]
-    
+
 testDeserializeCommand = TestLabel "testDeserializeCommand" $ TestCase $ do
     let v = parse elemDescriptor command1
     case v of
@@ -62,14 +62,14 @@ testDeserializeCommand = TestLabel "testDeserializeCommand" $ TestCase $ do
         Right (Just (CheckScript (CodeElement name text))) -> assertEqual "---" "foo.lslp" name
         Right Nothing -> assertFailure "didn't find element!"
 
-command1 = [$here|<CompilationCommand__CheckScript>
+command1 = [here|<CompilationCommand__CheckScript>
   <el1 class="CodeElement_CodeElement">
     <codeElementName>foo.lslp</codeElementName>
     <codeElementText>sample</codeElementText>
   </el1>
 </CompilationCommand__CheckScript>|]
 
-command2 = [$here|<CompilationCommand__Init>
+command2 = [here|<CompilationCommand__Init>
   <el1>
     <el1 class="boolean">true</el1>
     <el2 class="linked-list"/>
@@ -88,4 +88,3 @@ testDeserializeComand2 = TestLabel "tstDeser2" $ TestCase $ do
         Left s -> assertFailure s
         Right (Just (Init _)) -> return ()
         Right Nothing -> assertFailure "didn't find element!"
-

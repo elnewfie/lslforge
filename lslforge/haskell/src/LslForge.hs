@@ -9,9 +9,9 @@ import qualified Language.Lsl.Internal.UnitTester as UnitTester
 import qualified Language.Lsl.Internal.CompilationServer as CompilationServer
 
 import Control.Monad
-import IO
-import System
+import System.Environment
 import System.Exit
+import System.IO
 
 version="0.1.9.3"
 

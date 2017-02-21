@@ -6,9 +6,9 @@ data EventDelivery = EventDeliveryScript | EventDeliveryPrim | EventDeliveryObje
 data EventAdditionalData = EventAdditionalKeys String String | EventAdditionalAvatarKeys String String | EventAdditionalVectors String String
                          | EventAdditionalInts String String
 
-lslEventDescriptors = [ 
+lslEventDescriptors = [
     ("at_rot_target", [(LLInteger,"tnum"),(LLRot,"targetRot"),(LLRot,"ourrot")], EventDeliveryScript, [],
-     "raised when a scripted object comes within an angular distance of a target rotation"), 
+     "raised when a scripted object comes within an angular distance of a target rotation"),
     ("at_target", [(LLInteger,"tnum"),(LLVector,"targetPos"),(LLVector,"ourpos")], EventDeliveryScript, [],
      "raised when a scripted object comes within a distance of a target posisition"),
     ("attach",[(LLKey,"id")],  EventDeliveryRoot, [],
@@ -64,7 +64,7 @@ lslEventDescriptors = [
      "raised when a script rezzes another object.  The id is the GUID of the object that it rezzed"),
     ("on_rez", [(LLInteger,"start_param")], EventDeliveryObject, [],
      "raised when an object rezzes (from an agents inventory, an objects inventory, or as an attachment when an user logs on).\nSequence: [state_entry - if hasn't been triggered] > [on_rez] > [attach]."),
-    ("path_update", [(LLInteger,"type"), (LLList,"reserved")], EventDeliveryObject, [], 
+    ("path_update", [(LLInteger,"type"), (LLList,"reserved")], EventDeliveryObject, [],
       "Triggered when a pathfinding event occurs"),
     ("remote_data", [(LLInteger,"event_type"),(LLKey,"channel"),(LLKey,"message_id"),(LLString,"sender"),(LLInteger,"idata"),(LLString,"sdata")],
      EventDeliveryScript, [],
@@ -90,7 +90,7 @@ lslEventDescriptors = [
      [EventAdditionalAvatarKeys "Avatar key" "Key of agent touching prim",
       EventAdditionalInts "Link Number" "Link source of touch"],
      "raised when an agent starts touching a scripted object"),
-    ("touch_end",[(LLInteger,"num_detected")], EventDeliveryPrim, 
+    ("touch_end",[(LLInteger,"num_detected")], EventDeliveryPrim,
      [EventAdditionalAvatarKeys "Avatar key" "Key of agent touching prim",
       EventAdditionalInts "Link Number" "Link source of touch"],
      "raised when an agent stops touching a scripted object")]

@@ -64,9 +64,8 @@ module Language.Lsl.WorldDef(
     worldXMLAccept
     ) where
 
-import Control.Applicative
 import Control.Monad(when,foldM)
-import Control.Monad.Error(MonadError(..))
+import Control.Monad.Except(MonadError(..))
 import Control.Monad.State(evalState)
 import Control.Monad.Writer(tell,lift,runWriterT)
 
@@ -100,13 +99,13 @@ data FullWorldDef = FullWorldDef {
     fullWorldDefRegions :: [((Int,Int),Region)],
     fullWorldDefInitialKeyIndex :: Integer } deriving (Show)
 
-data WebHandling = 
-     WebHandlingByFunction 
+data WebHandling =
+     WebHandlingByFunction
    | WebHandlingByDoingNothing
    | WebHandlingByInternet { webHandlingTimeout :: Float } deriving (Show)
-                             
-data LSLObject = LSLObject { 
-    _primKeys :: [LSLKey], 
+
+data LSLObject = LSLObject {
+    _primKeys :: [LSLKey],
     _dynamics :: !ObjectDynamics } deriving (Show)
 
 data ObjectDynamics = ObjectDynamics {
@@ -123,11 +122,11 @@ data ObjectDynamics = ObjectDynamics {
     _objectRotationTarget :: !(Maybe RotationTarget),
     _objectVolumeDetect :: Bool
     } deriving (Show)
-                      
-defaultDynamics = ObjectDynamics { 
+
+defaultDynamics = ObjectDynamics {
     _objectPosition = (0,0,0),
     _objectRotation = (0,0,0,1),
-    _objectVelocity = (0,0,0), 
+    _objectVelocity = (0,0,0),
     _objectForce = ((0,0,0),False),
     _objectBuoyancy = 0,
     _objectImpulse = (((0,0,0),False),0),
@@ -137,27 +136,27 @@ defaultDynamics = ObjectDynamics {
     _objectPositionTarget = Nothing,
     _objectRotationTarget = Nothing,
     _objectVolumeDetect = False }
-data PositionTarget = 
-      Repel { 
-        positionTargetTau :: Float, 
-        positionTargetOverWater :: Bool, 
+data PositionTarget =
+      Repel {
+        positionTargetTau :: Float,
+        positionTargetOverWater :: Bool,
         positionTargetHeight :: Float }
-    | Hover { 
-        positionTargetTau :: Float, 
-        positionTargetOverWater :: Bool, 
+    | Hover {
+        positionTargetTau :: Float,
+        positionTargetOverWater :: Bool,
         positionTargetHeight :: Float }
-    | PositionTarget { 
-        positionTargetTau :: Float, 
-        positionTargetLocation :: (Float,Float,Float), 
+    | PositionTarget {
+        positionTargetTau :: Float,
+        positionTargetLocation :: (Float,Float,Float),
         positionTargetSetBy :: ScriptId }
     deriving (Show)
-    
+
 data RotationTarget = RotationTarget {
     rotationTarget :: (Float,Float,Float,Float),
     rotationTargetStrength :: Float,
     rotationTargetTau :: Float } deriving (Show)
-                                       
-data Avatar = Avatar { 
+
+data Avatar = Avatar {
     _avatarKey :: LSLKey,
     _avatarName :: String,
     _avatarActiveGroup :: Maybe LSLKey,
@@ -176,11 +175,11 @@ data Avatar = Avatar {
     _avatarControls :: !Int,
     _avatarControlListener :: !(Maybe AvatarControlListener) } deriving (Show)
 
-data AvatarControlListener = AvatarControlListener { 
+data AvatarControlListener = AvatarControlListener {
     avatarControlListenerMask :: !Int,
     avatarControlListenerScript :: !(LSLKey,String) } deriving (Show)
 
-data CameraParams = CameraParams { 
+data CameraParams = CameraParams {
     cameraActive :: Bool,
     cameraBehindednessAngle :: Float,
     cameraBehindednessLag :: Float,
@@ -210,7 +209,7 @@ defaultCamera = CameraParams {
     cameraPositionLag = 0.1,
     cameraPositionLocked = False,
     cameraPositionThreshold = 1 }
-                               
+
 defaultAvatar key = Avatar {
         _avatarKey = key,
         _avatarName = "Default Avatar",
@@ -229,14 +228,14 @@ defaultAvatar key = Avatar {
         _avatarEventHandler = Nothing,
         _avatarControls = 0,
         _avatarControlListener = Nothing }
-                       
+
 -- these are bit INDEXES not MASKS (0 == least significant bit)
 primPhantomBit :: Int
 primPhantomBit = 4
 primPhysicsBit :: Int
 primPhysicsBit = 0
 
-data InventoryItemData = 
+data InventoryItemData =
       InvScript { invScriptLibId :: String, invScriptState :: Maybe (ScriptImage Float) }
     | InvBodyPart
     | InvGesture
@@ -247,7 +246,7 @@ data InventoryItemData =
     | InvLandmark { invLandmarkLocation :: ((Int,Int),(Float,Float,Float)) }
     | InvNotecard { invNotecardLines :: [String] }
     | InvObject { invObjectPrims :: [Prim] } deriving (Show)
-    
+
 isInvScript (InvScript _ _) = True
 isInvScript _ = False
 isInvBodyPart InvBodyPart = True
@@ -279,7 +278,7 @@ isInvAnimationItem = isInvAnimation . inventoryItemData
 isInvLandmarkItem = isInvLandmark . inventoryItemData
 isInvNotecardItem = isInvNotecard . inventoryItemData
 isInvObjectItem = isInvObject . inventoryItemData
-                       
+
 newtype InventoryItemIdentification = InventoryItemIdentification {
     inventoryItemNameKey :: (String,LSLKey) } deriving (Show)
 data InventoryInfo  = InventoryInfo {
@@ -289,7 +288,7 @@ data InventoryItem = InventoryItem {
     inventoryItemIdentification :: InventoryItemIdentification,
     inventoryItemInfo :: InventoryInfo,
     inventoryItemData :: InventoryItemData } deriving (Show)
- 
+
 data ItemPermissions = ItemPermissions {
         permMaskBase :: Int,
         permMaskOwner :: Int,
@@ -297,12 +296,12 @@ data ItemPermissions = ItemPermissions {
         permMaskEveryone :: Int,
         permMaskNext :: Int
     } deriving Show
-    
+
 inventoryItemName = fst . inventoryItemNameKey . inventoryItemIdentification
 invnetoryItemKey = snd . inventoryItemNameKey . inventoryItemIdentification
 inventoryItemNames = map inventoryItemName
-scriptInventoryItem s k id = 
-    InventoryItem (InventoryItemIdentification (s,k)) 
+scriptInventoryItem s k id =
+    InventoryItem (InventoryItemIdentification (s,k))
         (InventoryInfo nullKey defaultInventoryPermissions) (InvScript id Nothing)
 findByInvName name = find ((== name) . inventoryItemName)
 findByInvKey key = find ((== key) . invnetoryItemKey)
@@ -314,10 +313,10 @@ inventoryInfoPermValue 1 = return . permMaskOwner
 inventoryInfoPermValue 2 = return . permMaskGroup
 inventoryInfoPermValue 3 = return . permMaskEveryone
 inventoryInfoPermValue 4 = return . permMaskNext
-inventoryInfoPermValue i = 
+inventoryInfoPermValue i =
     const (throwError ("no such perm mask - " ++ show i))
 
-defaultInventoryPermissions = 
+defaultInventoryPermissions =
     ItemPermissions 0xffffffff 0xffffffff 0xffffffff 0xffffffff 0xffffffff
 
 data Prim = Prim {
@@ -351,7 +350,7 @@ data Prim = Prim {
     _primAttachment :: Maybe Attachment,
     _primRemoteScriptAccessPin :: Int } deriving (Show)
 
-data PrimType = 
+data PrimType =
     PrimType {
        _primVersion :: Int, -- 1 or 9
        _primTypeCode :: Int,
@@ -369,11 +368,11 @@ data PrimType =
        _primSculptTexture :: Maybe String,
        _primSculptType :: Int
     } deriving (Show)
-                   
+
 basicBox = PrimType 9 0 0 (0,1,0) (0,0,0) (0,0,0) (0,0,0) 0 (0,0,0) (0,1,0) 0 0 0 Nothing 0
 
-data Attachment = Attachment { 
-    _attachmentKey :: LSLKey, 
+data Attachment = Attachment {
+    _attachmentKey :: LSLKey,
     _attachmentPoint :: Int } deriving (Show)
 
 data LightInfo = LightInfo {
@@ -382,7 +381,7 @@ data LightInfo = LightInfo {
     _lightRadius :: Float,
     _lightFalloff :: Float
     } deriving (Show)
-    
+
 data Flexibility = Flexibility {
     _flexSoftness :: Int,
     _flexGravity :: Float,
@@ -391,7 +390,7 @@ data Flexibility = Flexibility {
     _flexTension :: Float,
     _flexForce :: (Float,Float,Float)
     } deriving (Show)
-    
+
 data PrimFace = PrimFace {
     _faceAlpha :: Float,
     _faceColor :: (Float,Float,Float),
@@ -399,11 +398,11 @@ data PrimFace = PrimFace {
     _faceBumpiness :: Int,
     _faceFullbright :: Bool,
     _faceTextureMode :: Int,
-    _faceTextureInfo :: TextureInfo 
+    _faceTextureInfo :: TextureInfo
     } deriving (Show)
 
 defaultFace = PrimFace 1.0 (1.0,1.0,1.0) 0 0 False 0 defaultTextureInfo
-               
+
 data TextureInfo = TextureInfo {
     _textureKey :: LSLKey,
     _textureRepeats :: (Float,Float,Float),
@@ -412,14 +411,14 @@ data TextureInfo = TextureInfo {
     } deriving (Show)
 
 defaultTextureInfo = TextureInfo nullKey (1.0,1.0,0.0) (0.0,0.0,0.0) 0.0
-                   
+
 data Email = Email {
     emailSubject :: String,
     emailAddress :: String, -- sender address
     emailMessage :: String,
     emailTime :: Int } deriving (Show)
-                                      
-emptyPrim name key = Prim { 
+
+emptyPrim name key = Prim {
     _primName = name,
     _primKey = key,
     _primParent = Nothing,
@@ -439,7 +438,7 @@ emptyPrim name key = Prim {
     _primLight = Nothing,
     _primTempOnRez = False,
     _primTypeInfo = basicBox,
-    _primPermissions = [0],            
+    _primPermissions = [0],
     _primAllowInventoryDrop = False,
     _primSitTarget = Nothing,
     _primSittingAvatar = Nothing,
@@ -455,7 +454,7 @@ data Region = Region {
     regionFlags :: Int,
     regionParcels :: [Parcel]
     } deriving (Show)
-    
+
 data Parcel = Parcel {
     parcelName :: String,
     parcelDescription :: String,
@@ -469,15 +468,15 @@ data Parcel = Parcel {
 defaultRegions :: LSLKey -> [((Int,Int),Region)]
 defaultRegions owner =
     [(
-        (0,0), 
-        Region { 
+        (0,0),
+        Region {
             regionName = "Region_0_0", regionFlags = 0,
-            regionParcels = 
+            regionParcels =
                 [Parcel "parcel_0" "default parcel" (0,256,0,256) owner
                     0xffffffff [] []] }
     )]
 
-data Script = Script { 
+data Script = Script {
     _scriptImage :: !(ScriptImage Float),
     _scriptActive :: Bool,
     _scriptPermissions :: M.Map LSLKey Int,
@@ -492,7 +491,7 @@ data Script = Script {
     _scriptRotationTargets :: !(IM.IntMap ((Float,Float,Float,Float), Float)),
     _scriptControls :: ![LSLKey] } deriving (Show)
 
-mkScript img = Script { 
+mkScript img = Script {
     _scriptImage = img,
     _scriptActive = True,
     _scriptPermissions = M.empty,
@@ -506,7 +505,7 @@ mkScript img = Script {
     _scriptPositionTargets = IM.empty,
     _scriptRotationTargets = IM.empty,
     _scriptControls = [] }
-                        
+
 worldFromFullWorldDef worldBuilder fwd lib scripts = do
     let primMap = mkPrimMap (fullWorldDefPrims fwd)
     -- prove all the prims in all the objects exists
@@ -514,14 +513,14 @@ worldFromFullWorldDef worldBuilder fwd lib scripts = do
     let filt prim = filter isInvScriptItem $ _primInventory prim
     let item2Script prim item = ((_primKey prim, inventoryItemName item),
             invScriptLibId $ inventoryItemData item)
-    let activeScripts = concatMap 
+    let activeScripts = concatMap
             (\ prim -> map (item2Script prim) $ filt prim) $ M.elems primMap'
-    (activatedScripts,log) <- 
+    (activatedScripts,log) <-
         runWriterT (activateScripts activeScripts scripts primMap')
     return $ worldBuilder
         (fullWorldDefSliceSize fwd)
         (fullWorldDefMaxTime fwd)
-        [] lib scripts 
+        [] lib scripts
         (M.fromList $ mkAvatarLookup (fullWorldDefAvatars fwd))
         (mkObjectMap (fullWorldDefObjects fwd))
         primMap'
@@ -529,7 +528,7 @@ worldFromFullWorldDef worldBuilder fwd lib scripts = do
         (M.fromList (fullWorldDefRegions fwd))
         (fullWorldDefInitialKeyIndex fwd)
         (fullWorldDefWebHandling fwd)
-        (fullWorldDefEventHandler fwd) 
+        (fullWorldDefEventHandler fwd)
         log
 
 fctx :: MonadError String m => String -> Either String a -> m a
@@ -538,25 +537,25 @@ fctx _ (Right v) = return v
 
 mkPrimMap prims = M.fromList [(_primKey p, p) | p <- prims]
 
-mkObjectMap objects = 
+mkObjectMap objects =
     M.fromList [ (p, o) | o@(LSLObject { _primKeys = (p:_) }) <- objects ]
 mkAvatarLookup avatars = [ (_avatarKey a,a) | a <- avatars]
 
-checkObject primMap o = 
+checkObject primMap o =
     foldM checkPrim primMap (_primKeys o)
-    where 
+    where
         root = head (_primKeys o)
-        checkPrim m k = 
+        checkPrim m k =
             case M.lookup k m of
                 Nothing -> fail ("prim " ++ show k ++ " not found in definition")
-                Just prim -> 
-                    return (if (k == root) 
+                Just prim ->
+                    return (if (k == root)
                         then m
                         else M.insert k (prim { _primParent = Just root }) m)
 
 checkObjects primMap os = foldM checkObject primMap os
 
-activateScripts scriptIdInfo compiledScripts primMap = 
+activateScripts scriptIdInfo compiledScripts primMap =
     mapM (activateScript compiledScripts primMap) scriptIdInfo >>=
         (\ ms -> return [ s | Just s <- ms ])
 
@@ -564,26 +563,26 @@ activateScript scripts primMap (k@(primKey,invName),(scriptID)) = do
     let script = case lookup scriptID scripts of
              Nothing -> fail "script not found"
              Just v -> v
-    prim <- (lift . fctx ("looking up prim " ++ unLslKey primKey ++ " failed")) 
+    prim <- (lift . fctx ("looking up prim " ++ unLslKey primKey ++ " failed"))
         (mlookup primKey primMap)
-    when (isNothing (findByInvName invName (_primInventory prim))) $ 
+    when (isNothing (findByInvName invName (_primInventory prim))) $
         fail (invName ++ " doesn't exist in prim " ++ unLslKey primKey)
     case script of
-        Left (CodeErrs ((_,s):_)) -> 
-            tell [("script \"" ++ invName ++ "\" in prim " ++ unLslKey primKey ++ 
-                  " failed to activate because of error: " ++ s)] 
+        Left (CodeErrs ((_,s):_)) ->
+            tell [("script \"" ++ invName ++ "\" in prim " ++ unLslKey primKey ++
+                  " failed to activate because of error: " ++ s)]
             >> return Nothing
         Right code -> return $ Just (k,mkScript $ initLSLScript code)
 
-world = do 
+world = do
     handler <- opt "simEventHandler" text
     avs <- req "avatars" avatars
     ps <- req "prims" prims
-    let webHandling = maybe WebHandlingByDoingNothing 
+    let webHandling = maybe WebHandlingByDoingNothing
             (const WebHandlingByFunction) handler
     FullWorldDef <$> req "maxTime" val <*> req "sliceSize" val
         <*> pure webHandling <*> pure handler <*> req "objects" objects
-        <*> pure ps <*> pure avs 
+        <*> pure ps <*> pure avs
         <*> pure (defaultRegions nullKey) <*> (snd <$> get')
 
 objects = liste "object" object
@@ -592,7 +591,7 @@ object = do
     keys <- mapM findRealKey =<< req "primKeys" (liste "string" text)
     position <- dvec0 "position"
     LSLObject <$> pure keys <*> pure defaultDynamics { _objectPosition = position }
-    
+
 vec = (,,) <$> req "x" val <*> req "y" val <*> req "z" val
 region = (,) <$> req "x" val <*> req "y" val
 
@@ -606,21 +605,21 @@ prim = do
     rotation <- rotationsToQuaternion P123 <$> dvec0 "rotation"
     Prim <$> req "name" text <*> newKey (Just key) <*> pure Nothing
         <*> def "description" "" text <*> pure (scripts ++ inventory)
-        <*> pure owner <*> pure Nothing <*> pure owner 
+        <*> pure owner <*> pure Nothing <*> pure owner
         <*> def "position" (128,128,0) vec <*> pure rotation <*> dvec1 "scale"
         <*> def "faces" (replicate 6 defaultFace) (liste "face" primFace)
         <*> opt "flexibility" flexibility <*> dval "material" 0
-        <*> dval "status" 0x0e <*> pure 0 <*> opt "light" lightInfo 
+        <*> dval "status" 0x0e <*> pure 0 <*> opt "light" lightInfo
         <*> dval "tempOnRez" False <*> def "typeInfo" basicBox primType
-        <*> def "permissions" 
+        <*> def "permissions"
             [0x0008e000, 0x0008e000, 0x0008c000, 0x00080000, 0x00082000]
                  (liste "int" val)
-        <*> dval "dropAllowed" False <*> pure Nothing <*> pure Nothing 
+        <*> dval "dropAllowed" False <*> pure Nothing <*> pure Nothing
         <*> pure [] <*> pure False <*> pure False <*> pure (-2,-2,-2,-2,-2)
         <*> pure Nothing <*> pure 0
-        
-    
-    
+
+
+
 invItem = choicet $ map (fmap inventoryItem)
      [("notecardItem",invNotecard),("textureItem", invTexture),
       ("bodyPartItem", invBodyPart), ("clothingItem", invClothing),
@@ -629,20 +628,20 @@ invItem = choicet $ map (fmap inventoryItem)
       ("landmarkItem", invLandmark)]
 
 invNotecard = InvNotecard <$> req "lines" (liste "string" text)
-    
+
 invTexture = return InvTexture
 invBodyPart = return InvBodyPart
 invClothing = return InvClothing
 invGesture = return InvGesture
 invSound = InvSound <$> req "duration" val
-invAnimation = InvAnimation <$> req "duration" 
+invAnimation = InvAnimation <$> req "duration"
     (val >>= \ v -> return $ if v == 0 then Nothing else Just v)
-    
+
 invObject = InvObject <$> req "prims" prims
 invLandmark = curry InvLandmark <$> req "region" region <*> req "position" vec
 
 inventoryItem f = do
-    id <- curry InventoryItemIdentification <$> req "name" text 
+    id <- curry InventoryItemIdentification <$> req "name" text
         <*> newKey Nothing
     info <- InventoryInfo <$> (LSLKey <$> req "creator" text)
         <*> def "perms" defaultInventoryPermissions itemPermissions -- pure defaultInventoryPermissions
@@ -652,26 +651,26 @@ inventoryItem f = do
 itemPermissions = ItemPermissions <$> req "base" val
     <*> req "owner" val <*> req "group" val <*> req "everyone" val
     <*> req "next" val
-    
+
 script = scriptInventoryItem <$> req "scriptName" text <*> newKey Nothing
     <*> req "scriptId" text
-    
+
 primFace = PrimFace <$> dval "alpha" 0 <*> dvec1 "color"
     <*> dval "shininess" 0 <*> dval "bumpiness" 0 <*> dval "fullbright" False
-    <*> dval "textureMode" 0 
+    <*> dval "textureMode" 0
     <*> def "textureInfo" defaultTextureInfo textureInfo
-    
+
 textureInfo = TextureInfo <$> (LSLKey <$> def "name" "" text) <*> dvec1 "repeats"
     <*> dvec0 "offsets" <*> dval "rotation" 0
-    
+
 flexibility = Flexibility <$> dval "softness" 0 <*> dval "gravity" 1
     <*> dval "friction" 0 <*> dval "wind" 0 <*> dval "tension" 1.0
     <*> dvec0 "force"
-    
-lightInfo = LightInfo <$> dvec1 "color" <*> dval "intensity" 1.0 
+
+lightInfo = LightInfo <$> dvec1 "color" <*> dval "intensity" 1.0
     <*> dval "radius" 10.0 <*> dval "falloff" 1.0
-    
-primType = 
+
+primType =
     PrimType <$> dval "version" 9 <*> dval "typeCode" 0
         <*> def "holeshape" 0 val <*> dvec0 "cut" <*> dvec0 "twist"
         <*> dvec0 "holesize" <*> dvec0 "topshear" <*> dval "hollow" 0
@@ -686,16 +685,16 @@ dval s v = def s v val
 avatars = liste "avatar" avatar
 
 avatar = do
-    (name,x,y,z,handlerName) <- (,,,,) <$> req "name" text 
+    (name,x,y,z,handlerName) <- (,,,,) <$> req "name" text
         <*> req "xPos" val <*> req "yPos" val <*> req "zPos" val
         <*> opt "avatarEventHandler" text
     key <- newKey (Just name)
     return $ (defaultAvatar key) {
-        _avatarName = name, 
+        _avatarName = name,
         _avatarPosition = (x,y,z),
-        _avatarCameraPosition = (x,y,z), 
+        _avatarCameraPosition = (x,y,z),
         _avatarEventHandler = fmap (flip (,) []) handlerName }
-    
+
 findRealKey k = fst <$> get' >>= mlookup k
 newKey xref = do
     (m,i) <- get'
