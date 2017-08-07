@@ -8,8 +8,6 @@ public class InitAll {
         Maybe.init(xstream);
         Maybe_Nothing.init(xstream);
         Maybe_Just.init(xstream);
-        Tuple2.init(xstream);
-        Tuple3.init(xstream);
         CodeElement.init(xstream);
         CodeElement_CodeElement.init(xstream);
         CompilationCommand.init(xstream);
