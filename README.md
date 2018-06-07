@@ -12,9 +12,12 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
-* 2017-08-07 LSLForge **0.1.9.4**
+* 2017-08-07 LSLForge **0.1.9.4** (**Windows Only - TESTING IN PROGRESS**)
+    * Upgraded Haskell (Thanks [@simon-nicholls](https://github.com/simon-nicholls))
     * HTTP_USER_AGENT
     * OBJECT_RENDER_WEIGHT
+    * key llName2Key(string name)
+    * key llRequestUserKey(string name)
 * 2017-02-10 LSLForge **0.1.9.3** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
     * ATTACH_FACE_TONGUE misspelled
 * 2017-01-07 LSLForge **0.1.9.2** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
