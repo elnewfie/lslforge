@@ -317,8 +317,8 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
     public void annotateErrs(List<ErrInfo> errs) {
     	ISourceViewer sourceViewer = getSourceViewer();
     	if (sourceViewer == null) return;
-         IAnnotationModel am = sourceViewer.getAnnotationModel(); 
-            
+        IAnnotationModel am = sourceViewer.getAnnotationModel(); 
+        //if (am == null) return;    
 
         Iterator<?> ai = am.getAnnotationIterator();
         while (ai.hasNext()) {
@@ -327,6 +327,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
                 am.removeAnnotation(ann);
         }
         
+        //if (errs != null) {
         for (ErrInfo err : errs) {
             ErrInfo_ErrInfo e = (ErrInfo_ErrInfo) err;
             if (e.el1 instanceof Maybe_Just) {
@@ -343,6 +344,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
                 am.addAnnotation(ann, pos);
             }
         }
+        //}
     }
     
     @Override

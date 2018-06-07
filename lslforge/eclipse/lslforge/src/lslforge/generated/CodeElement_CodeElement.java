@@ -1,5 +1,6 @@
 package lslforge.generated;
 import com.thoughtworks.xstream.XStream;
+import java.util.LinkedList;
 public class CodeElement_CodeElement extends CodeElement{
     public String codeElementName;
     public String codeElementText;

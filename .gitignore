@@ -25,3 +25,4 @@ lslforge/build_*
 lslforge/copy_*
 /lslforge/rename_files.sh
 build
+/.project

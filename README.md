@@ -139,6 +139,11 @@ To compile the native LSLForge binary, you must have the cross-platform Haskell 
 
 To install Stack, please visit the [Stack Homepage](https://www.haskellstack.org/) and follow the instructions. It is likely that you can find a package available for many package managers e.g. chocolatey, homebrew and pacman, but check before installing that their stack version is up to date.
 
+#### Configure stack folder if necessary:
+* ``STACK_ROOT`` environment variable if you do not want stack files appear under ``C:\sr`` under Windows.
+* To configure downloaded programs location, open stack's root `config.yaml` and add a line `local-programs-path: <path>` with the path desired, after that commands like `stack ghci` will download files right into that folder
+* To configure where `stack install` will place the files, add the following line to `config.yaml`: ``local-bin-path: <path>`` with the path desired. This folder may be added to the ``PATH`` environment variable. (The reminder will be given after ``stack install`` copies the file there).
+
 ### Compiling Haskell native LSLForge binary
 
 In a terminal, change directory to the project's `lslforge/haskell` subdirectory, and enter `stack install` to build and install the LSLForge binary.
@@ -147,7 +152,7 @@ You will need to enter `stack setup` beforehand, if you have freshly installed S
 
 ### Post-compilation
 
-If your "install" was successful, an executable will appear at ``%APPDATA%\local\bin`` folder for Windows, or ``$HOME/.local/bin`` for other platforms (look at the message after install).
+If your "install" was successful, an executable will appear at ``%APPDATA%\local\bin`` folder for Windows, or ``$HOME/.local/bin`` for other platforms (look at the message after install) - unless you changed the ``local-bin-path`` parameter in ``confif.yaml`` to override default location
 
 Now you only need to specify this executable in Eclipse, ``Preferences`` > ``LSLForge`` settings.
 

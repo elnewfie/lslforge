@@ -213,9 +213,10 @@ deriveJavaRep nm = if nm == ''[] then return [] else
                                          "    public " ++ (repT tparms 0 t) ++
                                          " " ++ nameBase nm ++ ";\n")
                              let classStr = "import com.thoughtworks.xstream.XStream;\n" ++
-                                            (if importList
-                                                 then "import java.util.LinkedList;\n"
-                                                 else "") ++
+                                            --(if importList
+                                            --     then "import java.util.LinkedList;\n"
+                                            "import java.util.LinkedList;\n" ++
+                                            --     else "") ++
                                             "public class " ++ cname ++ gparms ++
                                             " extends " ++  basenm ++ gparms ++ "{\n" ++
                                             fields ++
@@ -352,7 +353,9 @@ saveReps pkg codeInfo = do
             "public class InitAll {\n" ++
             "    public static void initAll(XStream xstream) {\n" ++
                 concatMap (\ (nm,_) -> "        " ++ nm ++ ".init(xstream);\n") codeInfo ++
-            "    }\n" ++
+                "        Tuple2.init(xstream);\n" ++ -- FIXME: Tuple2 somehow should appear differently
+                "        Tuple3.init(xstream);\n" ++ -- FIXME: Tuple3 somehow should appear differently
+                "    }\n" ++
             "}\n"
 
 
@@ -397,8 +400,8 @@ repT dict mult (AppT (ConT nm) y) | nm == ''[] && y == (ConT ''Char) = "String"
                                   | otherwise = (deriveName nm) ++ "<" ++ repT dict 0 y ++ (if mult /= 0 then "," else ">")
 repT dict mult (AppT ListT y)
     | y == (ConT ''Char) = "String"
-    | otherwise          = "LinkedList" ++ "<" ++ repT dict 0 y ++ ">" ++ (if mult == 0 then ">" else ",")
-repT dict mult (TupleT x) = "Tuple" ++ show x
+    | otherwise          = "LinkedList" ++ "<" ++ repT dict 0 y ++ (if mult == 0 then ">" else ",")
+repT dict mult (TupleT x) = "Tuple" ++ show x ++ "<"
 repT dict mult (AppT x y) = repT dict (mult + 1) x ++ repT dict 0 y ++ if mult == 0 then ">" else ","
 repT _ _ t = error ("can't repT: " ++ show t)
 
