@@ -1,3 +1,3 @@
 #!/bin/sh
-strip haskell/dist/build/LSLForge/LSLForge
-cp haskell/dist/build/LSLForge/LSLForge eclipse/lslforge-macosx-x86/os/macosx/x86
+strip haskell/.stack-work/install/x86_64-osx/lts-8.2/8.0.2/bin/LSLForge
+cp haskell/.stack-work/install/x86_64-osx/lts-8.2/8.0.2/bin/LSLForge eclipse/lslforge-macos-x86_64/os/macos/x86_64
