@@ -112,7 +112,8 @@ module Language.Lsl.Internal.InternalLLFuncs(
 import Language.Lsl.Internal.Util(Permutation3(..),axisAngleToRotation,cut,dist3d,elemAtM,
                filtMap,fromInt,indexOf,mag3d,mag3d2,matrixToQuaternion,quaternionToMatrix,
                quaternionToRotations,rotationBetween,rotationsToQuaternion)
-import Language.Lsl.Internal.Type(LSLType(..),LSLValue(..),lslValString,parseFloat,parseInt,rot2RVal,toSVal,typeOfLSLValue,vVal2Vec)
+import Language.Lsl.Internal.Type(LSLType(..),LSLValue(..),iVal,lslValString,parseFloat,parseInt,rot2RVal,toSVal,typeOfLSLValue,vVal2Vec)
+import Language.Lsl.Internal.Util(LSLInteger)
 import Language.Lsl.Internal.Evaluation(EvalResult(..))
 import Language.Lsl.Internal.Constants(findConstVal)
 import Language.Lsl.Internal.Key(LSLKey(..))
@@ -206,13 +207,13 @@ internalLLFuncs = [
 continueWith x = return (EvalIncomplete,x)
 
 -- String Functions
-llStringLength _ [SVal s] = continueWith $ IVal (length s)
-llGetSubString _ [SVal source, IVal start, IVal end] = continueWith $ SVal (subList source start end)
-llDeleteSubString _ [SVal source, IVal start, IVal end] = continueWith $ SVal (deleteSubList source start end)
+llStringLength _ [SVal s] = continueWith $ iVal (length s)
+llGetSubString _ [SVal source, IVal start, IVal end] = continueWith $ SVal (subList source (fromInt start) (fromInt end))
+llDeleteSubString _ [SVal source, IVal start, IVal end] = continueWith $ SVal (deleteSubList source (fromInt start) (fromInt end))
 llInsertString _ [SVal dst, IVal pos, SVal src] =
    -- TODO: wiki says this function does not support negative indices...
    -- how does it deal with out of range indices?
-   let (x,y) = splitAt pos dst in continueWith $ SVal $ x ++ src ++ y
+   let (x,y) = splitAt (fromInt pos) dst in continueWith $ SVal $ x ++ src ++ y
 
 
 separate :: Eq a => [a] -> [[a]] -> [[a]] -> [a] -> Bool -> [[a]]
@@ -254,7 +255,7 @@ llToLower _ [SVal string] = continueWith $ SVal $ map toLower string
 llSubStringIndex _ [SVal source, SVal pattern] = continueWith $ IVal $
     case indexOf pattern source of
         Nothing -> (-1)
-        Just i -> i
+        Just i -> fromInt i
 
 unescapedChars = ['A'..'Z'] ++ ['0'..'9'] ++ ['a'..'z']
 
@@ -313,7 +314,7 @@ modpow a b c | b < 0 = 0
                 in pow (a `mod` c) b'
 
 -- should use a map for this, but have been using lists for everything, so will stick with it...
-statFuncs :: RealFloat a => [(Int, [a] -> a)]
+statFuncs :: RealFloat a => [(LSLInteger, [a] -> a)]
 statFuncs = map (\(Just (IVal op), f) -> (op,f)) [
     (findConstVal "LIST_STAT_RANGE", listStatRange),
     (findConstVal "LIST_STAT_MAX", listStatMax),
@@ -334,7 +335,7 @@ toF _ = Nothing
 fvals list = filtMap toF list
 
 llListStatistics _ [IVal operation,LVal list] =
-    case lookup operation statFuncs of
+    case lookup (fromInt operation) statFuncs of
         Nothing -> continueWith $ FVal 0 -- this seems to be what lsl does...
         Just f -> continueWith $ FVal (f $ fvals list)
 
@@ -413,9 +414,9 @@ llVecNorm _ [v@(VVal x y z)] =
 -- List Functions
 
 --llGetListLength	 Gets the number of elements in a list
-llGetListLength _ [LVal list] = continueWith $ IVal (length list)
-llList2List _ [LVal source, IVal start, IVal end] = continueWith $ LVal (subList source start end)
-llDeleteSubList _ [LVal source, IVal start, IVal end] = continueWith $ LVal (deleteSubList source start end)
+llGetListLength _ [LVal list] = continueWith $ iVal (length list)
+llList2List _ [LVal source, IVal start, IVal end] = continueWith $ LVal (subList source (fromInt start) (fromInt end))
+llDeleteSubList _ [LVal source, IVal start, IVal end] = continueWith $ LVal (deleteSubList source (fromInt start) (fromInt end))
 
 llDumpList2String _ [LVal list, SVal sep] =
     continueWith $ SVal $ concat $ intersperse sep (map lslValString list)
@@ -469,15 +470,15 @@ bracketPattern n partial [] = lslCsvToList partial []
 llListFindList _ [LVal source, LVal pattern] = continueWith $ IVal $
     case indexOf pattern source of
         Nothing -> (-1)
-        Just i -> i
+        Just i -> fromInt i
 llListInsertList _ [LVal dst, LVal src, IVal pos] =
-   let (x,y) = splitAt pos dst in continueWith $ LVal $ x ++ src ++ y
+   let (x,y) = splitAt (fromInt pos) dst in continueWith $ LVal $ x ++ src ++ y
 
 -- TODO: does SL handle start > end?
 llListReplaceList _ [LVal dst, LVal src, IVal start, IVal end] =
     let n = length src
-        s = convertIndex n start
-        e = convertIndex n end
+        s = convertIndex n $ fromInt start
+        e = convertIndex n $ fromInt end
         (x,y) = cut s (e+1) dst in continueWith $ LVal $ x ++ src ++ y
 
 -- llList2ListStrided	Extracts a subset of a strided list
@@ -487,7 +488,7 @@ llList2ListStrided _ [LVal src, IVal start, IVal end, IVal stride] =
         end' = (end `div` stride)
         stridedSrc = filtMap (\ (x,y) -> if x `mod` stride == 0 then Just y else Nothing) $ zip [0..] src
     in
-        continueWith $ LVal $ subList stridedSrc start' end'
+        continueWith $ LVal $ subList stridedSrc (fromInt start') (fromInt end')
 
 strideList l stride =
     if length l <= stride || stride <= 1 then [l] else (take stride l):(strideList (drop stride l) stride)
@@ -499,7 +500,7 @@ llListSort _ [LVal list, IVal stride, IVal ascending] =
       -- will be descending (which is odd)
       direction = if ascending == true then id else reverse
   in continueWith $ LVal $
-      concat (direction $ sort $ strideList list stride)
+      concat (direction $ sort $ strideList list (fromInt stride))
 
 
 typeCodes :: RealFloat a => [(LSLType, LSLValue a)]
@@ -517,10 +518,10 @@ invalidType = let Just v = findConstVal "TYPE_INVALID" in v
 -- TODO: might this function work with negative indices? assuming no.
 llGetListEntryType _ [LVal l, IVal index] =
     continueWith $
-        if index < 0 || index >= length l then invalidType
-        else let Just v = lookup (typeOfLSLValue $ l !! index) typeCodes in v
+        if index < 0 || index >= (fromInt (length l)) then invalidType
+        else let Just v = lookup (typeOfLSLValue $ l !! (fromInt index)) typeCodes in v
 
-elemAtM' i = if i >= 0 then elemAtM i else elemAtM ((-1) - i) . reverse
+elemAtM' i = if i >= 0 then elemAtM (fromInt i) else elemAtM ((-1) - fromInt i) . reverse
 
 llList2Float _ [LVal l, IVal index] =
     continueWith $ FVal $
@@ -533,9 +534,9 @@ llList2Float _ [LVal l, IVal index] =
 llList2Integer _ [LVal l, IVal index] =
     continueWith $ IVal $
         case elemAtM' index l of
-            Just (SVal s) -> parseInt s
+            Just (SVal s) -> fromInt $ parseInt s
             Just (IVal i) -> i
-            Just (FVal f) -> truncate f
+            Just (FVal f) -> fromInt $ truncate f
             _ -> 0
 
 llList2Key _ [LVal l, IVal index] =
@@ -569,7 +570,7 @@ llIntegerToBase64 _ [IVal i] =
          digit4 = 63 .&. (i `shiftR` 8)
          digit5 = 63 .&. (i `shiftR` 2)
          digit6 = 63 .&. (i `shiftR` (-4))
-    in continueWith $ SVal $ map (base64chars !!) [digit1,digit2,digit3,digit4,digit5,digit6] ++ "=="
+    in continueWith $ SVal $ map (\i -> base64chars !! (fromInt i)) [digit1,digit2,digit3,digit4,digit5,digit6] ++ "=="
 
 charToBits :: Char -> Int
 charToBits c = case elemIndex c base64chars of
@@ -582,7 +583,7 @@ llBase64ToInteger _ [SVal s] =
          charToBits c = case elemIndex c base64chars of
              Nothing -> 0
              Just i -> i
-     in continueWith $ IVal $ foldl' (.|.) 0 $ zipWith (shiftL) (map charToBits (take 6 s')) [26,20..]
+     in continueWith $ iVal $ foldl' (.|.) 0 $ zipWith (shiftL) (map charToBits (take 6 s')) [26,20..]
 
 slPrintable :: String
 slPrintable = map toEnum (10:[32..127])

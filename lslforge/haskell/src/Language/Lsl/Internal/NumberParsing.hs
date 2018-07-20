@@ -47,11 +47,11 @@ doFloat = try hexFloatAndTail <|> (do
 hexInt =
     do oneOf "xX"
        digits <- many1 hexDigit
-       return $ foldl (\ x y -> x * 16 + y) 0 $ map digitToInt digits
+       return $ foldl (\ x y -> x * 16 + y) 0 $ map (fromIntegral . digitToInt) digits
 
 decimalInt =
     do digits <- many1 digit
-       return $ foldl (\ x y -> x * 10 + y) 0 $ map digitToInt digits
+       return $ foldl (\ x y -> x * 10 + y) 0 $ map (fromIntegral . digitToInt) digits
 
 int = do char '0'
          (hexInt <|> decimalInt <|> return 0)

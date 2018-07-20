@@ -1,11 +1,12 @@
 module Language.Lsl.Internal.TestResult(TestResult(..),resultToXML, emitTestResult) where
 
 import Language.Lsl.Internal.XmlCreate(emit,emitSimple)
+import Language.Lsl.Internal.Util(LSLInteger)
 
-data TestResult = ErrorResult String String [(Int,String)] |
-                  FailureResult String String [(Int,String)] |
-                  Timeout String [(Int,String)] |
-                  SuccessResult String [(Int,String)]
+data TestResult = ErrorResult String String [(LSLInteger,String)] |
+                  FailureResult String String [(LSLInteger,String)] |
+                  Timeout String [(LSLInteger,String)] |
+                  SuccessResult String [(LSLInteger,String)]
     deriving Show
 
 okResult = 0

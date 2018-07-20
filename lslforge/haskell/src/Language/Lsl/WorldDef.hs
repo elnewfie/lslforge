@@ -84,19 +84,19 @@ import Language.Lsl.Internal.Exec(ScriptImage,initLSLScript)
 import Language.Lsl.Internal.Key(mkKey,nullKey,LSLKey(..))
 import Language.Lsl.Internal.Type(LSLValue(..))
 import Language.Lsl.Internal.Util(
-    mlookup,Permutation3(..),rotationsToQuaternion)
+    mlookup,Permutation3(..),rotationsToQuaternion,LSLInteger)
 
 type ScriptId = (LSLKey,String)
 
 data FullWorldDef = FullWorldDef {
-    fullWorldDefMaxTime :: Int,
-    fullWorldDefSliceSize :: Int,
+    fullWorldDefMaxTime :: LSLInteger,
+    fullWorldDefSliceSize :: LSLInteger,
     fullWorldDefWebHandling :: WebHandling,
     fullWorldDefEventHandler :: Maybe String,
     fullWorldDefObjects :: [LSLObject],
     fullWorldDefPrims :: [Prim],
     fullWorldDefAvatars :: [Avatar],
-    fullWorldDefRegions :: [((Int,Int),Region)],
+    fullWorldDefRegions :: [((LSLInteger,LSLInteger),Region)],
     fullWorldDefInitialKeyIndex :: Integer } deriving (Show)
 
 data WebHandling =
@@ -114,9 +114,9 @@ data ObjectDynamics = ObjectDynamics {
     _objectVelocity :: (Float,Float,Float),
     _objectForce :: ((Float,Float,Float),Bool),
     _objectBuoyancy :: Float,
-    _objectImpulse :: (((Float,Float,Float),Bool),Int),
+    _objectImpulse :: (((Float,Float,Float),Bool),LSLInteger),
     _objectTorque :: ((Float,Float,Float),Bool),
-    _objectRotationalImpulse :: (((Float,Float,Float),Bool),Int),
+    _objectRotationalImpulse :: (((Float,Float,Float),Bool),LSLInteger),
     _objectOmega :: (Float,Float,Float),
     _objectPositionTarget :: !(Maybe PositionTarget),
     _objectRotationTarget :: !(Maybe RotationTarget),
@@ -160,23 +160,23 @@ data Avatar = Avatar {
     _avatarKey :: LSLKey,
     _avatarName :: String,
     _avatarActiveGroup :: Maybe LSLKey,
-    _avatarRegion :: (Int,Int),
+    _avatarRegion :: (LSLInteger,LSLInteger),
     _avatarPosition :: (Float,Float,Float),
     _avatarRotation :: (Float,Float,Float,Float),
     _avatarHeight :: Float,
-    _avatarState :: Int,
+    _avatarState :: LSLInteger,
     _avatarInventory :: [InventoryItem],
     _avatarCameraPosition :: (Float,Float,Float),
     _avatarCameraRotation :: (Float,Float,Float,Float),
     _avatarCameraControlParams :: CameraParams,
-    _avatarActiveAnimations :: [(Maybe Int,LSLKey)],
+    _avatarActiveAnimations :: [(Maybe LSLInteger,LSLKey)],
     _avatarAttachments :: IM.IntMap LSLKey,
     _avatarEventHandler :: !(Maybe (String,[(String,LSLValue Float)])),
-    _avatarControls :: !Int,
+    _avatarControls :: !LSLInteger,
     _avatarControlListener :: !(Maybe AvatarControlListener) } deriving (Show)
 
 data AvatarControlListener = AvatarControlListener {
-    avatarControlListenerMask :: !Int,
+    avatarControlListenerMask :: !LSLInteger,
     avatarControlListenerScript :: !(LSLKey,String) } deriving (Show)
 
 data CameraParams = CameraParams {
@@ -230,9 +230,9 @@ defaultAvatar key = Avatar {
         _avatarControlListener = Nothing }
 
 -- these are bit INDEXES not MASKS (0 == least significant bit)
-primPhantomBit :: Int
+primPhantomBit :: LSLInteger
 primPhantomBit = 4
-primPhysicsBit :: Int
+primPhysicsBit :: LSLInteger
 primPhysicsBit = 0
 
 data InventoryItemData =
@@ -243,7 +243,7 @@ data InventoryItemData =
     | InvTexture
     | InvSound { invSoundDuration :: Float }
     | InvAnimation { invAnimationDuration :: Maybe Float }
-    | InvLandmark { invLandmarkLocation :: ((Int,Int),(Float,Float,Float)) }
+    | InvLandmark { invLandmarkLocation :: ((LSLInteger,LSLInteger),(Float,Float,Float)) }
     | InvNotecard { invNotecardLines :: [String] }
     | InvObject { invObjectPrims :: [Prim] } deriving (Show)
 
@@ -290,11 +290,11 @@ data InventoryItem = InventoryItem {
     inventoryItemData :: InventoryItemData } deriving (Show)
 
 data ItemPermissions = ItemPermissions {
-        permMaskBase :: Int,
-        permMaskOwner :: Int,
-        permMaskGroup :: Int,
-        permMaskEveryone :: Int,
-        permMaskNext :: Int
+        permMaskBase :: LSLInteger,
+        permMaskOwner :: LSLInteger,
+        permMaskGroup :: LSLInteger,
+        permMaskEveryone :: LSLInteger,
+        permMaskNext :: LSLInteger
     } deriving Show
 
 inventoryItemName = fst . inventoryItemNameKey . inventoryItemIdentification
@@ -317,7 +317,7 @@ inventoryInfoPermValue i =
     const (throwError ("no such perm mask - " ++ show i))
 
 defaultInventoryPermissions =
-    ItemPermissions 0xffffffff 0xffffffff 0xffffffff 0xffffffff 0xffffffff
+    ItemPermissions (-1) (-1) (-1) (-1) (-1)
 
 data Prim = Prim {
     _primName :: String,
@@ -333,28 +333,28 @@ data Prim = Prim {
     _primScale :: (Float, Float, Float),
     _primFaces :: [PrimFace],
     _primFlexibility :: Maybe Flexibility,
-    _primMaterial :: Int,
-    _primStatus :: Int,
-    _primVehicleFlags :: Int,
+    _primMaterial :: LSLInteger,
+    _primStatus :: LSLInteger,
+    _primVehicleFlags :: LSLInteger,
     _primLight :: Maybe LightInfo,
     _primTempOnRez :: Bool,
     _primTypeInfo :: PrimType,
-    _primPermissions :: [Int],
+    _primPermissions :: [LSLInteger],
     _primAllowInventoryDrop :: Bool,
     _primSitTarget :: Maybe ((Float,Float,Float),(Float,Float,Float,Float)),
     _primSittingAvatar :: Maybe LSLKey,
     _primPendingEmails :: [Email],
     _primPassTouches :: Bool,
     _primPassCollisions :: Bool,
-    _primPayInfo :: (Int,Int,Int,Int,Int),
+    _primPayInfo :: (LSLInteger,LSLInteger,LSLInteger,LSLInteger,LSLInteger),
     _primAttachment :: Maybe Attachment,
-    _primRemoteScriptAccessPin :: Int } deriving (Show)
+    _primRemoteScriptAccessPin :: LSLInteger } deriving (Show)
 
 data PrimType =
     PrimType {
-       _primVersion :: Int, -- 1 or 9
-       _primTypeCode :: Int,
-       _primHoleshape :: Int,
+       _primVersion :: LSLInteger, -- 1 or 9
+       _primTypeCode :: LSLInteger,
+       _primHoleshape :: LSLInteger,
        _primCut :: (Float,Float,Float),
        _primTwist :: (Float,Float,Float),
        _primHolesize :: (Float,Float,Float),
@@ -366,14 +366,14 @@ data PrimType =
        _primRevolutions :: Float,
        _primSkew :: Float,
        _primSculptTexture :: Maybe String,
-       _primSculptType :: Int
+       _primSculptType :: LSLInteger
     } deriving (Show)
 
 basicBox = PrimType 9 0 0 (0,1,0) (0,0,0) (0,0,0) (0,0,0) 0 (0,0,0) (0,1,0) 0 0 0 Nothing 0
 
 data Attachment = Attachment {
     _attachmentKey :: LSLKey,
-    _attachmentPoint :: Int } deriving (Show)
+    _attachmentPoint :: LSLInteger } deriving (Show)
 
 data LightInfo = LightInfo {
     _lightColor :: (Float,Float,Float),
@@ -383,7 +383,7 @@ data LightInfo = LightInfo {
     } deriving (Show)
 
 data Flexibility = Flexibility {
-    _flexSoftness :: Int,
+    _flexSoftness :: LSLInteger,
     _flexGravity :: Float,
     _flexFriction :: Float,
     _flexWind :: Float,
@@ -394,10 +394,10 @@ data Flexibility = Flexibility {
 data PrimFace = PrimFace {
     _faceAlpha :: Float,
     _faceColor :: (Float,Float,Float),
-    _faceShininess :: Int,
-    _faceBumpiness :: Int,
+    _faceShininess :: LSLInteger,
+    _faceBumpiness :: LSLInteger,
     _faceFullbright :: Bool,
-    _faceTextureMode :: Int,
+    _faceTextureMode :: LSLInteger,
     _faceTextureInfo :: TextureInfo
     } deriving (Show)
 
@@ -416,7 +416,7 @@ data Email = Email {
     emailSubject :: String,
     emailAddress :: String, -- sender address
     emailMessage :: String,
-    emailTime :: Int } deriving (Show)
+    emailTime :: LSLInteger } deriving (Show)
 
 emptyPrim name key = Prim {
     _primName = name,
@@ -451,21 +451,21 @@ emptyPrim name key = Prim {
 
 data Region = Region {
     regionName :: String,
-    regionFlags :: Int,
+    regionFlags :: LSLInteger,
     regionParcels :: [Parcel]
     } deriving (Show)
 
 data Parcel = Parcel {
     parcelName :: String,
     parcelDescription :: String,
-    parcelBoundaries :: (Int,Int,Int,Int), -- bottom, top, left, right aka south,north,west,east
+    parcelBoundaries :: (LSLInteger,LSLInteger,LSLInteger,LSLInteger), -- bottom, top, left, right aka south,north,west,east
     parcelOwner :: LSLKey,
-    parcelFlags :: Int,
-    parcelBanList :: [(LSLKey,Maybe Int)],
-    parcelPassList :: [(LSLKey,Maybe Int)]
+    parcelFlags :: LSLInteger,
+    parcelBanList :: [(LSLKey,Maybe LSLInteger)],
+    parcelPassList :: [(LSLKey,Maybe LSLInteger)]
     } deriving (Show)
 
-defaultRegions :: LSLKey -> [((Int,Int),Region)]
+defaultRegions :: LSLKey -> [((LSLInteger,LSLInteger),Region)]
 defaultRegions owner =
     [(
         (0,0),
@@ -473,20 +473,20 @@ defaultRegions owner =
             regionName = "Region_0_0", regionFlags = 0,
             regionParcels =
                 [Parcel "parcel_0" "default parcel" (0,256,0,256) owner
-                    0xffffffff [] []] }
+                    (-1) [] []] }
     )]
 
 data Script = Script {
     _scriptImage :: !(ScriptImage Float),
     _scriptActive :: Bool,
-    _scriptPermissions :: M.Map LSLKey Int,
+    _scriptPermissions :: M.Map LSLKey LSLInteger,
     _scriptLastPerm :: Maybe LSLKey,
-    _scriptStartTick :: Int,
-    _scriptLastResetTick :: Int,
+    _scriptStartTick :: LSLInteger,
+    _scriptLastResetTick :: LSLInteger,
     _scriptEventQueue :: [Event Float],
-    _scriptStartParameter :: Int,
+    _scriptStartParameter :: LSLInteger,
     _scriptCollisionFilter :: !(String,LSLKey,Bool),
-    _scriptTargetIndex :: !Int,
+    _scriptTargetIndex :: !LSLInteger,
     _scriptPositionTargets :: !(IM.IntMap ((Float,Float,Float), Float)),
     _scriptRotationTargets :: !(IM.IntMap ((Float,Float,Float,Float), Float)),
     _scriptControls :: ![LSLKey] } deriving (Show)

@@ -333,6 +333,7 @@ collectReps names = do
           decomposeType m ListT = return m
           decomposeType m (ConT nm) | nm == ''Bool ||
                                       nm == ''Int ||
+                                      nm == ''Int32 ||
                                       nm == ''Char ||
                                       nm == ''[] ||
                                       -- nm == ''Maybe ||

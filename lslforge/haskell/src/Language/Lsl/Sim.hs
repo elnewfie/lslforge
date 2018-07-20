@@ -63,12 +63,12 @@ import Language.Lsl.Internal.Key(nullKey,LSLKey(..))
 import Language.Lsl.Internal.Log(LogLevel(..),LogMessage(..))
 import Language.Lsl.Internal.Physics(checkIntersections,dampForce,dampTorque,
     dampZForce,gravC,kin,rotDyn,totalTorque)
-import Language.Lsl.Internal.Type(LSLValue(..),LSLType(..),isIVal,isLVal,
+import Language.Lsl.Internal.Type(LSLValue(..),LSLType(..),iVal,isIVal,isLVal,
     isSVal,lslShowVal,lslTypeString,rot2RVal,vec2VVal)
 import Language.Lsl.UnitTestEnv(simFunc,hasFunc)
 import Language.Lsl.Internal.SimLL
-import Language.Lsl.Internal.Util(add3d,angleBetween,diff3d,dist3d2,mag3d,
-    mlookup,neg3d,norm3d,quaternionToMatrix,rot3d,scale3d,(<||>),filtMapM)
+import Language.Lsl.Internal.Util(LSLInteger,add3d,angleBetween,diff3d,dist3d2,mag3d,
+    mlookup,neg3d,norm3d,quaternionToMatrix,rot3d,scale3d,(<||>),filtMapM,fromInt)
 import Language.Lsl.WorldDef(AvatarControlListener(..),InventoryInfo(..),
     InventoryItem(..),InventoryItemData(..),InventoryItemIdentification(..),
     LSLObject(..), ObjectDynamics(..),Prim(..),PositionTarget(..),
@@ -99,7 +99,7 @@ getPrimInfo pkey =
                   return $ do
                       plist <- mkeys
                       i <- elemIndex pkey plist
-                      return (p1Key, i, getI primName p)
+                      return (p1Key, (fromInt i), getI primName p)
 
 pushEvent e key sid =
     ((scriptEventQueue.lm (key,sid).worldScripts) `modM_` (++[e])) <||>
@@ -244,7 +244,7 @@ processEvent evt@(SensorEvent (pk,sn) name key stype range arc rpt) =
        let list = take 16 (sensedObjects ++ sensedAvatars)
        if null list
            then pushEvent (Event "no_sensor" [] M.empty) pk sn
-           else pushEvent (Event "sensor" [(IVal $ length list)] (M.fromList (zipWith (\ i k -> ("key_" ++ show i,KVal k)) [0..] list))) pk sn
+           else pushEvent (Event "sensor" [(iVal $ length list)] (M.fromList (zipWith (\ i k -> ("key_" ++ show i,KVal k)) [0..] list))) pk sn
     where senseObjects = do
               pos <- getGlobalPos pk
               rot <- getGlobalRot pk
@@ -382,8 +382,8 @@ processEvent (DialogEvent agent message buttons channel source) =
                                     events = fromMaybe (LVal []) (lookup "outEvents" results)
                                 in do
                                     warn
-                                    when (selection >= 0 && selection < length buttons) $
-                                        putChat sayRange agent channel (buttons !! selection)
+                                    when (selection >= 0 && selection < (fromInt $ length buttons)) $
+                                        putChat sayRange agent channel (buttons !! fromInt selection)
                                     processEventsList events
                                     worldEventHandler =: Just (moduleName, results))
                             where warn = logAMessage LogWarn "sim"
@@ -462,8 +462,8 @@ processEvent _ = error "not implemented"
 
 processEventsList (LVal []) = return ()
 processEventsList (LVal ((IVal i):l)) = do
-    processEventList (take i l)
-    processEventsList (LVal (drop i l))
+    processEventList (take (fromInt i) l)
+    processEventsList (LVal (drop (fromInt i) l))
 processEventsList _ = logAMessage LogWarn "sim" "user supplied event handler has invalid type for 'outEvents' variable"
 
 processEventList [SVal "xml_request", SVal sourceId, KVal channel, IVal idata, SVal sdata, FVal delay] =
@@ -594,7 +594,7 @@ matchListener (Chat chan' sender' key' msg' (region,position) range) ((Listener 
 
 listenAddress l = (listenerPrimKey l, listenerScriptName l)
 
-nextActivity :: (Monad a) => WorldE a (Maybe Int)
+nextActivity :: (Monad a) => WorldE a (Maybe LSLInteger)
 nextActivity =
     do  scripts <- getM worldScripts
         t <- (+1) <$> getM tick
@@ -688,7 +688,7 @@ handleTouches = do
         return ()
 
 sendTouch ttype k tl =
-     pushEventToPrim (Event ttype [IVal $ length tl] payload) k
+     pushEventToPrim (Event ttype [iVal $ length tl] payload) k
      where payload = foldl' ins M.empty (zip [0..] tl)
            ins m (i,(Touch { touchAvatarKey = ak, touchFace = face, touchST = (s,t) },link)) =
                M.insert ("vector_" ++ show i) (VVal 0 0 0) .
@@ -720,7 +720,7 @@ runPhysics = do
             forM_ (M.toList os) $ \ (pk,obj) -> runErrPrim pk () $ do
                 let dynl = dyn pk
                 prim:*dynm <- getM (wprim pk.*dynl)
-                when (flip testBit primPhysicsBit $ getI primStatus prim) $ do
+                when (flip testBit (fromInt primPhysicsBit) $ getI primStatus prim) $ do
                     mass <- objectMass pk
                     let pos0@(_,_,z0) = getI objectPosition dynm
                     let vel0@(_,_,vz0) = getI objectVelocity dynm
@@ -813,7 +813,7 @@ handleObjectCollisions prims = do
             mapM_ (send "collision") objCollisions')
         toObjCollisions formerCollisions "collision_end" >>= mapM_ (send "collision_end")
         worldCollisions =: curCollisions
-    where send :: Monad m => String -> (LSLKey,[(Int,LSLKey)]) -> WorldE m ()
+    where send :: Monad m => String -> (LSLKey,[(LSLInteger,LSLKey)]) -> WorldE m ()
           send hn (pk,oinfo) =  collisionScripts >>= mapM_ (sendScript hn pk oinfo)
               where collisionScripts = filtMapM validScript =<< (getPrimScripts pk)
 --                          liftM (map inventoryItemName) (getPrimScripts pk) >>=
@@ -827,7 +827,7 @@ handleObjectCollisions prims = do
                                return $ if p then Just sn else Nothing
                            _ -> return Nothing
                     validScript _ = return Nothing
-          sendScript :: Monad m => String -> LSLKey -> [(Int,LSLKey)] -> String -> WorldE m ()
+          sendScript :: Monad m => String -> LSLKey -> [(LSLInteger,LSLKey)] -> String -> WorldE m ()
           sendScript hn pk oinfo sn = do
               filt <- getM $ scriptCollisionFilter.lscript pk sn
               case filt of
@@ -847,7 +847,7 @@ handleObjectCollisions prims = do
                                                               then (not . (name==)) <$> (getM $ primName.wprim k)
                                                               else return True)
                     pushit oinfo = unless (null oinfo) $ pushEvent ev pk sn
-                        where ev = Event hn [IVal $ length oinfo]
+                        where ev = Event hn [iVal $ length oinfo]
                                       (M.fromList $
                                           zipWith (\ i (_,k) -> ("key_" ++ show i, KVal k)) [0..] oinfo ++
                                           zipWith (\ i (n,_) -> ("integer_" ++ show i, IVal n)) [0..] oinfo)
@@ -938,7 +938,7 @@ handleTargets = do
                             let image = getI scriptImage script
                                 inRange = (dist3d2 target pos <= range^2) in
                             if hasActiveHandler image "at_target" && inRange
-                                then pushEvent (Event "at_target" [IVal i, vec2VVal target, vec2VVal pos] M.empty) k sn
+                                then pushEvent (Event "at_target" [iVal i, vec2VVal target, vec2VVal pos] M.empty) k sn
                                 else when (hasActiveHandler image "not_at_target" && not inRange) $
                                          pushEvent (Event "not_at_target" [] M.empty) k sn
                             )
@@ -946,7 +946,7 @@ handleTargets = do
                             let image = getI scriptImage script
                                 inRange = (angleBetween target rot <= range) in
                             if hasActiveHandler image "at_rot_target" && inRange
-                                then pushEvent (Event "at_rot_target" [IVal i, rot2RVal target, rot2RVal rot] M.empty) k sn
+                                then pushEvent (Event "at_rot_target" [iVal i, rot2RVal target, rot2RVal rot] M.empty) k sn
                                 else when (hasActiveHandler image "not_at_rot_target" && not inRange) $
                                          pushEvent (Event "not_at_rot_target" [] M.empty) k sn
                             )
@@ -986,7 +986,7 @@ data SimStatus = SimEnded { simStatusMessage :: String, simStatusLog :: [LogMess
                                 simStatusState :: SimStateInfo } deriving (Show)
 
 data SimStateInfo = SimStateInfo {
-        simStateInfoTime :: Int,
+        simStateInfoTime :: LSLInteger,
         simStateInfoPrims :: [(LSLKey,String)],
         simStateInfoAvatars :: [(LSLKey,String)],
         simStateInfoScripts :: [(LSLKey,String)]

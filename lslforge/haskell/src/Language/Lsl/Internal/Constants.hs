@@ -5,6 +5,7 @@ import Data.Bits((.|.),shiftL)
 import Data.Foldable(find)
 import Language.Lsl.Internal.Key(LSLKey(..))
 import Language.Lsl.Internal.Type(LSLType,LSLValue(..),typeOfLSLValue)
+import Language.Lsl.Internal.Util(LSLInteger)
 
 data Constant a = Constant { constName :: String, constVal :: LSLValue a }
     deriving (Show)
@@ -21,15 +22,15 @@ cInventoryObject = 6;llcInventoryObject :: RealFloat a => LSLValue a; llcInvento
 cInventoryScript = 10;llcInventoryScript :: RealFloat a => LSLValue a; llcInventoryScript = IVal cInventoryScript
 cInventorySound = 1;llcInventorySound :: RealFloat a => LSLValue a; llcInventorySound = IVal cInventorySound
 cInventoryTexture = 0;llcInventoryTexture :: RealFloat a => LSLValue a; llcInventoryTexture = IVal cInventoryTexture
-cPermissionChangeLinks = 0x80 :: Int
+cPermissionChangeLinks = 0x80 :: LSLInteger
 llcPermissionChangeLinks = IVal cPermissionChangeLinks
 
-cChangedLink = 0x20 :: Int
+cChangedLink = 0x20 :: LSLInteger
 llcChangedLink = IVal cChangedLink
 cChangedInventory = 0x1;llcChangedInventory :: RealFloat a => LSLValue a; llcChangedInventory = IVal cChangedInventory
 cChangedAllowedDrop = 0x40;llcChangedAllowedDrop :: RealFloat a => LSLValue a; llcChangedAllowedDrop = IVal cChangedAllowedDrop
 
-cChangedRegionStart = 0x400 :: Int
+cChangedRegionStart = 0x400 :: LSLInteger
 llcChangedRegionStart = IVal cChangedRegionStart
 
 cMaskBase = 0;llcMaskBase :: RealFloat a => LSLValue a; llcMaskBase = IVal cMaskBase
@@ -53,15 +54,15 @@ cPrimTypeSculpt = 7;llcPrimTypeSculpt :: RealFloat a => LSLValue a; llcPrimTypeS
 cPrimTypeTorus = 4;llcPrimTypeTorus :: RealFloat a => LSLValue a; llcPrimTypeTorus = IVal cPrimTypeTorus
 cPrimTypeTube = 5;llcPrimTypeTube :: RealFloat a => LSLValue a; llcPrimTypeTube = IVal cPrimTypeTube
 
-validAttachmentPoints = [0..36]::[Int]
+validAttachmentPoints = [0..36]::[LSLInteger]
 
-cDebugChannel = 2147483647 :: Int
+cDebugChannel = 2147483647 :: LSLInteger
 llcDebugChannel = IVal cDebugChannel
 
 cEOF = "\n\n\n"
 llcEOF = (SVal cEOF)
 
-cPermissionControlCamera = 0x800 :: Int
+cPermissionControlCamera = 0x800 :: LSLInteger
 llcPermissionControlCamera = IVal cPermissionControlCamera
 cPermissionTrackCamera = 0x400;llcPermissionTrackCamera :: RealFloat a => LSLValue a; llcPermissionTrackCamera = IVal cPermissionTrackCamera
 cPermissionTriggerAnimation = 0x10;llcPermissionTriggerAnimation :: RealFloat a => LSLValue a; llcPermissionTriggerAnimation = IVal cPermissionTriggerAnimation
@@ -142,13 +143,13 @@ cRemoteDataReply = 3;llcRemoteDataReply :: RealFloat a => LSLValue a; llcRemoteD
 llcZeroVector = VVal 0 0 0
 llcZeroRotation = RVal 0 0 0 1
 
-mkIConst :: RealFloat a => Int -> (Int,LSLValue a)
-mkIConst i = (i,IVal i)
+-- mkIConst :: (RealFloat a, Integral b) => b -> (b,LSLValue a)
+-- mkIConst i = (i,IVal i)
 
-cPrimHoleDefault = 0 :: Int
-cPrimHoleSquare = 32 :: Int
-cPrimHoleCircle = 16 :: Int
-cPrimHoleTriangle = 48 :: Int
+cPrimHoleDefault = 0 :: LSLInteger
+cPrimHoleSquare = 32 :: LSLInteger
+cPrimHoleCircle = 16 :: LSLInteger
+cPrimHoleTriangle = 48 :: LSLInteger
 validPrimHoleType = flip elem $ map IVal [cPrimHoleDefault,cPrimHoleSquare,
     cPrimHoleCircle,cPrimHoleTriangle]
 
@@ -794,7 +795,7 @@ allConstants = [
     Constant "TEXTURE_MEDIA" (KVal $ LSLKey "8b5fec65-8d8d-9dc5-cda8-8fdf2716e361"),
     Constant "TEXTURE_PLYWOOD" (KVal $ LSLKey "89556747-24cb-43ed-920b-47caed15465f"),
     Constant "TEXTURE_TRANSPARENT" (KVal $ LSLKey "8dcd4a48-2d37-4909-9f78-f7a9eb4ef903"),
-    Constant "TOUCH_INVALID_FACE" (IVal 0xffffffff),
+    Constant "TOUCH_INVALID_FACE" (IVal (-1)),
     Constant "TOUCH_INVALID_TEXCOORD" (VVal (-1) (-1) 0),
     Constant "TOUCH_INVALID_VECTOR" (VVal 0 0 0),
     Constant "TRAVERSAL_TYPE" (IVal 7),
