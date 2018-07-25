@@ -323,13 +323,11 @@ collectReps names = do
               Just _ -> return m
               Nothing -> reify n >>= \ info -> case info of
                   PrimTyConI _ _ _ -> return (M.insert n Nothing m)
-                  TyConI (DataD _ nm _ _ cs _) -> case nameBase nm of
-                       '(':rest -> return (M.insert nm (Just $ "Tuple" ++ show (length rest)) m)
-                       _ -> foldM collectCReps (M.insert nm (Just $ nameBase nm) m) cs
+                  TyConI (DataD _ nm _ _ cs _) -> foldM collectCReps (M.insert nm (Just $ nameBase nm) m) cs
                   TyConI (NewtypeD _ nm _ _ c _) -> collectCReps (M.insert nm (Just $ nameBase nm) m) c
                   TyConI (TySynD _ _ t1) -> decomposeType (M.insert n Nothing m) t1
           decomposeType m (VarT _) = return m
-          decomposeType m (TupleT n) = return m
+          decomposeType m (TupleT n) = return (M.insert (mkTupleName n) (Just $ "Tuple" ++ show n) m)
           decomposeType m ListT = return m
           decomposeType m (ConT nm) | nm == ''Bool ||
                                       nm == ''Int ||
@@ -344,6 +342,7 @@ collectReps names = do
           collectCReps m (NormalC _ sts) = foldM decomposeType m (map snd sts)
           collectCReps m (RecC _ vsts) = foldM decomposeType m (map (\ (_,_,t) -> t) vsts)
           collectCReps m (InfixC (_,t0) _ (_,t1)) = decomposeType m t0 >>= \ m' -> decomposeType m' t1
+          mkTupleName n = mkName $ "(" ++ replicate (fromIntegral n - 1) ',' ++ ")"
 
 saveReps :: String -> [(String,String)] -> IO ()
 saveReps pkg codeInfo = do
@@ -354,8 +353,6 @@ saveReps pkg codeInfo = do
             "public class InitAll {\n" ++
             "    public static void initAll(XStream xstream) {\n" ++
                 concatMap (\ (nm,_) -> "        " ++ nm ++ ".init(xstream);\n") codeInfo ++
-                "        Tuple2.init(xstream);\n" ++ -- FIXME: Tuple2 somehow should appear differently
-                "        Tuple3.init(xstream);\n" ++ -- FIXME: Tuple3 somehow should appear differently
                 "    }\n" ++
             "}\n"
 

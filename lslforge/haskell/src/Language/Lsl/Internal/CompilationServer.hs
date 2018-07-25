@@ -16,7 +16,7 @@ import Language.Lsl.Internal.Util
 import qualified Language.Lsl.Internal.XmlCreate as E
 import Language.Lsl.Internal.SerializationGenerator
 import Language.Lsl.Internal.DOMCombinators
-import Language.Lsl.Internal.SerializationInstances(jrep'Maybe,jrep'Either)
+import Language.Lsl.Internal.SerializationInstances(jrep'Maybe,jrep'Either,jrep'Tuple2,jrep'Tuple3)
 import System.Directory
 import System.FilePath(replaceExtension)
 
