@@ -119,13 +119,12 @@ import Language.Lsl.Internal.Constants(findConstVal)
 import Language.Lsl.Internal.Key(LSLKey(..))
 import Language.Lsl.Internal.SHA1(hashStoHex)
 import Data.List(elemIndex,find,foldl',intersperse,isPrefixOf,sort)
-import Data.Char(toLower,toUpper)
+import Data.Char(toLower,toUpper,chr,ord,isHexDigit,digitToInt,intToDigit)
 import Data.Bits((.|.),(.&.),shiftL,shiftR,xor)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as L
 import qualified Data.Digest.Pure.MD5 as MD5
 import qualified Data.ByteString.UTF8 as UTF8
-import Network.URI(escapeURIChar,unEscapeString)
 import Codec.Binary.UTF8.String(encodeString,decodeString)
 
 internalLLFuncNames :: [String]
@@ -261,19 +260,31 @@ unescapedChars = ['A'..'Z'] ++ ['0'..'9'] ++ ['a'..'z']
 
 escapeURL "" n = ""
 escapeURL (c:cs) n =
-    let s = escapeURIChar (`elem` unescapedChars) c
+    let s = escapeURIChar' (`elem` unescapedChars) c
         len = length s
     in if len > n then "" else s ++ escapeURL cs (n - len)
 maxResult = 254::Int
+
+escapeURIChar' :: (Char -> Bool) -> Char -> String
+escapeURIChar' p c | p c = [c]
+                   | otherwise = '%' : intToDigit (n `shiftR` 4) : intToDigit (n .&. 0xf) : []
+              where n = ord c
 
 llEscapeURL _ [SVal string] =
     continueWith $ SVal $ escapeURL (encodeString string) maxResult
     --continueWith $ SVal $ escapeURL string maxResult
 
 llUnescapeURL _ [SVal string] =
-    continueWith $ SVal $ decodeString $ take maxResult $ unEscapeString string
+    continueWith $ SVal $ decodeString $ take maxResult $ unEscapeString' string
     --continueWith $ SVal $ take maxResult $ unEscapeString string
 
+unEscapeString' :: String -> String
+unEscapeString' "" = ""
+unEscapeString' ('%':c:d:r) | isHexDigit c && isHexDigit d =
+                                (chr $ digitToInt d + digitToInt c `shiftL` 4) : unEscapeString' r
+                            | otherwise = '%' : (unEscapeString' $ c : d : r)
+unEscapeString' (c:r) = c : unEscapeString' r
+    
 llMD5String _ [SVal string, IVal nonce] =
     continueWith $ SVal $ (show . MD5.md5 . L.pack . B.unpack . UTF8.fromString) (string ++ ":" ++ show nonce)
 
