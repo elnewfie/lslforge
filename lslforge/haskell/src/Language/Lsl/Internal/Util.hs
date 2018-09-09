@@ -40,6 +40,7 @@ module Language.Lsl.Internal.Util (
 
 import Control.Monad(liftM,when,MonadPlus(..))
 import Control.Monad.Except(MonadError(..))
+import qualified Control.Monad.Fail as F
 import Data.Char
 import Data.Int(Int32)
 import Data.List(find,elemIndex,isPrefixOf,tails)
@@ -94,10 +95,10 @@ whenJust Nothing _ = return ()
 whenJust (Just v) action = action v
 
 -- monadified lookup
-lookupM :: (Monad m, Eq a, Show a) => a -> [(a,b)] -> m b
+lookupM :: (F.MonadFail m, Eq a, Show a) => a -> [(a,b)] -> m b
 lookupM x l =
    case lookup x l of
-       Nothing -> fail ((show x) ++ " not found")
+       Nothing -> F.fail ((show x) ++ " not found")
        Just y -> return y
 
 -- monadified find
@@ -122,7 +123,7 @@ filtMapM f (x:xs) =
             Nothing -> filtMapM f xs
             Just y -> liftM (y:) (filtMapM f xs)
 
-lookupByIndex :: (Integral a, Show a, Monad m) => a -> [b] -> m b
+lookupByIndex :: (Integral a, Show a, F.MonadFail m) => a -> [b] -> m b
 lookupByIndex i l = lookupM i $ zip [0..] l
 
 removeLookup :: Eq a => a -> [(a,b)] -> [(a,b)]

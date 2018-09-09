@@ -30,6 +30,7 @@ module Language.Lsl.Internal.Exec(
 
 import Control.Monad(foldM_,when,mplus,msum,zipWithM,ap,liftM)
 import Control.Monad.Except(MonadError(..),ExceptT(..),runExceptT)
+import qualified Control.Monad.Fail as F
 import Control.Monad.State(MonadState(..),lift,StateT(..))
 import Control.Monad.Trans
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
@@ -269,7 +270,7 @@ writeMem name value cells =
         (cells',[]) -> fail "no such variable"
         (xs,y:ys) -> return ((name,value):(xs ++ ys))
 
-readMem :: Monad m => String -> MemRegion a -> m (LSLValue a)
+readMem :: F.MonadFail m => String -> MemRegion a -> m (LSLValue a)
 readMem = lookupM
 
 initGlobals :: RealFloat a => [Global] -> MemRegion a

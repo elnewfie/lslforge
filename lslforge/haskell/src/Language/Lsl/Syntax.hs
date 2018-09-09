@@ -68,7 +68,7 @@ import Data.Maybe(isJust,isNothing)
 import Language.Lsl.Internal.Util(LSLInteger,ctx,findM,lookupM,filtMap)
 import Control.Monad(when,MonadPlus(..))
 import Control.Monad.Except(MonadError(..))
--- import Control.Monad.Error.Class(Error(..))
+import Control.Monad.Outdated.Error(Error(..))
 import qualified Control.Monad.State as S(State)
 import Control.Monad.State hiding(State)
 
@@ -256,6 +256,10 @@ msgFromCodeErr = snd
 
 -- | An error monad for representing validation errors with respect to LSL code.
 type Validity a = Either CodeErrs a
+
+instance Error CodeErrs where
+    noMsg = CodeErrs [(Nothing,"")]
+    strMsg s = CodeErrs [(Nothing,s)]
 
 --------------------
 

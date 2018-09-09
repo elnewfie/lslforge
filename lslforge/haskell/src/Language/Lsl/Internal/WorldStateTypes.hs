@@ -11,6 +11,8 @@ module Language.Lsl.Internal.WorldStateTypes where
 import Control.Applicative
 import Control.Monad(liftM,ap,MonadPlus(..))
 import Control.Monad.Except(ExceptT(..),MonadError(..))
+import qualified Control.Monad.Fail as F
+import Control.Monad.Outdated.Error(Error(..))
 import Control.Monad.State(MonadState(..),StateT(..))
 import Data.Map(Map)
 import qualified Data.IntMap as IM
@@ -193,6 +195,9 @@ instance Monad m => Applicative (WorldE m) where
 instance Monad m => Alternative (WorldE m) where
    empty = mzero
    (<|>) = mplus
+
+instance Monad m => F.MonadFail (WorldE m) where
+    fail e = WorldE $ ExceptT $ return (Left $ strMsg e)
 
 data PendingHTTPResponse = PendingHTTPResponse {
         phrRequesterKey :: LSLKey,
