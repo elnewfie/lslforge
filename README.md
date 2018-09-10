@@ -12,7 +12,8 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
-* 2017-08-07 LSLForge **0.1.9.4** (**Windows Only - TESTING IN PROGRESS**)
+* 2018-09-10 LSLForge **0.1.9.4** (**Windows**, **Mac** Only - **TESTING IN PROGRESS**)
+    * Fixed ``Tuple*.java`` disappearance (Thanks [@PellSmit](https://github.com/PellSmit))
     * Upgraded Haskell (Thanks [@simon-nicholls](https://github.com/simon-nicholls))
     * HTTP_USER_AGENT
     * OBJECT_RENDER_WEIGHT
