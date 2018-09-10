@@ -204,7 +204,7 @@ evalExpr (Not expr) =
     do t <- evalCtxExpr expr
        case t of
            (IVal i) -> return $ IVal (if i == 0 then 1 else 0)
-evalExpr (IntLit i) = return (IVal i)
+evalExpr (IntLit i) = return (iVal i)
 evalExpr (FloatLit f) = return (FVal $ realToFrac f)
 evalExpr (StringLit s) = return (SVal s)
 evalExpr (KeyLit k) = return (KVal $ LSLKey k)
@@ -333,7 +333,7 @@ evalRelExpr fi ff e0 e1 =
 
 evalIntExpr f e0 e1 =
     do (IVal i0, IVal i1) <- evalEach e0 e1
-       return $ IVal $ f i0 i1
+       return $ iVal $ f (fromInt i0) (fromInt i1)
 
 evalEach e0 e1 =
     do v0 <- evalCtxExpr e0

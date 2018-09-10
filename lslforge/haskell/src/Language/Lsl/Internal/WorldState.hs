@@ -95,7 +95,7 @@ import Language.Lsl.Internal.Exec(hasActiveHandler)
 import Language.Lsl.Internal.Key(mkKey,LSLKey(..),nullKey)
 import Language.Lsl.Internal.Log(LogMessage(..),LogLevel(..))
 import Language.Lsl.Internal.Type(LSLValue(..),vec2VVal)
-import Language.Lsl.Internal.Util(lookupByIndex)
+import Language.Lsl.Internal.Util(LSLInteger,fromInt,lookupByIndex)
 import Language.Lsl.WorldDef(Attachment,InventoryItem(..),InventoryItemIdentification(..),
     Region(..),Parcel(..),Prim,isInvNotecardItem,isInvLandmarkItem,
     isInvClothingItem,isInvBodyPartItem,isInvGestureItem,isInvSoundItem,
@@ -145,11 +145,11 @@ getPrimLinkNum pk = do
             links <- getM $ primKeys.lm ok.wobjects
             case elemIndex pk links of
                 Nothing -> throwError err
-                Just i -> return (i + 1)
+                Just i -> return (fromInt i + 1)
     where err = "internal error, can't find prim in link list of parent object"
 
 -- TODO: temp until introduce region into Prim definition
-getPrimRegion _ = return (0 :: Int, 0 :: Int)
+getPrimRegion _ = return (0 :: LSLInteger, 0 :: LSLInteger)
 
 getPos pkey = runErrPrim pkey (VVal 0.0 0.0 0.0)
     (vec2VVal <$> (getRootPrim pkey >>= getObjectPosition))
@@ -157,9 +157,9 @@ getPos pkey = runErrPrim pkey (VVal 0.0 0.0 0.0)
 runErrFace k i defaultVal = runAndLogIfErr
     ("face " ++ (show i) ++ " or prim " ++ unLslKey k ++ " not found") defaultVal
 
-getPrimFaceAlpha k i = getM (faceAlpha.lli i.primFaces.wprim k)
-getPrimFaceColor k i = getM (faceColor.lli i.primFaces.wprim k)
-getPrimFaceTextureInfo k i = getM (faceTextureInfo.lli i.primFaces.wprim k)
+getPrimFaceAlpha k i = getM (faceAlpha.lli (fromInt i).primFaces.wprim k)
+getPrimFaceColor k i = getM (faceColor.lli (fromInt i).primFaces.wprim k)
+getPrimFaceTextureInfo k i = getM (faceTextureInfo.lli (fromInt i).primFaces.wprim k)
 
 runErrPrim k defaultVal =
     runAndLogIfErr ("prim " ++ unLslKey k ++ " not found") defaultVal
@@ -176,7 +176,7 @@ setPrimFaceColor k i v = runErrFace k i () $ updatePrimFace k i (setI faceColor 
 isSensorEvent (SensorEvent {}) = True
 isSensorEvent _ = False
 
-takeWQ :: Int -> WorldEventQueue -> (Maybe WorldEventType,WorldEventQueue)
+takeWQ :: LSLInteger -> WorldEventQueue -> (Maybe WorldEventType,WorldEventQueue)
 takeWQ i [] = (Nothing,[])
 takeWQ i ((j,we):wes) | i >= j = (Just we,wes)
                       | otherwise = (Nothing,wes)

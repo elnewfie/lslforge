@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -XNoMonomorphismRestriction -XFlexibleContexts #-}
 module Language.Lsl.Internal.Util (
+    LSLInteger,
     mlookup,
     ilookup,
     safeIndex,
@@ -39,7 +40,9 @@ module Language.Lsl.Internal.Util (
 
 import Control.Monad(liftM,when,MonadPlus(..))
 import Control.Monad.Except(MonadError(..))
+import qualified Control.Monad.Fail as F
 import Data.Char
+import Data.Int(Int32)
 import Data.List(find,elemIndex,isPrefixOf,tails)
 import qualified Data.ByteString.Lazy.Char8 as B
 import qualified Data.Map as Map
@@ -51,6 +54,8 @@ import Language.Lsl.Internal.Math
 
 import Network.URI(escapeURIString,isUnescapedInURI,unEscapeString)
 import System.IO(hFlush,stdout)
+
+type LSLInteger = Int32
 
 -- some random operators
 (<||>) a b = a `catchError` const b
@@ -90,10 +95,10 @@ whenJust Nothing _ = return ()
 whenJust (Just v) action = action v
 
 -- monadified lookup
-lookupM :: (Monad m, Eq a, Show a) => a -> [(a,b)] -> m b
+lookupM :: (F.MonadFail m, Eq a, Show a) => a -> [(a,b)] -> m b
 lookupM x l =
    case lookup x l of
-       Nothing -> fail ((show x) ++ " not found")
+       Nothing -> F.fail ((show x) ++ " not found")
        Just y -> return y
 
 -- monadified find
@@ -118,7 +123,7 @@ filtMapM f (x:xs) =
             Nothing -> filtMapM f xs
             Just y -> liftM (y:) (filtMapM f xs)
 
-lookupByIndex :: Monad m => Int -> [a] -> m a
+lookupByIndex :: (Integral a, Show a, F.MonadFail m) => a -> [b] -> m b
 lookupByIndex i l = lookupM i $ zip [0..] l
 
 removeLookup :: Eq a => a -> [(a,b)] -> [(a,b)]
@@ -130,8 +135,8 @@ removeLookup k l = let (xs,ys) = break ((k==).fst) l in
 indexOf :: Eq a => [a] -> [a] -> Maybe Int
 indexOf sub list = elemIndex True $ map (isPrefixOf sub) (tails list)
 
-fromInt :: Num a => Int -> a
-fromInt = fromInteger . toInteger
+fromInt :: (Num a, Integral b) => b -> a
+fromInt = fromIntegral
 
 cut :: Int -> Int -> [a] -> ([a],[a])
 cut start end src = (take start src, drop end src)

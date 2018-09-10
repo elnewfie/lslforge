@@ -58,10 +58,10 @@ import Language.Lsl.Internal.Key(nullKey,LSLKey(..))
 import Language.Lsl.Internal.Log(LogLevel(..))
 import Language.Lsl.Internal.Physics(calcAccel,primMassApprox)
 import Language.Lsl.Syntax(Ctx(..),FuncDec(..),predefFuncs)
-import Language.Lsl.Internal.Type(LSLValue(..),LSLType(..),defaultValue,
+import Language.Lsl.Internal.Type(LSLValue(..),LSLType(..),iVal,defaultValue,
     lslBool,lslValString,rVal2Rot,rot2RVal,typeOfLSLValue,vVal2Vec,vec2VVal,
     onI,onS,toSVal)
-import Language.Lsl.Internal.Util(add3d,diff3d,fac,findM,fromInt,
+import Language.Lsl.Internal.Util(LSLInteger,add3d,diff3d,fac,findM,fromInt,
     generatePermutation,lookupByIndex,mag3d,mlookup,norm3d,
     quaternionMultiply,rot3d,rotationBetween,scale3d,tuplify,
     (<||>),(<??>),rotL,whenJust,filtMapM)
@@ -123,7 +123,7 @@ countURLs scriptId = (length . filter ((==scriptId) . snd) . M.elems) <$> (getM 
 
 regionIndex (x,y) = base i +
   (maybe (error "impossible!") id
-      $ elemIndex (x,y)
+      $ fromInt <$> elemIndex (x,y)
           [ (k,l) | k <- [(-ix)..ix],l <- [(-ix)..ix],isp (k,l) ])
   where i = max (abs x) (abs y)
         ix = el i `div` 2
@@ -221,7 +221,7 @@ llSensorRemove info@(ScriptInfo _ _ sn pk _) [] = void $
 ------------------------------------------------------------------------------
 llGetRegionAgentCount info@(ScriptInfo _ _ sn pk _) [] = do
     region <- getPrimRegion pk
-    count <- (length . filter ((==region) . getI avatarRegion) . M.elems) <$> getM worldAvatars
+    count <- (fromInt . length . filter ((==region) . getI avatarRegion) . M.elems) <$> getM worldAvatars
     continueI count
 
 llRequestAgentData info@(ScriptInfo _ _ sn pk _) [KVal ak, IVal d] =
@@ -441,7 +441,7 @@ llGiveInventory info [KVal k, SVal s] = giveInventory info k "" [s]
 llGiveInventoryList info [KVal k, SVal f, LVal l] = giveInventory info k f [ s | SVal s <- map toSVal l]
 
 llSetRemoteScriptAccessPin (ScriptInfo _ _ _ pk _) [IVal pin] =
-    void $ primRemoteScriptAccessPin.wprim pk =: pin
+    void $ primRemoteScriptAccessPin.wprim pk =: fromInt pin
 llRemoteLoadScript info [KVal _,SVal _, IVal _, IVal _] =
     void $ sayErr info  "Deprecated.  Please use llRemoteLoadScriptPin instead."
 
@@ -520,7 +520,7 @@ llSetScriptState (ScriptInfo _ _ sn pk _) [SVal sn', IVal state] = void $ do
 llSetPayPrice info@(ScriptInfo _ _ sn pk _) [IVal price, LVal l] = void $ do
     hasMoney <- scriptHasActiveHandler pk sn "money"
     unless hasMoney $ throwError "no money handler, pay price info ignored"
-    primPayInfo.wprim pk =: (price,i1,i2,i3,i4)
+    primPayInfo.wprim pk =: (fromInt price,fromInt i1,fromInt i2,fromInt i3,fromInt i4)
     where toI (IVal i) = if i < (-2) then (-1) else i
           toI _ = (-1)
           [i1,i2,i3,i4] = take 4 $ map toI l ++ replicate 4 (-1)
@@ -556,19 +556,23 @@ llMessageLinked info@(ScriptInfo oid pid sid pkey _)
         [IVal link,IVal val,SVal msg,KVal key] = void $ do
     links <- getM $ primKeys.lm oid.wobjects
     when (null links) $ throwError "object is has no links!"
-    let sender = if length links > 1 then pid + 1 else pid
+    let sender = fromInt $ if length links > 1 then pid + 1 else pid
     let targetLinkIndices = targetLinks (length links) link pid
     let targetLinks = map (links !!) targetLinkIndices
     let event = (Event "link_message" [IVal sender, IVal val, SVal msg, KVal key] M.empty)
     mapM_ (\ pk -> pushDeferredScriptEventToPrim event pk 0) targetLinks
 
+targetLinks :: Int -> LSLInteger -> LSLInteger -> [Int]
 targetLinks n link pid =
     case link of
         l | l == (-1) -> [0 .. (n - 1)] -- whole link set
-          | l == (-2) -> [0..(pid - 1)] ++ [(pid + 1).. (n - 1)] -- others
+          | l == (-2) -> [0..(pid' - 1)] ++ [(pid' + 1).. (n - 1)] -- others
           | l == (-3) -> [1..(n - 1)] -- children
-          | l == (-4) -> [pid] -- this prim
-          | otherwise -> [link - 1]
+          | l == (-4) -> [pid'] -- this prim
+          | otherwise -> [link' - 1]
+    where
+        link' = (fromInt link)::Int
+        pid' = (fromInt pid)::Int
 
 -- the key to 'sleep' is that instead of returning 'EvalIncomplete' as its EvalResult, it returns
 -- 'YieldTil <some-tick>', which puts the script into a sleep state.
@@ -618,7 +622,7 @@ sayErr info@(ScriptInfo oid _ _ pk _) msg = do
 
 registerListener listener = do
     id <- nextListenerId `modM` (+1)
-    lmi id.wlisteners =: (listener,True)
+    lmi (fromInt id).wlisteners =: (listener,True)
     return id
 
 unregisterListener pk sname id = do
@@ -627,19 +631,19 @@ unregisterListener pk sname id = do
         (throwError ("listener " ++ show id ++ " not registered for calling script"))
     wlisteners `modM_` IM.delete id
 updateListener pk sname id active = do
-    listener <- getM $ lfst.lmi id.wlisteners
+    listener <- getM $ lfst.lmi (fromInt id).wlisteners
     when (listenerScriptName listener /= sname && listenerPrimKey listener /= pk)
         (throwError ("listener " ++ show id ++ " not registered for calling script"))
     lmi id.wlisteners =: (listener,active)
 
 llListen (ScriptInfo oid pid sid pkey event) [IVal chan, SVal sender, KVal key, SVal msg] =
-    (registerListener $ Listener pkey sid chan sender key msg) >>=  continueI
+    (registerListener $ Listener pkey sid chan sender key msg) >>= continueI
 
 llListenRemove (ScriptInfo _ _ sid pk _) [IVal id] =
-    unregisterListener pk sid id >> continueV
+    unregisterListener pk sid (fromInt id) >> continueV
 
 llListenControl (ScriptInfo _ _ sid pk _) [IVal id, IVal active] =
-    updateListener pk sid id (active /= 0) >> continueV
+    updateListener pk sid (fromInt id) (active /= 0) >> continueV
 
 llFrand _ [FVal maxval] = wrand >>= continueF . (maxval *)
 
@@ -661,15 +665,15 @@ llEjectFromLand info@(ScriptInfo oid _ _ pk _) [KVal user] = void $ do
 
 llBreakLink info@(ScriptInfo oid _ sid pk _) [IVal link] =
     do  perm <- getPermissions pk sid
-        if perm .&. cPermissionChangeLinks /= 0
+        if perm .&. (fromInt cPermissionChangeLinks) /= 0
             then do
                 objects <- getM wobjects
                 links :* dynm <- getM $ (primKeys.*dynamics).lm oid.wobjects
                 prohibited (getM $ primAttachment.wprim oid) <??> "can't change links of attached object"
-                if link < 1 || link > length links then slog info "llBreakLink: invalid link id"
+                if link < 1 || (fromInt link) > length links then slog info "llBreakLink: invalid link id"
                     else do
                         let (dyn1,dyn2) = if link == 1 then (defaultDynamics,dynm) else (dynm,defaultDynamics)
-                        let (xs,y:ys) = splitAt (link - 1) links
+                        let (xs,y:ys) = splitAt (fromInt (link - 1)) links
                         let (linkSet1,linkSet2) = (xs ++ ys, [y])
                         unless (null linkSet1) (lm (head linkSet1).wobjects =: LSLObject linkSet1 dyn1)
                         lm (head linkSet2).wobjects =: LSLObject linkSet2 dyn2
@@ -683,7 +687,7 @@ llBreakLink info@(ScriptInfo oid _ sid pk _) [IVal link] =
 
 llBreakAllLinks info@(ScriptInfo oid _ sid pk _) [] = void $ do
     perm <- getPermissions pk sid
-    when (perm .&. cPermissionChangeLinks == 0) $ throwError "no permission"
+    when (perm .&. (fromInt cPermissionChangeLinks) == 0) $ throwError "no permission"
     objects <- getM wobjects
     links :* dynm <- getM $ (primKeys.*dynamics).lm oid.wobjects
     prohibited (getM $ primAttachment.wprim oid) <??> "can't change links of attached object"
@@ -703,7 +707,7 @@ llBreakAllLinks info@(ScriptInfo oid _ sid pk _) [] = void $ do
 llCreateLink info@(ScriptInfo oid _ sid pk _)
         [KVal target, IVal iparent] = void $ do
     perm <- getPermissions pk sid
-    when (perm .&. cPermissionChangeLinks == 0) $ throwError "no permission to change links"
+    when (perm .&. (fromInt cPermissionChangeLinks) == 0) $ throwError "no permission to change links"
     (link':links'):*dynamics' <- getM ((primKeys.*dynamics).lm target.wobjects) <??> "target not found"
     (link:links):*dynamics <- getM $ (primKeys.*dynamics).lm oid.wobjects
     prohibited (getM $ primAttachment.wprim oid) <??> "can't change links of attached object"
@@ -747,9 +751,9 @@ llAttachToAvatar info@(ScriptInfo oid _ sid pk _) [IVal attachPoint] = void $ do
             av <- getM $ wav k
             let attachments = getI avatarAttachments av
             rotL maybe (\ _ -> throwError "attachment point already occupied")
-                (IM.lookup attachPoint attachments) $
-                do lmi attachPoint.avatarAttachments.wav k =: oid
-                   primAttachment.wprim oid =: Just (Attachment k attachPoint)
+                (IM.lookup (fromInt attachPoint) attachments) $
+                do lmi (fromInt attachPoint).avatarAttachments.wav k =: oid
+                   primAttachment.wprim oid =: Just (Attachment k (fromInt attachPoint))
                    pushAttachEvent pk k
 
 llDetachFromAvatar info@(ScriptInfo oid _ sid pk _) [] = void $ do
@@ -758,7 +762,7 @@ llDetachFromAvatar info@(ScriptInfo oid _ sid pk _) [] = void $ do
     Attachment k attachPoint <- getM $ primAttachment'.wprim oid
     perm <- mlookup k perms <||> throwError "no permission to detach"
     when (perm .&. cPermissionAttach == 0) $ throwError "no permission to attach"
-    modM_ (avatarAttachments.wav k)  (IM.delete attachPoint)
+    modM_ (avatarAttachments.wav k)  (IM.delete (fromInt attachPoint))
     primAttachment.wprim oid =: Nothing
     pushAttachEvent oid nullKey
     putWorldEvent 1 (DetachCompleteEvent oid k)
@@ -799,7 +803,7 @@ llRequestPermissions (ScriptInfo _ _ sid pk _) [KVal k, IVal mask] = void $
 
 llClearCameraParams info@(ScriptInfo _ _ sid pk _) [] = void $
     maybe (return ()) clear =<<
-        getPermittedAvKey info "llClearCameraParams" cPermissionControlCamera
+        getPermittedAvKey info "llClearCameraParams" (fromInt cPermissionControlCamera)
     where clear k = avatarCameraControlParams.wav k =: defaultCamera
 
 llGetCameraPos info@(ScriptInfo _ _ sid pk _) [] = do
@@ -1148,8 +1152,10 @@ llRotateTexture (ScriptInfo _ _ _ pk _) [FVal rot, IVal faceIndex] =
     updateTextureInfo (setI textureRotation rot) pk faceIndex
 
 groupList _ [] = []
-groupList n l | n > 0 = take n l : groupList n (drop n l)
+groupList n l | n > 0 = take n' l : groupList n' (drop n' l)
               | otherwise = groupList 1 l
+        where
+            n' = fromInt n
 
 genNum :: [Int] -> Integer -> Integer
 genNum rands maxval =
@@ -1206,7 +1212,7 @@ getObjectPermMask oid maskId = do
     masks <- getM $ primPermissions.wprim oid
     let base = if null masks then 0x0008e000 else head masks
     let n = length masks
-    return (if maskId `elem` [0..(n-1)] then masks !! maskId else
+    return (if (fromInt maskId) `elem` [0..(n-1)] then masks !! (fromInt maskId) else
                   if maskId == 3 then 0 else base)
 
 llGetScale (ScriptInfo _ _ _ pkey _) [] = continueVec =<< getM (primScale.wprim pkey)
@@ -1242,10 +1248,10 @@ llSetTimerEvent (ScriptInfo _ _ sn pk _) [FVal interval] =
                       _ -> True
 
 llSetVehicleFlags info@(ScriptInfo _ _ _ pk _) [IVal flagsToSet] =
-    void $ (primVehicleFlags.wprim pk) `modM_` (.|. flagsToSet)
+    void $ (primVehicleFlags.wprim pk) `modM_` (.|. (fromInt flagsToSet))
 
 llRemoveVehicleFlags info@(ScriptInfo _ _ _ pk _) [IVal flagsToClear] =
-    void $ (primVehicleFlags.wprim pk) `modM_` (.&. complement flagsToClear)
+    void $ (primVehicleFlags.wprim pk) `modM_` (.&. (fromInt (complement flagsToClear)))
 
 ----------------------------------------------------------------------
 -- get/set prim parameters
@@ -1290,7 +1296,7 @@ queryPrimFlexible k =
     getM (primFlexibility.wprim k) >>= (\ flex -> case flex of
         Nothing -> return [IVal 0, IVal 0, FVal 0, FVal 0, FVal 0, FVal 0, VVal 0.0 0.0 0.0]
         Just flex' -> return $ map ($ flex')
-            [const (IVal 1),IVal . getI flexSoftness, FVal . getI flexGravity,
+            [const (IVal 1),iVal . getI flexSoftness, FVal . getI flexGravity,
              FVal . getI flexFriction, FVal . getI flexWind,
              FVal . getI flexTension, vec2VVal . getI flexForce])
 queryPrimLight k =
@@ -1301,10 +1307,10 @@ queryPrimLight k =
              FVal . getI lightIntensity, FVal . getI lightRadius,
              FVal . getI lightFalloff])
 
-queryPrimMaterial k = liftM ((:[]) . IVal) $ getM $ primMaterial.wprim k
-queryPrimStatus bit k =  liftM ((:[]) . IVal . (\ i -> lslBool (testBit i bit))) $ getM $ primStatus.wprim k
+queryPrimMaterial k = liftM ((:[]) . iVal) $ getM $ primMaterial.wprim k
+queryPrimStatus bit k =  liftM ((:[]) . iVal . (\ i -> lslBool (testBit i (fromInt bit)))) $ getM $ primStatus.wprim k
 queryPrimBumpShiny side =  queryFaceVals bumpShiny side
-    where bumpShiny face = [IVal $ getI faceShininess face, IVal $ getI faceBumpiness face]
+    where bumpShiny face = [iVal $ getI faceShininess face, iVal $ getI faceBumpiness face]
 queryPrimColor side = queryFaceVals colorAlpha side
     where colorAlpha face = [vec2VVal $ getI faceColor face, FVal $ getI faceAlpha face]
 queryPrimTexture side = queryFaceVals textureInfo side
@@ -1313,7 +1319,7 @@ queryPrimTexture side = queryFaceVals textureInfo side
                       [SVal . unLslKey . getI textureKey,vec2VVal . getI textureRepeats,
                        vec2VVal . getI textureOffsets,
                        FVal . getI textureRotation]
-queryPrimTexgen = queryFaceVals (return . IVal . getI faceTextureMode)
+queryPrimTexgen = queryFaceVals (return . iVal . getI faceTextureMode)
 queryPrimFullbright = queryFaceVals (\ face -> if getI faceFullbright face then [IVal 1] else [IVal 0])
 
 queryFaceVals f (IVal side) k =
@@ -1416,7 +1422,7 @@ updatePrimPhantom = updatePrimStatus "insufficient or incorrect parameters for P
 updatePrimPhysics = updatePrimStatus "insufficient or incorrect parameters for PRIM_PHYSICS" primPhysicsBit
 
 updatePrimStatus _ bit pk (IVal i:rest) =
-    (primStatus.wprim pk) `modM_` flip (if i == 0 then clearBit else setBit) bit
+    (primStatus.wprim pk) `modM_` flip (if i == 0 then clearBit else setBit) (fromInt bit)
     >> return rest
 
 updatePrimStatus fMsg _ _ _ = throwError fMsg
@@ -1482,7 +1488,7 @@ updatePrimFaceParams pk params extract update = do
     (face, faceParams, rest) <- extract params -- this can fail
     faces <- getM $ primFaces.wprim pk
     if face == -1 then primFaces.wprim pk =: (map (update faceParams) faces)
-        else case splitAt face faces of
+        else case splitAt (fromInt face) faces of
             (_,[]) -> return ()
             (xs,y:ys) -> primFaces.wprim pk =: (xs ++ (update faceParams y:ys))
     return rest
@@ -1697,7 +1703,7 @@ llGetNextEmail info@(ScriptInfo _ _ sn pk _) [SVal addr, SVal subj] =
                                 SVal $ emailAddress email,
                                 SVal $ emailSubject email,
                                 SVal $ emailMessage email,
-                                IVal (length emails -1)]
+                                iVal (length emails -1)]
        continueV
    where match email = (addr == "" || addr == emailAddress email) &&
                        (subj == "" || subj == emailSubject email)
@@ -1709,7 +1715,7 @@ llEmail info@(ScriptInfo _ _ _ pk _) [SVal address, SVal subject, SVal message] 
            then let potentialKey = take (length address - length suffix) address in
                do time <- getUnixTime
                   (primPendingEmails.wprim (LSLKey potentialKey)) `modM`
-                      (++[Email subject address message time])
+                      (++[Email subject address message $ fromInt time])
                   logit
            else logit
         continueV -- should do a yield til... (20 second delay!)
@@ -2227,18 +2233,18 @@ llCollisionFilter (ScriptInfo _ _ sn pk _) [SVal name, KVal k, IVal i] =
 
 llTarget (ScriptInfo _ _ sn pk _) [VVal x y z, FVal range] = do
     index <- (scriptTargetIndex.lscript pk sn) `modM` (+1)
-    lmi index.scriptPositionTargets.lscript pk sn =: ((x,y,z),range)
+    lmi (fromInt index).scriptPositionTargets.lscript pk sn =: ((x,y,z),range)
     continueI index
 
 llTargetRemove (ScriptInfo _ _ sn pk _) [IVal tnumber] =
-    void $ (scriptPositionTargets.lscript pk sn) `modM_` IM.delete tnumber
+    void $ (scriptPositionTargets.lscript pk sn) `modM_` IM.delete (fromInt tnumber)
 
 llRotTarget (ScriptInfo _ _ sn pk _) [RVal x y z s, FVal err] = void $ do
     index <- (scriptTargetIndex.lscript pk sn) `modM` (+1)
-    lmi index.scriptRotationTargets.lscript pk sn =: ((x,y,z,s),err)
+    lmi (fromInt index).scriptRotationTargets.lscript pk sn =: ((x,y,z,s),err)
 
 llRotTargetRemove (ScriptInfo _ _ sn pk _) [IVal tnumber] = void $
-    (scriptRotationTargets.lscript pk sn) `modM_` IM.delete tnumber
+    (scriptRotationTargets.lscript pk sn) `modM_` IM.delete (fromInt tnumber)
 
 --------------------------------------------------------------------------------
 llGround info [VVal _ _ _] = continueF 0 -- the world is flat!
@@ -2280,7 +2286,7 @@ llTargetOmega info [VVal x y z,FVal spinrate, FVal gain] = void $
 continueWith val = return (EvalIncomplete,val)
 continueVec = continueWith . vec2VVal
 continueF = continueWith . FVal
-continueI = continueWith . IVal
+continueI = continueWith . iVal
 continueRot = continueWith . rot2RVal
 continueS = continueWith . SVal
 continueK = continueWith . KVal

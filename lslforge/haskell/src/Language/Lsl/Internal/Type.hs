@@ -4,6 +4,7 @@ module Language.Lsl.Internal.Type(
     LSLType(..),
     LSLValue(..),
     Component(..),
+    iVal,
     convertValues,
     typeOfLSLValue,
     typeOfLSLComponent,
@@ -46,7 +47,7 @@ import Data.Data(Data,Typeable)
 import Data.List(intersperse)
 import Language.Lsl.Internal.NumberParsing(readInt,readHexFloat)
 import Language.Lsl.Internal.Key(nullKey,LSLKey(..))
-import Language.Lsl.Internal.Util(cross,quaternionMultiply,quaternionToMatrix,fromInt)
+import Language.Lsl.Internal.Util(LSLInteger,cross,quaternionMultiply,quaternionToMatrix,fromInt)
 import Language.Lsl.Internal.DOMProcessing(req,choicet,text,elist,val)
      --(Element(..),ElemAcceptor(..),findValue,elementsOnly,simple,attrString,acceptList)
 
@@ -57,9 +58,12 @@ data LSLType = LLList | LLInteger | LLVector | LLFloat | LLString | LLRot | LLKe
 
 -- A value.  Values correspond to the built in types (LSLType) that LSL
 -- supports.  A value is an item that can be pushed onto the value stack.
-data LSLValue a = IVal Int | FVal a | SVal String | VVal a a a
+data LSLValue a = IVal LSLInteger | FVal a | SVal String | VVal a a a
                | RVal a a a a | LVal [LSLValue a] | KVal LSLKey
                | VoidVal deriving (Show,Eq,Ord)
+
+iVal :: Integral a => a -> LSLValue b
+iVal = IVal . fromInt
 
 data Component = X | Y | Z | S | All deriving (Eq,Show, Typeable, Data)
 
@@ -167,7 +171,8 @@ isKVal _ = False
 parseInt s =
    case readInt s of
        [] -> 0
-       (i,_):_ -> i
+       (i,_):_ -> fromInt i
+
 parseFloat s =
    case readFloat s of
        [] -> 0.0

@@ -11,6 +11,8 @@ module Language.Lsl.Internal.WorldStateTypes where
 import Control.Applicative
 import Control.Monad(liftM,ap,MonadPlus(..))
 import Control.Monad.Except(ExceptT(..),MonadError(..))
+import qualified Control.Monad.Fail as F
+import Control.Monad.Outdated.Error(Error(..))
 import Control.Monad.State(MonadState(..),StateT(..))
 import Data.Map(Map)
 import qualified Data.IntMap as IM
@@ -25,6 +27,7 @@ import Language.Lsl.Internal.Key(LSLKey(..))
 import Language.Lsl.Internal.Log(LogMessage(..))
 import Language.Lsl.Syntax(Validity,LModule(..),CompiledLSLScript(..))
 import Language.Lsl.Internal.Type(LSLValue(..),LSLType(..))
+import Language.Lsl.Internal.Util(LSLInteger)
 import Language.Lsl.WorldDef(Prim(..),PrimFace(..),InventoryItem(..),
     LSLObject(..),Script(..),Avatar(..),
     Region(..),ObjectDynamics(..),WebHandling(..),PrimType(..),
@@ -32,7 +35,7 @@ import Language.Lsl.WorldDef(Prim(..),PrimFace(..),InventoryItem(..),
 
 import System.Random(StdGen(..))
 
-type WorldEvent = (Int,WorldEventType) -- time, event
+type WorldEvent = (LSLInteger,WorldEventType) -- time, event
 
 type WorldEventQueue = [WorldEvent]
 
@@ -48,11 +51,11 @@ data WorldEventType =
             deferredScriptEvent :: Event Float,
             deferredScriptEventTarget :: DeferredScriptEventTarget }
         | Chat {
-            chatChannel :: Int,
+            chatChannel :: LSLInteger,
             chatterName :: String,
             chatterKey :: LSLKey,
             chatMessage :: String,
-            chatLocation :: ((Int,Int),(Float,Float,Float)),
+            chatLocation :: ((LSLInteger,LSLInteger),(Float,Float,Float)),
             chatRange :: Maybe Float }
         | TimerEvent {
             timerEventInterval :: Float,
@@ -61,19 +64,19 @@ data WorldEventType =
             permissionRequestPrim :: LSLKey,
             permissionRequestScript :: String,
             permissionRequestAgent :: LSLKey,
-            permissionRequestMask :: Int }
+            permissionRequestMask :: LSLInteger }
         | SensorEvent {
             sensorAddress :: (LSLKey,String),
             sensorSenseName :: String,
             sensorSenseKey :: LSLKey,
-            sensorSenseType :: Int,
+            sensorSenseType :: LSLInteger,
             sensorSenseRange :: Float,
             sensorSenseArc :: Float,
             sensorRepeat :: Maybe Float }
         | XMLRequestEvent {
             xmlRequestSource :: XMLRequestSourceType,
             xmlRequestChannel :: LSLKey,
-            xmlRequestIData :: Int,
+            xmlRequestIData :: LSLInteger,
             xmlRequestSData :: String }
         | HTTPRequestEvent {
             httpRequestSource :: (LSLKey,String),
@@ -81,27 +84,27 @@ data WorldEventType =
             httpRequestURL :: String,
             httpRequestMethod :: String,
             httpRequestMimetype :: String,
-            httpRequestBodyMaxlength :: Int,
-            httpRequestVerifyCert :: Int,
+            httpRequestBodyMaxlength :: LSLInteger,
+            httpRequestVerifyCert :: LSLInteger,
             httpRequestBody :: String }
         | XMLReplyEvent {
             xmlRequestKey :: LSLKey,
             xmlRequestChannel :: LSLKey,
             xmlRequestMessageId :: LSLKey,
             xmlRequestSData :: String,
-            xmlRequestIData :: Int }
+            xmlRequestIData :: LSLInteger }
         | DialogEvent {
             dialogAgent :: LSLKey,
             dialogMessage :: String,
             dialogButtons :: [String],
-            dialogChannel :: Int,
+            dialogChannel :: LSLInteger,
             dialogSourceObject :: LSLKey }
         | RezObjectEvent {
             rezObjectLinkSet :: [Prim],
             rezObjectPos :: (Float,Float,Float),
             rezObjectVel :: (Float,Float,Float),
             rezObjectRot :: (Float,Float,Float,Float),
-            rezObjectStartParam :: Int,
+            rezObjectStartParam :: LSLInteger,
             rezObjectRezzer :: LSLKey,
             rezObjectCopy :: Bool,
             rezObjectAtRoot :: Bool }
@@ -140,13 +143,13 @@ data DeferredScriptEventTarget =
 data Touch = Touch {
     touchAvatarKey :: LSLKey,
     touchPrimKey :: LSLKey,
-    touchFace :: Int,
+    touchFace :: LSLInteger,
     touchST :: (Float,Float),
-    touchStartTick :: Int,
-    touchEndTick :: Int  }
+    touchStartTick :: LSLInteger,
+    touchEndTick :: LSLInteger  }
     deriving (Show)
 
-data SimEvent = SimEvent { simEventName :: String, simEventArgs :: [SimEventArg], simEventDelay :: Int }
+data SimEvent = SimEvent { simEventName :: String, simEventArgs :: [SimEventArg], simEventDelay :: LSLInteger }
     deriving (Show)
 data SimEventArg = SimEventArg { simEventArgName :: String, simEventArgValue :: String }
     deriving (Show)
@@ -154,7 +157,7 @@ data SimEventArg = SimEventArg { simEventArgName :: String, simEventArgValue :: 
 data Listener = Listener {
     listenerPrimKey :: LSLKey,
     listenerScriptName :: String,
-    listenerChannel :: Int,
+    listenerChannel :: LSLInteger,
     listenerName :: String,
     listenerKey :: LSLKey,
     listenerMsg :: String }
@@ -193,6 +196,9 @@ instance Monad m => Alternative (WorldE m) where
    empty = mzero
    (<|>) = mplus
 
+instance Monad m => F.MonadFail (WorldE m) where
+    fail e = WorldE $ ExceptT $ return (Left $ strMsg e)
+
 data PendingHTTPResponse = PendingHTTPResponse {
         phrRequesterKey :: LSLKey,
         phrResponderScript :: ScriptId,
@@ -201,22 +207,22 @@ data PendingHTTPResponse = PendingHTTPResponse {
         phrQuery :: String,
         phrRemoteIP :: String,
         phrUserAgent :: String,
-        phrExpire :: Int
+        phrExpire :: LSLInteger
     } deriving (Show)
 
 -- a data type that defines the state of the 'world'
 data World m = World {
-        _sliceSize :: !Int,
-        _maxTick :: !Int,
-        _nextPause :: !Int,
+        _sliceSize :: !LSLInteger,
+        _maxTick :: !LSLInteger,
+        _nextPause :: !LSLInteger,
         _wqueue :: !WorldEventQueue,
         _wlisteners :: !(IM.IntMap (Listener,Bool)),
-        _nextListenerId :: !Int,
+        _nextListenerId :: !LSLInteger,
         _wobjects :: !(Map LSLKey LSLObject),
         _wprims :: !(Map LSLKey Prim),
         _worldScripts :: !(Map (LSLKey,String) Script),
         _inventory :: ![(String,LSLObject)],
-        _tick :: !Int,
+        _tick :: !LSLInteger,
         _msglog :: ![LogMessage],
         _predefs :: !(Map String (PredefFunc m)),
         _randGen :: !StdGen,
@@ -226,21 +232,21 @@ data World m = World {
         _worldAvatars :: !(Map LSLKey Avatar),
         _worldBreakpointManager :: !BreakpointManager,
         _worldSuspended :: !(Maybe (LSLKey,String)), -- prim-key, script-name, image
-        _worldRegions :: !(Map (Int,Int) Region),
-        _worldZeroTime :: !Int,
+        _worldRegions :: !(Map (LSLInteger,LSLInteger) Region),
+        _worldZeroTime :: !LSLInteger,
         _worldKeyIndex :: !Integer,
         _worldWebHandling :: !WebHandling,
         _worldOutputQueue :: ![SimEvent],
         _worldPendingHTTPRequests :: ![LSLKey],
         _worldOpenDataChannels :: !(Map LSLKey (LSLKey,String),Map (LSLKey,String) LSLKey),
         _worldXMLRequestRegistry :: !(Map LSLKey XMLRequestSourceType),
-        _worldPhysicsTime :: !Int,
-        _worldTargetCheckTime :: !Int,
+        _worldPhysicsTime :: !LSLInteger,
+        _worldTargetCheckTime :: !LSLInteger,
         _worldLastPositions :: !(Map LSLKey (Bool,(Float,Float,Float))),
         _worldCollisions :: !(S.Set (LSLKey,LSLKey)),
         _worldLandCollisions :: !(S.Set LSLKey),
         _worldTouches :: !(Map LSLKey [Touch]),
-        _worldTouchCheckTime :: !Int,
+        _worldTouchCheckTime :: !LSLInteger,
         _worldURLRegistry :: !(Map String (LSLKey,ScriptId)),
         _worldPendingHTTPResponses :: !(Map LSLKey PendingHTTPResponse)
     } deriving (Show)

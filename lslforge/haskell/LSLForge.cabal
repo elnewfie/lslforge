@@ -42,6 +42,7 @@ executable LSLForge
   main-is:        LslForge.hs
   hs-source-dirs: src
   other-modules:
+    Control.Monad.Outdated.Error
     Data.Generics.Extras.Schemes
     Data.LabelExtras
     Language.Lsl.Internal.AccessGenerator

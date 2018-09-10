@@ -30,6 +30,7 @@ module Language.Lsl.Internal.Exec(
 
 import Control.Monad(foldM_,when,mplus,msum,zipWithM,ap,liftM)
 import Control.Monad.Except(MonadError(..),ExceptT(..),runExceptT)
+import qualified Control.Monad.Fail as F
 import Control.Monad.State(MonadState(..),lift,StateT(..))
 import Control.Monad.Trans
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
@@ -42,14 +43,14 @@ import Language.Lsl.Internal.Breakpoint(Breakpoint(..),StepManager(..),
     pushStepManagerFrame,popStepManagerFrame,emptyStepManager,mkBreakpoint)
 import Language.Lsl.Internal.CodeHelper(renderCall)
 import Language.Lsl.Internal.FuncSigs(convertArgs)
-import Language.Lsl.Internal.Util(fromInt,lookupM,ctx,findM)
+import Language.Lsl.Internal.Util(LSLInteger,fromInt,lookupM,ctx,findM)
 import Language.Lsl.Syntax(
     Expr(..), CompiledLSLScript(..),Statement(..),Func(..),FuncDec(..),Var(..),
     State(..),Ctx(..),Global(..),TextLocation(..),SourceContext(..),
     Handler(..),ctxVr2Vr,findFunc,findFuncDec,ctxItems,findState,fromMCtx,
     predefFuncs)
 import Language.Lsl.Internal.Type(
-    LSLType(..),LSLValue(..),typeOfLSLComponent,typeOfLSLValue,toFloat,toSVal,
+    LSLType(..),LSLValue(..),iVal,typeOfLSLComponent,typeOfLSLValue,toFloat,toSVal,
     lslShowVal,replaceLslValueComponent,vecMulScalar,rotMulVec,parseVector,
     parseRotation,parseInt,parseFloat,invRot,rotMul,vcross,Component(..),
     lslValueComponent)
@@ -112,14 +113,14 @@ executeLsl img oid pid sid pkey perf log qtick utick chkBp queue maxTick =
 data EvalState m a = EvalState {
      scriptImage :: ScriptImage a,
      objectId :: LSLKey,
-     primId :: Int,
+     primId :: LSLInteger,
      scriptName :: String,
      myPrimKey :: LSLKey,
      performAction :: String -> ScriptInfo a -> [LSLValue a] ->
         m (EvalResult,LSLValue a),
      logMessage :: String -> m (),
-     qwtick :: m Int,
-     uwtick :: Int -> m (),
+     qwtick :: m LSLInteger,
+     uwtick :: LSLInteger -> m (),
      checkBreakpoint :: Breakpoint -> StepManager -> m (Bool, StepManager),
      nextEvent :: String -> String -> m (Maybe (Event a))  }
 
@@ -269,7 +270,7 @@ writeMem name value cells =
         (cells',[]) -> fail "no such variable"
         (xs,y:ys) -> return ((name,value):(xs ++ ys))
 
-readMem :: Monad m => String -> MemRegion a -> m (LSLValue a)
+readMem :: F.MonadFail m => String -> MemRegion a -> m (LSLValue a)
 readMem = lookupM
 
 initGlobals :: RealFloat a => [Global] -> MemRegion a
@@ -287,9 +288,9 @@ evalLit globals expr =
                 (IVal i) -> fromInteger $ toInteger i
                 _ -> error "invalid float expression"
     in case expr of
-        Neg (Ctx _ (IntLit i)) -> IVal (-i)
+        Neg (Ctx _ (IntLit i)) -> iVal $ (-i)
         Neg (Ctx _ (FloatLit f)) -> FVal (-(realToFrac f))
-        IntLit i        -> IVal i
+        IntLit i        -> iVal i
         FloatLit f      -> FVal (realToFrac f)
         StringLit s     -> SVal s
         KeyLit k        -> KVal $ LSLKey k
@@ -384,9 +385,9 @@ queryExState q = queryState (q . scriptImage)
 updateExState :: Monad w => (ScriptImage a -> ScriptImage a) -> Eval a w ()
 updateExState u = updateState (\s -> s { scriptImage = u $ scriptImage s })
 
-getTick :: Monad w => Eval a w Int
+getTick :: Monad w => Eval a w LSLInteger
 getTick = lift =<< qwtick <$> get
-setTick :: (Monad w) => Int -> Eval a w ()
+setTick :: (Monad w) => LSLInteger -> Eval a w ()
 setTick v = lift =<< (uwtick <$> get <*> pure v)
 
 doAction name scriptInfo args =
@@ -416,7 +417,7 @@ getCurState :: Monad w => Eval a w String
 getCurState = queryExState curState
 getObjectId :: Monad w => Eval a w LSLKey
 getObjectId = queryState objectId
-getPrimId :: Monad w => Eval a w Int
+getPrimId :: Monad w => Eval a w LSLInteger
 getPrimId = queryState primId
 getScriptName :: Monad w => Eval a w String
 getScriptName = queryState scriptName
@@ -578,8 +579,8 @@ modMark f = do
             setCallStack (frame { frameStacks = (sc':ss',es) }:frames)
 
 data ExecutionState =
-      Waiting | Executing | Halted | SleepingTil Int | Erroneous String
-    | Crashed String | Suspended Breakpoint | WaitingTil Int
+      Waiting | Executing | Halted | SleepingTil LSLInteger | Erroneous String
+    | Crashed String | Suspended Breakpoint | WaitingTil LSLInteger
     deriving (Show,Eq)
 
 matchEvent :: (RealFloat t) => Event t -> [Ctx Handler] ->
@@ -630,7 +631,7 @@ setupSimple path globbindings args = do
 
 incontext s f = either throwError return f
 
-evalScript :: (RealFloat a, Read a, Show a, Monad w) => Int -> [Event a] -> Eval a w [Event a]
+evalScript :: (RealFloat a, Read a, Show a, Monad w) => LSLInteger -> [Event a] -> Eval a w [Event a]
 evalScript maxTick queue = do
     executionState <- getExecutionState
     case executionState of
@@ -689,7 +690,7 @@ evalScript maxTick queue = do
                 else return queue
         Halted -> return queue
 
-eval :: (RealFloat a, Read a, Show a, Monad w) => Int -> Eval a w EvalResult
+eval :: (RealFloat a, Read a, Show a, Monad w) => LSLInteger -> Eval a w EvalResult
 eval maxTick =  do
        t <- (+1) <$> getTick
        setTick t
@@ -781,7 +782,7 @@ eval' =
                     val <- popVal
                     pushElement (EvCtxStatement (if trueCondition val then stmt1 else stmt2))
                     continue
-                EvExpr (IntLit i) -> pushVal (IVal i) >> continue
+                EvExpr (IntLit i) -> pushVal (iVal i) >> continue
                 EvExpr (FloatLit f) -> pushVal (FVal (realToFrac f)) >> continue
                 EvExpr (StringLit s) -> pushVal (SVal s) >> continue
                 EvExpr (KeyLit k) -> pushVal (KVal $ LSLKey k) >> continue
@@ -975,17 +976,17 @@ eval' =
                     (IVal i1,FVal f2) -> toLslBool $ fromInt i1 == f2
                     (v1,v2) -> toLslBool $ v1 == v2
                 EvNe -> evalBinary $ \ val1 val2 -> case (val1,val2) of
-                    (LVal l1, LVal l2) -> IVal (length l1 - length l2) -- special case of LSL weirdness
+                    (LVal l1, LVal l2) -> iVal (length l1 - length l2) -- special case of LSL weirdness
                     (SVal s, KVal k) -> toLslBool $ s /= unLslKey k
                     (KVal k, SVal s) -> toLslBool $ unLslKey k /= s
                     (FVal f1,IVal i2) -> toLslBool $ f1 /= fromInt i2
                     (IVal i1,FVal f2) -> toLslBool $ fromInt i1 /= f2
                     (v1,v2) -> toLslBool $ v1 /= v2
                 EvShiftL -> evalBinary $ \ val1 val2 -> case (val1,val2) of
-                    (IVal i1,IVal i2) -> IVal (i1 `shiftL` i2)
+                    (IVal i1,IVal i2) -> IVal (i1 `shiftL` (fromInt i2))
                     _ -> error ("cannot apply operator to " ++ (show val1) ++ " and " ++ (show val2))
                 EvShiftR -> evalBinary $ \ val1 val2 -> case (val1,val2) of
-                    (IVal i1,IVal i2) -> IVal (i1 `shiftR` i2)
+                    (IVal i1,IVal i2) -> IVal (i1 `shiftR` (fromInt i2))
                     _ -> error ("cannot apply operator to " ++ (show val1) ++ " and " ++ (show val2))
                 EvNot -> do
                     val <- popVal

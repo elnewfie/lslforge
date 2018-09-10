@@ -22,9 +22,9 @@ import Language.Lsl.Internal.OptimizerOptions(OptimizerOption(..))
 import Language.Lsl.Syntax(CompiledLSLScript(..),Expr(..),Statement(..),Var(..),
                            Func(..),FuncDec(..),State(..),Ctx(..),Handler(..),
                            Global(..),Component(..),SourceContext(..),lslQ)
-import Language.Lsl.Internal.Type(LSLType(..),toSVal)
+import Language.Lsl.Internal.Type(LSLType(..),LSLValue(..),toSVal)
 import Language.Lsl.Internal.Pragmas(Pragma(..))
-import Language.Lsl.Internal.Type(LSLValue(..))
+import Language.Lsl.Internal.Util(LSLInteger,fromInt)
 import Language.Lsl.UnitTestEnv(simSFunc)
 
 optionInlining = elem OptimizationInlining
@@ -819,7 +819,7 @@ globalConstants gs fs ss =
           mexpr2expr m LLKey Nothing = KeyLit ""
           mexpr2expr m LLVoid Nothing = error "somehow, an expression of type void?"
 
-bb2int :: (a -> a -> Bool) -> a -> a -> Int
+bb2int :: (a -> a -> Bool) -> a -> a -> LSLInteger
 bb2int op x y = if op x y then 1 else 0
 
 fromBool :: Num a => Bool -> a
@@ -913,8 +913,8 @@ simplifyE (NotEqual (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (bb
 simplifyE (BAnd (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (i .&. j))
 simplifyE (BOr (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (i .|. j))
 simplifyE (Xor (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (i `xor` j))
-simplifyE (ShiftL (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (i `shiftL` j))
-simplifyE (ShiftR (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (i `shiftR` j))
+simplifyE (ShiftL (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (i `shiftL` fromInt j))
+simplifyE (ShiftR (Ctx _ (IntLit i)) (Ctx _ (IntLit j)))  = return (IntLit (i `shiftR` fromInt j))
 simplifyE e@(Div (Ctx _ (IntLit i)) (Ctx _ (IntLit j))) | j /= 0 = return (IntLit ( i `div` j))
                                                         | otherwise = return e
 simplifyE e@(Mod (Ctx _ (IntLit i)) (Ctx _ (IntLit j))) | j /= 0 = return (IntLit ( i `mod` j))

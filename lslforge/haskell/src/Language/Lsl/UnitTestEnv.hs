@@ -37,14 +37,14 @@ import Language.Lsl.Internal.TestResult(TestResult(..))
 import Language.Lsl.UnitTest(
     EntryPoint(..),LSLUnitTest(..),ExpectationMode(..),
     FuncCallExpectations(..),expectedReturns,removeExpectation)
-import Language.Lsl.Internal.Util(findM,ctx)
+import Language.Lsl.Internal.Util(LSLInteger,findM,ctx)
 
 --trace1 v = trace ("->>" ++ (show v)) v
 
 data SimpleWorld a = SimpleWorld {
-        maxTick :: Int,
-        tick :: Int,
-        msgLog :: [(Int,String)],
+        maxTick :: LSLInteger,
+        tick :: LSLInteger,
+        msgLog :: [(LSLInteger,String)],
         wScripts :: [(String,Validity CompiledLSLScript)],
         wLibrary :: [(String,Validity LModule)],
         expectations :: FuncCallExpectations a,
@@ -52,11 +52,11 @@ data SimpleWorld a = SimpleWorld {
     }
 
 type SimpleWorldM a = ExceptT String (State (SimpleWorld a))
-getTick :: SimpleWorldM a Int
+getTick :: SimpleWorldM a LSLInteger
 getTick = get >>= return . tick
-getMaxTick :: SimpleWorldM a Int
+getMaxTick :: SimpleWorldM a LSLInteger
 getMaxTick = get >>= return . maxTick
-getMsgLog :: SimpleWorldM a [(Int,String)]
+getMsgLog :: SimpleWorldM a [(LSLInteger,String)]
 getMsgLog = get >>= return . msgLog
 getWScripts :: SimpleWorldM a [(String, Validity CompiledLSLScript)]
 getWScripts = get >>= return . wScripts
