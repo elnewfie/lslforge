@@ -2,14 +2,14 @@ package lslforge.generated;
 import com.thoughtworks.xstream.XStream;
 public class InitAll {
     public static void initAll(XStream xstream) {
+        Tuple2.init(xstream);
+        Tuple3.init(xstream);
         Either.init(xstream);
         Either_Left.init(xstream);
         Either_Right.init(xstream);
         Maybe.init(xstream);
         Maybe_Nothing.init(xstream);
         Maybe_Just.init(xstream);
-        Tuple2.init(xstream);
-        Tuple3.init(xstream);
         CodeElement.init(xstream);
         CodeElement_CodeElement.init(xstream);
         CompilationCommand.init(xstream);
