@@ -224,8 +224,8 @@ public class SimManager implements SimEventListener {
 
             @Override
 			protected IStatus run(IProgressMonitor monitor) {
-                String metaDataString = LSLForgePlugin.runTask(SIM_META_DATA, ""); //$NON-NLS-1$
-                Log.info("metaDataString = " + metaDataString); //$NON-NLS-1$
+                String metaDataString = LSLForgePlugin.runExecutableAndForget(SIM_META_DATA, ""); //$NON-NLS-1$
+                Log.debug("metaDataString = " + metaDataString); //$NON-NLS-1$
                 if (metaDataString == null) return new Status(IStatus.ERROR, LSLForgePlugin.PLUGIN_ID,
                         Messages.SimManager_Cant_Get_Simulator_Information);
                 SimMetaData metaData = SimMetaData.fromXML(metaDataString);

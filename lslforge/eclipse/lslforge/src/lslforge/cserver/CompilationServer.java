@@ -34,6 +34,10 @@ public class CompilationServer {
 	private final Thread monitorThread;
     private final HashSet<RestartListener> listeners = new HashSet<RestartListener>();
     
+    //public Process getProcess() {
+	//	return process;
+	//}
+    
     public static class CommandAndResult {
     	private final CompilationCommand command;
     	private final Result result;
@@ -116,7 +120,7 @@ public class CompilationServer {
 						try {
 							String xmlOut = xstream.toXML(cmdInfo.getCommand());
 							
-							Log.info("command to server: " + xmlOut); //$NON-NLS-1$
+							Log.debug("command to server: " + xmlOut); //$NON-NLS-1$
 					        writer.println(Util.URIEncode(xmlOut));
 					        writer.flush();
 							
@@ -183,7 +187,7 @@ public class CompilationServer {
     	return cr.getResult();
     }
     
-    protected void startProcess() {
+    public void startProcess() {
     	synchronized (this) {
 	    	process = LSLForgePlugin.launchCoreCommand(COMPILATION_SERVER, true);
 	    	reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
