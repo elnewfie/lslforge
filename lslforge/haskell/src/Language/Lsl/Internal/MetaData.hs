@@ -31,10 +31,10 @@ emitParam (name,t) = emit "param" [emitSimple "name"  name, emitSimple "type" (l
 
 handlers =
     emit "handlers" (map emitHandler lslEventDescriptors)
-    
+
 functions =
     emit "functions" (map emitFunction funcMeta)
-    
+
 emitFunction (name,rtype,params,description) =
     emit "function" [
         emitSimple "name" name,
@@ -42,10 +42,10 @@ emitFunction (name,rtype,params,description) =
         emitParams params,
         emitSimple "description" description,
         emitSimple "stateless" (if (name `elem` internalLLFuncNames) then "true" else "false")]
-        
+
 constants =
     emit "constants" (map emitConstant allConstants)
-    
+
 emitConstant (Constant name value) =
     emit "constant" [
         emitSimple "name" name,

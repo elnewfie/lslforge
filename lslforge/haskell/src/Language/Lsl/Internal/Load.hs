@@ -4,10 +4,8 @@ module Language.Lsl.Internal.Load(
     loadModules) where
 
 import Control.Exception(SomeException(..),tryJust)
-import Control.Monad.Error(liftIO)
-import Control.Monad.Trans(MonadIO(..))
 import Language.Lsl.Internal.BuiltInModules(avEventGen)
-import Language.Lsl.Syntax(SourceContext(..),compileLSLScript',compileLibrary,
+import Language.Lsl.Syntax(compileLSLScript',compileLibrary,
     Library,CompiledLSLScript,Validity,CodeErrs(..))
 import Language.Lsl.Parse(parseModule, parseScript)
 
@@ -34,7 +32,7 @@ loadModules files =
 --        --return (validated ++ (map (\ (n,err) -> (n,Left err)) bad))
 
 loadScript ::  Library -> (t,String) -> IO (t,Validity CompiledLSLScript)
-loadScript lib sinfo = 
+loadScript lib sinfo =
      parseFile parseScript sinfo
      >>= \ r -> case r of
          (t,Left e) -> return (t,Left $ CodeErrs [e])
@@ -44,9 +42,9 @@ loadScripts library = mapM (loadScript library)
 -- loadScripts library files =
 --     do parseResults <- parseFiles parseScript files
 --        let (bad,ok) = splitResults parseResults
---        return $ (map (\ (n,script) -> (n,compileLSLScript' library script)) ok) ++ 
+--        return $ (map (\ (n,script) -> (n,compileLSLScript' library script)) ok) ++
 --            (map (\ (n,err) -> (n,Left [err])) bad)
-           
+
 splitResults [] = ([],[])
 splitResults ((name,Left err):xs) =
     let (lefts,rights) = splitResults xs in

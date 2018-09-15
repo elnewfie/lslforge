@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleInstances,
+             FlexibleContexts,
              NoMonomorphismRestriction,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,
@@ -27,7 +28,11 @@ module Language.Lsl.Internal.Exec(
     hardReset,
     hasActiveHandler) where
 
---import Debug.Trace
+import Control.Monad(foldM_,when,mplus,msum,zipWithM,ap,liftM)
+import Control.Monad.Except(MonadError(..),ExceptT(..),runExceptT)
+import qualified Control.Monad.Fail as F
+import Control.Monad.State(MonadState(..),lift,StateT(..))
+import Control.Monad.Trans
 import Data.Bits((.&.),(.|.),xor,shiftL,shiftR,complement)
 import Data.List(intersperse,find,tails)
 import Data.Data
@@ -38,14 +43,14 @@ import Language.Lsl.Internal.Breakpoint(Breakpoint(..),StepManager(..),
     pushStepManagerFrame,popStepManagerFrame,emptyStepManager,mkBreakpoint)
 import Language.Lsl.Internal.CodeHelper(renderCall)
 import Language.Lsl.Internal.FuncSigs(convertArgs)
-import Language.Lsl.Internal.Util(fromInt,lookupM,ctx,findM)
+import Language.Lsl.Internal.Util(LSLInteger,fromInt,lookupM,ctx,findM)
 import Language.Lsl.Syntax(
     Expr(..), CompiledLSLScript(..),Statement(..),Func(..),FuncDec(..),Var(..),
     State(..),Ctx(..),Global(..),TextLocation(..),SourceContext(..),
     Handler(..),ctxVr2Vr,findFunc,findFuncDec,ctxItems,findState,fromMCtx,
     predefFuncs)
 import Language.Lsl.Internal.Type(
-    LSLType(..),LSLValue(..),typeOfLSLComponent,typeOfLSLValue,toFloat,toSVal,
+    LSLType(..),LSLValue(..),iVal,typeOfLSLComponent,typeOfLSLValue,toFloat,toSVal,
     lslShowVal,replaceLslValueComponent,vecMulScalar,rotMulVec,parseVector,
     parseRotation,parseInt,parseFloat,invRot,rotMul,vcross,Component(..),
     lslValueComponent)
@@ -54,14 +59,6 @@ import Language.Lsl.Internal.Evaluation(EvalResult(..),Event(..),
     ScriptInfo(..))
 import Language.Lsl.Internal.Constants(findConstVal,llcZeroRotation,
     llcZeroVector)
-
-import Control.Applicative
-import Control.Monad(foldM_,when,mplus,msum,zipWithM,ap,liftM)
-import Control.Monad.State(MonadState(..),lift,StateT(..))
-import Control.Monad.Error(MonadError(..),ErrorT(..))
-import Control.Monad.Trans
-
---import Debug.Trace(trace)
 
 -- initialize a script for execution
 initLSLScript :: RealFloat a => CompiledLSLScript -> ScriptImage a
@@ -92,7 +89,7 @@ initStateSimple script perfAction log qtick utick chkBp =
                 checkBreakpoint = chkBp,
                 nextEvent = undefined }
 
-runEval = (runStateT . runErrorT . unEval)
+runEval = (runStateT . runExceptT . unEval)
 
 executeLsl img oid pid sid pkey perf log qtick utick chkBp queue maxTick =
      do let state = (EvalState { scriptImage = img,
@@ -109,42 +106,42 @@ executeLsl img oid pid sid pkey perf log qtick utick chkBp queue maxTick =
         result <- (runEval $ evalScript maxTick queue) state
         case result of
             (Left s,_) -> return $ Left s
-            (Right queue',evalState) -> 
+            (Right queue',evalState) ->
                 return $ Right (scriptImage evalState, queue')
 
 -- The state of evaluation for a script.
 data EvalState m a = EvalState {
      scriptImage :: ScriptImage a,
      objectId :: LSLKey,
-     primId :: Int,
+     primId :: LSLInteger,
      scriptName :: String,
      myPrimKey :: LSLKey,
-     performAction :: String -> ScriptInfo a -> [LSLValue a] -> 
+     performAction :: String -> ScriptInfo a -> [LSLValue a] ->
         m (EvalResult,LSLValue a),
      logMessage :: String -> m (),
-     qwtick :: m Int,
-     uwtick :: Int -> m (),
+     qwtick :: m LSLInteger,
+     uwtick :: LSLInteger -> m (),
      checkBreakpoint :: Breakpoint -> StepManager -> m (Bool, StepManager),
      nextEvent :: String -> String -> m (Maybe (Event a))  }
 
 --type Eval m a = ErrorT String (StateT (EvalState m a) m)
-newtype Eval a m b = Eval { unEval :: ErrorT String (StateT (EvalState m a) m) b }
+newtype Eval a m b = Eval { unEval :: ExceptT String (StateT (EvalState m a) m) b }
     deriving (Monad)
-    
+
 instance Monad m => MonadState (EvalState m a) (Eval a m) where
    get = Eval { unEval = get }
    put v = Eval { unEval = put v }
 
 instance MonadTrans (Eval a) where
     lift v = Eval { unEval = lift $ lift v }
-    
+
 instance Monad m => MonadError String (Eval a m) where
     throwError e = Eval { unEval = throwError e }
     catchError v f = Eval { unEval = catchError (unEval v) (unEval . f) }
 
 instance Monad m => Functor (Eval a m) where
     fmap = liftM
-    
+
 instance Monad m => Applicative (Eval a m) where
    pure  = return
    (<*>) = ap
@@ -166,7 +163,7 @@ data ScriptImage a = ScriptImage {
     currentEvent :: Maybe (Event a)
     } deriving (Show)
 
-data FrameInfo a = FrameInfo { 
+data FrameInfo a = FrameInfo {
     frameInfoImageName :: String,
     frameInfoFrames :: [(String,Maybe SourceContext,Maybe Int,[(String,LSLValue a)])] }
     deriving (Show)
@@ -196,7 +193,7 @@ softReset image =
 
 -- a hard reset occurs when a script is explicitly reset, either
 -- via an LSL call, or 'manually' (in the real SL, via the GUI)
-hardReset image = 
+hardReset image =
     case executionState image of
         Erroneous _ -> image -- no effect
         Halted -> image -- halted scripts are scripts that are explicitly not in the run state
@@ -206,7 +203,7 @@ hardReset image =
             glob = initGlobals (globals image),
             valueStack = [],
             callStack = [] }
-            
+
 type StateName = String
 
 -- a labeled block: a label and all the statements that follow it.
@@ -217,7 +214,7 @@ findLBlock name = find (\ (LBlock n _) -> name == n)
 
 -- label the blocks in a list of statements `(i.e.
 -- (EXAMPLE:
---        { 
+--        {
 --           @foo;
 --           if (i == 7) jump bar;
 --           @bar;
@@ -234,17 +231,17 @@ findLBlock name = find (\ (LBlock n _) -> name == n)
 --  The 2nd is 'bar', labelling the block:
 --           llSay(0, (string) (i + j));
 --           if (j == 10) jump foo;
---  
+--
 --labelBlocks [] = []
 -- labelBlocks (ctxStmt:stmts) =
 --     case ctxItem ctxStmt of
 --         Label s -> (LBlock s stmts):(labelBlocks stmts)
 --         _ -> (labelBlocks stmts)
-        
-labelBlocks ss = 
+
+labelBlocks ss =
     [ LBlock s stmts | (Ctx { ctxItem = Label s}:stmts) <- tails ss]
 
--- A name/element pair is the basic unit of memory.  Each memory 
+-- A name/element pair is the basic unit of memory.  Each memory
 -- location has a name (rather than an address) and can hold a value
 -- which can be of any LSL type.  So 1 memory location can hold a
 -- vector, or a string, or a list, etc.
@@ -268,22 +265,22 @@ initVar name LLInteger (Just (FVal f)) = (name,IVal $ floor f)
 initVar name _ (Just v) = (name,v)
 
 writeMem :: Monad m => String -> LSLValue a -> MemRegion a -> m (MemRegion a)
-writeMem name value cells = 
+writeMem name value cells =
     case break (\(name',element) -> name' == name) cells of
         (cells',[]) -> fail "no such variable"
         (xs,y:ys) -> return ((name,value):(xs ++ ys))
 
-readMem :: Monad m => String -> MemRegion a -> m (LSLValue a)
+readMem :: F.MonadFail m => String -> MemRegion a -> m (LSLValue a)
 readMem = lookupM
 
 initGlobals :: RealFloat a => [Global] -> MemRegion a
 initGlobals globals = map (initGlobal globals) globals
- 
-initGlobal globals (GDecl (Ctx _ (Var name t)) mexpr) = 
+
+initGlobal globals (GDecl (Ctx _ (Var name t)) mexpr) =
     initVar name t $ fmap (evalLit globals) mexpr
 
 evalCtxLit globals (Ctx _ expr) = evalLit globals expr
-       
+
 evalLit globals expr =
     let litExpr2Float expr =
             case evalCtxLit globals expr of
@@ -291,18 +288,18 @@ evalLit globals expr =
                 (IVal i) -> fromInteger $ toInteger i
                 _ -> error "invalid float expression"
     in case expr of
-        Neg (Ctx _ (IntLit i)) -> IVal (-i)
+        Neg (Ctx _ (IntLit i)) -> iVal $ (-i)
         Neg (Ctx _ (FloatLit f)) -> FVal (-(realToFrac f))
-        IntLit i        -> IVal i
+        IntLit i        -> iVal i
         FloatLit f      -> FVal (realToFrac f)
         StringLit s     -> SVal s
         KeyLit k        -> KVal $ LSLKey k
         ListExpr l      -> LVal $ map (evalCtxLit globals) l
         VecExpr a b c   -> VVal (litExpr2Float a) (litExpr2Float b) (litExpr2Float c)
         RotExpr a b c d -> RVal (litExpr2Float a) (litExpr2Float b) (litExpr2Float c) (litExpr2Float d)
-        Get (Ctx _ nm,All)    -> 
+        Get (Ctx _ nm,All)    ->
             case find (\ (GDecl (Ctx _ (Var nm' t)) mexpr') -> nm == nm') globals of
-                Nothing -> 
+                Nothing ->
                     case findConstVal nm of
                         Nothing -> error ("invalid global " ++ nm ++ " referenced in initializer")
                         Just v -> v
@@ -326,7 +323,7 @@ bindParmsForgiving vars vals = zipWithM bindParmForgiving vars vals
 toBool x = x /= 0
 
 --type Frame = (ScopeStack,EvalStack)
-data Frame a = Frame { 
+data Frame a = Frame {
     frameName :: String,
     frameContext :: Maybe SourceContext,
     frameSourceLine :: Maybe Int,
@@ -336,12 +333,12 @@ type LabelSet = [LBlock]
 type ScopeStack a = [Scope a]
 type CallStack a = [Frame a]
 
-data Scope a = Scope { 
+data Scope a = Scope {
     scopeMem :: !(MemRegion a),
     scopeLabels :: !LabelSet,
     scopeMarks :: Int }
     deriving (Show)
-    
+
 readVarScope :: String -> Scope a -> Maybe (LSLValue a)
 readVarScope name (Scope { scopeMem = mem }) = readMem name mem
 readVarSStack :: String -> ScopeStack a -> Maybe (LSLValue a)
@@ -369,8 +366,8 @@ type EvalStack = [EvalElement]
 
 type ValueStack a = [LSLValue a]
 
-data EvalElement = 
-      EvBlock [Ctx Statement] | EvCtxStatement (Ctx Statement) 
+data EvalElement =
+      EvBlock [Ctx Statement] | EvCtxStatement (Ctx Statement)
     | EvStatement Statement | EvExpr Expr | EvMexpr (Maybe Expr) | EvAdd
     | EvSub | EvMul | EvDiv | EvMod | EvBAnd | EvBOr  | EvBXor | EvBInv | EvNeg
     | EvNot | EvAnd | EvOr  | EvLe | EvLt  | EvGe   | EvGt  | EvEq | EvNe
@@ -388,9 +385,9 @@ queryExState q = queryState (q . scriptImage)
 updateExState :: Monad w => (ScriptImage a -> ScriptImage a) -> Eval a w ()
 updateExState u = updateState (\s -> s { scriptImage = u $ scriptImage s })
 
-getTick :: Monad w => Eval a w Int
+getTick :: Monad w => Eval a w LSLInteger
 getTick = lift =<< qwtick <$> get
-setTick :: (Monad w) => Int -> Eval a w ()
+setTick :: (Monad w) => LSLInteger -> Eval a w ()
 setTick v = lift =<< (uwtick <$> get <*> pure v)
 
 doAction name scriptInfo args =
@@ -401,7 +398,7 @@ checkBp bp = do
     (result,sm') <- lift =<< checkBreakpoint <$> get <*> pure bp <*> getStepManager
     setStepManager sm'
     return result
-    
+
 getGlob :: Monad w => Eval a w (MemRegion a)
 getGlob = queryExState glob
 getFuncs :: Monad w => Eval a w [Func]
@@ -420,7 +417,7 @@ getCurState :: Monad w => Eval a w String
 getCurState = queryExState curState
 getObjectId :: Monad w => Eval a w LSLKey
 getObjectId = queryState objectId
-getPrimId :: Monad w => Eval a w Int
+getPrimId :: Monad w => Eval a w LSLInteger
 getPrimId = queryState primId
 getScriptName :: Monad w => Eval a w String
 getScriptName = queryState scriptName
@@ -453,11 +450,11 @@ pushScope mem labels = do
     (frame:frames) <- getCallStack
     let (ss,es) = frameStacks frame
     setCallStack (frame { frameStacks = (Scope { scopeMem = mem, scopeLabels = labels, scopeMarks = 0}:ss,es) }:frames)
-        
+
 pushVal value = (setVStack . (value:)) =<< getVStack
 
 popVal :: Monad w => Eval a w (LSLValue a)
-popVal = do 
+popVal = do
     vstack <- getVStack
     case vstack of
        [] -> throwError "empty value stack"
@@ -466,22 +463,22 @@ popVal = do
            return v
 
 peekVal :: Monad w => Eval a w (LSLValue a)
-peekVal = do 
+peekVal = do
     vstack <- getVStack
     case vstack of
         [] -> throwError "empty value stack"
         (v:_) -> return v
-           
+
 valStackEmpty :: (RealFloat a, Read a, Monad w) => Eval a w Bool
 valStackEmpty = (==[]) <$> getVStack
 
 elementStackEmpty :: Monad w => Eval a w Bool
-elementStackEmpty = 
+elementStackEmpty =
     do (frame:cs) <- getCallStack
        case frameStacks frame of
            (_,[]) -> return True
            _ -> return False
-           
+
 popElement :: Monad w => Eval a w EvalElement
 popElement = do
     (frame:frames) <- getCallStack
@@ -492,12 +489,12 @@ getEStack :: Monad w => Eval a w [EvalElement]
 getEStack = do
     (frame:frames) <- getCallStack
     return $ snd $ frameStacks frame
-       
+
 popMarks 0 = return ()
 popMarks n = do
     e <- popElement
-    case e of 
-       EvMark -> popMarks (n - 1) 
+    case e of
+       EvMark -> popMarks (n - 1)
        _ -> popMarks n
 
 pushElement element =
@@ -511,7 +508,7 @@ pushElements elements =
 callStackEmpty :: Monad w => Eval a w Bool
 callStackEmpty = getCallStack >>= return . null
 
-popFrame :: Monad w => Eval a w ()           
+popFrame :: Monad w => Eval a w ()
 popFrame =
     do (f:cs) <- getCallStack
        stepMgr <- getStepManager
@@ -519,25 +516,25 @@ popFrame =
        setStepManager stepMgr'
        setCallStack cs
 
-pushFrame name ctx line =do 
+pushFrame name ctx line =do
     stepMgr <- getStepManager
     let stepMgr' = pushStepManagerFrame stepMgr
     setStepManager stepMgr'
     cs <- getCallStack
     setCallStack (Frame { frameName = name, frameContext = ctx, frameSourceLine = line, frameStacks = ([],[])}:cs)
-       
+
 getFunc :: Monad w => String -> Eval a w Func
 getFunc name = incontext ("func: " ++ name) . findFunc name =<< getFuncs
 
 setVar :: Monad w => String -> LSLValue a -> Eval a w ()
-setVar name val = do 
+setVar name val = do
     cs <- getCallStack
     case writeVarCallStack name val cs of
         Just cs' -> setCallStack cs'
-        Nothing -> setGlob =<< 
+        Nothing -> setGlob =<<
             incontext ("setting " ++ name ++ ":") . writeMem name val
                =<< getGlob
-                 
+
 getVar :: (RealFloat a, Read a, Monad w) => String -> Eval a w (LSLValue a)
 getVar name =
     do cs <- getCallStack
@@ -547,7 +544,7 @@ getVar name =
            Just val -> return val
 
 initVar1 :: (RealFloat a, Read a, Monad w) => String -> LSLType -> Maybe (LSLValue a) -> Eval a w ()
-initVar1 name t mval = 
+initVar1 name t mval =
     do (frame:frames) <- getCallStack
        let (sc@Scope { scopeMem = m }:ss,es) = frameStacks frame
        let frame' = frame { frameStacks = (sc { scopeMem = initVar name t mval:m }:ss,es) }
@@ -556,7 +553,7 @@ initVar1 name t mval =
 initVars1 :: (RealFloat a, Read a, Monad w) => [Var] -> [LSLValue a] -> Eval a w ()
 initVars1 vars vals =
     foldM_ (\_ -> \ (Var n t, v) -> initVar1 n t $ Just v) () $ zip vars vals
-    
+
 unwindToLabel name =
     let f n =
             do (frame:frames) <- getCallStack
@@ -581,24 +578,24 @@ modMark f = do
             let sc' = sc { scopeMarks = marks' }
             setCallStack (frame { frameStacks = (sc':ss',es) }:frames)
 
-data ExecutionState = 
-      Waiting | Executing | Halted | SleepingTil Int | Erroneous String 
-    | Crashed String | Suspended Breakpoint | WaitingTil Int
+data ExecutionState =
+      Waiting | Executing | Halted | SleepingTil LSLInteger | Erroneous String
+    | Crashed String | Suspended Breakpoint | WaitingTil LSLInteger
     deriving (Show,Eq)
 
-matchEvent :: (RealFloat t) => Event t -> [Ctx Handler] -> 
+matchEvent :: (RealFloat t) => Event t -> [Ctx Handler] ->
     Maybe ([(String, LSLValue t)],[Ctx Statement],String,Maybe SourceContext)
 matchEvent (Event name _ _) [] = Nothing
-matchEvent event@(Event name values _) ((Ctx _ (Handler (Ctx ctx name') parms stmts)):hs) 
+matchEvent event@(Event name values _) ((Ctx _ (Handler (Ctx ctx name') parms stmts)):hs)
         | name == name' = do mem <- bindParms (ctxItems parms) values
                              return (mem,stmts,name,ctx)
         | otherwise = matchEvent event hs
 
-findHandler name handlers = ctx ("finding handler " ++ name) $ 
+findHandler name handlers = ctx ("finding handler " ++ name) $
     findM (\ (Ctx _ (Handler (Ctx _ name') _ _)) -> name' == name) handlers
 
 
-evalSimple maxTick = do  
+evalSimple maxTick = do
     result <- eval maxTick
     case result of
         EvalComplete Nothing ->
@@ -607,7 +604,7 @@ evalSimple maxTick = do
                    val <- popVal
                    return (result,Just val)
         _ -> return (result,Nothing)
-            
+
 setupSimple path globbindings args = do
     setScriptImageName (concat (intersperse "." path))
     updateGlobals globbindings
@@ -634,7 +631,7 @@ setupSimple path globbindings args = do
 
 incontext s f = either throwError return f
 
-evalScript :: (RealFloat a, Read a, Monad w) => Int -> [Event a] -> Eval a w [Event a]
+evalScript :: (RealFloat a, Read a, Show a, Monad w) => LSLInteger -> [Event a] -> Eval a w [Event a]
 evalScript maxTick queue = do
     executionState <- getExecutionState
     case executionState of
@@ -647,7 +644,7 @@ evalScript maxTick queue = do
                     -- when a state_exit event occurs we've already changed the state variable in the image
                     -- to the new state.  the event itself contains the name of the old state, so we can
                     -- find the right event handler.
-                    Event "state_exit" _ m -> 
+                    Event "state_exit" _ m ->
                         case M.lookup "last_state" m of
                             Just (SVal s) -> return s
                             Nothing -> logMsg "not a valid state exit!" >> getCurState
@@ -665,7 +662,7 @@ evalScript maxTick queue = do
                         setExecutionState Executing
                         setCurrentEvent event
                         evalScript maxTick queue'
-        Executing -> do 
+        Executing -> do
             result <- eval maxTick
             case result of
                 EvalComplete (Just newState) -> do
@@ -681,23 +678,23 @@ evalScript maxTick queue = do
                 YieldTil i -> setExecutionState (SleepingTil i) >> return queue
                 BrokeAt bp -> setExecutionState (Suspended bp) >> return queue
                 _ -> return queue
-        SleepingTil i -> do 
+        SleepingTil i -> do
             tick <- getTick
-            if (tick >= i) 
+            if (tick >= i)
                then setExecutionState Executing >> evalScript maxTick queue
                else return queue
-        WaitingTil i -> do 
+        WaitingTil i -> do
             tick <- getTick
             if (tick >= i)
                 then setExecutionState Waiting >> evalScript maxTick queue
                 else return queue
         Halted -> return queue
 
-eval :: (RealFloat a, Read a, Monad w) => Int -> Eval a w EvalResult
-eval maxTick =  do 
+eval :: (RealFloat a, Read a, Show a, Monad w) => LSLInteger -> Eval a w EvalResult
+eval maxTick =  do
        t <- (+1) <$> getTick
        setTick t
-       if t <= maxTick 
+       if t <= maxTick
            then do
                result <- eval'
                case result of
@@ -705,11 +702,11 @@ eval maxTick =  do
                    x -> return x
            else return EvalIncomplete
 
-eval' :: (RealFloat a, Read a, Monad w) => Eval a w EvalResult
+eval' :: (RealFloat a, Read a, Show a, Monad w) => Eval a w EvalResult
 eval' =
-    let continue = return EvalIncomplete 
+    let continue = return EvalIncomplete
         popAndCheck :: Monad w => Eval a w EvalResult
-        popAndCheck = do  
+        popAndCheck = do
             popFrame
             noMoreFrames <- callStackEmpty
             return (if noMoreFrames then EvalComplete Nothing else EvalIncomplete)
@@ -785,7 +782,7 @@ eval' =
                     val <- popVal
                     pushElement (EvCtxStatement (if trueCondition val then stmt1 else stmt2))
                     continue
-                EvExpr (IntLit i) -> pushVal (IVal i) >> continue
+                EvExpr (IntLit i) -> pushVal (iVal i) >> continue
                 EvExpr (FloatLit f) -> pushVal (FVal (realToFrac f)) >> continue
                 EvExpr (StringLit s) -> pushVal (SVal s) >> continue
                 EvExpr (KeyLit k) -> pushVal (KVal $ LSLKey k) >> continue
@@ -843,7 +840,7 @@ eval' =
                 EvExpr (Call (Ctx _ name) exprs) ->
                     case findFuncDec name predefFuncs of
                         Just (FuncDec _ t parms) -> pushElements [EvPredef name, EvExpr (ListExpr exprs)]
-                        Nothing -> do 
+                        Nothing -> do
                             (Func (FuncDec ctxName t parms) stmts) <- getFunc name
                             pushElement (EvCall (ctxItem ctxName) (srcCtx ctxName) (ctxItems parms) stmts (t == LLVoid))
                             pushElement (EvExpr (ListExpr exprs))  -- first evaluate the arguments
@@ -865,7 +862,7 @@ eval' =
                     pushElements [EvMark,EvBlock stmts]
                     continue
                 EvPredef name -> evalPredef' name
-                EvGet (name,c) -> do 
+                EvGet (name,c) -> do
                     val <- getVar name
                     pushVal $ lslValueComponent c val
                     continue
@@ -879,8 +876,8 @@ eval' =
                           (LLString,KVal k) -> SVal $ unLslKey k
                           (LLKey,SVal s) -> KVal $ LSLKey s
                           (t, v) | t == typeOfLSLValue v -> v
-                                 | otherwise -> error ("can't implicitly convert from " ++ 
-                                                       (show $ typeOfLSLValue v) ++ 
+                                 | otherwise -> error ("can't implicitly convert from " ++
+                                                       (show $ typeOfLSLValue v) ++
                                                        " to " ++ (show t))
                     let varVal' = replaceLslValueComponent c varVal val'
                     setVar name varVal'
@@ -979,17 +976,17 @@ eval' =
                     (IVal i1,FVal f2) -> toLslBool $ fromInt i1 == f2
                     (v1,v2) -> toLslBool $ v1 == v2
                 EvNe -> evalBinary $ \ val1 val2 -> case (val1,val2) of
-                    (LVal l1, LVal l2) -> IVal (length l1 - length l2) -- special case of LSL weirdness
+                    (LVal l1, LVal l2) -> iVal (length l1 - length l2) -- special case of LSL weirdness
                     (SVal s, KVal k) -> toLslBool $ s /= unLslKey k
                     (KVal k, SVal s) -> toLslBool $ unLslKey k /= s
                     (FVal f1,IVal i2) -> toLslBool $ f1 /= fromInt i2
                     (IVal i1,FVal f2) -> toLslBool $ fromInt i1 /= f2
                     (v1,v2) -> toLslBool $ v1 /= v2
                 EvShiftL -> evalBinary $ \ val1 val2 -> case (val1,val2) of
-                    (IVal i1,IVal i2) -> IVal (i1 `shiftL` i2)
+                    (IVal i1,IVal i2) -> IVal (i1 `shiftL` (fromInt i2))
                     _ -> error ("cannot apply operator to " ++ (show val1) ++ " and " ++ (show val2))
                 EvShiftR -> evalBinary $ \ val1 val2 -> case (val1,val2) of
-                    (IVal i1,IVal i2) -> IVal (i1 `shiftR` i2)
+                    (IVal i1,IVal i2) -> IVal (i1 `shiftR` (fromInt i2))
                     _ -> error ("cannot apply operator to " ++ (show val1) ++ " and " ++ (show val2))
                 EvNot -> do
                     val <- popVal
@@ -1036,9 +1033,9 @@ eval' =
                         (LLList, LVal l) -> LVal l
                         (LLList,v) -> LVal [v]
                     continue
-                EvMkVec -> 
+                EvMkVec ->
                     revVec <$> popF <*> popF <*> popF >>= pushVal >> continue
-                EvMkRot -> 
+                EvMkRot ->
                     revRot <$> popF <*> popF <*> popF <*> popF >>= pushVal
                        >> continue
 
@@ -1081,7 +1078,7 @@ evalPredef' name = do
     (evalResult,retval) <- doAction name scriptInfo args'
     pushVal retval
     return evalResult
-          
+
 data ExecutionInfo a = ExecutionInfo String Int (FrameInfo a) deriving (Show)
 
 hasActiveHandler simage handler =

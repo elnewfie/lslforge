@@ -2,10 +2,9 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.ExpressionHandler(validateExpression,evaluateExpression) where
 
-import Control.Applicative
-import Control.Monad.Error
+import Control.Monad.Except
 import Data.Bits
-import IO
+import System.IO
 
 import Language.Lsl.Internal.Constants
 import Language.Lsl.Internal.DOMProcessing(req,tag,text,xmlAccept)
@@ -21,8 +20,9 @@ emit s = E.emit s []
 
 validPrimitiveCtxExpr (Ctx _ expr) = validPrimitiveExpr expr
 
-validPrimitiveExpr (Get (Ctx _ name,All)) = findConstType name
-validPrimitiveExpr (Neg expr) = 
+validPrimitiveExpr :: Expr -> Either String LSLType
+validPrimitiveExpr (Get (Ctx _ name,All)) = maybe (fail "not found!") Right $ findConstType name
+validPrimitiveExpr (Neg expr) =
     do t <- validPrimitiveCtxExpr expr
        when (t `notElem` [LLFloat,LLInteger,LLVector,LLRot]) $ fail "operator only valid for integer, float, vector, and rotation expressions"
        return t
@@ -66,7 +66,7 @@ validPrimitiveExpr (Add e0 e1) =
            (LLRot,LLRot) -> return LLVector
            (LLString,LLString) -> return LLString
            _ -> fail "incompatible operands"
-validPrimitiveExpr (Sub e0 e1) = 
+validPrimitiveExpr (Sub e0 e1) =
     do (t0,t1) <- validPrimEach e0 e1
        case (t0,t1) of
            (LLInteger,LLFloat) -> return LLFloat
@@ -76,7 +76,7 @@ validPrimitiveExpr (Sub e0 e1) =
            (LLVector,LLVector) -> return LLVector
            (LLRot,LLRot) -> return LLRot
            _ -> fail "incompatible operands"
-validPrimitiveExpr (Mul e0 e1) = 
+validPrimitiveExpr (Mul e0 e1) =
     do (t0,t1) <- validPrimEach e0 e1
        case (t0,t1) of
            (LLInteger,LLFloat) -> return LLFloat
@@ -131,13 +131,13 @@ validPrimEach e0 e1 =
     do t0 <- validPrimitiveCtxExpr e0
        t1 <- validPrimitiveCtxExpr e1
        return (t0,t1)
-       
+
 validIntegerExpr e0 e1 =
     do (t0,t1) <- validPrimEach e0 e1
        case (t0,t1) of
            (LLInteger,LLInteger) -> return LLInteger
            _ -> fail "incompatible operands"
-           
+
 validRelExpr e0 e1 =
     do (t0,t1) <- validPrimEach e0 e1
        case (t0,t1) of
@@ -147,7 +147,7 @@ validRelExpr e0 e1 =
            (LLInteger,LLInteger) -> return LLInteger
            _ -> fail "incompatible operands"
 
-validEqExpr e0 e1 =           
+validEqExpr e0 e1 =
     do (t0,t1) <- validPrimEach e0 e1
        case (t0,t1) of
            (LLInteger,LLFloat) -> return LLInteger
@@ -163,7 +163,7 @@ checkExpr t text =
        Left _ -> fail "syntax error"
        Right expr ->
            case validPrimitiveCtxExpr expr of
-               Right t' -> 
+               Right t' ->
                    case (t,t') of
                        (LLString,LLKey) -> return expr
                        (LLKey,LLString) -> return expr
@@ -171,25 +171,25 @@ checkExpr t text =
                        (t,t') | t == t' -> return expr
                               | otherwise -> fail (lslTypeString t ++ " expected")
                Left s -> fail s
-               
+
 evaluateExpression t text =
     case checkExpr t text of
         Left s -> fail s
-        Right expr -> 
+        Right expr ->
             do v <- evalCtxExpr expr
                case (t,v) of
                    (LLKey,SVal s) -> return $ KVal (LSLKey s)
                    (LLString,KVal k) -> return $ SVal $ unLslKey k
                    (LLFloat,IVal i) -> return $ FVal (fromInt i)
                    _ -> return v
-            
+
 unexpectedValue :: Monad m => m a
 unexpectedValue = fail "unexpected value"
 
 evalCtxExpr (Ctx _ expr) = evalExpr expr
 
 evalExpr (Get (Ctx _ name,All)) = findConstVal name
-evalExpr (Neg expr) = 
+evalExpr (Neg expr) =
     do v <- evalCtxExpr expr
        case v of
            (IVal i) -> return (IVal (-i))
@@ -204,11 +204,11 @@ evalExpr (Not expr) =
     do t <- evalCtxExpr expr
        case t of
            (IVal i) -> return $ IVal (if i == 0 then 1 else 0)
-evalExpr (IntLit i) = return (IVal i)
+evalExpr (IntLit i) = return (iVal i)
 evalExpr (FloatLit f) = return (FVal $ realToFrac f)
 evalExpr (StringLit s) = return (SVal s)
 evalExpr (KeyLit k) = return (KVal $ LSLKey k)
-evalExpr (VecExpr xExpr yExpr zExpr) = 
+evalExpr (VecExpr xExpr yExpr zExpr) =
     do x <- evalCtxExpr xExpr
        y <- evalCtxExpr yExpr
        z <- evalCtxExpr zExpr
@@ -233,7 +233,7 @@ evalExpr (Add e0 e1) =
            (VVal x y z,VVal x' y' z') -> return $ VVal (x + x') (y + y') (z + z')
            (RVal x1 y1 z1 s1,RVal x2 y2 z2 s2) -> return $ RVal (x1 + x2) (y1 + y2) (z1 + z2) (s1 + s2)
            _ -> fail "incompatible operands"
-evalExpr (Sub e0 e1) = 
+evalExpr (Sub e0 e1) =
     do (v0,v1) <- evalEach e0 e1
        case (v0,v1) of
            (IVal i1,IVal i2) -> return $ IVal (i1 - i2)
@@ -268,7 +268,7 @@ evalExpr (Div e0 e1) =
             (v@(VVal _ _ _),r@(RVal _ _ _ _)) -> return $ rotMulVec (invRot r) v
             (r1@(RVal _ _ _ _),r2@(RVal _ _ _ _)) -> return $ rotMul r1 $ invRot r2
             _ -> fail "incompatible operands"
-evalExpr (Mod e0 e1) = 
+evalExpr (Mod e0 e1) =
     do (v0,v1) <- evalEach e0 e1
        case (v0,v1) of
            (IVal i1,IVal i2) -> return $ IVal (i1 `mod` i2)
@@ -309,7 +309,7 @@ evalExpr (Cast t e) = do
        (LLRot, (RVal _ _ _ _)) -> return v
        (LLList, LVal l) -> return v
        _ -> fail "invalid cast!"
-       
+
 evalExpr expr = fail "expression not valid in this context"
 
 evalEqExpr f e0 e1 =
@@ -321,7 +321,7 @@ evalEqExpr f e0 e1 =
                (KVal k, SVal s) -> f (SVal s) (SVal $ unLslKey k)
                (x,y) -> f x y
        return $ IVal $ if b then 1 else 0
-           
+
 evalRelExpr fi ff e0 e1 =
     do (v0,v1) <- evalEach e0 e1
        let b = case (v0,v1) of
@@ -333,13 +333,13 @@ evalRelExpr fi ff e0 e1 =
 
 evalIntExpr f e0 e1 =
     do (IVal i0, IVal i1) <- evalEach e0 e1
-       return $ IVal $ f i0 i1 
-       
+       return $ iVal $ f (fromInt i0) (fromInt i1)
+
 evalEach e0 e1 =
     do v0 <- evalCtxExpr e0
        v1 <- evalCtxExpr e1
        return (v0,v1)
-       
+
 extractExpressionFromXML s = either error id $ xmlAccept expression s
 
 expression = tag "expression" >> (,) <$> req "type" text <*> req "text" text

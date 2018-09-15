@@ -81,9 +81,9 @@ public class LSLCodeScanner extends RuleBasedScanner implements ColorProviderLis
             "integer", "string", "float", "list", "vector", "rotation", "key", "quaternion" }; //$NON-NLS-1$ //$NON-NLS-5$ //$NON-NLS-7$ //$NON-NLS-8$ //$NON-NLS-6$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-2$
 
     static {
-        STYLE_TO_CONST.put(BOLD_STYLE, new Integer(SWT.BOLD));
-        STYLE_TO_CONST.put(ITALIC_STYLE, new Integer(SWT.ITALIC));
-        STYLE_TO_CONST.put(UL_STYLE, new Integer(SWT.UNDERLINE_SINGLE));
+        STYLE_TO_CONST.put(BOLD_STYLE, Integer.valueOf(SWT.BOLD));
+        STYLE_TO_CONST.put(ITALIC_STYLE, Integer.valueOf(SWT.ITALIC));
+        STYLE_TO_CONST.put(UL_STYLE, Integer.valueOf(SWT.UNDERLINE_SINGLE));
     }
     
     private String[] handlerNames;

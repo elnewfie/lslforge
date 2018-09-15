@@ -62,15 +62,15 @@ kin t0 t1 t2d zoffs m p0 v0 f (i,ti) =
        limit (p@(x,y,z),v@(vx,vy,vz)) = if belowGround zoffs p then ((x,y,0),(vx,vy, if vz < 0 then 0 else vz)) else (p,v)
        d = t2d $ t1 - t0
        di = max 0 (min (t2d (ti - t0)) d)
-   in limit (p0 `add3d` (scale3d d v0) `add3d` (scale3d (d^2 / 2) accel) `add3d` (scale3d (di^2/2) accel1), 
+   in limit (p0 `add3d` (scale3d d v0) `add3d` (scale3d (d^2 / 2) accel) `add3d` (scale3d (di^2/2) accel1),
              v0 `add3d` (scale3d d accel) `add3d` (scale3d di accel1))
 
-calcAccel t zoffs m p f (i,ti) = 
+calcAccel t zoffs m p f (i,ti) =
     let (x,y,z) = gravA `add3d` scale3d (1/m) f `add3d` (if ti < t then (0,0,0) else scale3d (1/m) i) in
         (x, y, if belowGround zoffs p then 0 else z)
-  
--- i have no enthusiasm to work out if this is right... :(      
--- rotDyn t0 t1 t2d radius mass rot0 omega0@(ox0,oy0,oz0) torques = 
+
+-- i have no enthusiasm to work out if this is right... :(
+-- rotDyn t0 t1 t2d radius mass rot0 omega0@(ox0,oy0,oz0) torques =
 --     let inertia = momentOfIntertia mass radius
 --         dt = t2d $ t1 - t0
 --         accels = map ( \ ((tx,ty,tz),tf) -> ((tx/inertia,ty/inertia,tz/inertia), max 0 (min (t2d (tf - t0)) dt))) torques
@@ -83,7 +83,7 @@ calcAccel t zoffs m p f (i,ti) =
 --                 (map (\ (a,d) -> rotationsToQuaternion P123 (limscale (d^2 * 0.5) a)) accels))
 --         omega = foldl (\ o (a,d) -> lim3 $ o `add3d` (scale3d d a)) omega0 accels
 --     in (rot, omega)
-    
+
 rotDyn dt radius mass rot0 omega0 torque =
     let inertia = momentOfInertia mass radius
         angularAcceleration = scale3d (1/inertia) torque
@@ -96,15 +96,15 @@ totalTorque t0 t1 t2d torques =
     let dt = t2d $ t1 - t0
         torques' = map (\ (torque,tf) -> scale3d ((max 0 (min (t2d (tf - t0)) dt)) / dt) torque) torques
     in foldl add3d (0,0,0) torques'
-    
+
 checkIntersections toBB cmp objects = concat (go objects)
     where go [] = []
           go (o:os) = [ pair o o' | (True,o') <- zip (map (bbIntersect (toBB o) . toBB ) os) os] : (go os)
           pair o o' = if cmp o o' == LT then (o,o') else (o',o)
-          
+
 dampZForce tau zt z0 m vz0 f = m * ((2 * (p - tau * vz0) / (tau^2)) - (gravC + f * m)) where p = zt - z0
 
-dampForce tau pt p0 m v0 f = 
+dampForce tau pt p0 m v0 f =
     scale3d m ((scale3d (2/(tau^2)) (p `diff3d` (scale3d tau v0))) `diff3d` (gravA `add3d` (scale3d m f)))
     where p = pt `diff3d` p0
 
@@ -130,4 +130,3 @@ iterativeDamping m p v pt tau dt = let f = dampForce tau pt p m v (0,0,0)
                                        p' = p `add3d` (scale3d dt v)
                                        v' = v `add3d` (scale3d (dt/m) f) in
     ((p',v',f) : iterativeDamping m p' v' pt tau dt)
-        

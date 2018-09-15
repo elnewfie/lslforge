@@ -2,6 +2,8 @@ package lslforge.debug;
 
 import lslforge.editor.LSLForgeEditor;
 
+import java.net.URI;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -22,7 +24,9 @@ public class LSLSourceLocator implements ISourceLocator, ISourcePresentation {
             Path p = new Path(frame.getFile());
             
             IWorkspace w = ResourcesPlugin.getWorkspace();
-            IFile[] files = w.getRoot().findFilesForLocation(p);
+            
+            IFile[] files = w.getRoot().findFilesForLocationURI(URI.create(p.makeAbsolute().toString()));
+            //IFile[] files = w.getRoot().findFilesForLocation(p);
             
             if (files != null && files.length > 0) return files[0];
         }

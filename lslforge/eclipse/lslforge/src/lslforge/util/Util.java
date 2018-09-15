@@ -150,16 +150,16 @@ public class Util {
             
             ArrayList<Integer> list = new ArrayList<Integer>();
             
-            list.add(new Integer(0));
+            list.add(Integer.valueOf(0));
             int ch;
             int index = 0;
             while ((ch = reader.read()) >= 0) {
                 index++;
                 if (ch == '\n') {
-                    list.add(new Integer(index));
+                    list.add(Integer.valueOf(index));
                 }
             }
-            list.add(new Integer(index));
+            list.add(Integer.valueOf(index));
             
             return list;
         } catch (Exception e) {

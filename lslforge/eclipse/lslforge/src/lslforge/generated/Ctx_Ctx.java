@@ -1,5 +1,6 @@
 package lslforge.generated;
 import com.thoughtworks.xstream.XStream;
+import java.util.LinkedList;
 public class Ctx_Ctx<E1> extends Ctx<E1>{
     public Maybe<SourceContext> srcCtx;
     public E1 ctxItem;

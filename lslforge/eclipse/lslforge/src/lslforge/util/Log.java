@@ -8,19 +8,26 @@ import org.eclipse.core.runtime.Status;
 public class Log {
 	public static final String pluginId = "lslforge"; 			//$NON-NLS-1$
 	private static int minLogLevel = IStatus.INFO;
+	private static String level = "";
 	
 	private Log() {}		//Force as non-instantiable
 
 	public static void debug(String message) {
-		log(IStatus.INFO, IStatus.OK, "[debug] " + message, null); //$NON-NLS-1$
+		if ("DEBUG".equals(level)) {
+		  log(IStatus.INFO, IStatus.OK, "[debug] " + message, null); //$NON-NLS-1$
+		}
 	}
 	
 	public static void debug(Throwable exception) {
-		log(IStatus.INFO, IStatus.OK, "[debug] " + exception.getLocalizedMessage(), exception); //$NON-NLS-1$
+		if ("DEBUG".equals(level)) {
+		  log(IStatus.INFO, IStatus.OK, "[debug] " + exception.getLocalizedMessage(), exception); //$NON-NLS-1$
+	    }
 	}
 	
 	public static void debug(String message, Throwable exception) {
-		log(IStatus.INFO, IStatus.OK, "[debug] " + message, exception);		//$NON-NLS-1$
+		if ("DEBUG".equals(level)) {
+		  log(IStatus.INFO, IStatus.OK, "[debug] " + message, exception);		//$NON-NLS-1$
+		}
 	}
 
 	public static void info(String message) {
@@ -80,11 +87,16 @@ public class Log {
 	}
 	
 	/**
-	 * Set the minimum logging status level that will be recorded. 
+	 * Set the minimum logging status level that will be recorded.
+	 * DEBUG level will force Log.debug messages to be logged as Eclipse's IStatus.INFO
 	 * @param level must be one of <code>DEBUG</code>, <code>INFO</code>, <code>WARNING</code> or <code>ERROR</code>
 	 */
 	public static void setMinLogLevel(String level) {
+		if (level == null) {
+			throw new RuntimeException("Invalid log level: null"); //$NON-NLS-1$
+		}
 		level = level.toUpperCase();
+		Log.level = level;
 		
 		if(level.equals("DEBUG")) { //$NON-NLS-1$
 			Log.minLogLevel = IStatus.INFO;

@@ -8,7 +8,6 @@
 .metadata
 
 #Update site build output
-lslforge/haskell/dist/*
 lslforge/eclipse/update-site/dist/*
 lslforge/eclipse/update-site/plugins/*
 lslforge/eclipse/update-site/features/*
@@ -20,9 +19,11 @@ lslforge/eclipse/lslforge-linux-x86/os/linux/x86/LSLForge
 lslforge/eclipse/lslforge-linux-x86_64/os/linux/x86_64/LSLForge
 lslforge/eclipse/lslforge-win32-x86/os/win32/x86/LSLForge.exe
 /lslforge/eclipse/lslforge-macosx-x86/os/macosx/x86/LSLForge
+lslforge/eclipse/lslforge-macosx-x86_64/os/macosx/x86_64/LSLForge
 
 #Newfie's ad-hoc build scripts
 lslforge/build_*
 lslforge/copy_*
 /lslforge/rename_files.sh
 build
+/.project
