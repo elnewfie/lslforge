@@ -3,4 +3,4 @@
 rm -v eclipse/lslforge/src/lslforge/generated/*.java
 #mv -v eclipse/lslforge/src/lslforge/generated/*.save *.java
 
-eclipse/lslforge-linux-x86/os/linux/x86/LslForge _CodeGen_ eclipse/lslforge/src/lslforge/generated lslforge.generated
+eclipse/lslforge-linux-x86/os/linux/x86/LSLForge _CodeGen_ eclipse/lslforge/src/lslforge/generated lslforge.generated
