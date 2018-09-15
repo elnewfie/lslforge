@@ -3,20 +3,20 @@
    <description name="LSLForge Update Site" url="https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/">
       LSLForge Update Site
    </description>
-   <feature url="features/lslforge_0.1.9.4.jar" id="lslforge" version="0.1.9.4">
-      <category name="LSLForge"/>
+   <feature url="features/lslforge_0.1.9.5.jar" id="lslforge" version="0.1.9.5">
+      <category name="LSLForge_0.1.9.5"/>
    </feature>
-   <feature url="features/lslforge_part_linux_x86_0.1.9.4.jar" id="lslforge_part_linux_x86" version="0.1.9.4" os="linux" arch="">
-      <category name="LSLForge"/>
+   <feature url="features/lslforge_part_linux_x86_0.1.9.5.jar" id="lslforge_part_linux_x86" version="0.1.9.5" os="linux" arch="">
+      <category name="LSLForge_0.1.9.5"/>
    </feature>
-   <feature url="features/lslforge_part_linux_x86_64_0.1.9.4.jar" id="lslforge_part_linux_x86_64" version="0.1.9.4" os="linux" arch="">
-      <category name="LSLForge"/>
+   <feature url="features/lslforge_part_linux_x86_64_0.1.9.5.jar" id="lslforge_part_linux_x86_64" version="0.1.9.5" os="linux" arch="">
+      <category name="LSLForge_0.1.9.5"/>
    </feature>
-   <feature url="features/lslforge_part_macosx_x86_0.1.9.4.jar" id="lslforge_part_macosx_x86" version="0.1.9.4" os="macosx">
-      <category name="LSLForge"/>
+   <feature url="features/lslforge_part_macosx_x86_0.1.9.5.jar" id="lslforge_part_macosx_x86" version="0.1.9.5" os="macosx">
+      <category name="LSLForge_0.1.9.5"/>
    </feature>
-   <feature url="features/lslforge_part_win32_x86_0.1.9.4.jar" id="lslforge_part_win32_x86" version="0.1.9.4" os="win32" arch="">
-      <category name="LSLForge"/>
+   <feature url="features/lslforge_part_win32_x86_0.1.9.5.jar" id="lslforge_part_win32_x86" version="0.1.9.5" os="win32" arch="">
+      <category name="LSLForge_0.1.9.5"/>
    </feature>
-   <category-def name="LSLForge" label="LSLForge"/>
+   <category-def name="LSLForge_0.1.9.5" label="LSLForge"/>
 </site>

@@ -12,7 +12,10 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
-* 2018-09-10 LSLForge **0.1.9.4** (**Windows**, **Mac** Only - **TESTING IN PROGRESS**)
+* 2018-09-14 LSLForge **0.1.9.5** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
+    * Experimental hot deploy of the newly selected native executable
+    * "Generated" comment at the end of *.lsl file (easier to check what was copy-pasted) (**Windows** only)
+* 2018-09-10 LSLForge **0.1.9.4** (**Windows**, **Mac** Only)
     * Fixed ``Tuple*.java`` disappearance (Thanks [@PellSmit](https://github.com/PellSmit))
     * Upgraded Haskell (Thanks [@simon-nicholls](https://github.com/simon-nicholls))
     * HTTP_USER_AGENT
@@ -52,13 +55,22 @@ The official group for LSLForge Editor tool is [LSLForge Users](secondlife:///ap
 
 ### Eclipse Plugin
 
-Any of the Eclipse installations were found working:
+All the latest  Eclipse installations were found working:
+
+* Eclipse Photon (4.8.0)
+* Eclipse Oxygen 
+
+> NOTE: Oomph seems to restore LSLForge native setting despite attempts to overwrite the field. The only workaround for now is to check ``[X] Skip automatic task execution at startup time`` under Oomph > Setup Tasks in Preferences. 
+
+Platforms that used to work but **not tested recently**:
 
 * Eclipse Juno RC2 (4.2.2)
 * Eclipse Luna (4.4.0)
 * Eclipse Mars.1 (4.5.1)
 * Eclipse Mars.2 (4.5.2)
 * Eclipse Neon (4.6.0)
+
+#### How to Install
 
 To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Click ``Add...``, give it a name and enter the link for location:
 
@@ -68,6 +80,7 @@ This way you'll get the newest release.
 
 Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
 
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.5/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.4/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.3/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.2/eclipse/``
@@ -79,7 +92,7 @@ For even older version, clone the whole repo and link your Eclipse to a particul
 
 > If you don't see any items for installing, try to uncheck "Group items by category"
 
-> Run ``eclipse -clean`` to make it forget cached downloads
+> Run ``eclipse -clean`` to force it to forget cached downloads
 
 Checkbox 2 items:
 
@@ -135,7 +148,7 @@ In the main project that uses ``ModulesProject``, place a checkmark along its na
 
 ``ModulesProject`` directory tree becomes part of the project's tree. It will still be imported as ``$import Modules.Debug.lslm`` without any additions.
 
-## Native Library Compilation Example
+## Native Executable Compilation Example
 
 ### Requirements
 
