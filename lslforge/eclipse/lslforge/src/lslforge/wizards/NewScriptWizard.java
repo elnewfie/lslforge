@@ -20,8 +20,8 @@ public class NewScriptWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
 	private class LSLScriptWizardPage extends LSLFileCreationWizardPage {
 		private static final String DEFAULT_SCRIPT_CONTENTS = 
-		    "\n\ndefault {\n    state_entry() {\n        llOwnerSay(\"Hello " + //$NON-NLS-1$
-		    "Scripter\");\n    }\n}\n"; //$NON-NLS-1$
+		    "default {\n  state_entry() {\n    llOwnerSay(\"Welcome to " + //$NON-NLS-1$
+		    "LSLForge\");\n  }\n}\n"; //$NON-NLS-1$
 
         public LSLScriptWizardPage(IStructuredSelection selection) {
 			super("createModule", selection); //$NON-NLS-1$
