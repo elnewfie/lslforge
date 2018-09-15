@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: LSLForge
 Bundle-SymbolicName: lslforge; singleton:=true
-Bundle-Version: 0.1.9.4
+Bundle-Version: 0.1.9.5
 Bundle-ClassPath: lslforge.jar,
  antlr-3.4-complete-no-antlrv2.jar,
  xstream-1.4.9.jar,
@@ -233,3 +233,4 @@ Bundle-ActivationPolicy: lazy
 Import-Package: com.ibm.icu.text;version="3.6.1",
  org.eclipse.ui.views.contentoutline
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Automatic-Module-Name: lslforge
