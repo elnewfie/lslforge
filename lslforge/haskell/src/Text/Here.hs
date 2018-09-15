@@ -4,13 +4,13 @@
 -- Module      :  Text.Here
 -- Copyright   :  (c) Rob Greayer 2009
 -- License     :  BSD-style (see the file LICENSE)
--- 
+--
 -- Maintainer  :  robgreayer@yahoo.com
 -- Stability   :  provisional
 -- Portability :  non-portable (uses existentially template haskell)
 --
 -- An implementation of 'here' documents, using quasiquotation.
--- 
+--
 -----------------------------------------------------------------------------
 module Text.Here(here) where
 
@@ -29,4 +29,8 @@ hereExp s = dataToExpQ (const Nothing) (filt s)
 
 -- | A quasi-quoter for a string...
 here :: QuasiQuoter
-here = QuasiQuoter hereExp herePat
+here = QuasiQuoter { quoteExp  = hereExp
+                   , quotePat  = herePat
+                   , quoteType = error "No quoteType implementation for here"
+                   , quoteDec  = error "No quoteDec implementation for here"
+                   }

@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import lslforge.decorators.ErrorDecorator;
 import lslforge.editor.LSLPartitionScanner;
 import lslforge.editor.lsl.LSLCodeScanner;
+import lslforge.generated.CompilationCommand;
 import lslforge.language_metadata.LSLConstant;
 import lslforge.language_metadata.LSLFunction;
 import lslforge.language_metadata.LSLHandler;
@@ -43,6 +44,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -63,7 +66,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  * @author rgreayer
  *
  */
-public class LSLForgePlugin extends AbstractUIPlugin {
+public class LSLForgePlugin extends AbstractUIPlugin implements IPropertyChangeListener {
 	public static final String LSLFORGE_NATIVE_PATH = "lslforge.native_path"; //$NON-NLS-1$
     private static final Pattern LSLFORGE_CORE_VERSION_PAT = Pattern.compile("^0\\.1(\\..*)?$"); //$NON-NLS-1$
 	private static final String LSLFORGE_CORE_VERSION = "0.1.*"; //$NON-NLS-1$
@@ -128,7 +131,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
      * @param redir an indicator as to whether stderr should be redirected to stdout
      * @return the process to monitor
      */
-    public static Process runCommand(String command, String input, boolean redir) {
+    private static Process runCommand(String command, String input, boolean redir) {
         try {
             Process process = launchCoreCommand(command, redir);
             if (process == null) return null;
@@ -186,7 +189,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
     }
     
     private String executablePath;
-
+    
     private boolean determineExecutable() {
         String path = getDefault().getPreferenceStore().getString(LSLFORGE_NATIVE_PATH);
         String preferredVersion = null;
@@ -195,7 +198,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         if (path != null && !"".equals(path.trim())) { //$NON-NLS-1$
             preferredVersion = tryTask("Version", path); //$NON-NLS-1$
             if (checkVersion(preferredVersion)) {
-                setExecutablePath(path);
+                setExecutablePath(path, preferredVersion);
                 return true;
             }
         }
@@ -207,7 +210,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
                 embeddedVersion = tryTask("Version", path); //$NON-NLS-1$
                 
                 if (checkVersion(embeddedVersion)) {
-                    setExecutablePath(path);
+                    setExecutablePath(path, embeddedVersion);
                     return true;
                 }
             } catch (IOException e) {
@@ -222,7 +225,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
                 embeddedVersion = tryTask("Version", path); //$NON-NLS-1$
                 
                 if (checkVersion(embeddedVersion)) {
-                    setExecutablePath(path);
+                    setExecutablePath(path, embeddedVersion);
                     return true;
                 }
             } catch (IOException e) {
@@ -232,7 +235,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         
         installedVersion = tryTask("Version", LSL_COMMAND); //$NON-NLS-1$
         if (checkVersion(installedVersion)) {
-            setExecutablePath(LSL_COMMAND);
+            setExecutablePath(LSL_COMMAND, installedVersion);
             return true;
         }
         
@@ -277,6 +280,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
                 dlg.open();
             }
         });
+        Log.info("Not found executable: "+buf.toString());
         
         return false;
     }
@@ -301,8 +305,8 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         return executablePath;
     }
     
-    private void setExecutablePath(String path) {
-        Log.info("executablePath = " + path); //$NON-NLS-1$
+    private void setExecutablePath(String path, String version) {
+        Log.info("setExecutablePath: " + path+", Version: "+version); //$NON-NLS-1$
         this.executablePath = path;
     }
     
@@ -339,7 +343,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
         }
     }
     
-    public static String runTask(String command, String input) {
+    public static String runExecutableAndForget(String command, String input) {
         Process p = runCommand(command, input, true);
         if (p == null) return null;
         return readString(p.getInputStream());
@@ -371,7 +375,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
     
     static String validateExpression(String expression) {
         Log.debug("expression: " + expression); //$NON-NLS-1$
-        String result = runTask("ExpressionHandler", expression); //$NON-NLS-1$
+        String result = runExecutableAndForget("ExpressionHandler", expression); //$NON-NLS-1$
         Log.debug("result: " + result); //$NON-NLS-1$
         if (result == null) {
             return "Can't evaluate expression (internal error)"; //$NON-NLS-1$ TODO
@@ -408,7 +412,7 @@ public class LSLForgePlugin extends AbstractUIPlugin {
     }
 
     private LSLMetaData buildMetaData() {
-        String result = runTask("MetaData", ""); //$NON-NLS-1$//$NON-NLS-2$
+        String result = runExecutableAndForget("MetaData", ""); //$NON-NLS-1$//$NON-NLS-2$
         if (result == null) {
             Log.error(Messages.LSLForgePlugin_NO_META_DATA);
             return new LSLMetaData();
@@ -547,16 +551,14 @@ public class LSLForgePlugin extends AbstractUIPlugin {
     	if(DEBUG) {
     		Log.setMinLogLevel("debug"); //$NON-NLS-1$
     	} else {
-    		//Only interested in unusual log entries
-    		Log.setMinLogLevel("warning"); //$NON-NLS-1$
+    		//Only interested in unusual log entries and info
+    		Log.setMinLogLevel("info"); //$NON-NLS-1$
     	}
     	
         getPreferenceStore().setDefault(LSLFORGE_NATIVE_PATH, ""); //$NON-NLS-1$
-    	//checkVersion();
-        if (determineExecutable()) {
-            testManager = new TestManager();
-            simManager  = new SimManager();
-        }
+        getPreferenceStore().addPropertyChangeListener(this);
+        
+        performDetermineExectuable();
   
         //Add a listener to the bundle
         context.addBundleListener(new BundleListener() {
@@ -572,10 +574,38 @@ public class LSLForgePlugin extends AbstractUIPlugin {
 		});
     }
     
+    private void performDetermineExectuable() {
+    	//checkVersion();
+        if (determineExecutable()) {
+            testManager = new TestManager();
+            simManager  = new SimManager();
+        }
+    }
+    
     private boolean checkVersion(final String version) {
         if (version == null) return false;
         Matcher m = LSLFORGE_CORE_VERSION_PAT.matcher(version.trim());
         boolean matches = m.matches();
         return matches;
+    }
+    
+	// Fires on Preferences property change
+    public void propertyChange(PropertyChangeEvent event) {
+	    if (LSLFORGE_NATIVE_PATH.equals(event.getProperty())) {
+		    Log.debug("Changing ["+event.getProperty()+"]: to: \""+event.getNewValue().toString()+"\" from: \""+event.getOldValue().toString()+"\"");
+		    if (event.getNewValue() != null) {
+		    	performDetermineExectuable();
+		    	try {
+		    	  if (LSLProjectNature.getStaticCompilationServer()!=null) {
+		    		  //Process previous = LSLProjectNature.getStaticCompilationServer().getProcess();
+		    		  //LSLProjectNature.getStaticCompilationServer().execute(new CompilationCommand());
+		    		  // Simply adding new executable for now
+		    		  LSLProjectNature.getStaticCompilationServer().startProcess();
+		    	  }
+		    	} catch (Error e) {
+		    	  Log.error("Attempting to add new executable failed: "+e.getMessage());
+		    	}
+		    }
+	    }
     }
 }

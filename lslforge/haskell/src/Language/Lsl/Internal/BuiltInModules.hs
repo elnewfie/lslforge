@@ -1,21 +1,20 @@
 {-# OPTIONS_GHC -XQuasiQuotes #-}
 module Language.Lsl.Internal.BuiltInModules(avEventGen) where
 
-import Language.Lsl.Syntax
 import Language.Lsl.QQ(lslm)
 import Language.Lsl.Internal.Constants(lslForgeAvatarKey,lslForgeAvatarPos,lslForgeAvatarRot,lslForgeAvatarName)
 
-avEventGenAST = [$lslm|$module
+avEventGenAST = [lslm|$module
         integer LSLFORGE_AVATAR_KEY = $integer:lslForgeAvatarKey;
         integer LSLFORGE_AVATAR_POS = $integer:lslForgeAvatarPos;
         integer LSLFORGE_AVATAR_ROT = $integer:lslForgeAvatarRot;
         integer LSLFORGE_AVATAR_NAME= $integer:lslForgeAvatarName;
-        
+
         string mkTouch(string primKey, float duration) {
             return "AvatarTouch {avatarTouchPrimKey = LSLKey{unLslKey=\"" + primKey + "\"}, avatarTouchDuration = " + (string) duration + "}";
         }
         string mkFaceTouch(string primKey, float duration, integer face, float s, float t) {
-            return "AvatarFaceTouch {avatarTouchPrimKey = LSLKey{unLslKey=\"" + primKey + "\"}, avatarTouchDuration = " + (string) duration + 
+            return "AvatarFaceTouch {avatarTouchPrimKey = LSLKey{unLslKey=\"" + primKey + "\"}, avatarTouchDuration = " + (string) duration +
                 ", avatarTouchFace = " + (string)face + ", avatarTouchST = (" + (string) s + "," + (string) t + ")}";
         }
         string mkWhisper(integer chan, string message) {
@@ -39,5 +38,5 @@ avEventGenAST = [$lslm|$module
                 "\", avatarHTTPRequestUserAgent = \"" + userAgent + "\"}";
         }
     |]
-    
+
 avEventGen = ("$avEventGen", avEventGenAST)

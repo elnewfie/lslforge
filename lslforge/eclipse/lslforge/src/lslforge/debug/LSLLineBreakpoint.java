@@ -28,7 +28,7 @@ public class LSLLineBreakpoint extends LineBreakpoint {
                 Map<String,Object> attributes = new HashMap<String,Object>();
                 attributes.put(IBreakpoint.ID, getModelIdentifier());
                 attributes.put(IBreakpoint.ENABLED, Boolean.TRUE);
-                attributes.put(IMarker.LINE_NUMBER, new Integer(line));
+                attributes.put(IMarker.LINE_NUMBER, Integer.valueOf(line));
                 // add attributes
                 // set attributes
                 ensureMarker().setAttributes(attributes);

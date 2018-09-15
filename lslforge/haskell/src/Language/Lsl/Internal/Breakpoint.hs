@@ -29,45 +29,45 @@ data Breakpoint = Breakpoint { breakpointFile :: String, breakpointLine :: Int, 
     deriving (Show,Eq,Ord)
 data DynamicBreakpoint = NoDynamicBreakpoint | NextStatement | NextStatementInFrame | NextStatementAboveFrame
     deriving (Show,Eq)
-    
+
 newtype StepManager = StepManager [DynamicBreakpoint] deriving (Show)
 
 mkBreakpoint name line col = Breakpoint name line col
 
 data BreakpointManager = BreakpointManager { fixedBreakpoints :: (Map String (Set (Int,Int))) }
     deriving (Show)
-    
+
 emptyStepManager = StepManager []
 
 emptyBreakpointManager = BreakpointManager M.empty
 
 replaceBreakpoints bps bpm =
     foldl (flip addFixedBreakpoint) (bpm { fixedBreakpoints = M.empty }) bps
-    
-checkBreakpoint bp bpm sm@(StepManager dynBreakpts) = 
+
+checkBreakpoint bp bpm sm@(StepManager dynBreakpts) =
     case dynBreakpts of
         (NextStatement:frames) -> (True,bpm, StepManager (NoDynamicBreakpoint : frames))
         (NextStatementInFrame:frames) -> (True,bpm, StepManager (NoDynamicBreakpoint : frames))
         _ -> let (result,bpm') = hasFixedBreakpoint bp bpm in (result,bpm',sm)
-        
+
 hasFixedBreakpoint bp bpm =
     case M.lookup (breakpointFile bp) map of
         Nothing -> (False,bpm)
         Just set -> ((breakpointLine bp, breakpointColumn bp) `S.member` set, bpm)
     where map = fixedBreakpoints bpm
-    
+
 addFixedBreakpoint (Breakpoint file line col) bpm =
     let map = fixedBreakpoints bpm in
         case M.lookup file map of
             Nothing -> bpm { fixedBreakpoints = M.insert file (S.singleton (line,col)) map }
             Just set -> bpm { fixedBreakpoints = M.insert file (S.insert (line,col) set) map }
-            
+
 removeFixedBreakpoint (Breakpoint file line col) bpm =
     let map = fixedBreakpoints bpm in
         case M.lookup file map of
             Nothing -> bpm
             Just set -> bpm { fixedBreakpoints = M.insert file (S.delete (line,col) set) map }
-            
+
 pushStepManagerFrame (StepManager dynBps) =
     StepManager $ case dynBps of
         (NextStatement:frames) -> (NextStatement:NoDynamicBreakpoint:frames)
@@ -83,7 +83,7 @@ popStepManagerFrame (StepManager dynBps) =
 setStepOutBreakpoint = setDynamicBreakpoint NextStatementAboveFrame
 setStepBreakpoint = setDynamicBreakpoint NextStatement
 setStepOverBreakpoint = setDynamicBreakpoint NextStatementInFrame
-        
+
 setDynamicBreakpoint dbp (StepManager dynBps) =
     StepManager $ case  dynBps of
         (_:frames) -> dbp:frames

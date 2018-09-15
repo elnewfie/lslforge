@@ -159,7 +159,7 @@ public class OutlineBuilder
 			Result r = n.getCompilationServer().execute(cmd);
 			return r.get();
 		} catch (Exception e1) {
-			throw new Exception("Unable to retrieve compile result"); //$NON-NLS-1$
+			throw new Exception("Unable to retrieve compile result: "+cmd); //$NON-NLS-1$
 		}
 	}
 

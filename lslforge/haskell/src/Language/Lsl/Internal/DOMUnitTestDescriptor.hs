@@ -2,8 +2,7 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.DOMUnitTestDescriptor(tests) where
 
-import Control.Applicative
-import Control.Monad.Error(MonadError(..))
+import Control.Monad.Except(MonadError(..))
 import Data.List(isSuffixOf)
 import Language.Lsl.Internal.DOMProcessing(liste,req,text,opt,choicec,choicet,
     elist)
@@ -22,7 +21,7 @@ entryPointE = do
     path <- req "path" text
     fileName <- req "fileName" text
     ep fileName path
-    where ep nm path 
+    where ep nm path
             | "lslm" `isSuffixOf` nm = return $ ModuleFunc nm path
             | otherwise = case parts path of
              [a,b] -> return $ ScriptHandler nm a b
@@ -41,18 +40,18 @@ decodeMode s = throwError ("illegal mode " ++ s)
 
 callsE = filter (not . null . fst . fst) <$> liste "call" callE
 
-callE = ( \ x y z -> ((x,y),z)) <$> req "name" text <*> req "args" callArgsE 
+callE = ( \ x y z -> ((x,y),z)) <$> req "name" text <*> req "args" callArgsE
     <*> req "returns" someV
 
 callArgsE = liste "maybe-value" maybeV
-    
+
 bindingsE = liste "globalBinding" globalBindingE
 globalBindingE = (,) <$> req "name" text <*> req "value" someV
 
-evalE typ = evaluateExpression typ <$> text >>= maybe 
+evalE typ = evaluateExpression typ <$> text >>= maybe
     (throwError ("invalid content for " ++ show typ))
     return
-    
+
 lslValTypes = [
     ("lsl-string",evalE LLString),
     ("lsl-key",evalE LLKey),
@@ -63,13 +62,13 @@ lslValTypes = [
     ("lsl-list1",evalE LLList),
     ("lsl-void",return VoidVal)]
 
-maybeV = opt "val" someV   
-someV =  choicec lslValTypes >>= 
+maybeV = opt "val" someV
+someV =  choicec lslValTypes >>=
     maybe (throwError "unrecognized lsl value type") return
-    
+
 parts :: String -> [String]
 parts "" =  []
 parts s  =  let (l, s') = break (== '.') s
-			   in  l : case s' of
-					[]     	-> []
-					(_:s'') -> parts s''
+            in  l : case s' of
+                      []      -> []
+                      (_:s'') -> parts s''

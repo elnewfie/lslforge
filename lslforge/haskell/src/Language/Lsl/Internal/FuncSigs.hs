@@ -12,13 +12,13 @@ import Language.Lsl.Internal.Type(LSLType(..), convertValues,LSLValue)
 funcMeta :: [(String,LSLType,[(String,LSLType)],String)]
 funcMeta =
     let dummyNames = zipWith (++) (repeat "arg") (map show [1..])
-        sig2Meta (name,rt,args) = 
+        sig2Meta (name,rt,args) =
             let (argNames,description) = case lookup name funcDescriptions of
                     Nothing -> (dummyNames,"no description")
                     Just (names,desc) -> (names ++ dummyNames,desc)
             in (name, rt,zip argNames args,description)
     in map sig2Meta funcSigs
-        
+
 findSig name = find (\ (fname,_,_) -> name == fname) funcSigs
 
 convertArgs :: RealFrac a => String -> [LSLValue a] -> [LSLValue a]
@@ -277,6 +277,7 @@ funcSigs = [
     ("llModPow",LLInteger,[LLInteger,LLInteger,LLInteger]),
     ("llModifyLand",LLVoid,[LLInteger,LLInteger]),
     ("llMoveToTarget",LLVoid,[LLVector,LLFloat]),
+    ("llName2Key",LLKey,[LLString]),
     ("llNavigateTo",LLVoid,[LLVector,LLList]),
     ("llOffsetTexture",LLVoid,[LLFloat,LLFloat,LLInteger]),
     ("llOpenRemoteDataChannel",LLVoid,[]),
@@ -321,6 +322,7 @@ funcSigs = [
     ("llRequestSimulatorData",LLKey,[LLString,LLInteger]),
     ("llRequestURL",LLKey,[]),
     ("llRequestUsername",LLKey,[LLKey]),
+    ("llRequestUserKey",LLKey, [LLString]),
     ("llResetLandBanList",LLVoid,[]),
     ("llResetLandPassList",LLVoid,[]),
     ("llResetOtherScript",LLVoid,[LLString]),
@@ -709,6 +711,7 @@ funcDescriptions = [
     ("llModPow",(["a","b","c"],"Returns a raised to the b power, mod c. ( (a**b)%c ).  b is capped at 0xFFFF (16 bits).\n")),
     ("llModifyLand",(["action","size"],"Modify land with action (LAND_LEVEL, LAND_RAISE, LAND_LOWER, LAND_SMOOTH, LAND_NOISE, LAND_REVERT) on size (LAND_SMALL_BRUSH, LAND_MEDIUM_BRUSH, LAND_LARGE_BRUSH)\n")),
     ("llMoveToTarget",(["target","tau"],"critically damp to target in tau seconds (if the script is physical)\n")),
+    ("llName2Key", (["name"], "Returns a key the Agent ID for the named agent in the region. If there is no agent with the specified name currently signed onto the region, this function returns the value NULL_KEY. Names are always provided in the form \"First[ Last]\" or \"first[.last]\" (first name with an optional last name.) If the last name is omitted a last name of \"Resident\" is assumed. Case is not considered when resolving agent names.\n")),
     ("llNavigateTo", (["pos","options"], "Directs an object to travel to a defined position in the region or adjacent regions.\n")),
     ("llOffsetTexture",(["offsets","offsett","face"],"sets the texture s, t offsets for the chosen face\n")),
     ("llOpenRemoteDataChannel",([],"Creates a channel to listen for XML-RPC calls.  Will trigger a remote_data event with channel id once it is available.\n")),
@@ -753,6 +756,7 @@ funcDescriptions = [
     ("llRequestSimulatorData",(["simulator","data"],"Requests data about simulator.  When data is available the dataserver event will be raised\n")),
     ("llRequestURL", ([], "Requests one HTTP:// url for use by this object. The http_request event is tiggered with results.\n")),
     ("llRequestUsername",(["id"],"Requests the Username of the agent identified by id. When Username is available the dataserver event will be raised. The agent identified by id does not need to be in the same region or online at the time of the request.\n")),
+    ("llRequestUserKey",(["username"],"Requests the Agent ID for the agent identified by name from the dataserver. Names are always provided in the form \"First[ Last]\" or \"first[.last]\" (first name with an optional last name.) If the last name is omitted a last name of \"Resident\" is assumed. Case is not considered when resolving agent names. Returns a handle (a key) that can be used to identify the request when the dataserver event is raised.\n")),
     ("llResetLandBanList",([],"Removes all residents from the land ban list.\n")),
     ("llResetLandPassList",([],"Removes all residents from the land access/pass list.\n")),
     ("llResetOtherScript",(["name"],"Resets script name\n")),

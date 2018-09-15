@@ -2,14 +2,13 @@
 module Language.Lsl.Internal.DOMCombinators where
 
 import Control.Monad.State
-import Control.Monad.Error
+import Control.Monad.Except
 
 import Data.Maybe
 import Language.Lsl.Internal.DOMProcessing
 import Text.XML.HaXml(Attribute,AttValue(..),Document(..),Element(..),Content(..),Reference(..),xmlParse,info)
 import Text.XML.HaXml.Posn(Posn(..),noPos)
 import Language.Lsl.Internal.Util(readM)
-import Debug.Trace
 
 type ContentAcceptor a = [Content Posn] -> Either String a
 type ContentFinder a = StateT [Content Posn] (Either String) a
@@ -21,15 +20,15 @@ type AttributeTester a = Posn -> Attribute -> Either String (Maybe a)
 type AttributesTester a = Posn -> [Attribute] -> Either String (Maybe a)
 
 el :: String -> (b -> a) -> ContentAcceptor b -> ElementTester a
-el tag f cf p (Elem name _ cs) | tag /= name = Right Nothing
+el tag f cf p (Elem name _ cs) | tag /= unqualifiedQName name = Right Nothing
                                | otherwise = case cf cs of
                                         Left s -> Left ("at " ++ show p ++ ": " ++ s)
                                         Right v -> Right (Just (f v))
 
 elWith :: String -> (a -> b -> c) -> AttributeAcceptor (Maybe a) -> ContentAcceptor b -> ElementTester c
-elWith tag f af cf p (Elem name attrs cs) | tag /= name = Right Nothing
+elWith tag f af cf p (Elem name attrs cs) | tag /= unqualifiedQName name = Right Nothing
                                           | otherwise = do
-                                                   av <- af p attrs 
+                                                   av <- af p attrs
                                                    case av of
                                                        Nothing -> Right Nothing
                                                        Just av -> do
@@ -40,17 +39,17 @@ liftElemTester :: (Posn -> (Element Posn) -> Either String (Maybe a)) -> (Conten
 liftElemTester ef (CElem e pos) = case ef pos e of
     Left s -> Left ("at " ++ show pos ++ ": " ++ s)
     Right v -> Right v
-    
+
 canHaveElem :: ElementTester a -> ContentFinder (Maybe a)
-canHaveElem ef = get >>= \ cs -> 
+canHaveElem ef = get >>= \ cs ->
         mapM (\ c -> (lift . liftElemTester ef) c >>= return . (,) c) [ e | e@(CElem _ _) <- cs ]
         >>= (\ vs -> case span (isNothing . snd) vs of
     (bs,[]) -> put (map fst bs) >> return Nothing
     (bs,c:cs) -> put (map fst (bs ++ cs)) >> return (snd c))
-   
+
 mustHaveElem :: ElementTester a -> ContentFinder a
-mustHaveElem ef = get >>= \ cs -> 
-        mapM (\ c -> (lift . liftElemTester ef) c >>= return . (,) c) [ e | e@(CElem _ _) <- cs ] 
+mustHaveElem ef = get >>= \ cs ->
+        mapM (\ c -> (lift . liftElemTester ef) c >>= return . (,) c) [ e | e@(CElem _ _) <- cs ]
         >>= (\ vs -> case span (isNothing . snd) vs of
     (bs,[]) -> throwError ("element not found")
     (bs,c:cs) -> put (map fst (bs ++ cs)) >> return (fromJust $ snd c))
@@ -85,9 +84,9 @@ refToString (RefEntity s) = refEntityString s
 refToString (RefChar i) = [toEnum i]
 
 attrIs :: String -> String -> AttributeTester ()
-attrIs k v _ (nm,attv) | v == attContent attv  && k == nm = return (Just ())
+attrIs k v _ (nm,attv) | v == attContent attv  && k == unqualifiedQName nm = return (Just ())
                        | otherwise = return Nothing
-                                  
+
 hasAttr :: AttributeTester a -> AttributeFinder (Maybe a)
 hasAttr at = get >>= \ (pos,attrs) -> mapM (lift . at pos) attrs >>= return . zip attrs >>= (\ ps -> case span (isNothing . snd) ps of
     (bs,[]) -> return Nothing
@@ -118,7 +117,7 @@ boolContent cs = simpleContent cs >>= (\ v -> case v of
     "true" -> Right True
     "false" -> Right False
     s -> Left ("unrecognized bool " ++ s))
-    
+
 readableContent :: Read a => ContentAcceptor a
 readableContent cs = simpleContent cs >>= readM
 
@@ -132,7 +131,7 @@ refEntityString _ = "?"
 simpleContent :: ContentAcceptor String
 simpleContent cs = mapM processContentItem cs >>= return . concat
     where
-        processContentItem (CElem (Elem name _ _) _) = Left ("unexpected content element (" ++ name ++ ")")
+        processContentItem (CElem (Elem name _ _) _) = Left ("unexpected content element (" ++ show name ++ ")")
         processContentItem (CString _ s _) = Right s
         processContentItem (CRef (RefEntity s) _) = Right $ refEntityString s
         processContentItem (CRef (RefChar i) _) = Right $ [toEnum i]
@@ -160,7 +159,7 @@ baz = comprises $ do
     r <- mustHave "r" readableContent
     return (Baz q r)
 
-fooE = el "BarFoo" id bar 
+fooE = el "BarFoo" id bar
    <|> el "BazFoo" id baz
 
 fooAs :: String -> ElementTester Foo
@@ -172,5 +171,5 @@ data Zzz = Zzz { content :: [Foo], bleah :: Foo } deriving Show
 zzzE = el "Zzz" id $ comprises (mustHave "content" (many fooE) >>= \ cs -> mustHaveElem (fooAs "bleah") >>= \ b -> return $ Zzz cs b)
 
 parse :: ElementAcceptor a -> String -> Either String a
-parse eaf s = eaf noPos el 
+parse eaf s = eaf noPos el
     where Document _ _ el _ = xmlParse "" s

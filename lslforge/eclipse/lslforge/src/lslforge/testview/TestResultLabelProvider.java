@@ -62,7 +62,7 @@ public class TestResultLabelProvider extends LabelProvider implements ITableLabe
             return Messages.getString("TestResultLabelProvider.LOG"); //$NON-NLS-1$
         } else if (element instanceof LogMessage) {
             LogMessage message = (LogMessage) element;
-            return MessageFormat.format(Messages.getString("TestResultLabelProvider.LOG_FORMAT"), new Object[] { new Integer(message.getTime()),  //$NON-NLS-1$
+            return MessageFormat.format(Messages.getString("TestResultLabelProvider.LOG_FORMAT"), new Object[] { Integer.valueOf(message.getTime()),  //$NON-NLS-1$
                     message.getText() });
         } else if (element instanceof ResultInfo) {
             ResultInfo info = (ResultInfo) element;

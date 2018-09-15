@@ -1,17 +1,14 @@
 {-# OPTIONS_GHC -XFlexibleContexts -XNoMonomorphismRestriction -XTemplateHaskell #-}
 module Language.Lsl.Internal.CompilationServer where
 
---import Control.Monad
---import Control.Monad.Instances
-import Control.Monad.Error
+import Control.Monad.Except
 
---import Data.Data
 import Data.Either
 import Data.Generics
-import Data.Generics.Extras.Schemes
 import qualified Data.Map as M
+
 import Language.Lsl.Internal.Compiler
-import Language.Lsl.Internal.Load(loadScript)
+import Language.Lsl.Internal.Load (loadScript)
 import Language.Lsl.Internal.Pragmas
 import Language.Lsl.Syntax
 import Language.Lsl.Parse
@@ -19,8 +16,7 @@ import Language.Lsl.Internal.Util
 import qualified Language.Lsl.Internal.XmlCreate as E
 import Language.Lsl.Internal.SerializationGenerator
 import Language.Lsl.Internal.DOMCombinators
-import Language.Lsl.Internal.SerializationInstances(
-    jrep'Maybe,jrep'Either,jrep'Tuple2,jrep'Tuple3)
+import Language.Lsl.Internal.SerializationInstances(jrep'Maybe,jrep'Either,jrep'Tuple2,jrep'Tuple3)
 import System.Directory
 import System.FilePath(replaceExtension)
 
@@ -50,36 +46,36 @@ data GlobalSummary = GlobalSummary { globalName :: String, globalType :: LSLType
 
 data CompilationStatus = CompilationStatus { csName :: !String, csInfo :: !(Either [ErrInfo] ([GlobalSummary],[EPSummary])) }
     deriving (Show,Eq)
-    
+
 data ErrInfo = ErrInfo (Maybe TextLocation) String deriving (Show,Eq)
 
 toErrInfo (Nothing,msg) = ErrInfo Nothing msg
 toErrInfo (Just srcCtx, msg) = ErrInfo (Just $ srcTextLocation srcCtx) msg
 
-parseErrorToErrInfo pe = 
-    let (x,y) = (sourcePosToTextLocation $ errorPos pe, 
-            showErrorMessages "or" "unknown parse error" 
+parseErrorToErrInfo pe =
+    let (x,y) = (sourcePosToTextLocation $ errorPos pe,
+            showErrorMessages "or" "unknown parse error"
                 "expecting" "unexpected" "end of input" (errorMessages pe))
     in ErrInfo (Just x) y
-                                            
+
 sourcePosToTextLocation pos = (TextLocation line col line col name)
     where line = sourceLine pos
           col = sourceColumn pos
           name = sourceName pos
 
 gsummary :: Data a => a -> [Either GlobalSummary EPSummary]
-gsummary = everythingBut (False `mkQ` string `extQ` srcContext) (++) [] ([] `mkQ` fsum `extQ` gsum)
-    where gsum (GDecl (Ctx _ (Var n t)) _) = [Left $ GlobalSummary n t]
-          fsum (FuncDec fnm t parms) = [Right $ EPSummary EPFunc (ctxItem fnm) t (map ((\ (Var n t) -> (n,t)) . ctxItem) parms)]
-          string :: String -> Bool
-          string _ = True
-          srcContext :: SourceContext -> Bool
-          srcContext _ = True
-          
-ssummary :: [Ctx State] -> [EPSummary] 
+gsummary =
+    everythingBut (++) (lslQ `extQ` fsum `extQ` gsum)
+  where
+    gsum (GDecl (Ctx _ (Var n t)) _) =
+      ([Left $ GlobalSummary n t], False)
+    fsum (FuncDec fnm t parms) =
+      ([Right $ EPSummary EPFunc (ctxItem fnm) t (map ((\ (Var n t) -> (n,t)) . ctxItem) parms)], False)
+
+ssummary :: [Ctx State] -> [EPSummary]
 ssummary = concatMap go
-    where go (Ctx _ (State nm hs)) = map (hsum (ctxItem nm)) hs 
-          hsum snm (Ctx _ (Handler hnm parms _)) = 
+    where go (Ctx _ (State nm hs)) = map (hsum (ctxItem nm)) hs
+          hsum snm (Ctx _ (Handler hnm parms _)) =
               EPSummary EPHandler (snm ++ "." ++ ctxItem hnm) LLVoid (map ((\ (Var n t) -> (n,t)) . ctxItem) parms)
 
 moduleSummary :: LModule -> ([GlobalSummary],[EPSummary])
@@ -102,12 +98,12 @@ validationSummary (ms,ss) = (msum,ssum)
 
 data Tup3 a b c = Tup3 a b c
 
-data Tst = Tst (Double,Int,Char)      
+data Tst = Tst (Double,Int,Char)
 
 data Tst1 = Tst1 (Tup3 Double Int Char)
 
 $(deriveJavaRep ''TextLocation)
-$(deriveJavaRep ''LSLType)          
+$(deriveJavaRep ''LSLType)
 $(deriveJavaRep ''EPKind)
 $(deriveJavaRep ''EPSummary)
 $(deriveJavaRep ''GlobalSummary)
@@ -134,16 +130,16 @@ $(deriveJavaRep ''Tup3)
 $(deriveJavaRep ''Tst)
 $(deriveJavaRep ''Tst1)
 
-data CState = CState { 
+data CState = CState {
     optimize :: Bool,
     modulePaths :: M.Map String String,
     scriptPaths :: M.Map String String,
-    modules :: M.Map String (Validity (LModule,ModuleInfo)), 
+    modules :: M.Map String (Validity (LModule,ModuleInfo)),
     scripts :: M.Map String (Validity CompiledLSLScript) }
-    
+
 emptyCState = CState { optimize = False, modulePaths = M.empty, scriptPaths = M.empty, modules = M.empty, scripts = M.empty }
 
-mkCState (opt,mpaths,spaths) (lib,scripts) = 
+mkCState (opt,mpaths,spaths) (lib,scripts) =
     CState { optimize = opt, modulePaths = M.fromList mpaths, scriptPaths = M.fromList spaths, modules = M.fromList lib, scripts = M.fromList scripts }
 
 toLib = libFromAugLib . M.toList
@@ -153,7 +149,7 @@ handler s0 input = case parse elemDescriptor input of
    Left s -> return $ (s0, E.emit "error" [] [showString (E.xmlEscape s)] "")
    Right Nothing -> return $ (s0, E.emit "error" [] [showString ("unexpected root element")] "")
    Right (Just command) -> handleCommand s0 command
-       
+
 handleCommand _ (Init srcInfo) = do
     compilationResult <- compileAndEmit srcInfo
     return (mkCState srcInfo compilationResult, xmlSerialize Nothing (FullSourceValidation $ validationSummary compilationResult) "")
@@ -177,10 +173,10 @@ handleCommand cs (RemoveScript scriptInfo) = do
     return (cs',xmlSerialize Nothing summary "")
 handleCommand cs (CheckModule (CodeElement name text)) =
     let (m, errs) = alternateModuleParser name text
-        lib1 = compileLibrary 
-                (M.toList 
-                    (M.insert name m 
-                        (M.fromList 
+        lib1 = compileLibrary
+                (M.toList
+                    (M.insert name m
+                        (M.fromList
                             [ (n,m) | (n,Right m) <- libFromAugLib $ M.toList (modules cs)])))
         errs' = map parseErrorToErrInfo errs ++ case lookup name lib1 of
                     Nothing -> []
@@ -216,7 +212,7 @@ simpCN (Ctx sc n) = (Ctx (simpSC sc) n)
 simpSC Nothing = Nothing
 simpSC (Just (SourceContext tl _ _ _)) = (Just (SourceContext tl "" "" []))
 simpF (Func fd _) = (Func fd [])
-          
+
 compilationServer :: IO ()
 compilationServer = processLinesSIOB emptyCState "quit" handler
 

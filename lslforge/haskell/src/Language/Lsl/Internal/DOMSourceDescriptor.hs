@@ -2,7 +2,6 @@
 {-# OPTIONS_GHC -fwarn-unused-binds -fwarn-unused-imports #-}
 module Language.Lsl.Internal.DOMSourceDescriptor(sources) where
 
-import Control.Applicative
 import Language.Lsl.Internal.DOMProcessing
 
 item = (,) <$> req "identifier" text <*> req "path" text

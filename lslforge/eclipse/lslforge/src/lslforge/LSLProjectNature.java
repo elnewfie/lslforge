@@ -328,6 +328,10 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 		if(cserver == null) cserver = new CompilationServer();
 	}
 	
+	public static CompilationServer getStaticCompilationServer() {
+	    return cserver;
+	}
+	
 	public CompilationServer getCompilationServer() {
 	    return cserver;
 	}
@@ -620,7 +624,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 	}
 	
 	public void resourceChanged(IResourceChangeEvent event) {
-	    Log.info("resource changed in " + this.project.getName()); //$NON-NLS-1$
+	    Log.debug("resource changed in " + this.project.getName()); //$NON-NLS-1$
 		final IResourceDelta delta = event.getDelta();
 
 		//DeltaVisitor dv = new DeltaVisitor();
@@ -662,7 +666,7 @@ public class LSLProjectNature implements IProjectNature, IResourceChangeListener
 
     public void scheduleBuild(final boolean recompileAll, final List<LSLForgeElement> scriptChanges,
     		final List<LSLForgeElement> scriptRemovals) {
-    	Log.info("Scheduling build, recompileAll: " + (recompileAll ? "yes" : "no")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    	Log.debug("Scheduling build, recompileAll: " + (recompileAll ? "[yes]" : "[no]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         WorkspaceJob job = new WorkspaceJob("EvaluateErrors") { //$NON-NLS-1$
 
         	@Override

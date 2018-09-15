@@ -7,5 +7,3 @@ $(deriveJavaRepTups [2..10])
 
 $(deriveJavaRep ''Either)
 $(deriveJavaRep ''Maybe)
-
-

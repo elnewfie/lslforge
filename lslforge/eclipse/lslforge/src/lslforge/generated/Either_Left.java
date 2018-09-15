@@ -1,5 +1,6 @@
 package lslforge.generated;
 import com.thoughtworks.xstream.XStream;
+import java.util.LinkedList;
 public class Either_Left<E1,E2> extends Either<E1,E2>{
     public E1 el1;
     public static void init(XStream xstream) {

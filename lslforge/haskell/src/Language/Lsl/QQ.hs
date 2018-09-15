@@ -21,8 +21,8 @@ aqp (AQFloat v) = Just $ TH.conP 'FloatLit [TH.varP $ TH.mkName v]
 aqp _ = Nothing
 
 lslModulePat :: String -> TH.Q TH.Pat
-lslModulePat s = 
-    case parseModuleFromStringAQ s of 
+lslModulePat s =
+    case parseModuleFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l
@@ -31,8 +31,8 @@ lslModulePat s =
                    showErrorMessages "or" "unknown" "expecting" "unexpected" "end of input" msgs
         Right x -> dataToPatQ (const Nothing `extQ` aqp) x
 lslModuleExp :: String -> TH.Q TH.Exp
-lslModuleExp s = 
-    case parseModuleFromStringAQ s of 
+lslModuleExp s =
+    case parseModuleFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l
@@ -43,11 +43,15 @@ lslModuleExp s =
 
 -- | A quasi-quoter for an LSL (Plus) module.
 lslm :: QuasiQuoter
-lslm = QuasiQuoter lslModuleExp lslModulePat
+lslm = QuasiQuoter { quoteExp  = lslModuleExp
+                   , quotePat  = lslModulePat
+                   , quoteType = error "No quoteType implementation for lslm"
+                   , quoteDec  = error "No quoteDec implementation for lslm"
+                   }
 
 lslScriptPat :: String -> TH.Q TH.Pat
-lslScriptPat s = 
-    case parseScriptFromStringAQ s of 
+lslScriptPat s =
+    case parseScriptFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l
@@ -56,8 +60,8 @@ lslScriptPat s =
                    showErrorMessages "or" "unknown" "expecting" "unexpected" "end of input" msgs
         Right x -> dataToPatQ (const Nothing `extQ` aqp) x
 lslScriptExp :: String -> TH.Q TH.Exp
-lslScriptExp s = 
-    case parseScriptFromStringAQ s of 
+lslScriptExp s =
+    case parseScriptFromStringAQ s of
         Left err -> let (pos,msgs) = (errorPos err, errorMessages err) in do
             l <- TH.location
             let (line,col) = TH.loc_start l
@@ -68,4 +72,8 @@ lslScriptExp s =
 
 -- | A quasi-quoter for an LSL script.
 lsl :: QuasiQuoter
-lsl = QuasiQuoter lslScriptExp lslScriptPat
+lsl = QuasiQuoter { quoteExp  = lslScriptExp
+                  , quotePat  = lslScriptPat
+                  , quoteType = error "No quoteType implementation for lsl"
+                  , quoteDec  = error "No quoteDec implementation for lsl"
+                  }

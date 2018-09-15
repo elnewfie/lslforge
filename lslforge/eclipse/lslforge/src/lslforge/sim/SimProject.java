@@ -340,9 +340,9 @@ public class SimProject {
             
             GridPositionNode node = (GridPositionNode) props.findChildByName("pos"); //$NON-NLS-1$
             GridCoordinateNode x = (GridCoordinateNode) node.findChildByName("x"); //$NON-NLS-1$
-            x.setValue(new Integer(0));
+            x.setValue(Integer.valueOf(0));
             GridCoordinateNode y = (GridCoordinateNode) node.findChildByName("y"); //$NON-NLS-1$
-            y.setValue(new Integer(0));
+            y.setValue(Integer.valueOf(0));
         }
 
         public void setOwner(String owner) {
@@ -1086,7 +1086,7 @@ public class SimProject {
 		protected void onUpdate(String s) {
             try {
                 float f = Float.parseFloat(s);
-                setValue(new Float(f));
+                setValue(Float.valueOf(f));
             } catch (NumberFormatException e) {
                 // ignore
             }
@@ -1109,7 +1109,7 @@ public class SimProject {
             return (val < 0) ? 0 : (val > 256 ? 256 : val);
         }
         public GridCoordinateNode(Node parent, String name, float value) {
-            super(parent, name, new Float(value));
+            super(parent, name, Float.valueOf(value));
         }
         
         @Override
@@ -1155,7 +1155,7 @@ public class SimProject {
 		public void onUpdate(String s) {
             try {
                 float f = Float.parseFloat(s);
-                setValue(new Float(f));
+                setValue(Float.valueOf(f));
             } catch (NumberFormatException e) {
                 // ignore
             }
@@ -1192,7 +1192,7 @@ public class SimProject {
         }
         
         public AnyNaturalNode(Node parent, String name, int value, String displayName) {
-            super(parent, name, new Integer(value));
+            super(parent, name, Integer.valueOf(value));
             this.displayName = displayName;
         }
         
@@ -1237,7 +1237,7 @@ public class SimProject {
 		public void onUpdate(String s) {
             try {
                 int i = Integer.parseInt(s);
-                setValue(new Integer(i));
+                setValue(Integer.valueOf(i));
             } catch (NumberFormatException e) {
                 // ignore
             }
@@ -1259,7 +1259,7 @@ public class SimProject {
         }
         
         public HexIntNode(Node parent, String name, int value, String displayName) {
-            super(parent, name, new Integer(value));
+            super(parent, name, Integer.valueOf(value));
             this.displayName = displayName;
         }
         

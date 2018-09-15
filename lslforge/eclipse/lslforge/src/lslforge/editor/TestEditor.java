@@ -711,7 +711,7 @@ public class TestEditor extends EditorPart implements NodeListener {
 			        }
 			    }
 			    
-			    return new Integer(index);
+			    return Integer.valueOf(index);
 			} else {
 			    return n.getValueString();
 			}

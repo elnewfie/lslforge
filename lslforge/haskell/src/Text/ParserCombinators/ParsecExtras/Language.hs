@@ -4,7 +4,7 @@
 -- Copyright   :  (c) Daan Leijen 1999-2001
 --                (c) Robert Greayer 2008
 -- License     :  BSD-style (see the file libraries/parsec/LICENSE)
--- 
+--
 -- Maintainer  :  robgreayer@yahoo.com
 -- Stability   :  provisional
 -- Portability :  non-portable (uses non-portable module Text.ParserCombinators.ParsecExtras.Token)
@@ -13,58 +13,58 @@
 -- to instantiate a token parser (see "Text.ParserCombinators.Parsec.Token").
 -- The 'extras' version exists purely to provide better control over whitespace handling.
 -- It is nearly a cut-n-paste copy of the Text.ParserCombinators.Parsec.Language module
--- 
+--
 -----------------------------------------------------------------------------
 
 module Text.ParserCombinators.ParsecExtras.Language
                      ( haskellDef, haskell
                      , mondrianDef, mondrian
-                   
+
                      , emptyDef
                      , haskellStyle
-                     , javaStyle   
-                     , LanguageDef (..)                
+                     , javaStyle
+                     , LanguageDef (..)
                      ) where
 import Text.ParserCombinators.Parsec
-import Text.ParserCombinators.ParsecExtras.Token 
+import Text.ParserCombinators.ParsecExtras.Token
 
-           
+
 -----------------------------------------------------------
 -- Styles: haskellStyle, javaStyle
------------------------------------------------------------               
+-----------------------------------------------------------
 haskellStyle :: LanguageDef st
-haskellStyle= emptyDef                      
+haskellStyle= emptyDef
                 { commentStart   = "{-"
                 , commentEnd     = "-}"
                 , commentLine    = "--"
                 , nestedComments = True
                 , identStart     = letter
-                , identLetter	 = alphaNum <|> oneOf "_'"
-                , opStart	 = opLetter haskellStyle
-                , opLetter	 = oneOf ":!#$%&*+./<=>?@\\^|-~"              
+                , identLetter    = alphaNum <|> oneOf "_'"
+                , opStart        = opLetter haskellStyle
+                , opLetter       = oneOf ":!#$%&*+./<=>?@\\^|-~"
                 , reservedOpNames= []
                 , reservedNames  = []
-                , caseSensitive  = True   
-                }         
-                           
+                , caseSensitive  = True
+                }
+
 javaStyle  :: LanguageDef st
 javaStyle   = emptyDef
-		{ commentStart	 = "/*"
-		, commentEnd	 = "*/"
-		, commentLine	 = "//"
-		, nestedComments = True
-		, identStart	 = letter
-		, identLetter	 = alphaNum <|> oneOf "_'"		
-		, reservedNames  = []
-		, reservedOpNames= []	
-                , caseSensitive  = False				  
-		}
+                { commentStart   = "/*"
+                , commentEnd     = "*/"
+                , commentLine    = "//"
+                , nestedComments = True
+                , identStart     = letter
+                , identLetter    = alphaNum <|> oneOf "_'"
+                , reservedNames  = []
+                , reservedOpNames= []
+                , caseSensitive  = False
+                }
 
 -----------------------------------------------------------
 -- minimal language definition
------------------------------------------------------------                
+-----------------------------------------------------------
 emptyDef   :: LanguageDef st
-emptyDef    = LanguageDef 
+emptyDef    = LanguageDef
                { commentStart   = ""
                , commentEnd     = ""
                , commentLine    = ""
@@ -78,25 +78,25 @@ emptyDef    = LanguageDef
                , caseSensitive  = True
                , custWhiteSpace = Nothing
                }
-                
+
 
 
 -----------------------------------------------------------
 -- Haskell
------------------------------------------------------------               
+-----------------------------------------------------------
 haskell :: TokenParser st
 haskell      = makeTokenParser haskellDef
 
 haskellDef  :: LanguageDef st
 haskellDef   = haskell98Def
-	        { identLetter	 = identLetter haskell98Def <|> char '#'
-	        , reservedNames	 = reservedNames haskell98Def ++ 
-    				   ["foreign","import","export","primitive"
-    				   ,"_ccall_","_casm_"
-    				   ,"forall"
-    				   ]
+                { identLetter    = identLetter haskell98Def <|> char '#'
+                , reservedNames  = reservedNames haskell98Def ++
+                                   ["foreign","import","export","primitive"
+                                   ,"_ccall_","_casm_"
+                                   ,"forall"
+                                   ]
                 }
-			    
+
 haskell98Def :: LanguageDef st
 haskell98Def = haskellStyle
                 { reservedOpNames= ["::","..","=","\\","|","<-","->","@","~","=>"]
@@ -108,21 +108,19 @@ haskell98Def = haskellStyle
                                     "primitive"
                                     -- "as","qualified","hiding"
                                    ]
-                }         
-                
-                
+                }
+
+
 -----------------------------------------------------------
 -- Mondrian
------------------------------------------------------------               
+-----------------------------------------------------------
 mondrian :: TokenParser st
 mondrian    = makeTokenParser mondrianDef
 
 mondrianDef :: LanguageDef st
 mondrianDef = javaStyle
-		{ reservedNames = [ "case", "class", "default", "extends"
-				  , "import", "in", "let", "new", "of", "package"
-				  ]	
-                , caseSensitive  = True				  
-		}
-
-				
+                { reservedNames = [ "case", "class", "default", "extends"
+                                  , "import", "in", "let", "new", "of", "package"
+                                  ]
+                , caseSensitive  = True
+                }
