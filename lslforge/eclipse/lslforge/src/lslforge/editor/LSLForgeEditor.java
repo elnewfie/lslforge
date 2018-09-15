@@ -260,7 +260,7 @@ public class LSLForgeEditor extends TextEditor implements SourceViewerConfigurat
                 IResource resource = (IResource) getEditorInput().getAdapter(IResource.class);
                 
                 if (resource != null) {
-                    Integer line = new Integer(getVerticalRuler().toDocumentLineNumber(e.y) + 1);
+                    Integer line = Integer.valueOf(getVerticalRuler().toDocumentLineNumber(e.y) + 1);
                     try {
                         IMarker m = null;
                         IMarker[] markers = resource.findMarkers(LSLLineBreakpoint.MARKER_ID, true, 0);

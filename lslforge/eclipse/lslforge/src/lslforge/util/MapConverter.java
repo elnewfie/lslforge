@@ -1,5 +1,7 @@
 package lslforge.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,11 +88,19 @@ public class MapConverter implements Converter {
         @SuppressWarnings("rawtypes")
 		Class defaultType = mapper.defaultImplementationOf(type);
         try {
-            return defaultType.newInstance();
+        	Constructor<?> ctor = defaultType.getConstructor();
+            return ctor.newInstance();
+            //return defaultType.newInstance();
         } catch (InstantiationException e) {
-            throw new ConversionException("Cannot instantiate " + defaultType.getName(), e); //$NON-NLS-1$
+            throw new ConversionException("Cannot instantiate (InstantiationException)" + defaultType.getName(), e); //$NON-NLS-1$
         } catch (IllegalAccessException e) {
-            throw new ConversionException("Cannot instantiate " + defaultType.getName(), e); //$NON-NLS-1$
+            throw new ConversionException("Cannot instantiate (IllegalAccessException)" + defaultType.getName(), e); //$NON-NLS-1$
+        } catch (IllegalArgumentException e) {
+            throw new ConversionException("Cannot instantiate (IllegalArgumentException)" + defaultType.getName(), e); //$NON-NLS-1$
+        } catch (InvocationTargetException e) {
+            throw new ConversionException("Cannot instantiate (InvocationTargetException)" + defaultType.getName(), e); //$NON-NLS-1$
+        } catch (NoSuchMethodException e) {
+            throw new ConversionException("Cannot instantiate (NoSuchMethodException)" + defaultType.getName(), e); //$NON-NLS-1$
         }
     }
     
@@ -116,12 +126,12 @@ public class MapConverter implements Converter {
         xstream.registerConverter(new ListConverter(mapper));
         HashMap<String,Object> m = new HashMap<String,Object>();
         m.put("hello", "there");  //$NON-NLS-1$//$NON-NLS-2$
-        m.put("goodbye", new Integer(12)); //$NON-NLS-1$
+        m.put("goodbye", Integer.valueOf(12)); //$NON-NLS-1$
         HashMap<String,Object> m1 = new HashMap<String,Object>();
-        m1.put("foo", new Float(5.0)); //$NON-NLS-1$
+        m1.put("foo", Float.valueOf(5.0f)); //$NON-NLS-1$
         ArrayList<Object> l = new ArrayList<Object>();
         l.add("bite"); //$NON-NLS-1$
-        l.add(new Integer(90210));
+        l.add(Integer.valueOf(90210));
         m1.put("list", l); //$NON-NLS-1$
         m.put("more", m1); //$NON-NLS-1$
         String s = xstream.toXML(m);

@@ -1,5 +1,7 @@
 package lslforge.util;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -65,11 +67,19 @@ public class ListConverter implements Converter {
         @SuppressWarnings("rawtypes")
 		Class defaultType = mapper.defaultImplementationOf(type);
         try {
-            return defaultType.newInstance();
+        	Constructor<?> ctor = defaultType.getConstructor();
+            return ctor.newInstance();
+        	//return defaultType.newInstance();
         } catch (InstantiationException e) {
-            throw new ConversionException("Cannot instantiate " + defaultType.getName(), e); //$NON-NLS-1$
+            throw new ConversionException("Cannot instantiate (InstantiationException)" + defaultType.getName(), e); //$NON-NLS-1$
         } catch (IllegalAccessException e) {
-            throw new ConversionException("Cannot instantiate " + defaultType.getName(), e); //$NON-NLS-1$
+            throw new ConversionException("Cannot instantiate (IllegalAccessException)" + defaultType.getName(), e); //$NON-NLS-1$
+        } catch (IllegalArgumentException e) {
+            throw new ConversionException("Cannot instantiate (IllegalArgumentException)" + defaultType.getName(), e); //$NON-NLS-1$
+        } catch (InvocationTargetException e) {
+            throw new ConversionException("Cannot instantiate (InvocationTargetException)" + defaultType.getName(), e); //$NON-NLS-1$
+        } catch (NoSuchMethodException e) {
+            throw new ConversionException("Cannot instantiate (NoSuchMethodException)" + defaultType.getName(), e); //$NON-NLS-1$
         }
     }
     

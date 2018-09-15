@@ -385,7 +385,7 @@ public class SimProjectNodes {
         public SoundNode(Node parent, String nodeName, Object value) {
             super(parent, nodeName, value);
             addProperty(new SimProject.ConstrainedFloatNode(this, "duration", //$NON-NLS-1$
-            		new Float(1.0f), 0.0f, 10f, "Duration")); //$NON-NLS-1$ TODO
+            		Float.valueOf(1.0f), 0.0f, 10f, "Duration")); //$NON-NLS-1$ TODO
         }
 
         @Override
@@ -422,7 +422,7 @@ public class SimProjectNodes {
         public AnimationNode(Node parent, String nodeName, Object value) {
             super(parent, nodeName, value);
             addProperty(new SimProject.ConstrainedFloatNode(this, "duration", //$NON-NLS-1$
-            		new Float(1.0f), 0.0f, 120f, "Duration")); //$NON-NLS-1$ TODO
+            		Float.valueOf(1.0f), 0.0f, 120f, "Duration")); //$NON-NLS-1$ TODO
         }
 
         @Override
