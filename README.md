@@ -12,6 +12,14 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
+* 2018-09-16 LSLForge **0.1.9.6**
+    * Animesh Functions and Constants:
+        * llStartObjectAnimation(string anim);
+        * llStopObjectAnimation(string anim);
+        * list llGetObjectAnimationNames();
+        * integer OBJECT_CREATION_TIME = 36;
+        * integer OBJECT_SELECT_COUNT = 37;
+        * integer OBJECT_SIT_COUNT = 38;
 * 2018-09-14 LSLForge **0.1.9.5** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
     * Experimental hot deploy of the newly selected native executable
     * "Generated" comment at the end of *.lsl file (easier to check what was copy-pasted) (**Windows** only)
@@ -80,6 +88,7 @@ This way you'll get the newest release.
 
 Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
 
+* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.6/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.5/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.4/eclipse/``
 * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.3/eclipse/``
