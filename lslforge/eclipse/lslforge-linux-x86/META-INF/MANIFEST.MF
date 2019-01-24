@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: lslforge_linux_x86 Fragment
 Bundle-SymbolicName: lslforge_linux_x86
-Bundle-Version: 0.1.9.5
-Fragment-Host: lslforge;bundle-version="0.1.9.5"
+Bundle-Version: 0.1.9.6
+Fragment-Host: lslforge;bundle-version="0.1.9.6"
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Automatic-Module-Name: lslforge_linux_x86

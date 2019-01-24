@@ -1,5 +1,5 @@
 name:           LSLForge
-version:        0.1.9.5
+version:        0.1.9.6
 synopsis:       An execution and testing framework for the Linden Scripting Language (LSL)
 description:
   Provides a framework for executing Linden Scripting Language scripts offline,

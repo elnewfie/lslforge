@@ -12,6 +12,14 @@ This fork is to maintain LSL definitions for functions and constants, as well as
 
 ### News (newest first)
 
+* 2018-09-16 LSLForge **0.1.9.6** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
+    * Animesh Functions and Constants:
+        * llStartObjectAnimation(string anim);
+        * llStopObjectAnimation(string anim);
+        * list llGetObjectAnimationNames();
+        * integer OBJECT_CREATION_TIME = 36;
+        * integer OBJECT_SELECT_COUNT = 37;
+        * integer OBJECT_SIT_COUNT = 38;
 * 2018-09-14 LSLForge **0.1.9.5** (**Windows**, **Linux** (Thanks [@Trapez](https://github.com/Trapez)), **Mac** (Thanks [@PellSmit](https://github.com/PellSmit)))
     * Experimental hot deploy of the newly selected native executable
     * "Generated" comment at the end of *.lsl file (easier to check what was copy-pasted) (**Windows** only)
@@ -53,6 +61,8 @@ The official group for LSLForge Editor tool is [LSLForge Users](secondlife:///ap
 
 ## Installing
 
+* Java 8 JDK is currently used for generating the plugin. You may find that you need to update to Java 8 or later in order to use the plugin.
+
 ### Eclipse Plugin
 
 All the latest  Eclipse installations were found working:
@@ -72,23 +82,27 @@ Platforms that used to work but **not tested recently**:
 
 #### How to Install
 
-To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Click ``Add...``, give it a name and enter the link for location:
+To install a plugin into Eclipse, choose ``Help`` > ``Install New Software``. Click ``Add...`` and enter the link for location:
 
-``https://raw.githubusercontent.com/elnewfie/lslforge/master/eclipse/``
+* For the tested and reported to be working releases use:
+    * ``https://raw.githubusercontent.com/elnewfie/lslforge/master/eclipse/``
 
-This way you'll get the newest release.
+* For releases that are currently tested:
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/master/eclipse/``
 
-Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
+    (In case of bugs please report right to the https://github.com/raysilent/lslforge/ repo.)
 
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.5/eclipse/``
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.4/eclipse/``
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.3/eclipse/``
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.2/eclipse/``
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.1/eclipse/``
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
-* ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.8/eclipse/``
+* Alternatively you may switch to a development fork and try a specific version since ``0.1.8`` (including work in progress branches):
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.6/eclipse/``
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.5/eclipse/``
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.4/eclipse/``
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.3/eclipse/``
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.2/eclipse/``
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9.1/eclipse/``
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.9/eclipse/``
+    * ``https://raw.githubusercontent.com/raysilent/lslforge/0.1.8/eclipse/``
 
-For even older version, clone the whole repo and link your Eclipse to a particular folder under ``eclipse\archive``.
+* For even older version, clone the whole repo and link your Eclipse to a particular folder under ``eclipse\archive``.
 
 > If you don't see any items for installing, try to uncheck "Group items by category"
 

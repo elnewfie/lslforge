@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 import lslforge.decorators.ErrorDecorator;
 import lslforge.editor.LSLPartitionScanner;
 import lslforge.editor.lsl.LSLCodeScanner;
-import lslforge.generated.CompilationCommand;
 import lslforge.language_metadata.LSLConstant;
 import lslforge.language_metadata.LSLFunction;
 import lslforge.language_metadata.LSLHandler;
@@ -168,6 +167,7 @@ public class LSLForgePlugin extends AbstractUIPlugin implements IPropertyChangeL
         
         // only want to do this if normal execution failed...
         try {
+            Log.info("Changing mod for native executable");
             Util.chmod(new File(exeName));
         } catch (IOException e) {
             Log.error("can't change mode of native executable", e); //$NON-NLS-1$
